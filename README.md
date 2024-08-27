@@ -23,8 +23,13 @@ Each file in the benchmark begins with its name, followed by a line with the num
 
 Then, for each execution, the following structure appears:
 
-1. A line indicating the number of edges, denoted as N
-2. N subsequent lines, each containing information about an edge. The format of each line is:
+1. A line indicating the number of edges, denoted as `N`
+2. `N` subsequent lines, each containing information about an edge. The format of each line is:
    - `u` -> `v` : `count`
    - Here, `u` and `v` represent the origin and destination blocks of the edge, respectively
    - `count` represents the number of times this edge is traversed during the execution.
+
+There are also two other scripts in Python that are similar to `print_jotai_json.py`:
+
+- The script `get_block_frequencies.py` takes the JSON input and compute the block frequencies based on the edges frequencies. The output is very similar to the `print_jotai_json.py` one, but for each block the output is only `u` : `count`. The critical edges blocks are omitted in the output.
+- The script `get_hottest_block.py` not only compute the frequencies, but also compute what is the hottest blocks among every block in one execution. The output of one execution is a line, indicating the number `N` of hot blocks, followed by `N` lines, each one containing an ID of a hot block in that execution.
