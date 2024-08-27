@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-export BENCH_DIR=~/Codes/merlin/tests/jotai_benchmarks
-export RESULTS_DIR="../../Benchmark Results/merlin/jotai_benchmarks"
-export JSON_FILE="../../JSON Files/jotaiMerlinResults.json"
-NISSE_SCRIPT=../nisse_profiler.sh
-PYTHON_SCRIPT=get_angha_results.py
-PYTHON_PROCESS_SCRIPT=process_angha_results.py
+export BASE_DIR=~/Codes/hydra
+export BENCH_DIR=~/Codes/merlin/test/jotai_benchmarks
+export RESULTS_DIR="$BASE_DIR/Benchmark Results/merlin/jotai_benchmarks"
+export JSON_FILE="$BASE_DIR/JSON Files/jotaiMerlinResults2.json"
+CURRENT_DIR=$(pwd)
+SCRIPTS_FOLDER="$BASE_DIR/Benchmark Scripts"
+NISSE_SCRIPT="$SCRIPTS_FOLDER/nisse_profiler.sh"
+PYTHON_SCRIPTS="$SCRIPTS_FOLDER/Jotai"
 
 for i in {0..5}
 do
@@ -22,13 +24,17 @@ do
         MAX=`expr $(./a.out | wc -l) - 6`
         if [ $MAX -ge $i ]
         then
-            bash $NISSE_SCRIPT $f $i > /dev/null 2>&1
+            bash "$NISSE_SCRIPT" $f $i > /dev/null 2>&1
         fi
         COUNTER=`expr $COUNTER + 1`
     done
-    python3 $PYTHON_SCRIPT $i
+    cd "$PYTHON_SCRIPTS"
+    python3 get_results.py $i
+    cd "$CURRENT_DIR"
 done
 
 rm a.out
 
-python3 $PYTHON_PROCESS_SCRIPT
+cd "$PYTHON_SCRIPTS"
+python3 process_results.py
+cd "$CURRENT_DIR"

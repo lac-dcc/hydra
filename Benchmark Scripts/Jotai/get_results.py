@@ -4,7 +4,7 @@ import sys
 
 
 bench_dir = os.environ.get('BENCH_DIR', '')
-results_dir = os.environ.get('RESULT_DIR', '')
+results_dir = os.environ.get('RESULTS_DIR', '')
 
 if bench_dir == '':
     print('Input benchmark directory: ')

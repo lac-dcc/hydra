@@ -38,7 +38,7 @@ if json_file_name == '':
     json_file_name = input()
 
 for app_name in os.listdir(results_dir):
-    app_folder = results_dir+app_name+'/'
+    app_folder = results_dir+'/'+app_name+'/'
     final[app_name] = {}
     for function_name in os.listdir(app_folder):
         function_folder = app_folder+function_name+'/'
