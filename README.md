@@ -1,4 +1,10 @@
-# Hydra
+<p align="center">
+  <img alt="Project Banner" src="./assets/images/Banner.png" width="95%" height="auto"/></br>
+</p>
+
+Hydra is a collection of benchmarks and tools to test the ability of different techniques to predict the hottest spot in programs.
+Each benchmark in this program runs with one or more different inputs.
+We provide execution counts for all the edges of each program, plus scripts to extract and display these counts.
 
 ## Hotspot Yielding Dynamic Runtime Analysis
 
