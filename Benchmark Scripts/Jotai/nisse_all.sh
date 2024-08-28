@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 export BASE_DIR=~/Codes/hydra
-export BENCH_DIR=~/Codes/merlin/test/jotai_benchmarks
+export BENCH_DIR="$BASE_DIR/Benchmark/Jotai"
 export RESULTS_DIR="$BASE_DIR/Benchmark Results/merlin/jotai_benchmarks"
 export JSON_FILE="$BASE_DIR/JSON Files/jotaiMerlinResults2.json"
 CURRENT_DIR=$(pwd)
