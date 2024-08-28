@@ -50,7 +50,7 @@ def print_function(app_name, function_name):
     if app_name in data:
         if function_name in data[app_name]:
             num_executions = len(data[app_name][function_name])
-            print('_extr'+app_name+'.c_'+function_name+'.c')
+            print('extr_'+app_name+'.c_'+function_name+'.c')
             print(num_executions)
             for i in range(0,num_executions):
                 print_execution(app_name, function_name, i)
