@@ -1,6 +1,7 @@
 import os
 import json
 import sys
+from collections import OrderedDict
 
 final = {}
 
@@ -49,6 +50,15 @@ for app_name in os.listdir(results_dir):
                 if '.prof.full.edges' in file_name and file_name[:-16] == function_name:
                     final[app_name][function_name][int(exec_number)] = process_file(exec_folder+file_name)
 
+def sort_json(data):
+    if isinstance(data, dict):
+        sorted_dict = OrderedDict(sorted((k, sort_json(v)) for k, v in data.items()))
+        return sorted_dict
+    elif isinstance(data, list):
+        return [sort_json(item) for item in data]
+    else:
+        return data
+
 arq = open(json_file_name,'w')
-json.dump(final, arq)
+json.dump(sort_json(final), arq)
 arq.close()
