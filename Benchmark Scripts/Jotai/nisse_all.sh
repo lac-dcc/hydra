@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export BASE_DIR=~/Codes/hydra
+export BASE_DIR=~/Codigos/hydra
 export BENCH_DIR="$BASE_DIR/Benchmark/Jotai"
 export RESULTS_DIR="$BASE_DIR/Benchmark Results/merlin/jotai_benchmarks"
 export JSON_FILE="$BASE_DIR/JSON Files/jotaiMerlinResults2.json"
