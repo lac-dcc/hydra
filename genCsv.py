@@ -3,7 +3,7 @@ import csv
 import os
 
 csv_data = [
-    ['File Name', 'Execution', 'Number of vertices', 'Number of edges', 'Min count', 'Max count', 'Hottest blocks', 'Random hottest guess', 'Random hit', 'Nested hottest guess', 'Nested hit']
+    ['File Name', 'Execution', 'Number of vertices', 'Number of edges', 'Min count', 'Max count', 'Hottest blocks', 'Random hottest guess', 'Random hit', 'Nested hottest guess', 'Nested hit', 'Benchmark link']
 ]
 
 gt_data = json.load(open('JSON Files/jotaiMerlinResults.json','r'))
@@ -19,6 +19,7 @@ for app_name in gt_data:
             file_name = 'extr_'+app_name+'.h_'+function_name+'.c'
         random_guess = random_data[app_name][function_name]
         nested_guess = nested_data[app_name][function_name]
+        benchmark_link = 'https://github.com/lac-dcc/hydra/blob/main/Benchmark/Jotai/'+file_name
         for execution_number in range(0,len(gt_data[app_name][function_name])):
             graph = gt_data[app_name][function_name][execution_number]
             frequencies = {}
@@ -34,22 +35,22 @@ for app_name in gt_data:
                     else:
                         frequencies[v] = graph[u][v]
             nodes = len(nodes)
-            sorted_executions = sorted(frequencies.items(), key=lambda item: item[1])[::-1]
-            max_count = sorted_executions[0][1]
-            min_count = sorted_executions[-1][1]
+            sorted_frequencies = sorted(frequencies.items(), key=lambda item: item[1])[::-1]
+            max_count = sorted_frequencies[0][1]
+            min_count = sorted_frequencies[-1][1]
             hottest_blocks_list = []
-            for block, count in sorted_executions:
+            for block, count in sorted_frequencies:
                 if count < max_count:
                     break
                 hottest_blocks_list.append(block)
             hottest_blocks = ';'.join(sorted(hottest_blocks_list, key=lambda x: int(x)))
             random_hit = 0
-            if random_guess in hottest_blocks_list:
+            if frequencies[random_guess] == max_count:
                 random_hit = 1
             nested_hit = 0
-            if nested_guess in hottest_blocks_list:
+            if frequencies[nested_guess] == max_count:
                 nested_hit = 1
-            csv_data.append([file_name, execution_number, nodes, edges, min_count, max_count, str(hottest_blocks), random_guess, random_hit, nested_guess, nested_hit])
+            csv_data.append([file_name, execution_number, nodes, edges, min_count, max_count, str(hottest_blocks), random_guess, random_hit, nested_guess, nested_hit, benchmark_link])
 
 with open('jotaiMerlinTable.csv', mode='w', newline='') as file:
     writer = csv.writer(file, delimiter=';', quoting=csv.QUOTE_MINIMAL)
