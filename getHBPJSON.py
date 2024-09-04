@@ -55,9 +55,14 @@ def sort_json(data):
     else:
         return data
 
-arq = open('JSON Files/jotaiRandomBlock.json','w')
+json_folder = os.environ.get('JSON_FOLDER', '')
+if json_folder == '':
+    print('Input JSON folder path')
+    json_folder = input()
+
+arq = open(json_folder+'/jotaiRandomBlock2.json','w')
 json.dump(sort_json(random_json), arq)
 arq.close()
-arq = open('JSON Files/jotaiNestedBlock.json','w')
+arq = open(json_folder+'/jotaiNestedBlock2.json','w')
 json.dump(sort_json(nested_json), arq)
 arq.close()

@@ -1,9 +1,10 @@
 #!/bin/bash
 
-LLVM_OPT=opt
-CLANG=clang
-
+LLVM_INSTALL_DIR=""
 BASE_DIR=~/Codigos/hydra
+
+LLVM_OPT="$LLVM_INSTALL_DIR/bin/opt"
+CLANG="$LLVM_INSTALL_DIR/bin/clang"
 
 PASS_FILE_RANDOM=$BASE_DIR/build/lib/libHotBlockRandom.so
 PASS_FILE_NESTED=$BASE_DIR/build/lib/libHotBlockNested.so
@@ -12,6 +13,7 @@ CFLAGS="-Xclang -disable-O0-optnone -Wno-everything -std=c99 -c -S -emit-llvm"
 BENCHMARK_DIR=$BASE_DIR/Benchmark/Jotai
 RESULTS_FOLDER_RANDOM=$BASE_DIR/Results/Jotai/Random
 RESULTS_FOLDER_NESTED=$BASE_DIR/Results/Jotai/Nested
+export JSON_FOLDER="$BASE_DIR/JSON Files"
 mkdir -p $RESULTS_FOLDER_RANDOM
 mkdir -p $RESULTS_FOLDER_NESTED
 
@@ -38,3 +40,4 @@ rm $BENCHMARK_DIR/*.ll
 cd ..
 rm -rf tmp
 
+python3 "$BASE_DIR/getHBPJSON.py"
