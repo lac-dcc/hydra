@@ -8,7 +8,7 @@ We provide execution counts for all the edges of each program, a [table](https:/
 
 ## How to produce the ground truth
 
-If you want to regenerate the ground truth (which is located in [this file](./JSON%20Files/jotaiMerlinResults.json)), you must run the script [nisse_all.sh](./Benchmark%20Scripts/Jotai/nisse_all.sh), observing the following requirements:
+You can regenerate the ground truth (in [JSON](./JSON%20Files/jotaiMerlinResults.json)) running the script [nisse_all.sh](./Benchmark%20Scripts/Jotai/nisse_all.sh). The following dependencies are required:
 
 - Clang 17 or newer
 - A build of the [Nisse profiler](https://github.com/lac-dcc/Nisse)
@@ -28,8 +28,8 @@ With these configurations correctly set, running the script `nisse_all.sh` must 
 
 There are two trivial heuristics implemented to guess the hottest blocks, which are:
 
-- The random block heuristic: a random block from the program is considered the hottest block
-- The most nested block heuristic: a random most nested loop header from the program is considered the hottest block
+- **Random block**: a random block from the program is considered the hottest block
+- **Most nested block**: a random most nested loop header from the program is considered the hottest block
 
 In order to run them, you must have the following requirements:
 
