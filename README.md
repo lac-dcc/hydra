@@ -3,10 +3,8 @@
 </p>
 
 Hydra is a collection of benchmarks and tools to test the ability of different techniques to predict the hottest spot in programs.
-Each benchmark in this program runs with one or more different inputs.
-We provide execution counts for all the edges of each program, plus scripts to extract and display these counts.
-
-A table containing the results of each benchmark, as well as a summary of the execution of some heuristics can be found in [this link](https://docs.google.com/spreadsheets/d/18C-DGg_l2gepRRfea_ivrW1o9qUde5fHHr6g3LIGn_I/edit?usp=sharing).
+Each benchmark consits of a single compilable C file that runs with one or more different inputs.
+We provide execution counts for all the edges of each program, a [table](https://docs.google.com/spreadsheets/d/18C-DGg_l2gepRRfea_ivrW1o9qUde5fHHr6g3LIGn_I/edit?usp=sharing) that we call "*the Ground Truth*", plus scripts to extract and display these counts.
 
 ## How to produce the ground truth
 
