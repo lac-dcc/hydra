@@ -18,20 +18,30 @@ endif()
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
 
-add_library(HotBlockNested MODULE
-    lib/HBPNested.cpp
-    lib/HBPNestedPlugin.cpp
-)
 
 add_library(HotBlockRandom MODULE
     lib/HBPRandom.cpp
     lib/HBPRandomPlugin.cpp
 )
 
+add_library(HotBlockNested MODULE
+    lib/HBPNested.cpp
+    lib/HBPNestedPlugin.cpp
+)
+
+add_library(HotBlockPredictor MODULE
+    lib/HBPPredictor.cpp
+    lib/HBPPredictorPlugin.cpp
+)
+
+target_include_directories(HotBlockRandom PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
+)
+
 target_include_directories(HotBlockNested PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
 
-target_include_directories(HotBlockRandom PRIVATE
+target_include_directories(HotBlockPredictor PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )

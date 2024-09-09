@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LLVM_INSTALL_DIR=""
+LLVM_INSTALL_DIR="~/clang"
 
 echo "--------------------------------------------------------------------------------"
 if [ ! -e "build" ]
