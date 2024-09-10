@@ -17,6 +17,9 @@ std::string removebb(const std::string &s) {
   return "0";
 }
 
+// Try to approximate the convergence of the somatory
+// x^1 + x^2 + ... x^n, with n going to infinity and
+// 0 <= x < 1
 double approximateConvergence(double x) {
     double ret = 0.0;
     double aux = x;
@@ -52,7 +55,6 @@ PreservedAnalyses HBPPredictorPass::run(Function &F,
     BasicBlock *predicted = nullptr;
 
     std::map<BasicBlock *, double> Frequencies;
-    std::set<BasicBlock *> LoopHeaders;
 
     auto &EntryBlock = F.getEntryBlock();
     Frequencies[&EntryBlock] = 1.0;
