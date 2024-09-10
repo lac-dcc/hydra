@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LLVM_INSTALL_DIR="/home/jvf/clang"
+LLVM_INSTALL_DIR="/home/jvf/clang/install"
 BASE_DIR="/home/jvf/Codigos/hydra"
 
 LLVM_OPT="$LLVM_INSTALL_DIR/bin/opt"

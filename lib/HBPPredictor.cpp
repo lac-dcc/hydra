@@ -1,6 +1,7 @@
 #include "HBPPredictor.h"
 #include <string>
 #include <regex>
+#include <cmath>
 #include <map>
 
 using namespace llvm;
@@ -30,10 +31,14 @@ bool isSuccessorInLoop(llvm::LoopInfo &li, BasicBlock *src, BasicBlock *dst) {
     return li.getLoopDepth(src) == (li.isLoopHeader(dst))+li.getLoopDepth(dst);
 }
 
+bool isLastInLoop(llvm::LoopInfo &li, BasicBlock *src, BasicBlock *dst) {
+    return li.isLoopHeader(dst) && li.getLoopDepth(src)-li.isLoopHeader(src) == li.getLoopDepth(dst);
+}
+
 PreservedAnalyses HBPPredictorPass::run(Function &F,
                                       FunctionAnalysisManager &AM) {
     
-    
+    const double eps = 1e-6;
 
     std::string functionName = F.getName().str();
     outfile.open(functionName + "-predictor.txt");
@@ -43,7 +48,7 @@ PreservedAnalyses HBPPredictorPass::run(Function &F,
     llvm::LoopInfo &li = AM.getResult<llvm::LoopAnalysis>(F);
     // llvm::BlockFrequencyInfo &bfi = AM.getResult<llvm::BlockFrequencyAnalysis>(F);
 
-    int MaxPred = -1;
+    double MaxPred = -1;
     BasicBlock *predicted = nullptr;
 
     std::map<BasicBlock *, double> Frequencies;
@@ -53,45 +58,39 @@ PreservedAnalyses HBPPredictorPass::run(Function &F,
     Frequencies[&EntryBlock] = 1.0;
 
     for (BasicBlock &BB : F) {
-        double BlockFrequency = Frequencies[&BB];
-
+        //If BB is a loop header, approximate its frequency based on the probability of entering the loop
         if (li.isLoopHeader(&BB)) {
             for (auto *Succ : llvm::successors(&BB)) {
                 auto EdgeProbability = bpi.getEdgeProbability(&BB, Succ);
                 double Probability = ((double)EdgeProbability.getNumerator())/EdgeProbability.getDenominator();
                 if (isSuccessorInLoop(li, &BB, Succ)) {
                     Frequencies[&BB] += approximateConvergence(Probability);
-                    Frequencies[Succ] = Frequencies[&BB];
-                } else {
-                    Frequencies[Succ] += BlockFrequency * Probability;
                 }
             }
-        } else {
-            for (auto *Succ : llvm::successors(&BB)) {
+        }
+
+        double BlockFrequency = Frequencies[&BB];
+
+        // Propagate the frequency for each successor of the BB based on the probability of entering each edge
+        for (auto *Succ : llvm::successors(&BB)) {
+            if (!isLastInLoop(li, &BB, Succ)) {
                 auto EdgeProbability = bpi.getEdgeProbability(&BB, Succ);
                 Frequencies[Succ] += BlockFrequency * ((double)EdgeProbability.getNumerator())/EdgeProbability.getDenominator();
             }
         }
-
-        BlockFrequency = Frequencies[&BB];
-
-        if (BlockFrequency > MaxPred) {
+        
+        // Update the answer
+        if (BlockFrequency > MaxPred && fabs(BlockFrequency - MaxPred) > eps) {
             MaxPred = BlockFrequency;
             predicted = &BB;
+        } else if (fabs(BlockFrequency - MaxPred) <= eps) { 
+            // If there is a draw, give preference to loop headers
+            if (!li.isLoopHeader(predicted) && li.isLoopHeader(&BB)) {
+                predicted = &BB;
+            }
         }
 
-        // int BlockFrequency = (&BB \== &EntryBlock ? EntryBlockFrequency : bfi.getBlockFreq(&BB).getFrequency());
-        // outfile << removebb(BB.getName().str()) << " " << BlockFrequency << "\n";
-        // for (auto *Succ : llvm::successors(&BB)) {
-        //   auto EdgeProbability = bpi.getEdgeProbability(&BB, Succ);
-        //   auto EdgeFrequency = BlockFrequency * EdgeProbability.getNumerator() / EdgeProbability.getDenominator();
-        //   outfile << "Edge: " << removebb(BB.getName().str())  << " -> " << removebb(Succ->getName().str())
-        //           << " | Probability: " << ((double)EdgeProbability.getNumerator())/EdgeProbability.getDenominator() << "\n";
-        // }
-        // if (BlockFrequency > max_pred) {
-        //     max_pred = BlockFrequency;
-        //     predicted = &BB;
-        // }
+        // outfile << "BB: " << removebb(BB.getName().str()) << " | Frequency: " << BlockFrequency << "\n";
     }
     
     outfile << removebb(predicted->getName().str()) << "\n";
