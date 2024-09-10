@@ -5,7 +5,7 @@
 
 using namespace llvm;
 
-std::string removebb(const std::string &s) {
+std::string extractAndFormatDigits(const std::string &s) {
   std::string sub = std::regex_replace(s, std::regex(R"([\D])"), "");
   if (sub.size() > 0) {
     if (std::regex_match(s, std::regex(".*crit.*"))) {
@@ -41,7 +41,7 @@ PreservedAnalyses HBPNestedPass::run(Function &F,
         }
     }
 
-    outfile << removebb(nested->getName().str()) << "\n";
+    outfile << extractAndFormatDigits(nested->getName().str()) << "\n";
 
     outfile.close();
 

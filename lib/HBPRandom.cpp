@@ -4,7 +4,7 @@
 
 using namespace llvm;
 
-std::string removebb(const std::string &s) {
+std::string extractAndFormatDigits(const std::string &s) {
   std::string sub = std::regex_replace(s, std::regex(R"([\D])"), "");
   if (sub.size() > 0) {
     if (std::regex_match(s, std::regex(".*crit.*"))) {
@@ -28,7 +28,7 @@ PreservedAnalyses HBPRandomPass::run(Function &F,
         BasicBlocks.emplace_back(&BB);
     }
 
-    outfile << removebb(BasicBlocks[dist(mt)]->getName().str()) << "\n";
+    outfile << extractAndFormatDigits(BasicBlocks[dist(mt)]->getName().str()) << "\n";
 
     outfile.close();
 

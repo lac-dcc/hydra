@@ -6,7 +6,7 @@
 
 using namespace llvm;
 
-std::string removebb(const std::string &s) {
+std::string extractAndFormatDigits(const std::string &s) {
   std::string sub = std::regex_replace(s, std::regex(R"([\D])"), "");
   if (sub.size() > 0) {
     if (std::regex_match(s, std::regex(".*crit.*"))) {
@@ -17,9 +17,11 @@ std::string removebb(const std::string &s) {
   return "0";
 }
 
-// Try to approximate the convergence of the somatory
-// x^1 + x^2 + ... x^n, with n going to infinity and
-// 0 <= x < 1
+double getEdgeProbability(llvm::BranchProbabilityInfo &bpi, BasicBlock *src, BasicBlock *dst) {
+    auto EdgeProbability = bpi.getEdgeProbability(src, dst);
+    return ((double)EdgeProbability.getNumerator())/EdgeProbability.getDenominator();
+}
+
 double approximateConvergence(double x) {
     double ret = 0.0;
     double aux = x;
@@ -49,22 +51,21 @@ PreservedAnalyses HBPPredictorPass::run(Function &F,
 
     llvm::BranchProbabilityInfo &bpi = AM.getResult<llvm::BranchProbabilityAnalysis>(F);
     llvm::LoopInfo &li = AM.getResult<llvm::LoopAnalysis>(F);
-    // llvm::BlockFrequencyInfo &bfi = AM.getResult<llvm::BlockFrequencyAnalysis>(F);
 
     double MaxPred = -1;
     BasicBlock *predicted = nullptr;
 
     std::map<BasicBlock *, double> Frequencies;
 
+    // Get the entry block and assign an initial frequency to it (e.g. 1)
     auto &EntryBlock = F.getEntryBlock();
     Frequencies[&EntryBlock] = 1.0;
 
     for (BasicBlock &BB : F) {
-        //If BB is a loop header, approximate its frequency based on the probability of entering the loop
+        // If BB is a loop header, update its frequency based on the probability of entering the loop
         if (li.isLoopHeader(&BB)) {
             for (auto *Succ : llvm::successors(&BB)) {
-                auto EdgeProbability = bpi.getEdgeProbability(&BB, Succ);
-                double Probability = ((double)EdgeProbability.getNumerator())/EdgeProbability.getDenominator();
+                double Probability = getEdgeProbability(bpi, &BB, Succ);
                 if (isSuccessorInLoop(li, &BB, Succ)) {
                     Frequencies[&BB] += approximateConvergence(Probability);
                 }
@@ -76,8 +77,8 @@ PreservedAnalyses HBPPredictorPass::run(Function &F,
         // Propagate the frequency for each successor of the BB based on the probability of entering each edge
         for (auto *Succ : llvm::successors(&BB)) {
             if (!isLastInLoop(li, &BB, Succ)) {
-                auto EdgeProbability = bpi.getEdgeProbability(&BB, Succ);
-                Frequencies[Succ] += BlockFrequency * ((double)EdgeProbability.getNumerator())/EdgeProbability.getDenominator();
+                double Probability = getEdgeProbability(bpi, &BB, Succ);
+                Frequencies[Succ] += BlockFrequency * Probability;
             }
         }
         
@@ -92,10 +93,10 @@ PreservedAnalyses HBPPredictorPass::run(Function &F,
             }
         }
 
-        // outfile << "BB: " << removebb(BB.getName().str()) << " | Frequency: " << BlockFrequency << "\n";
+        // outfile << "BB: " << extractAndFormatDigits(BB.getName().str()) << " | Frequency: " << BlockFrequency << "\n";
     }
     
-    outfile << removebb(predicted->getName().str()) << "\n";
+    outfile << extractAndFormatDigits(predicted->getName().str()) << "\n";
 
     outfile.close();
 
