@@ -24,12 +24,13 @@ Now, you need to adjust some parameters that suit your environment:
 
 With these configurations correctly set, running the script `nisse_all.sh` must generate a file named `jotaiMerlinResults2.json` in the folder `JSON Files`. You can compare it with the `jotaiMerlinResults.json` using `diff`.
 
-## How to get the trivial heuristics results
+## How to get the heuristics results
 
-There are two trivial heuristics implemented to guess the hottest blocks, which are:
+There are three heuristics (two of which are trivial) implemented to guess the hottest blocks, which are:
 
 - **Random block**: a random block from the program is considered the hottest block
 - **Most nested block**: a random most nested loop header from the program is considered the hottest block
+- **LLVM-Predictor**: the LLVM analyzes `LoopInfo` and `BranchProbabilityInfo` are used to predict the frequency of each basic block, considering the entry block executes only once. The block with the highest estimated frequency is considered the hottest block
 
 In order to run them, you must have the following requirements:
 
@@ -44,7 +45,7 @@ Also, there are some parameters to adjust:
   - `LLVM_INSTALL_DIR` (line 3): must point to your LLVM installation directory
   - `BASE_DIR` (line 4): must point to your hydra (this repository) source directory
 
-With these configurations correctly set, you must run the scripts `build.sh` and `run.sh` in this order, and it must generate the JSONs `jotaiRandomBlock2.json` and `jotaiNestedBlock2.json` in the folder `JSON Files`. Also, they can be compared with their respective original files using `diff`.
+With these configurations correctly set, you must run the scripts `build.sh` and `run.sh` in this order, and it must generate the JSONs `jotaiRandomBlock2.json`, `jotaiNestedBlock2.json` and `jotaiPredictorBlock2.json` in the folder `JSON Files`. Also, they can be compared with their respective original files using `diff`.
 
 ## How to get the CSV table
 
