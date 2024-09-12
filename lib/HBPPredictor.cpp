@@ -1,8 +1,9 @@
 #include "HBPPredictor.h"
 #include <string>
 #include <regex>
-#include <cmath>
-#include <map>
+// #include <cmath>
+#include <vector>
+
 
 using namespace llvm;
 
@@ -17,33 +18,93 @@ std::string extractAndFormatDigits(const std::string &s) {
   return "0";
 }
 
-double getEdgeProbability(llvm::BranchProbabilityInfo &bpi, BasicBlock *src, BasicBlock *dst) {
+long double getEdgeProbability(llvm::BranchProbabilityInfo &bpi, BasicBlock *src, BasicBlock *dst) {
     auto EdgeProbability = bpi.getEdgeProbability(src, dst);
-    return ((double)EdgeProbability.getNumerator())/EdgeProbability.getDenominator();
+    return ((long double)EdgeProbability.getNumerator())/EdgeProbability.getDenominator();
 }
 
-double approximateConvergence(double x) {
-    double ret = 0.0;
-    double aux = x;
-    for (int i = 1; i <= 10000; i++) {
-        ret += aux;
-        aux *= x;
+// long double approximateConvergence(long double x) {
+//     long double ret = 0.0;
+//     long double aux = x;
+//     for (int i = 1; i <= 10000; i++) {
+//         ret += aux;
+//         aux *= x;
+//     }
+//     return ret;
+// }
+
+// bool isSuccessorInLoop(llvm::LoopInfo &li, BasicBlock *src, BasicBlock *dst) {
+//     return li.getLoopDepth(src) == (li.isLoopHeader(dst))+li.getLoopDepth(dst);
+// }
+
+bool isBackEdge(BasicBlock *src, BasicBlock *dst, const llvm::DominatorTree &DT) {
+    if (DT.dominates(dst, src)) {
+        return true;
     }
-    return ret;
+    if (auto Next = dst->getUniqueSuccessor()) {
+        if (DT.dominates(dst, src)) {
+            return true;
+        }
+    }
+    return false;
 }
 
-bool isSuccessorInLoop(llvm::LoopInfo &li, BasicBlock *src, BasicBlock *dst) {
-    return li.getLoopDepth(src) == (li.isLoopHeader(dst))+li.getLoopDepth(dst);
+void HBPPredictorPass::propagate(llvm::BranchProbabilityInfo &BPI, const llvm::DominatorTree &DT, BasicBlock *BB, BasicBlock *Head) {
+    // outfile << "Propagating BB " << extractAndFormatDigits(BB->getName().str()) << "\n"; 
+    const long double eps = 0.05;
+    if (vis[BB]) {
+        return;
+    }
+    if (BB == Head) {
+        bfreq[BB] = 1;
+    } else {
+        for (auto *Pred : llvm::predecessors(BB)) {
+            if (!vis[Pred] && !isBackEdge(Pred, BB, DT)) {
+                return;
+            }
+        }
+        bfreq[BB] = 0;
+        long double cyclic_prob = 0;
+        for (auto *Pred : llvm::predecessors(BB)) {
+            if (isBackEdge(Pred, BB, DT)) {
+                cyclic_prob += back_edge_prob[{Pred,BB}];
+            } else {
+                bfreq[BB] += freq[{Pred, BB}];
+            }
+        }
+        if (cyclic_prob > 1-eps) {
+            cyclic_prob = 1-eps;
+        }
+        bfreq[BB] = bfreq[BB]/(1-cyclic_prob);
+    }
+    vis[BB] = 1;
+    for (auto *Succ : llvm::successors(BB)) {
+        freq[{BB,Succ}] = getEdgeProbability(BPI, BB, Succ) * bfreq[BB];
+        if (Succ == Head) {
+            back_edge_prob[{BB,Succ}] = getEdgeProbability(BPI, BB, Succ) * bfreq[BB];
+        }
+    }
+    for (auto *Succ : llvm::successors(BB)) {
+        if (!isBackEdge(BB, Succ, DT)) {
+            // outfile << "Edge " << extractAndFormatDigits(BB->getName().str()) << " -> " <<
+            // extractAndFormatDigits(Succ->getName().str()) << " is not a back-edge\n";
+            propagate(BPI, DT, Succ, Head);
+        }
+    }
 }
 
-bool isLastInLoop(llvm::LoopInfo &li, BasicBlock *src, BasicBlock *dst) {
-    return li.isLoopHeader(dst) && li.getLoopDepth(src)-li.isLoopHeader(src) == li.getLoopDepth(dst);
+void HBPPredictorPass::markVis(BasicBlock *BB) {
+    if (!vis[BB]) return;
+    vis[BB] = 0;
+    for (auto *Succ : llvm::successors(BB)) {
+        markVis(Succ);
+    }
 }
 
 PreservedAnalyses HBPPredictorPass::run(Function &F,
                                       FunctionAnalysisManager &AM) {
     
-    const double eps = 1e-6;
+    // const long double eps = 1e-6;
 
     std::string functionName = F.getName().str();
     outfile.open(functionName + "-predictor.txt");
@@ -51,49 +112,49 @@ PreservedAnalyses HBPPredictorPass::run(Function &F,
 
     llvm::BranchProbabilityInfo &bpi = AM.getResult<llvm::BranchProbabilityAnalysis>(F);
     llvm::LoopInfo &li = AM.getResult<llvm::LoopAnalysis>(F);
-
-    double MaxPred = -1;
-    BasicBlock *predicted = nullptr;
-
-    std::map<BasicBlock *, double> Frequencies;
-
-    // Get the entry block and assign an initial frequency to it (e.g. 1)
-    auto &EntryBlock = F.getEntryBlock();
-    Frequencies[&EntryBlock] = 1.0;
+    llvm::DominatorTree &dt = AM.getResult<llvm::DominatorTreeAnalysis>(F);
 
     for (BasicBlock &BB : F) {
-        // If BB is a loop header, update its frequency based on the probability of entering the loop
-        if (li.isLoopHeader(&BB)) {
-            for (auto *Succ : llvm::successors(&BB)) {
-                double Probability = getEdgeProbability(bpi, &BB, Succ);
-                if (isSuccessorInLoop(li, &BB, Succ)) {
-                    Frequencies[&BB] += approximateConvergence(Probability);
-                }
-            }
-        }
-
-        double BlockFrequency = Frequencies[&BB];
-
-        // Propagate the frequency for each successor of the BB based on the probability of entering each edge
         for (auto *Succ : llvm::successors(&BB)) {
-            if (!isLastInLoop(li, &BB, Succ)) {
-                double Probability = getEdgeProbability(bpi, &BB, Succ);
-                Frequencies[Succ] += BlockFrequency * Probability;
-            }
+            // outfile << "Edge: " << extractAndFormatDigits(BB.getName().str()) << " -> " <<
+            // extractAndFormatDigits(Succ->getName().str()) << " | Probability: " <<
+            // getEdgeProbability(bpi, &BB, Succ) << "\n";
+            back_edge_prob[{&BB,Succ}] = getEdgeProbability(bpi, &BB, Succ);
         }
-        
-        // Update the answer
-        if (BlockFrequency > MaxPred && fabs(BlockFrequency - MaxPred) > eps) {
-            MaxPred = BlockFrequency;
-            predicted = &BB;
-        } else if (fabs(BlockFrequency - MaxPred) <= eps) { 
-            // If there is a draw, give preference to loop headers
-            if (!li.isLoopHeader(predicted) && li.isLoopHeader(&BB)) {
-                predicted = &BB;
-            }
-        }
+    }
 
-        // outfile << "BB: " << extractAndFormatDigits(BB.getName().str()) << " | Frequency: " << BlockFrequency << "\n";
+    std::vector<std::pair<int, BasicBlock *>> Headers;
+
+    for (Loop *l : li.getLoopsInPreorder()) {
+        Headers.emplace_back(l->getLoopDepth(), l->getHeader());
+    }
+
+    std::sort(Headers.rbegin(), Headers.rend());
+    Headers.emplace_back(0,&(F.getEntryBlock()));
+
+    for (auto Header : Headers) {
+        BasicBlock *Head = Header.second;
+        // outfile << extractAndFormatDigits(Head->getName().str()) << "\n";
+        for (BasicBlock &BB : F) {
+            vis[&BB] = 1;
+        }
+        markVis(Head);
+        // for (BasicBlock &BB : F) {
+        //     outfile << "BB: " << extractAndFormatDigits(BB.getName().str()) << " | " <<
+        //     (vis[&BB] ? "" : "Not ") << "Visited\n"; 
+        // }
+        propagate(bpi, dt, Head, Head);
+    }
+
+    long double MaxPred = -1;
+    BasicBlock *predicted = nullptr;
+
+    for (BasicBlock &BB : F) {
+        // outfile << "BB: " << extractAndFormatDigits(BB.getName().str()) << " | Frequency: " << bfreq[&BB] << "\n";
+        if (bfreq[&BB] > MaxPred) {
+            MaxPred = bfreq[&BB];
+            predicted = &BB;
+        }
     }
     
     outfile << extractAndFormatDigits(predicted->getName().str()) << "\n";
