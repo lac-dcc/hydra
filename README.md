@@ -49,7 +49,7 @@ With these configurations correctly set, you must run the scripts `build.sh` and
 
 ## How to get the CSV table
 
-With the `jotaiMerlinResults.json`, `jotaiRandomBlock.json` and `jotaiNestedBlock.json` files, you can generate a CSV file containing the detailed results by executing the `genCsv.py` python script.
+With the `jotaiMerlinResults.json`, `jotaiRandomBlock.json`, `jotaiNestedBlock.json` and `jotaiPredictorBlock.json` files, you can generate a CSV file containing the detailed results by executing the `genCsv.py` python script.
 
 ## How to pretty print a JSON file
 
