@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <map>
+#include <random>
 
 #include "llvm/IR/PassManager.h"
 #include "llvm/IR/Function.h"
@@ -28,6 +29,7 @@ private:
     std::map<BasicBlock *, double> bfreq;
     std::map<BasicBlock *, bool> vis;
     std::ofstream outfile;
+    std::mt19937 mt{};
 };
 
 }

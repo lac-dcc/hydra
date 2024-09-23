@@ -45,7 +45,7 @@ for app_name in gt_data:
                 if count < max_count:
                     break
                 hottest_blocks_list.append(block)
-            hottest_blocks = ';'.join(sorted(hottest_blocks_list, key=lambda x: int(x)))
+            hottest_blocks = ';'.join(sorted(hottest_blocks_list))
             random_hit = 0
             if frequencies[random_guess] == max_count:
                 random_hit = 1

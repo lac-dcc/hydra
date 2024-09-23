@@ -8,13 +8,27 @@
 using namespace llvm;
 
 std::string extractAndFormatDigits(const std::string &s) {
-  std::string sub = std::regex_replace(s, std::regex(R"([\D])"), "");
-  if (sub.size() > 0) {
-    if (std::regex_match(s, std::regex(".*crit.*"))) {
-      return "-" + sub;
+  std::string::size_type pos = s.find(".");
+  if (pos == std::string::npos) {
+    return (s.size() == 2 ? "0" : s.substr(2));
+  } else {
+    std::string bb1 = s.substr(0,pos), bb2, args, aux;
+    bb1 = (bb1.size() == 2 ? "0" : bb1.substr(2));
+    aux = s.substr(pos+1);
+    if (aux == "loopexit") {
+      return bb1+".le";
     }
-    return sub;
+    pos = aux.find("_");
+    bb2 = aux.substr(0,pos);
+    args = aux.substr(pos+1);
+    bb2 = (bb2.size() == 2 ? "0" : bb2.substr(2));
+    if (args == "crit_edge") {
+      return bb1+"_"+bb2+".ce";
+    } else {
+      return bb1+"_"+bb2+"."+args;
+    }
   }
+  
   return "0";
 }
 
@@ -51,7 +65,7 @@ bool isBackEdge(BasicBlock *src, BasicBlock *dst, const llvm::DominatorTree &DT)
 
 void HBPPredictorPass::propagate(llvm::BranchProbabilityInfo &BPI, const llvm::DominatorTree &DT, BasicBlock *BB, BasicBlock *Head) {
     // outfile << "Propagating BB " << extractAndFormatDigits(BB->getName().str()) << "\n"; 
-    const long double eps = 0.05;
+    const long double eps = 0.03;
     if (vis[BB]) {
         return;
     }
@@ -109,6 +123,8 @@ PreservedAnalyses HBPPredictorPass::run(Function &F,
     std::string functionName = F.getName().str();
     outfile.open(functionName + "-predictor.txt");
 
+    std::uniform_int_distribution dist{0, 1};
+
 
     llvm::BranchProbabilityInfo &bpi = AM.getResult<llvm::BranchProbabilityAnalysis>(F);
     llvm::LoopInfo &li = AM.getResult<llvm::LoopAnalysis>(F);
@@ -154,6 +170,8 @@ PreservedAnalyses HBPPredictorPass::run(Function &F,
         if (bfreq[&BB] > MaxPred) {
             MaxPred = bfreq[&BB];
             predicted = &BB;
+        } else if (bfreq[&BB] == MaxPred) {
+            if (dist(mt)) predicted = &BB;
         }
     }
     
