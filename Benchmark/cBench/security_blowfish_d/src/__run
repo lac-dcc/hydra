@@ -1,9 +1,12 @@
 #! /bin/bash
 
-if test -z "$1"; then
- echo "Usage: __run <dataset number> <exe name> <number of runs (optional)>"
+if test -z "$2"; then
+ echo "Usage: __run <bench_dir> <dataset number> <exe name> <number of runs (optional)>"
  exit
 fi
+
+CUR_DIR=$(pwd)
+cd $1
 
 #Searching for dataset info (command line and loop wrapper)
 found="0"
@@ -15,7 +18,7 @@ exec 5< _ccc_info_datasets
    read <&5 ds ;
    read <&5 cmd ;
    read <&5 loop_wrap ;
-   if [ $ds -eq $1 ] ; then
+   if [ $ds -eq $2 ] ; then
     found="1"
     break;
    fi
@@ -28,10 +31,10 @@ if [ $found != "1" ] ; then
  exit
 fi
 
-exe_name=$2
+exe_name=$3
 
-if test -n "$3"; then
- loop_wrap=$3
+if test -n "$4"; then
+ loop_wrap=$4
 fi
 
 echo "Found dataset: " $ds
@@ -39,8 +42,8 @@ echo "Command line:  " $cmd
 echo "Loop wrap:     " $loop_wrap
 echo "Exe name:      " $exe_name
 
-if test -n "$3"; then
- echo $3 > _finfo_dataset
+if test -n "$4"; then
+ echo $4 > _finfo_dataset
 else
  echo $loop_wrap > _finfo_dataset
 fi
@@ -54,3 +57,7 @@ else
 fi
 
 source tmp_bat
+
+mv *.prof $CUR_DIR
+
+cd -
