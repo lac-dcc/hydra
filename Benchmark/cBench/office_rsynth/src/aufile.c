@@ -1,8 +1,8 @@
-#include <config.h>
+#include "config.h"
 #include "proto.h"
 #include <stdio.h>
 #include <fcntl.h>
-#include <useconfig.h>
+#include "useconfig.h"
 #include "getargs.h"
 #include "l2u.h"
 #include "hplay.h"

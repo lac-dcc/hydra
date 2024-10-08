@@ -1,9 +1,9 @@
-#include <config.h>
+#include "config.h"
 /* $Id: def_pars.c,v 1.13 1994/11/08 13:30:50 a904209 Exp a904209 $
  */
 char *def_pars_id = "$Id: def_pars.c,v 1.13 1994/11/08 13:30:50 a904209 Exp a904209 $";
 #include <stdio.h>
-#include <useconfig.h>
+#include "useconfig.h"
 #include <math.h>
 #include "proto.h"
 #include "getargs.h"

@@ -75,7 +75,7 @@ $LLVM_OPT -S -passes="dot-cfg" -stats \
 # Compile the newly instrumented program, and link it against the profiler.
 # We are passing -no_pie to disable address space layout randomization:
 #
-$LLVM_CLANG -flto -fuse-ld=lld -Wall \
+$LLVM_CLANG -flto -fuse-ld=lld -lm \
     $PF_NAME $PROFILER_IMPL -o $BENCH_NAME
 ret_code=$?
 if [[ $ret_code -ne 0 ]]; then

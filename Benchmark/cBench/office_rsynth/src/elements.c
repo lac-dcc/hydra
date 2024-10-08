@@ -1,4 +1,4 @@
-#include <config.h>
+#include "config.h"
 /* $Id: elements.c,v 1.13 1994/11/08 13:30:50 a904209 Exp a904209 $
  */
 char *elements_id = "$Id: elements.c,v 1.13 1994/11/08 13:30:50 a904209 Exp a904209 $";

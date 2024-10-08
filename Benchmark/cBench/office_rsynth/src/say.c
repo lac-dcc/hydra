@@ -1,4 +1,4 @@
-#include <config.h>
+#include "config.h"
 /* $Id: say.c,v 1.13 1994/11/08 13:30:50 a904209 Exp a904209 $
    $Log: say.c,v $
  * Revision 1.13  1994/11/08  13:30:50  a904209
@@ -42,7 +42,7 @@ char *say_id = "$Id: say.c,v 1.13 1994/11/08 13:30:50 a904209 Exp a904209 $";
 extern char *Revision;
 #include <stdio.h>
 #include <ctype.h>
-#include <useconfig.h>
+#include "useconfig.h"
 #include <math.h>
 #include "proto.h"
 #include "nsynth.h"

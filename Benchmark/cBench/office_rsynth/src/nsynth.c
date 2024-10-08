@@ -1,4 +1,4 @@
-#include <config.h>
+#include "config.h"
 
 
 /* $Id: nsynth.c,v 1.13 1994/11/08 13:30:50 a904209 Exp a904209 $
@@ -34,7 +34,7 @@ char *nsynth_id = "$Id: nsynth.c,v 1.13 1994/11/08 13:30:50 a904209 Exp a904209 
  * 000016 20-Apr-91 ATS Modified for SPARCSTATION
  */
 
-#include <useconfig.h>
+#include "useconfig.h"
 #include <stdio.h>
 #include <math.h>
 #include "proto.h"

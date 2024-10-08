@@ -1,4 +1,4 @@
-#include <config.h>
+#include "config.h"
 #include "proto.h"
 #include <stdio.h>
 #include "phones.h"
@@ -7,7 +7,7 @@ void *dict;
 char **dialect = ph_am;
 
 #ifdef HAVE_LIBGDBM
-#include <useconfig.h>
+#include "useconfig.h"
 #include <ctype.h>
 #include <gdbm.h>
 

@@ -1,4 +1,4 @@
-#include <config.h>
+#include "config.h"
 
 /*****************************************************************/
 /***                                                           ***/
@@ -12,7 +12,7 @@
 /***                                                           ***/
 /*****************************************************************/
 
-#include <useconfig.h>
+#include "useconfig.h"
 #include <stdio.h>
 #include <math.h>
 #include <errno.h>

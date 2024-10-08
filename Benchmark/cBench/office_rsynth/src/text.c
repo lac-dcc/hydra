@@ -1,10 +1,10 @@
-#include <config.h>
+#include "config.h"
 /* $Id: text.c,v 1.13 1994/11/08 13:30:50 a904209 Exp a904209 $
  */
 char *text_id = "$Id: text.c,v 1.13 1994/11/08 13:30:50 a904209 Exp a904209 $";
 #include <stdio.h>
 #include <ctype.h>
-#include <useconfig.h>
+#include "useconfig.h"
 #include "proto.h"
 #include "darray.h"
 #include "phtoelm.h"
