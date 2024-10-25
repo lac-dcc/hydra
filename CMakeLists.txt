@@ -34,6 +34,16 @@ add_library(HotBlockPredictor MODULE
     lib/HBPPredictorPlugin.cpp
 )
 
+add_library(BlockOrderingRandom MODULE
+    lib/BOPRandom.cpp
+    lib/BOPRandomPlugin.cpp
+)
+
+add_library(BlockOrderingPredictor MODULE
+    lib/BOPPredictor.cpp
+    lib/BOPPredictorPlugin.cpp
+)
+
 target_include_directories(HotBlockRandom PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
@@ -43,5 +53,13 @@ target_include_directories(HotBlockNested PRIVATE
 )
 
 target_include_directories(HotBlockPredictor PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
+)
+
+target_include_directories(BlockOrderingRandom PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
+)
+
+target_include_directories(BlockOrderingPredictor PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
