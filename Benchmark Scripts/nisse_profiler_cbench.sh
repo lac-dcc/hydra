@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
 # Example:
-# ./nisse_profiler_cbench.sh path/to/cBench/automotive_bitcount [dataset_number]
+# ./mem_profiler.sh ../../tests/simple_array.c
 
-# if [ $# -lt 1 ]
-# then
-#     echo "Syntax: regions_ex file.c [INPUT]"
-#     exit 1
-# fi
+if [ $# -lt 1 ]
+then
+    echo Syntax: regions_ex file.c
+    exit 1
+fi
 
 # LLVM tools:
 #
@@ -21,20 +21,24 @@ PROFILER_IMPL=$NISSE_SOURCE_DIR/lib/prof.c
 MY_LLVM_LIB=$NISSE_BUILD_DIR/lib/libNisse.so
 PROP_BIN=$NISSE_BUILD_DIR/bin/propagation
 
-# Move to folder where cBench is
+# Move to folder where the file is:
 #
 DR_NAME="$(dirname $1)"
 cd $DR_NAME
-DR_NAME=$(pwd)
 echo $(pwd)
 
-# Some names:
+# File names:
 #
 BENCH_NAME=$(basename $1)
 PROF_DIR="$(pwd)/$BENCH_NAME.profiling"
 BC_NAME="$BENCH_NAME.bc"
 LL_NAME="$BENCH_NAME.ll"
 PF_NAME="$BENCH_NAME.profiled.ll"
+INFO_PROF="info.prof"
+MAIN_PROF="main.prof"
+PROF_SUF=".prof.full"
+EXE_LOG="execution.log"
+
 
 # Create the profiling folder:
 #
@@ -42,10 +46,9 @@ if [ -d "$PROF_DIR" ]; then
   rm -r "$PROF_DIR"
 fi
 mkdir $PROF_DIR
+cd $BENCH_NAME/src_work
 
-# Move to Benchmark source work directory
-#
-cd "$BENCH_NAME/src_work"
+# CLANG_FLAGS="-Xclang -disable-O0-optnone -std=c99 -c -S -emit-llvm"
 
 # Generating a single bytecode for the benchmark in SSA form:
 #
@@ -64,6 +67,7 @@ $LLVM_OPT -S -passes="mem2reg,instnamer" $LL_NAME -o $LL_NAME
 
 # Running the pass:
 #
+$LLVM_OPT -S -passes="loop-simplify,break-crit-edges" $LL_NAME -o $LL_NAME
 $LLVM_OPT -S -load-pass-plugin $MY_LLVM_LIB -passes="nisse" -stats \
     $LL_NAME -o $PF_NAME
 
@@ -72,80 +76,15 @@ $LLVM_OPT -S -load-pass-plugin $MY_LLVM_LIB -passes="nisse" -stats \
 $LLVM_OPT -S -passes="dot-cfg" -stats \
     $PF_NAME -o $PF_NAME
 
-# Compile the newly instrumented program, and link it against the profiler.
-# We are passing -no_pie to disable address space layout randomization:
+# Compile the newly instrumented program, and link it against the profiler
 #
 $LLVM_CLANG -flto -fuse-ld=lld -lm \
-    $PF_NAME $PROFILER_IMPL -o $BENCH_NAME
-ret_code=$?
-if [[ $ret_code -ne 0 ]]; then
-    echo "Compilation failed"
-    cd -
-    echo $BENCH_NAME >> err.txt
-    exit $ret_code
-fi
-
-if [ $# -ge 2 ]
-then
-  $DR_NAME/$BENCH_NAME/src_work/__run $DR_NAME/$BENCH_NAME/src_work $2 $PROF_DIR/$BENCH_NAME
-else
-  $DR_NAME/$BENCH_NAME/src_work/__run $DR_NAME/$BENCH_NAME/src_work 1 $PROF_DIR/$BENCH_NAME
-fi
-
-# Prepare the result folders
-#
-mkdir graphs profiles compiled partial_profiles dot
-
-# Propagation Flags to use:
-#
-if [ $# -eq 3 ]
-then
-  PROP_FLAG="-s"
-else
-  PROP_FLAG=""
-fi
-
-# Propagate the weights for each function:
-#
-for i in *.prof; do
-  echo $i
-  PROF_NAME="$i.full"
-  $PROP_BIN $i $PROP_FLAG -o $PROF_NAME
-  mv $i partial_profiles/
-  mv $PROF_NAME.edges profiles/
-  mv $PROF_NAME.bb profiles/
-done
-
-# Move the files to apropriate folders
-#
-for i in .*.dot; do
-  mv $i dot/
-done
-
-for i in *.graph; do
-  mv $i graphs/
-done
-
-for i in *.ll; do
-  mv $i compiled/
-done
-
-mv $BENCH_NAME compiled/
-
-cd -
-
-exit 0
-
-
-# Compile the newly instrumented program, and link it against the profiler.
-# We are passing -no_pie to disable address space layout randomization:
-#
-$LLVM_CLANG -Wall -std=c99 $PF_NAME $PROFILER_IMPL -o $BS_NAME
+  $PF_NAME $PROFILER_IMPL -o $BENCH_NAME
 ret_code=$?
 if [[ $ret_code -ne 0 ]]; then
   echo "Compilation failed"
   cd -
-  echo $FL_NAME >> err.txt
+  echo $BENCH_NAME >> err.txt
   exit $ret_code
 fi
 
@@ -153,33 +92,26 @@ fi
 #
 if [ $# -ge 2 ]
 then
-  ./$BS_NAME $2
+  $DR_NAME/$BENCH_NAME/src_work/__run $DR_NAME/$BENCH_NAME/src_work $2 $PROF_DIR/$BENCH_NAME
 else
-  ./$BS_NAME 0
+  $DR_NAME/$BENCH_NAME/src_work/__run $DR_NAME/$BENCH_NAME/src_work 1 $PROF_DIR/$BENCH_NAME
 fi
-
-# Prepare the result folders
-#
-mkdir graphs profiles compiled partial_profiles dot
-
-# Propagation Flags to use:
-#
-if [ $# -eq 3 ]
+ret_code=$?
+if [ ! -f $INFO_PROF ] || [ ! -f $MAIN_PROF ]
 then
-  PROP_FLAG="-s"
-else
-  PROP_FLAG=""
+  echo "Execution failed"
+  cd -
+  echo $FL_NAME >> err.txt
+  exit $ret_code
 fi
 
 # Propagate the weights for each function:
 #
-for i in *.prof; do
-  PROF_NAME="$i.full"
-  $PROP_BIN $i $PROP_FLAG -o $PROF_NAME
-  mv $i partial_profiles/
-  mv $PROF_NAME.edges profiles/
-  mv $PROF_NAME.bb profiles/
-done
+$PROP_BIN $INFO_PROF $MAIN_PROF -o ".prof.full"
+
+# Prepare the result folders
+#
+mkdir graphs profiles compiled partial_profiles dot
 
 # Move the files to apropriate folders
 #
@@ -195,7 +127,17 @@ for i in *.ll; do
   mv $i compiled/
 done
 
-mv $BS_NAME compiled/
+for i in *.prof.full*; do
+  mv $i profiles/
+done
+
+for i in *.prof; do
+  mv $i partial_profiles/
+done
+
+mv $EXE_LOG profiles/
+
+mv $BENCH_NAME compiled/
 
 # Go back to the folder where you were before:
 #
