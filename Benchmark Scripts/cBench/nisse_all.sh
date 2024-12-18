@@ -19,25 +19,14 @@ cd $CURRENT_DIR
 for i in {1..20}
 do
     echo "running dataset $i/20"
+    rm -rf $BENCH_DIR/*.profiling
     for d in $(ls $BENCH_DIR)
     do 
         if [ -d $BENCH_DIR/$d ]
         then
-            # Long time running
-            if [ "$d" = "automotive_bitcount" ]; then continue; fi
-            if [ "$d" = "automotive_qsort1" ]; then continue; fi
-            if [ "$d" = "bzip2e" ]; then continue; fi
-            if [ "$d" = "network_dijkstra" ]; then continue; fi
-            if [ "$d" = "network_patricia" ]; then continue; fi
-            if [ "$d" = "office_stringsearch1" ]; then continue; fi
-            if [ "$d" = "security_blowfish_d" ]; then continue; fi
-            if [ "$d" = "security_blowfish_e" ]; then continue; fi
-            if [ "$d" = "security_rijndael_d" ]; then continue; fi
-            if [ "$d" = "security_rijndael_e" ]; then continue; fi
-            if [ "$d" = "security_sha" ]; then continue; fi
-
             # Runtime error with Nisse
             if [[ $d =~ ^"consumer" ]]; then continue; fi
+            if [ "$d" = "security_rijndael_e" ]; then continue; fi
 
             # Compilation error
             if [ "$d" = "consumer_mad" ]; then continue; fi
@@ -55,4 +44,11 @@ do
             fi
         fi
     done
+    cd "$PYTHON_SCRIPTS"
+    python3 get_results.py $i
+    cd "$CURRENT_DIR"
 done
+
+cd "$PYTHON_SCRIPTS"
+python3 process_results.py
+cd "$CURRENT_DIR"
