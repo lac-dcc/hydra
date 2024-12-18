@@ -3,7 +3,7 @@ import csv
 import os
 
 csv_data = [
-    ['Benchmark name', 'Function name', 'Execution', 'Number of vertices', 'Number of edges', 'Min count', 'Max count', 'Random hottest guess', 'Random hit', 'Nested hottest guess', 'Nested hit', 'Predictor guess', 'Predictor hit']
+    ['Benchmark name', 'Function name', 'Execution', 'Number of vertices', 'Number of edges', 'Min count', 'Max count', 'Hottest Blocks', 'Random hottest guess', 'Random hit', 'Nested hottest guess', 'Nested hit', 'Predictor guess', 'Predictor hit']
 ]
 
 json_folder = os.environ.get('JSON_FOLDER', '')
@@ -41,12 +41,12 @@ for app_name in gt_data:
             sorted_frequencies = sorted(frequencies.items(), key=lambda item: item[1])[::-1]
             max_count = sorted_frequencies[0][1]
             min_count = sorted_frequencies[-1][1]
-            # hottest_blocks_list = []
+            hottest_blocks_list = []
             for block, count in sorted_frequencies:
                 if count < max_count:
                     break
-            #     hottest_blocks_list.append(block)
-            # hottest_blocks = ';'.join(sorted(hottest_blocks_list))
+                hottest_blocks_list.append(block)
+            hottest_blocks = ';'.join(sorted(hottest_blocks_list))
             random_hit = 0
             if frequencies[random_guess] == max_count:
                 random_hit = 1
@@ -57,8 +57,8 @@ for app_name in gt_data:
             if frequencies[predictor_guess] == max_count:
                 predictor_hit = 1
             if max_count == 0: continue
-            # csv_data.append([app_name, function_name, execution_number, nodes, edges, min_count, max_count, str(hottest_blocks), random_guess, random_hit, nested_guess, nested_hit, predictor_guess, predictor_hit])
-            csv_data.append([app_name, function_name, execution_number, nodes, edges, min_count, max_count, random_guess, random_hit, nested_guess, nested_hit, predictor_guess, predictor_hit])
+            csv_data.append([app_name, function_name, execution_number, nodes, edges, min_count, max_count, str(hottest_blocks), random_guess, random_hit, nested_guess, nested_hit, predictor_guess, predictor_hit])
+            # csv_data.append([app_name, function_name, execution_number, nodes, edges, min_count, max_count, random_guess, random_hit, nested_guess, nested_hit, predictor_guess, predictor_hit])
 
 with open('cBenchTable.csv', mode='w', newline='') as file:
     writer = csv.writer(file, delimiter=';', quoting=csv.QUOTE_MINIMAL)
