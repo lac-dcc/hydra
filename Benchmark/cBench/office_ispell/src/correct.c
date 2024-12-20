@@ -120,6 +120,11 @@ static char Rcs_Id[] =
 
 #include <string.h>
 #include <ctype.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 #include "config.h"
 #include "ispell.h"
 #include "proto.h"
@@ -165,7 +170,7 @@ static void	save_root_cap P ((ichar_t * word, ichar_t * pattern,
 		  struct flagent * sufent,
 		  ichar_t savearea[MAX_CAPS][INPUTWORDLEN + MAXAFFIXLEN],
 		  int * nsaved));
-static char *	getline P ((char * buf));
+static char *	getline_ P ((char * buf));
 void		askmode P ((void));
 void		copyout P ((char ** cc, int cnt));
 static void	lookharder P ((char * string));
@@ -447,7 +452,7 @@ checkagain:
 
 		move (li - 1, 0);
 		(void) putchar ('!');
-		if (getline (buf) == NULL)
+		if (getline_ (buf) == NULL)
 		    {
 		    (void) putchar (7);
 		    erase ();
@@ -472,7 +477,7 @@ checkagain:
 		    (void) printf ("%s ", CORR_C_READONLY);
 		    }
 		(void) printf (CORR_C_REPLACE_WITH);
-		if (getline (ctok) == NULL)
+		if (getline_ (ctok) == NULL)
 		    {
 		    (void) putchar (7);
 		    /* Put it back */
@@ -534,7 +539,7 @@ checkagain:
 		char	buf[100];
 		move (li - 1, 0);
 		(void) printf (CORR_C_LOOKUP_PROMPT);
-		if (getline (buf) == NULL)
+		if (getline_ (buf) == NULL)
 		    {
 		    (void) putchar (7);
 		    erase ();
@@ -1012,7 +1017,7 @@ int compoundgood (word, pfxopts)
     ichar_t		newword[INPUTWORDLEN + MAXAFFIXLEN];
     register ichar_t *	p;
     register ichar_t	savech;
-    long		secondcap;	/* Capitalization of 2nd half */
+    int		secondcap;	/* Capitalization of 2nd half */
 
     /*
     ** If compoundflag is COMPOUND_NEVER, compound words are never ok.
@@ -1388,7 +1393,7 @@ static void save_root_cap (word, pattern, prestrip, preadd, sufstrip, sufadd,
 #endif /* NO_CAPITALIZATION_SUPPORT */
     }
 
-static char * getline (s)
+static char * getline_ (s)
     register char *	s;
     {
     register char *	p;

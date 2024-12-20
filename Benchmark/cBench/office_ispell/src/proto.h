@@ -151,7 +151,7 @@ extern struct dent * treelookup P ((ichar_t * word));
 extern void	treeoutput P ((void));
 extern void	upcase P ((ichar_t * string));
 #ifndef NO_CAPITALIZATION_SUPPORT
-extern long	whatcap P ((ichar_t * word));
+extern int	whatcap P ((ichar_t * word));
 #endif
 extern char *	xgets P ((char * string, int size, FILE * stream));
 extern void	yyinit P ((void));
@@ -188,7 +188,7 @@ extern VOID *	calloc P ((unsigned int nelems, unsigned int elemsize));
 #ifdef _POSIX_SOURCE
 extern int	chmod P ((const char * file, unsigned int mode));
 #else /* _POSIX_SOURCE */
-extern int	chmod P ((const char * file, unsigned long mode));
+extern int	chmod P ((const char * file, unsigned int mode));
 #endif /* POSIX_SOURCE */
 extern int	close P ((int fd));
 extern int	creat P ((const char * file, int mode));
@@ -218,7 +218,7 @@ extern char *	getenv P ((const char * varname));
 extern int	ioctl P ((int fd, int func, char * arg));
 extern int	kill P ((int pid, int sig));
 extern int	link P ((const char * existing, const char * new));
-extern long	lseek P ((int fd, long offset, int whence));
+extern int	lseek P ((int fd, int offset, int whence));
 extern VOID *	malloc P ((unsigned int size));
 #ifdef USG
 extern VOID *	memcpy P ((VOID * dest, const VOID * src));

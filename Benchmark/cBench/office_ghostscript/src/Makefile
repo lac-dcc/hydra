@@ -20,7 +20,7 @@ endif
 # Actions
 all:		
 	$(ZCC) $(CCC_OPTS) $(CCC_OPTS_ADD) -c -w *.c
-	$(LDCC) $(LD_OPTS) $(CCC_OPTS_ADD) -lm -lz *.o
+	$(LDCC) $(LD_OPTS) $(CCC_OPTS_ADD) *.o -lm -lz
 
 clean:
 	rm -f a.out *.o *.a *.s *.i *.I

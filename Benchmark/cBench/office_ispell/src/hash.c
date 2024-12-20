@@ -75,7 +75,7 @@ int hash (s, hashtblsize)
     register ichar_t *	s;
     register int	hashtblsize;
     {
-    register long	h = 0;
+    register int	h = 0;
     register int	i;
 
 #ifdef ICHAR_IS_CHAR
@@ -95,5 +95,5 @@ int hash (s, hashtblsize)
 	  | ((h >> (32 - HASHSHIFT)) & ((1 << HASHSHIFT) - 1));
 	h ^= HASHUPPER (*s++);
 	}
-    return (unsigned long) h % hashtblsize;
+    return (unsigned int) h % hashtblsize;
     }

@@ -401,7 +401,7 @@ set_clip_path(gs_state *pgs, gx_clip_path *pcpath, int rule)
 #ifdef DEBUG
 if ( gs_debug_c('P') )
   {	extern void gx_cpath_print(P1(const gx_clip_path *));
-	dprintf("[P]Clipping path:\n"),
+	dprintf0("[P]Clipping path:\n"),
 	gx_cpath_print(pcpath);
   }
 #endif

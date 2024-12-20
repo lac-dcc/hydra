@@ -135,6 +135,7 @@ static char Rcs_Id[] =
 #include <ctype.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 static void	usage P ((void));
 static void	initckch P ((char * wchars));
@@ -256,7 +257,7 @@ int main (argc, argv)
     FILE* loop_wrap=NULL;
     FILE* loop_wrapi=NULL;
     FILE* loop_wrapo=NULL;
-    long loop_wrap1, loop_wrap2;
+    int loop_wrap1, loop_wrap2;
 
     char *	p;
     char *	cpd;

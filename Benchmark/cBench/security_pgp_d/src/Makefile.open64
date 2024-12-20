@@ -20,7 +20,7 @@ endif
 # Actions
 all:		
 	$(ZCC) $(CCC_OPTS) $(CCC_OPTS_ADD) -c -DUNIX -DPORTABLE *.c
-	$(LDCC) $(LD_OPTS) $(CCC_OPTS_ADD) -lm -m32 *.o
+	$(LDCC) $(LD_OPTS) $(CCC_OPTS_ADD) *.o -lm
 
 clean:
 	rm -f a.out *.o *.a *.s *.i *.I

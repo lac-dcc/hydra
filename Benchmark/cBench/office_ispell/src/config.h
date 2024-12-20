@@ -527,7 +527,7 @@
 ** division-by-zero errors! 
 */
 #ifndef MASKTYPE
-#define MASKTYPE	long
+#define MASKTYPE	int
 #endif
 #ifndef MASKTYPE_WIDTH
 #define MASKTYPE_WIDTH	32
@@ -876,4 +876,4 @@
 
 /* AUTOMATICALLY-GENERATED SYMBOLS */
 #define SIGNAL_TYPE_STRING "void"
-#define MASKTYPE_STRING "long"
+#define MASKTYPE_STRING "int"

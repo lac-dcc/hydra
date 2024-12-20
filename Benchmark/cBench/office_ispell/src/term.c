@@ -66,6 +66,7 @@ static char Rcs_Id[] =
 #include "msgs.h"
 #include <signal.h>
 #include <unistd.h> /* for _exit */
+#include <sys/wait.h>
 
 extern int cbench_print;
 

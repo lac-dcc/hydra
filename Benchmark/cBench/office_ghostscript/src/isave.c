@@ -631,7 +631,7 @@ restore_space(gs_ref_memory_t *mem)
 		  {
 #ifdef DEBUG
 if ( gs_debug_c('U') )
-		    {	dprintf("[U]restore");
+		    {	dprintf0("[U]restore");
 			alloc_save_print(cp, true);
 		    }
 #endif

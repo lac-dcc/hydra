@@ -104,7 +104,7 @@ int good (w, ignoreflagbits, dummy, pfxopts, sfxopts)
     ichar_t		nword[INPUTWORDLEN + MAXAFFIXLEN];
     register ichar_t *	p;
     register ichar_t *	q;
-    register		n;
+    register int n;
     register struct dent * dp;
 
     /*
@@ -180,8 +180,8 @@ int cap_ok (word, hit, len)
     int				prestrip;
     int				sufadd;
     ichar_t *			limit;
-    long			thiscap;
-    long			dentcap;
+    int			thiscap;
+    int			dentcap;
 
     thiscap = whatcap (word);
     /*
