@@ -45,7 +45,7 @@ private void near trace_matrix(P1(const gs_matrix *));
 #ifdef DEBUG
 #define print_inverse(pgs)\
 if ( gs_debug_c('x') )\
-	dprintf("[x]Inverting:\n"), trace_ctm(pgs), trace_matrix(&pgs->ctm_inverse)
+	dprintf0("[x]Inverting:\n"), trace_ctm(pgs), trace_matrix(&pgs->ctm_inverse)
 #else
 #define print_inverse(pgs) DO_NOTHING
 #endif
@@ -102,7 +102,7 @@ gs_initmatrix(gs_state *pgs)
 	set_ctm_only(pgs, imat);
 #ifdef DEBUG
 if ( gs_debug_c('x') )
-	dprintf("[x]initmatrix:\n"), trace_ctm(pgs);
+	dprintf0("[x]initmatrix:\n"), trace_ctm(pgs);
 #endif
 	return 0;
 }
@@ -153,7 +153,7 @@ gs_setcharmatrix(gs_state *pgs, const gs_matrix *pmat)
 	char_tm_only(pgs) = cmat;
 #ifdef DEBUG
 if ( gs_debug_c('x') )
-	dprintf("[x]setting char_tm:"), trace_matrix_fixed(&pgs->char_tm);
+	dprintf0("[x]setting char_tm:"), trace_matrix_fixed(&pgs->char_tm);
 #endif
 	pgs->char_tm_valid = true;
 	return 0;
@@ -183,7 +183,7 @@ gs_setmatrix(gs_state *pgs, const gs_matrix *pmat)
 	set_ctm_only(pgs, *pmat);
 #ifdef DEBUG
 if ( gs_debug_c('x') )
-	dprintf("[x]setmatrix:\n"), trace_ctm(pgs);
+	dprintf0("[x]setmatrix:\n"), trace_ctm(pgs);
 #endif
 	return 0;
 }
@@ -194,7 +194,7 @@ gs_imager_setmatrix(gs_imager_state *pis, const gs_matrix *pmat)
 	set_ctm_only(pis, *pmat);
 #ifdef DEBUG
 if ( gs_debug_c('x') )
-	dprintf("[x]imager_setmatrix:\n"), trace_ctm(pis);
+	dprintf0("[x]imager_setmatrix:\n"), trace_ctm(pis);
 #endif
 	return 0;
 }
@@ -264,7 +264,7 @@ gs_concat(gs_state *pgs, const gs_matrix *pmat)
 	set_ctm_only(pgs, cmat);
 #ifdef DEBUG
 if ( gs_debug_c('x') )
-	dprintf("[x]concat:\n"), trace_matrix(pmat), trace_ctm(pgs);
+	dprintf0("[x]concat:\n"), trace_matrix(pmat), trace_ctm(pgs);
 #endif
 	return code;
 }
@@ -359,7 +359,7 @@ if ( gs_debug_c('x') )
 	dprintf2("[x]translate_to_fixed %g, %g:\n",
 		 fixed2float(px), fixed2float(py)),
 	trace_ctm(pgs),
-	dprintf("[x]   char_tm:\n"),
+	dprintf0("[x]   char_tm:\n"),
 	trace_matrix_fixed(&pgs->char_tm);
 #endif
 	return 0;

@@ -196,6 +196,16 @@ struct dent
 #endif
     };
 
+struct dent32
+    {
+    int	next;
+    int	word;
+    MASKTYPE		mask[MASKSIZE];
+#ifdef FULLMASKSET
+    char		flags;
+#endif
+    };
+
 /*
 ** Flags in the directory entry.  If FULLMASKSET is undefined, these are
 ** stored in the highest bits of the last longword of the mask field.  If
@@ -289,6 +299,18 @@ struct flagent
     {
     ichar_t *		strip;			/* String to strip off */
     ichar_t *		affix;			/* Affix to append */
+    short		flagbit;		/* Flag bit this ent matches */
+    short		stripl;			/* Length of strip */
+    short		affl;			/* Length of affix */
+    short		numconds;		/* Number of char conditions */
+    short		flagflags;		/* Modifiers on this flag */
+    char		conds[SET_SIZE + MAXSTRINGCHARS]; /* Adj. char conds */
+    };
+
+struct flagent32
+    {
+    int		strip;			/* String to strip off */
+    int		affix;			/* Affix to append */
     short		flagbit;		/* Flag bit this ent matches */
     short		stripl;			/* Length of strip */
     short		affl;			/* Length of affix */

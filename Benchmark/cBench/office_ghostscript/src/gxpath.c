@@ -34,7 +34,7 @@ private int gx_path_new_subpath(P1(gx_path *));
 #ifdef DEBUG
 private void gx_print_segment(P1(const segment *));
 #  define trace_segment(msg, pseg)\
-     if ( gs_debug_c('P') ) dprintf(msg), gx_print_segment(pseg);
+     if ( gs_debug_c('P') ) dprintf0(msg), gx_print_segment(pseg);
 #else
 #  define trace_segment(msg, pseg) DO_NOTHING
 #endif

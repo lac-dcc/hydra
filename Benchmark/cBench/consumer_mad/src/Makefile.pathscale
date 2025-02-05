@@ -20,7 +20,7 @@ endif
 # Actions
 all:		
 	$(ZCC) $(CCC_OPTS) $(CCC_OPTS_ADD) -c -I. -DFPM_DEFAULT -DHAVE_CONFIG_H -DLOCALEDIR=\"/usr/local/share/locale\" *.c
-	$(LDCC) $(LD_OPTS) $(CCC_OPTS_ADD) -lm -lm -lz -lesd *.o
+	$(LDCC) $(LD_OPTS) $(CCC_OPTS_ADD) *.o -lm -lm -lz -lesd
 
 clean:
 	rm -f a.out *.o *.a *.s *.i *.I

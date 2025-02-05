@@ -73,7 +73,7 @@ extern int cbench_print;
 
 int		makedent P ((char * lbuf, int lbuflen, struct dent * ent));
 #ifndef NO_CAPITALIZATION_SUPPORT
-long		whatcap P ((ichar_t * word));
+int		whatcap P ((ichar_t * word));
 #endif
 int		addvheader P ((struct dent * ent));
 int		combinecaps P ((struct dent * hdr, struct dent * newent));
@@ -225,7 +225,7 @@ int makedent (lbuf, lbuflen, d)
 ** four capitalization codes ANYCASE, ALLCAPS, CAPITALIZED, or FOLLOWCASE.
 */
 
-long whatcap (word)
+int whatcap (word)
     register ichar_t *	word;
     {
     register ichar_t *	p;

@@ -28,10 +28,13 @@ do
             if [[ $d =~ ^"consumer" ]]; then continue; fi
             if [ "$d" = "security_rijndael_e" ]; then continue; fi
 
+            # Runtime error
+            if [ "$d" = "office_ispell" ]; then continue; fi
+            if [ "$d" = "security_rijndael_e" ]; then continue; fi
+            
             # Compilation error
             if [ "$d" = "consumer_mad" ]; then continue; fi
             if [ "$d" = "office_ghostscript" ]; then continue; fi
-            if [ "$d" = "office_ispell" ]; then continue; fi
             if [ "$d" = "office_rsynth" ]; then continue; fi
             if [ "$d" = "security_pgp_d" ]; then continue; fi
             if [ "$d" = "security_pgp_e" ]; then continue; fi

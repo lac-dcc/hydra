@@ -77,7 +77,7 @@ debug_print_full_ref(const ref *pref)
 	case t_integer:
 	  dprintf1("int %ld", pref->value.intval); break;
 	case t_mark:
-	  dprintf("mark"); break;
+	  dprintf0("mark"); break;
 	case t_mixedarray:
 	  dprintf2("mixed packedarray(%u)0x%lx", size,
 		   (ulong)pref->value.packed); break;
@@ -87,7 +87,7 @@ debug_print_full_ref(const ref *pref)
 	  debug_print_name(pref);
 	  break;
 	case t_null:
-	  dprintf("null"); break;
+	  dprintf0("null"); break;
 	case t_oparray:
 	  dprintf2("op_array(%u)0x%lx:", size, (ulong)pref->value.const_refs);
 	  { const op_array_table *opt = op_index_op_array_table(size);
@@ -128,7 +128,7 @@ debug_print_packed_ref(const ref_packed *pref)
 	switch ( *pref >> r_packed_type_shift )
 	{
 	case pt_executable_operator:
-	  dprintf("<op_name>");
+	  dprintf0("<op_name>");
 	  op_index_ref(elt, &nref);
 	  debug_print_ref(&nref);
 	  break;
@@ -136,9 +136,9 @@ debug_print_packed_ref(const ref_packed *pref)
 	  dprintf1("<int> %d", (int)elt + packed_min_intval);
 	  break;
 	case pt_literal_name:
-	  dprintf("<lit_name>"); goto ptn;
+	  dprintf0("<lit_name>"); goto ptn;
 	case pt_executable_name:
-	  dprintf("<exec_name>");
+	  dprintf0("<exec_name>");
 ptn:	  name_index_ref(elt, &nref);
 	  dprintf2("(0x%lx#%u)", (ulong)nref.value.pname, elt);
 	  debug_print_name(&nref);
@@ -170,7 +170,7 @@ debug_dump_one_ref(const ref *p)
 	if ( type >= tx_next_index )
 	  dprintf1("0x%02x?? ", type);
 	else if ( type >= t_next_index )
-	  dprintf("opr* ");
+	  dprintf0("opr* ");
 	else
 	  dprintf1("%s ", type_strings[type]);
 	for ( ; ap->mask; ++ap )

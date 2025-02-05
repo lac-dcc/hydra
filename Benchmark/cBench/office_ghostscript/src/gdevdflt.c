@@ -575,7 +575,7 @@ if ( gs_debug_c('t') )
 	dprintf6(" x,y=%d,%d w,h=%d,%d p=%d,%d\n",
 		x, y, w, h, px, py);
 	for ( pty = 0; pty < tiles->size.y; pty++ )
-	   {	dprintf("   ");
+	   {	dprintf0("   ");
 		for ( ptx = 0; ptx < tiles->raster; ptx++ )
 			dprintf1("%3x", *ptp++);
 	   }

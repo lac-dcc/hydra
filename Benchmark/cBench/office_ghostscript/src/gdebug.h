@@ -61,7 +61,7 @@ extern void lprintf_file_and_line(P3(FILE *, const char *, int));
 /* Debugging printout macros. */
 #ifdef DEBUG
 #  define if_debug0(c,s)\
-    if (gs_debug_c(c)) dprintf(s)
+    if (gs_debug_c(c)) dprintf0(s)
 #  define if_debug1(c,s,a1)\
     if (gs_debug_c(c)) dprintf1(s,a1)
 #  define if_debug2(c,s,a1,a2)\

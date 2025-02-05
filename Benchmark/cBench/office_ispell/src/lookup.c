@@ -71,7 +71,7 @@ static void	dumpindex P ((struct flagptr * indexp, int depth));
 #endif /* INDEXDUMP */
 struct dent *	lookup P ((ichar_t * word, int dotree));
 
-static		inited = 0;
+static int inited = 0;
 
 int linit ()
     {
@@ -94,6 +94,7 @@ int linit ()
 	}
 
     hashsize = read (hashfd, (char *) &hashheader, sizeof hashheader);
+
     if (hashsize < sizeof hashheader)
 	{
 	if (hashsize < 0)
@@ -181,60 +182,113 @@ int linit ()
 	if (read (hashfd, hashstrings, (unsigned) hashheader.lstringsize)
 	  != hashheader.lstringsize)
 	    {
-	    if (cbench_print) fprintf (stderr, LOOKUP_C_BAD_FORMAT);
+	    if (cbench_print) {
+                fprintf (stderr, LOOKUP_C_BAD_FORMAT);
+            }
 	    return (-1);
 	    }
+
 	(void) lseek (hashfd,
-	  (long) hashheader.stringsize - (long) hashheader.lstringsize
-	    + (long) hashheader.tblsize * (long) sizeof (struct dent),
+	  (int) hashheader.stringsize - (int) hashheader.lstringsize
+	    + (int) hashheader.tblsize * (int) sizeof (struct dent),
 	  1);
 	}
     else
 	{
-	if (read (hashfd, hashstrings, (unsigned) hashheader.stringsize)
-	    != hashheader.stringsize
-	  ||  read (hashfd, (char *) hashtbl,
-	      (unsigned) hashheader.tblsize * sizeof (struct dent))
-	    != hashheader.tblsize * sizeof (struct dent))
-	    {
-	    if (cbench_print) fprintf (stderr, LOOKUP_C_BAD_FORMAT);
-	    return (-1);
+          int cnt;
+	  struct dent32* tmptbl = malloc(hashheader.tblsize * sizeof (struct dent32));
+
+	  if (read (hashfd, hashstrings, (unsigned) hashheader.stringsize)
+	      != hashheader.stringsize
+	    ||  read (hashfd, (char *) tmptbl,
+	      (unsigned) hashheader.tblsize * sizeof (struct dent32))
+	    != hashheader.tblsize * sizeof (struct dent32))
+	      {
+	        if (cbench_print) {
+                   fprintf (stderr, LOOKUP_C_BAD_FORMAT);
+                }
+	      return (-1);
 	    }
-	}
-    if (read (hashfd, (char *) sflaglist,
-	(unsigned) (numsflags + numpflags) * sizeof (struct flagent))
-      != (numsflags + numpflags) * sizeof (struct flagent))
+
+          for (cnt = 0; cnt < hashheader.tblsize; cnt++) {
+              hashtbl[cnt].next = (struct dent*) ((long) tmptbl[cnt].next);
+              hashtbl[cnt].word = (char*) ((long) tmptbl[cnt].word);
+              memcpy(&(hashtbl[cnt].mask), &(tmptbl[cnt].mask), (MASKSIZE * sizeof(MASKTYPE)));
+#ifdef FULLMASKSET
+              hashtbl[cnt].flags = tmptbl[cnt].flags);
+#endif
+          }
+
+          free(tmptbl);
+         }
+
+    {
+    int cnt;
+    struct flagent32* tmplist = malloc((unsigned) (numsflags + numpflags) * sizeof (struct flagent32));
+
+    if (read (hashfd, (char *) tmplist,
+	(unsigned) (numsflags + numpflags) * sizeof (struct flagent32))
+      != (numsflags + numpflags) * sizeof (struct flagent32))
 	{
-	if (cbench_print) fprintf (stderr, LOOKUP_C_BAD_FORMAT);
+	if (cbench_print) {
+          fprintf (stderr, LOOKUP_C_BAD_FORMAT);
+        }
 	return (-1);
-	}
+    }
+
+          for (cnt = 0; cnt < (unsigned) (numsflags + numpflags); cnt++) {
+              sflaglist[cnt].strip = (ichar_t *) ((long) tmplist[cnt].strip);
+              sflaglist[cnt].affix = (ichar_t *) ((long) tmplist[cnt].affix);
+              sflaglist[cnt].flagbit = tmplist[cnt].flagbit;
+              sflaglist[cnt].stripl = tmplist[cnt].stripl;
+              sflaglist[cnt].affl = tmplist[cnt].affl;
+              sflaglist[cnt].numconds = tmplist[cnt].numconds;
+              sflaglist[cnt].flagflags = tmplist[cnt].flagflags;
+              memcpy(&(sflaglist[cnt].conds), &(tmplist[cnt].conds), ((SET_SIZE + MAXSTRINGCHARS) * sizeof(char)));
+          }
+
+          free(tmplist);
+    }
+
     (void) close (hashfd);
 
     if (!nodictflag)
 	{
 	for (i = hashsize, dp = hashtbl;  --i >= 0;  dp++)
 	    {
-	    if (dp->word == (char *) -1)
+	    if (dp->word == (char *) -1) {
+                // printf("word index: NULL\n");
 		dp->word = NULL;
-	    else
-		dp->word = &hashstrings [ (int)(dp->word) ];
-	    if (dp->next == (struct dent *) -1)
+	    } else {
+                // printf("word (%p) - index: %d\n", dp->word, ((unsigned long) dp->word) & 0xFFFFFFFF);
+		dp->word = &hashstrings [ ((unsigned long) dp->word) & 0xFFFFFFFF ];
+            }
+
+	    if (dp->next == (struct dent *) -1) {
+                // printf("next index: NULL\n");
 		dp->next = NULL;
-	    else
-		dp->next = &hashtbl [ (int)(dp->next) ];
+	    } else
+                // printf("next (%p) - index: %d\n", dp->next, ((unsigned long) dp->next) & 0xFFFFFFFF);
+		dp->next = &hashtbl [ ((unsigned long) dp->next) & 0xFFFFFFFF ];
 	    }
 	}
 
     for (i = numsflags + numpflags, entry = sflaglist; --i >= 0; entry++)
 	{
-	if (entry->stripl)
-	    entry->strip = (ichar_t *) &hashstrings[(int) entry->strip];
-	else
+	if (entry->stripl) {
+            // printf("strip (%p) - index: %d\n", entry->strip, ((unsigned long) entry->strip) & 0xFFFFFFFF);
+	    entry->strip = (ichar_t *) &hashstrings[((unsigned long) entry->strip) & 0xFFFFFFFF];
+	} else {
+            // printf("strip index: NULL\n");
 	    entry->strip = NULL;
-	if (entry->affl)
-	    entry->affix = (ichar_t *) &hashstrings[(int) entry->affix];
-	else
+        }
+	if (entry->affl) {
+            // printf("affix (%p) - index: %d\n", entry->affix, ((unsigned long) entry->affix) & 0xFFFFFFFF);
+	    entry->affix = (ichar_t *) &hashstrings[((unsigned long) entry->affix) & 0xFFFFFFFF];
+	} else {
+            // printf("affix index: NULL\n");
 	    entry->affix = NULL;
+        }
 	}
     /*
     ** Warning - 'entry' and 'i' are reset in the body of the loop

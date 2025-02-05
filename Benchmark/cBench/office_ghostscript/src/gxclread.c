@@ -57,7 +57,7 @@ cmd_print_bits(const byte *data, int width, int height, int raster)
 		 width, height, raster);
 	for ( i = 0; i < height; i++ )
 	   {	const byte *row = data + i * raster;
-		dprintf("[L]");
+		dprintf0("[L]");
 		for ( j = 0; j < raster; j++ )
 		  dprintf1(" %02x", row[j]);
 		dputc('\n');

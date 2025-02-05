@@ -230,7 +230,7 @@ gx_sort_ht_order(gx_ht_bit *recs, uint N)
 #ifdef DEBUG
 if ( gs_debug_c('H') )
 	{	uint i;
-		dprintf("[H]Sorted samples:\n");
+		dprintf0("[H]Sorted samples:\n");
 		for ( i = 0; i < N; i++ )
 			dprintf3("%5u: %5u: %u\n",
 				 i, recs[i].offset, recs[i].mask);

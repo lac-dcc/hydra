@@ -301,13 +301,13 @@ gs_makefont(gs_font_dir *pdir, const gs_font *pfont,
 #ifdef DEBUG
 if ( gs_debug_c('m') )
    {	if ( pfont->FontType == ft_composite )
-	  dprintf("[m]composite");
+	  dprintf0("[m]composite");
 	else if ( uid_is_UniqueID(&pbfont->UID) )
 	  dprintf1("[m]UniqueID=%ld", pbfont->UID.id);
 	else if ( uid_is_XUID(&pbfont->UID) )
 	  dprintf1("[m]XUID(%u)", (uint)(-pbfont->UID.id));
 	else
-	  dprintf("[m]no UID");
+	  dprintf0("[m]no UID");
 	dprintf7(", FontType=%d,\n[m]  new FontMatrix=[%g %g %g %g %g %g]\n",
 	  pfont->FontType,
 	  pmat->xx, pmat->xy, pmat->yx, pmat->yy,

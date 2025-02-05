@@ -61,6 +61,8 @@ static char Rcs_Id[] =
 
 #include <ctype.h>
 #include <errno.h>
+#include <unistd.h>
+
 #include "config.h"
 #include "ispell.h"
 #include "proto.h"
@@ -104,7 +106,7 @@ static int goodsizes[] =
 
 static char		personaldict[MAXPATHLEN];
 static FILE *		dictf;
-static			newwords = 0;
+static int newwords = 0;
 
 void treeinit (p, LibDict)
     char *		p;		/* Value specified in -p switch */
@@ -275,8 +277,10 @@ static FILE * trydict (filename, home, prefix, suffix)
     else
 	(void) sprintf (filename, "%s/%s%s", home, prefix, suffix);
     dictf = fopen (filename, "r");
-    if (dictf == NULL)
+    if (dictf == NULL) {
 	filename[0] = '\0';
+    }
+
     return dictf;
     }
 

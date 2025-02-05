@@ -125,7 +125,7 @@ refs_clear_marks(void /*obj_header_t*/ *vptr, uint size)
 if ( gs_debug_c('8') )
 {			dprintf1("  [8]unmark packed 0x%lx ", (ulong)rp);
 			debug_print_ref((const ref *)rp);
-			dprintf("\n");
+			dprintf0("\n");
 }
 #endif
 			r_clear_pmark(rp);
@@ -137,7 +137,7 @@ if ( gs_debug_c('8') )
 if ( gs_debug_c('8') )
 {			dprintf1("  [8]unmark ref 0x%lx ", (ulong)rp);
 			debug_print_ref((ref *)rp);
-			dprintf("\n");
+			dprintf0("\n");
 }
 #endif
 			r_clear_attrs((ref *)rp, l_mark);
