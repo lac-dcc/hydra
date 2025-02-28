@@ -1,6 +1,7 @@
-#include "HBPRandom.h"
+#include "Nested.h"
 #include <string>
 #include <regex>
+#include <iostream>
 
 using namespace llvm;
 
@@ -29,20 +30,32 @@ std::string extractAndFormatDigits(const std::string &s) {
   return "0";
 }
 
-PreservedAnalyses HBPRandomPass::run(Function &F,
+PreservedAnalyses NestedPass::run(Function &F,
                                       FunctionAnalysisManager &AM) {
     
+    
+
     std::string functionName = F.getName().str();
-    outfile.open(functionName + "-random.txt");
+    outfile.open(functionName + "-nested.txt");
 
-    std::uniform_int_distribution dist{0, (int)F.size()-1};
+    llvm::LoopInfo &li = AM.getResult<llvm::LoopAnalysis>(F);
 
-    std::vector<BasicBlock *> BasicBlocks;
+    int depth = 0;
+    BasicBlock *nested = nullptr;
+
     for (BasicBlock &BB : F) {
-        BasicBlocks.emplace_back(&BB);
+      nested = &BB;
+      break;
     }
 
-    outfile << extractAndFormatDigits(BasicBlocks[dist(mt)]->getName().str()) << "\n";
+    for (Loop *l : li.getLoopsInPreorder()) {
+        if ((l->getLoopDepth()) > depth) {
+            depth = l->getLoopDepth();
+            nested = l->getHeader();
+        }
+    }
+
+    outfile << extractAndFormatDigits(nested->getName().str()) << "\n";
 
     outfile.close();
 

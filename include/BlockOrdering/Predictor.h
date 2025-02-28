@@ -18,7 +18,7 @@
 
 namespace llvm {
 
-class BOPPredictorPass : public PassInfoMixin<BOPPredictorPass> {
+class PredictorPass : public PassInfoMixin<PredictorPass> {
 public:
     PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
     void propagate(llvm::BranchProbabilityInfo &BPI, const llvm::DominatorTree &DT, BasicBlock *BB, BasicBlock *Head);

@@ -1,4 +1,4 @@
-#include "BOPRandom.h"
+#include "Random.h"
 #include <string>
 #include <regex>
 
@@ -29,24 +29,20 @@ std::string extractAndFormatDigits(const std::string &s) {
   return "0";
 }
 
-PreservedAnalyses BOPRandomPass::run(Function &F,
+PreservedAnalyses RandomPass::run(Function &F,
                                       FunctionAnalysisManager &AM) {
-
+    
     std::string functionName = F.getName().str();
     outfile.open(functionName + "-random.txt");
 
-    // std::uniform_int_distribution dist{0, (int)F.size()-1};
+    std::uniform_int_distribution dist{0, (int)F.size()-1};
 
     std::vector<BasicBlock *> BasicBlocks;
     for (BasicBlock &BB : F) {
         BasicBlocks.emplace_back(&BB);
     }
 
-    std::shuffle(BasicBlocks.begin(), BasicBlocks.end(), mt);
-
-    for (BasicBlock * BB : BasicBlocks) {
-        outfile << extractAndFormatDigits(BB->getName().str()) << "\n";
-    }
+    outfile << extractAndFormatDigits(BasicBlocks[dist(mt)]->getName().str()) << "\n";
 
     outfile.close();
 

@@ -1,24 +1,25 @@
-#include "HBPRandom.h"
+#include "Profile.h"
 #include "llvm/Passes/PassBuilder.h"
 #include "llvm/Passes/PassPlugin.h"
 #include "llvm/Transforms/Utils/BreakCriticalEdges.h"
+#include <iostream>
 
 using namespace llvm;
 
 bool registerPipeline(StringRef Name, FunctionPassManager &FPM,
                       ArrayRef<PassBuilder::PipelineElement>) {
-    if (Name == "hotblock-random") {
+    if (Name == "block-ordering-profile") {
         FPM.addPass(LoopSimplifyPass());
         FPM.addPass(BreakCriticalEdgesPass());
-        FPM.addPass(HBPRandomPass());
+        FPM.addPass(ProfilePass());
         return true;
     }
     return false;
 }
 
-PassPluginLibraryInfo getHBPRandom() {
+PassPluginLibraryInfo getProfile() {
     return {
-        LLVM_PLUGIN_API_VERSION, "hotblock-random",
+        LLVM_PLUGIN_API_VERSION, "block-ordering-profile",
         LLVM_VERSION_STRING, [](PassBuilder &PB) {
             PB.registerPipelineParsingCallback(registerPipeline);
         }
@@ -27,5 +28,5 @@ PassPluginLibraryInfo getHBPRandom() {
 
 extern "C" LLVM_ATTRIBUTE_WEAK PassPluginLibraryInfo
 llvmGetPassPluginInfo() {
-    return getHBPRandom();
+    return getProfile();
 }

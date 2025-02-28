@@ -13,7 +13,7 @@
 
 namespace llvm {
 
-class BOPRandomPass : public PassInfoMixin<BOPRandomPass> {
+class RandomPass : public PassInfoMixin<RandomPass> {
 public:
     PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
 private:

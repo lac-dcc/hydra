@@ -1,4 +1,4 @@
-#include "BOPPredictor.h"
+#include "Predictor.h"
 #include <string>
 #include <regex>
 // #include <cmath>
@@ -63,7 +63,7 @@ bool isBackEdge(BasicBlock *src, BasicBlock *dst, const llvm::DominatorTree &DT)
     return false;
 }
 
-void BOPPredictorPass::propagate(llvm::BranchProbabilityInfo &BPI, const llvm::DominatorTree &DT, BasicBlock *BB, BasicBlock *Head) {
+void PredictorPass::propagate(llvm::BranchProbabilityInfo &BPI, const llvm::DominatorTree &DT, BasicBlock *BB, BasicBlock *Head) {
     // outfile << "Propagating BB " << extractAndFormatDigits(BB->getName().str()) << "\n"; 
     const long double eps = 0.03;
     if (vis[BB]) {
@@ -107,7 +107,7 @@ void BOPPredictorPass::propagate(llvm::BranchProbabilityInfo &BPI, const llvm::D
     }
 }
 
-void BOPPredictorPass::markVis(BasicBlock *BB) {
+void PredictorPass::markVis(BasicBlock *BB) {
     if (!vis[BB]) return;
     vis[BB] = 0;
     for (auto *Succ : llvm::successors(BB)) {
@@ -115,7 +115,7 @@ void BOPPredictorPass::markVis(BasicBlock *BB) {
     }
 }
 
-PreservedAnalyses BOPPredictorPass::run(Function &F,
+PreservedAnalyses PredictorPass::run(Function &F,
                                       FunctionAnalysisManager &AM) {
     
     // const long double eps = 1e-6;

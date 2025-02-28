@@ -1,24 +1,25 @@
-#include "BOPRandom.h"
+#include "Profile.h"
 #include "llvm/Passes/PassBuilder.h"
 #include "llvm/Passes/PassPlugin.h"
 #include "llvm/Transforms/Utils/BreakCriticalEdges.h"
+#include <iostream>
 
 using namespace llvm;
 
 bool registerPipeline(StringRef Name, FunctionPassManager &FPM,
                       ArrayRef<PassBuilder::PipelineElement>) {
-    if (Name == "block-ordering-random") {
+    if (Name == "hotblock-profile") {
         FPM.addPass(LoopSimplifyPass());
         FPM.addPass(BreakCriticalEdgesPass());
-        FPM.addPass(BOPRandomPass());
+        FPM.addPass(ProfilePass());
         return true;
     }
     return false;
 }
 
-PassPluginLibraryInfo getBOPRandom() {
+PassPluginLibraryInfo getProfile() {
     return {
-        LLVM_PLUGIN_API_VERSION, "block-ordering-random",
+        LLVM_PLUGIN_API_VERSION, "hotblock-profile",
         LLVM_VERSION_STRING, [](PassBuilder &PB) {
             PB.registerPipelineParsingCallback(registerPipeline);
         }
@@ -27,5 +28,5 @@ PassPluginLibraryInfo getBOPRandom() {
 
 extern "C" LLVM_ATTRIBUTE_WEAK PassPluginLibraryInfo
 llvmGetPassPluginInfo() {
-    return getBOPRandom();
+    return getProfile();
 }
