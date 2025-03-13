@@ -9,8 +9,8 @@ using namespace llvm;
 bool registerPipeline(StringRef Name, FunctionPassManager &FPM,
                       ArrayRef<PassBuilder::PipelineElement>) {
     if (Name == "hotblock-profile") {
-        FPM.addPass(LoopSimplifyPass());
-        FPM.addPass(BreakCriticalEdgesPass());
+        // FPM.addPass(LoopSimplifyPass());
+        // FPM.addPass(BreakCriticalEdgesPass());
         FPM.addPass(ProfilePass());
         return true;
     }

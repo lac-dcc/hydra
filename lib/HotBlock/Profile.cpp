@@ -351,7 +351,7 @@ void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction) {
   for (BasicBlock *oldBB : oldBlockOrder) {
     std::string oldBBName = extractAndFormatDigits(oldBB->getName().str());
     OpcodeHistogram oldHistogram = initializeHistogram(*oldBB);
-    FlowBlock *matchedBlock = OHM.matchBlock(oldHistogram, 0);
+    FlowBlock *matchedBlock = OHM.matchBlock(oldHistogram, 4);
 
     if (matchedBlock == nullptr && oldBlockIndex[oldBBName] == 0) {
       matchedBlock = blocks[0];
@@ -627,3 +627,36 @@ PreservedAnalyses ProfilePass::run(Function &F,
 
   return PreservedAnalyses::all();
 }
+
+/*
+
+std::string extractAndFormatDigits(const std::string &s) {
+  std::string::size_type pos = s.find(".");
+  if (pos == std::string::npos) {
+    return (s.size() == 2 ? "0" : s.substr(2));
+  } else {
+    std::string bb1 = s.substr(0,pos), bb2, args, args2, aux;
+    bb1 = (bb1.size() == 2 ? "0" : bb1.substr(2));
+    aux = s.substr(pos+1);
+    if (aux == "loopexit") {
+      return bb1+".le";
+    }
+    pos = aux.find("_");
+    bb2 = aux.substr(0,pos);
+    args = aux.substr(pos+1,9);
+    args2 = "";
+    if (aux.length() > pos+10) {
+      args2 = aux.substr(pos+10);
+    }
+    bb2 = (bb2.size() == 2 ? "0" : bb2.substr(2));
+    if (args == "crit_edge") {
+      return bb1+"_"+bb2+".ce"+args2;
+    } else {
+      return bb1+"_"+bb2+"."+args+args2;
+    }
+  }
+  
+  return "0";
+}
+
+*/
