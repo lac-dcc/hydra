@@ -14,14 +14,14 @@ export BASE_DIR="/home/jvf/Codes/hydra"
 CUR_DIR="$BASE_DIR/Cross Experiments/cBench/$EXP_FOLDER"
 
 echo "Running nisse_all script"
-bash "$CUR_DIR/cBench/nisse_all.sh"
+# bash "$CUR_DIR/cBench/nisse_all.sh"
 
 echo "Running hot block prediction heuristics"
 bash "$CUR_DIR/runHotBlock.sh"
 
 echo "Running block ordering prediction heuristics"
-bash "$CUR_DIR/runBlockOrdering.sh"
+# bash "$CUR_DIR/runBlockOrdering.sh"
 
 echo "Generating CSV files"
-python3 "$CUR_DIR/genHBPCsv.py"
-python3 "$CUR_DIR/genBOPCsv.py"
+# python3 "$CUR_DIR/genHBPCsv.py"
+# python3 "$CUR_DIR/genBOPCsv.py"

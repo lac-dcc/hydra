@@ -10,23 +10,23 @@ CLANG="$LLVM_INSTALL_DIR/bin/clang"
 
 CURRENT_DIR=$(pwd)
 
-PROFILE_PROJECTION_SCRIPT="$BASE_DIR/Cross Experiments/cBench/$EXP_FOLDER/runHBProfileProjection.sh"
-PASS_FILE_RANDOM=$BASE_DIR/build/lib/libHotBlockRandom.so
-PASS_FILE_NESTED=$BASE_DIR/build/lib/libHotBlockNested.so
-PASS_FILE_PREDICTOR=$BASE_DIR/build/lib/libHotBlockPredictor.so
+# PROFILE_PROJECTION_SCRIPT="$BASE_DIR/Cross Experiments/cBench/$EXP_FOLDER/runHBProfileProjection.sh"
+# PASS_FILE_RANDOM=$BASE_DIR/build/lib/libHotBlockRandom.so
+# PASS_FILE_NESTED=$BASE_DIR/build/lib/libHotBlockNested.so
+# PASS_FILE_PREDICTOR=$BASE_DIR/build/lib/libHotBlockPredictor.so
 # CFLAGS="-Xclang -disable-O0-optnone -Wno-everything -std=c99 -c -S -emit-llvm"
 
 BENCH_DIR=$BASE_DIR/Benchmark/cBench
-export RESULTS_FOLDER_RANDOM=$BASE_DIR/Results/cBench/Random
-export RESULTS_FOLDER_NESTED=$BASE_DIR/Results/cBench/Nested
-export RESULTS_FOLDER_PREDICTOR=$BASE_DIR/Results/cBench/Predictor
-export RESULTS_FOLDER_PROFILE=$BASE_DIR/Results/cBench/Profile
-export JSON_FOLDER="$BASE_DIR/Cross Experiments/cBench/$EXP_FOLDER/JSON Files"
+# export RESULTS_FOLDER_RANDOM=$BASE_DIR/Results/cBench/Random
+# export RESULTS_FOLDER_NESTED=$BASE_DIR/Results/cBench/Nested
+# export RESULTS_FOLDER_PREDICTOR=$BASE_DIR/Results/cBench/Predictor
+# export RESULTS_FOLDER_PROFILE=$BASE_DIR/Results/cBench/Profile
+# export JSON_FOLDER="$BASE_DIR/Cross Experiments/cBench/$EXP_FOLDER/JSON Files"
 
-rm -rf $RESULTS_FOLDER_RANDOM
-rm -rf $RESULTS_FOLDER_NESTED
-rm -rf $RESULTS_FOLDER_PREDICTOR
-rm -rf $RESULTS_FOLDER_PROFILE
+# rm -rf $RESULTS_FOLDER_RANDOM
+# rm -rf $RESULTS_FOLDER_NESTED
+# rm -rf $RESULTS_FOLDER_PREDICTOR
+# rm -rf $RESULTS_FOLDER_PROFILE
 
 cd $BENCH_DIR
 bash all__delete_work_dirs > /dev/null 2>&1
@@ -69,19 +69,19 @@ do
                 $LLVM_OPT -S -passes="$PASS" $d.ll -o $d.ll
             done
 
-            $LLVM_OPT -disable-output -load-pass-plugin $PASS_FILE_RANDOM -passes="hotblock-random" $d.ll
-            $LLVM_OPT -disable-output -load-pass-plugin $PASS_FILE_NESTED -passes="hotblock-nested" $d.ll
-            $LLVM_OPT -disable-output -load-pass-plugin $PASS_FILE_PREDICTOR -passes="hotblock-predictor" $d.ll
-            rm -rf $BASE_DIR/Results/Profile/   
-            bash "$PROFILE_PROJECTION_SCRIPT" $BENCH_DIR/$d > /dev/null 2>&1
-            mkdir -p $RESULTS_FOLDER_RANDOM/$d
-            mkdir -p $RESULTS_FOLDER_NESTED/$d
-            mkdir -p $RESULTS_FOLDER_PREDICTOR/$d
-            mkdir -p $RESULTS_FOLDER_PROFILE/$d
-            mv *-random.txt $RESULTS_FOLDER_RANDOM/$d/.
-            mv *-nested.txt $RESULTS_FOLDER_NESTED/$d/.
-            mv *-predictor.txt $RESULTS_FOLDER_PREDICTOR/$d/.
-            mv $BASE_DIR/Results/Profile/$d/*.txt $RESULTS_FOLDER_PROFILE/$d/.         
+            # $LLVM_OPT -disable-output -load-pass-plugin $PASS_FILE_RANDOM -passes="hotblock-random" $d.ll
+            # $LLVM_OPT -disable-output -load-pass-plugin $PASS_FILE_NESTED -passes="hotblock-nested" $d.ll
+            # $LLVM_OPT -disable-output -load-pass-plugin $PASS_FILE_PREDICTOR -passes="hotblock-predictor" $d.ll
+            # rm -rf $BASE_DIR/Results/Profile/   
+            # bash "$PROFILE_PROJECTION_SCRIPT" $BENCH_DIR/$d > /dev/null 2>&1
+            # mkdir -p $RESULTS_FOLDER_RANDOM/$d
+            # mkdir -p $RESULTS_FOLDER_NESTED/$d
+            # mkdir -p $RESULTS_FOLDER_PREDICTOR/$d
+            # mkdir -p $RESULTS_FOLDER_PROFILE/$d
+            # mv *-random.txt $RESULTS_FOLDER_RANDOM/$d/.
+            # mv *-nested.txt $RESULTS_FOLDER_NESTED/$d/.
+            # mv *-predictor.txt $RESULTS_FOLDER_PREDICTOR/$d/.
+            # mv $BASE_DIR/Results/Profile/$d/*.txt $RESULTS_FOLDER_PROFILE/$d/.         
 
             cd ..
             rm -rf tmp
@@ -89,4 +89,4 @@ do
     fi
 done
 
-python3 "$BASE_DIR/Cross Experiments/cBench/$EXP_FOLDER/getHBPJSON.py"
+# python3 "$BASE_DIR/Cross Experiments/cBench/$EXP_FOLDER/getHBPJSON.py"
