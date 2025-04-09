@@ -52,7 +52,7 @@ cd $BENCH_NAME/src_work
 
 # Generating a single bytecode for the benchmark in SSA form:
 #
-$LLVM_CLANG -Xclang -disable-O0-optnone -flto -emit-llvm -c *.c
+$LLVM_CLANG -Xclang -"$NEW_OPT" -flto -emit-llvm -c *.c
 ret_code=$?
 if [[ $ret_code -ne 0 ]]; then
     echo "Compilation failed"

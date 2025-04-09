@@ -45,7 +45,7 @@ do
             if [ $(ls $BENCH_DIR/$d | grep src_work | wc -l) = 1 ]
             then
                 echo "running benchmark $d"
-                bash "$NISSE_SCRIPT" $BENCH_DIR/$d $i # > /dev/null 2>&1
+                bash "$NISSE_SCRIPT" $BENCH_DIR/$d $i > /dev/null 2>&1
                 ret_code=$?
                 if [[ $ret_code -ne 0 ]]
                 then

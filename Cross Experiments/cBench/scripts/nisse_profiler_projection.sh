@@ -72,6 +72,14 @@ done
 
 $LLVM_OPT -S -load-pass-plugin $MY_LLVM_LIB -passes="nisse" -stats \
     $LL_NAME -o $PF_NAME
+if [[ $ret_code -ne 0 ]]
+then
+  echo "Compilation failed"
+  cd -
+  echo $BENCH_NAME >> err.txt
+  exit $ret_code
+fi
+
 
 # Print the instrumented CFG
 #

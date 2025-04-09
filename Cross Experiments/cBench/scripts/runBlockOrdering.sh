@@ -77,18 +77,36 @@ do
 
             START_TIME=`date +%s.%N`
             $LLVM_OPT -disable-output -load-pass-plugin $PASS_FILE_RANDOM -passes="block-ordering-random" $d.ll
+            ret_code=$?
+            if [[ $ret_code -ne 0 ]]
+            then
+                echo "Random heuristic failed at benchmark $d"
+                exit 1
+            fi
             END_TIME=`date +%s.%N`
             RUNTIME_RANDOM=$( echo "$END_TIME - $START_TIME" | bc -l )
 
             START_TIME=`date +%s.%N`
             $LLVM_OPT -disable-output -load-pass-plugin $PASS_FILE_PREDICTOR -passes="block-ordering-predictor" $d.ll
+            ret_code=$?
+            if [[ $ret_code -ne 0 ]]
+            then
+                echo "LLVM Predictor heuristic failed at benchmark $d"
+                exit 1
+            fi
             END_TIME=`date +%s.%N`
             RUNTIME_PREDICTOR=$( echo "$END_TIME - $START_TIME" | bc -l )
 
             rm -rf $BASE_DIR/Results/Profile/   
             
             START_TIME_PROFILE=`date +%s.%N`
-            bash "$PROFILE_PROJECTION_SCRIPT" $BENCH_DIR/$d # > /dev/null 2>&1
+            bash "$PROFILE_PROJECTION_SCRIPT" $BENCH_DIR/$d > /dev/null 2>&1
+            ret_code=$?
+            if [[ $ret_code -ne 0 ]]
+            then
+                echo "Profile Projection heuristic failed at benchmark $d"
+                exit 1
+            fi
             END_TIME_PROFILE=`date +%s.%N`
             RUNTIME_PROFILE=$( echo "$END_TIME_PROFILE - $START_TIME_PROFILE" | bc -l )
 
@@ -112,3 +130,9 @@ do
 done
 
 python3 "$SCRIPT_DIR/getBOPJSON.py"
+ret_code=$?
+if [[ $ret_code -ne 0 ]]
+then
+    echo "JSON processing failed"
+    exit 1
+fi

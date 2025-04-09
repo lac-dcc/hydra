@@ -40,7 +40,6 @@ for d in $(ls $BENCH_DIR)
 do 
     if [ -d $BENCH_DIR/$d ]
     then
-        if [[ $d != "security_sha" ]]; then continue; fi
         # Runtime error with Nisse
         if [[ $d =~ ^"consumer" ]]; then continue; fi
         if [ "$d" = "security_rijndael_e" ]; then continue; fi
@@ -81,23 +80,47 @@ do
 
             START_TIME=`date +%s.%N`
             $LLVM_OPT -disable-output -load-pass-plugin $PASS_FILE_RANDOM -passes="hotblock-random" $d.ll
+            ret_code=$?
+            if [[ $ret_code -ne 0 ]]
+            then
+                echo "Random heuristic failed at benchmark $d"
+                exit 1
+            fi
             END_TIME=`date +%s.%N`
             RUNTIME_RANDOM=$( echo "$END_TIME - $START_TIME" | bc -l )
 
             START_TIME=`date +%s.%N`
             $LLVM_OPT -disable-output -load-pass-plugin $PASS_FILE_NESTED -passes="hotblock-nested" $d.ll
+            ret_code=$?
+            if [[ $ret_code -ne 0 ]]
+            then
+                echo "Nested heuristic failed at benchmark $d"
+                exit 1
+            fi
             END_TIME=`date +%s.%N`
             RUNTIME_NESTED=$( echo "$END_TIME - $START_TIME" | bc -l )
 
             START_TIME=`date +%s.%N`
             $LLVM_OPT -disable-output -load-pass-plugin $PASS_FILE_PREDICTOR -passes="hotblock-predictor" $d.ll
+            ret_code=$?
+            if [[ $ret_code -ne 0 ]]
+            then
+                echo "LLVM Predictor heuristic failed at benchmark $d"
+                exit 1
+            fi
             END_TIME=`date +%s.%N`
             RUNTIME_PREDICTOR=$( echo "$END_TIME - $START_TIME" | bc -l )
 
             rm -rf $BASE_DIR/Results/Profile/   
 
             START_TIME_PROFILE=`date +%s.%N`
-            bash "$PROFILE_PROJECTION_SCRIPT" $BENCH_DIR/$d # > /dev/null 2>&1
+            bash "$PROFILE_PROJECTION_SCRIPT" $BENCH_DIR/$d > /dev/null 2>&1
+            ret_code=$?
+            if [[ $ret_code -ne 0 ]]
+            then
+                echo "Profile projection heuristic failed at benchmark $d"
+                exit 1
+            fi
             END_TIME_PROFILE=`date +%s.%N`
             RUNTIME_PROFILE=$( echo "$END_TIME_PROFILE - $START_TIME_PROFILE" | bc -l )
 
@@ -125,3 +148,9 @@ do
 done
 
 python3 "$SCRIPT_DIR/getHBPJSON.py"
+ret_code=$?
+if [[ $ret_code -ne 0 ]]
+then
+    echo "JSON processing failed"
+    exit 1
+fi
