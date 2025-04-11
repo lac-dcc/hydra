@@ -3,13 +3,14 @@ import csv
 import os
 
 csv_data = [
-    ['File Name', 'Execution', 'Number of vertices', 'Number of edges', 'Min count', 'Max count', 'Hottest blocks', 'Random hottest guess', 'Random hit', 'Nested hottest guess', 'Nested hit', 'Predictor guess', 'Predictor hit', 'Benchmark link']
+    ['File Name', 'Execution', 'Number of vertices', 'Number of edges', 'Min count', 'Max count', 'Hottest blocks', 'Random hottest guess', 'Random hit', 'Nested hottest guess', 'Nested hit', 'Predictor guess', 'Predictor hit', 'Profile guess', 'Profile hit', 'Benchmark link']
 ]
 
 gt_data = json.load(open('JSON Files/jotaiMerlinResults.json','r'))
 random_data = json.load(open('JSON Files/jotaiRandomBlock.json','r'))
 nested_data = json.load(open('JSON Files/jotaiNestedBlock.json','r'))
 predictor_data = json.load(open('JSON Files/jotaiPredictorBlock.json','r'))
+profile_data = json.load(open('JSON Files/jotaiProfileBlock.json','r'))
 
 benchmarks = os.listdir('Benchmark/Jotai')
 
@@ -21,6 +22,7 @@ for app_name in gt_data:
         random_guess = random_data[app_name][function_name]
         nested_guess = nested_data[app_name][function_name]
         predictor_guess = predictor_data[app_name][function_name]
+        profile_guess = profile_data[app_name][function_name]
         benchmark_link = 'https://github.com/lac-dcc/hydra/blob/main/Benchmark/Jotai/'+file_name
         for execution_number in range(0,len(gt_data[app_name][function_name])):
             graph = gt_data[app_name][function_name][execution_number]
@@ -55,7 +57,10 @@ for app_name in gt_data:
             predictor_hit = 0
             if frequencies[predictor_guess] == max_count:
                 predictor_hit = 1
-            csv_data.append([file_name, execution_number, nodes, edges, min_count, max_count, str(hottest_blocks), random_guess, random_hit, nested_guess, nested_hit, predictor_guess, predictor_hit, benchmark_link])
+            profile_hit = 0
+            if frequencies[profile_guess] == max_count:
+                profile_hit = 1
+            csv_data.append([file_name, execution_number, nodes, edges, min_count, max_count, str(hottest_blocks), random_guess, random_hit, nested_guess, nested_hit, predictor_guess, predictor_hit, profile_guess, profile_hit, benchmark_link])
 
 with open('jotaiMerlinTable.csv', mode='w', newline='') as file:
     writer = csv.writer(file, delimiter=';', quoting=csv.QUOTE_MINIMAL)

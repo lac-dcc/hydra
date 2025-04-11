@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LLVM_INSTALL_DIR="~/clang/install"
+LLVM_INSTALL_DIR="/usr/local"
 
 echo "--------------------------------------------------------------------------------"
 if [ ! -e "build" ]
@@ -11,7 +11,7 @@ then
 
     echo "Building the CFG printer pass"
     cd build
-    cmake -DLLVM_INSTALL_DIR=$LLVM_INSTALL_DIR -G "Unix Makefiles" ..
+    cmake -DCMAKE_BUILD_TYPE="Debug" -DLLVM_INSTALL_DIR=$LLVM_INSTALL_DIR -G "Unix Makefiles" ..
     cmake --build .
     cd ..
 

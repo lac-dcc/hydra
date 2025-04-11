@@ -11,13 +11,13 @@ def compute_swap_distance(idx_array):
     return res
 
 csv_data = [
-    ['File Name', 'Execution', 'Number of vertices', 'Number of edges', 'Min count', 'Max count', 'Block Ordering', 'Random guess', 'Random distance', 'Predictor guess', 'Predictor distance', 'Benchmark link']
+    ['File Name', 'Execution', 'Number of vertices', 'Number of edges', 'Min count', 'Max count', 'Block Ordering', 'Random guess', 'Random distance', 'Random hit', 'Predictor guess', 'Predictor distance', 'Predictor hit', 'Profile guess', 'Profile distance', 'Profile hit', 'Benchmark link']
 ]
 
 gt_data = json.load(open('JSON Files/jotaiMerlinResults.json','r'))
 random_data = json.load(open('JSON Files/jotaiRandomOrdering.json','r'))
-# nested_data = json.load(open('JSON Files/jotaiNestedOrdering.json','r'))
 predictor_data = json.load(open('JSON Files/jotaiPredictorOrdering.json','r'))
+profile_data = json.load(open('JSON Files/jotaiProfileOrdering.json','r'))
 
 benchmarks = os.listdir('Benchmark/Jotai')
 
@@ -27,8 +27,8 @@ for app_name in gt_data:
         if file_name not in benchmarks:
             file_name = 'extr_'+app_name+'.h_'+function_name+'.c'
         random_guess = random_data[app_name][function_name]
-        # nested_guess = nested_data[app_name][function_name]
         predictor_guess = predictor_data[app_name][function_name]
+        profile_guess = profile_data[app_name][function_name]
         benchmark_link = 'https://github.com/lac-dcc/hydra/blob/main/Benchmark/Jotai/'+file_name
         for execution_number in range(0,len(gt_data[app_name][function_name])):
             graph = gt_data[app_name][function_name][execution_number]
@@ -58,15 +58,24 @@ for app_name in gt_data:
             for block in random_guess:
                 random_guess_indices.append(sorted_block_indices[block])
             random_distance = compute_swap_distance(random_guess_indices)
+            random_hit = round(1.0-random_distance/(nodes*(nodes-1.0)/2.0),4)
 
             predictor_guess_indices = []
             for block in predictor_guess:
                 predictor_guess_indices.append(sorted_block_indices[block])
             predictor_distance = compute_swap_distance(predictor_guess_indices)
+            predictor_hit = round(1.0-predictor_distance/(nodes*(nodes-1.0)/2.0),4)
+
+            profile_guess_indices = []
+            for block in profile_guess:
+                profile_guess_indices.append(sorted_block_indices[block])
+            profile_distance = compute_swap_distance(profile_guess_indices)
+            profile_hit = round(1.0-profile_distance/(nodes*(nodes-1.0)/2.0),4)
             
             block_ordering = ';'.join(block_ordering_list)
             random_ordering = ';'.join(random_guess)
             predictor_ordering = ';'.join(predictor_guess)
+            profile_ordering = ';'.join(profile_guess)
             max_count = sorted_frequencies[0][1]
             min_count = sorted_frequencies[-1][1]
             # hottest_blocks_list = []
@@ -84,7 +93,7 @@ for app_name in gt_data:
             # predictor_hit = 0
             # if frequencies[predictor_guess] == max_count:
             #     predictor_hit = 1
-            csv_data.append([file_name, execution_number, nodes, edges, min_count, max_count, str(block_ordering), str(random_ordering), random_distance, str(predictor_ordering), predictor_distance, benchmark_link])
+            csv_data.append([file_name, execution_number, nodes, edges, min_count, max_count, str(block_ordering), str(random_ordering), random_distance, f"{random_hit:.4f}".replace('.',','), str(predictor_ordering), predictor_distance, f"{predictor_hit:.4f}".replace('.',','), str(profile_ordering), profile_distance, f"{profile_hit:.4f}".replace('.',','), benchmark_link])
 
 with open('jotaiMerlinTableOrdering.csv', mode='w', newline='') as file:
     writer = csv.writer(file, delimiter=';', quoting=csv.QUOTE_MINIMAL)
