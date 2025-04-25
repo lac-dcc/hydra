@@ -71,6 +71,8 @@ then
 fi
 
 mkdir -p "$RESULT_DIR/JSON Files"
+mkdir -p "$RESULT_DIR/LL Files/pre"
+mkdir -p "$RESULT_DIR/LL Files/opt"
 
 echo "Running nisse_all script"
 bash "$SCRIPT_DIR/cBench/nisse_all.sh"
