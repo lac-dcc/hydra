@@ -80,6 +80,8 @@ do
     $LLVM_OPT -S -passes="$PASS" $LL_NAME -o $LL_NAME
 done
 
+cp $LL_NAME "$BASE_DIR/Cross Experiments/cBench/$EXP_FOLDER/LL Files/opt/."
+
 $LLVM_OPT -S -load-pass-plugin $MY_LLVM_LIB -passes="nisse" -stats \
     $LL_NAME -o $PF_NAME
 ret_code=$?
