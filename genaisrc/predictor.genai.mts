@@ -51,6 +51,7 @@ const processFiles = async (env:ExpansionVariables) => {
       `Analyzing ${funcSet.length} functions of benchmark: ${fileNameWithoutExt}`
     );
 
+    let fun_counter = 1;
     // Iterate over each function for deeper analysis
     for (const func of funcSet) {
       const funcNameMatch = func.match(/@([a-zA-Z_][\w\.]*)\(/m);
@@ -65,9 +66,10 @@ const processFiles = async (env:ExpansionVariables) => {
       const bbSet = bbSetMatch ? bbSetMatch.map((id) => id.slice(0, -1)) : [];
       dbg(`bbSet: ${bbSet}`);
 
-      output.heading(3, `Analysis report of function: ${funcName}`);
+      output.heading(3, `${fun_counter}) Analysis report of function: ${funcName}`);
       output.detailsFenced("Function being analized:",func);
 
+      fun_counter += 1;
       console.log("Function content: \n", func);
 
       // Run the prompt for hot block estimation and ranking
