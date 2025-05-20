@@ -66,7 +66,7 @@ const processFiles = async (env:ExpansionVariables) => {
       dbg(`bbSet: ${bbSet}`);
 
       output.heading(3, `Analysis report of function: ${funcName}`);
-      output.fence(func);
+      output.detailsFenced("Function being analized:",func);
 
       console.log("Function content: \n", func);
 
