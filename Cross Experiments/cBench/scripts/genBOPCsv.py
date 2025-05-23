@@ -11,7 +11,7 @@ def compute_swap_distance(idx_array):
     return res
 
 csv_data = [
-    ['Benchmark Name', 'Function Name', 'Execution', 'Number of vertices', 'Number of edges', 'Min count', 'Max count', 'Block Ordering', 'Random guess', 'Random distance', 'Random hit', 'Predictor guess', 'Predictor distance', 'Predictor hit', 'Profile guess', 'Profile distance', 'Profile hit', 'Benchmark link']
+    ['Benchmark Name', 'Function Name', 'Execution', 'Number of vertices', 'Number of edges', 'Min count', 'Max count', 'Block Ordering', 'Random guess', 'Random distance', 'Random hit', 'Predictor guess', 'Predictor distance', 'Predictor hit', 'Profile guess', 'Profile distance', 'Profile hit', 'Vespa worked', 'Vespa guess', 'Vespa distance', 'Vespa hit', 'Benchmark link']
 ]
 
 base_dir = os.environ.get('BASE_DIR', '/home/jvf/Codes/hydra/')
@@ -21,6 +21,11 @@ gt_data = json.load(open(base_dir+'/Cross Experiments/cBench/'+exp_folder+'/JSON
 random_data = json.load(open(base_dir+'/Cross Experiments/cBench/'+exp_folder+'/JSON Files/cBenchRandomOrdering.json','r'))
 predictor_data = json.load(open(base_dir+'/Cross Experiments/cBench/'+exp_folder+'/JSON Files/cBenchPredictorOrdering.json','r'))
 profile_data = json.load(open(base_dir+'/Cross Experiments/cBench/'+exp_folder+'/JSON Files/cBenchProfileOrdering.json','r'))
+try:
+    vespa_data = json.load(open(base_dir+'/Cross Experiments/cBench/'+exp_folder+'/JSON Files/cBenchVespaOrdering.json','r'))
+except:
+    vespa_data = {}
+    
 
 benchmarks = os.listdir(base_dir+'/Benchmark/cBench')
 
@@ -29,6 +34,10 @@ for app_name in gt_data:
         random_guess = random_data[app_name][function_name]
         predictor_guess = predictor_data[app_name][function_name]
         profile_guess = profile_data[app_name][function_name]
+        try:
+            vespa_guess = vespa_data[app_name][function_name]
+        except:
+            vespa_guess = []
         benchmark_link = 'https://github.com/lac-dcc/hydra/blob/main/Benchmark/cBench/'+app_name
         for execution_number in range(1,len(gt_data[app_name][function_name])):
             graph = gt_data[app_name][function_name][execution_number]
@@ -78,13 +87,29 @@ for app_name in gt_data:
                 profile_guess_indices.append(sorted_block_indices[block])
             profile_distance = compute_swap_distance(profile_guess_indices)
             profile_hit = round(1.0-profile_distance/(nodes*(nodes-1.0)/2.0),4)
+
+            vespa_ordering = None
+            vespa_hit = float(0)
+            vespa_distance = 0
+            if len(vespa_guess) == nodes:
+                vespa_guess_indices = []
+                for block in vespa_guess:
+                    vespa_guess_indices.append(sorted_block_indices[block])
+                vespa_distance = compute_swap_distance(vespa_guess_indices)
+                vespa_nodes = len(vespa_guess_indices)
+                vespa_hit = round(1.0-vespa_distance/(vespa_nodes*(vespa_nodes-1.0)/2.0),4)
+                vespa_ordering = ';'.join(vespa_guess)
+                
             
             block_ordering = ';'.join(block_ordering_list)
             random_ordering = ';'.join(random_guess)
             predictor_ordering = ';'.join(predictor_guess)
             profile_ordering = ';'.join(profile_guess)
 
-            csv_data.append([app_name, function_name, execution_number, nodes, edges, min_count, max_count, str(block_ordering), str(random_ordering), random_distance, f"{random_hit:.4f}".replace('.',','), str(predictor_ordering), predictor_distance, f"{predictor_hit:.4f}".replace('.',','), str(profile_ordering), profile_distance, f"{profile_hit:.4f}".replace('.',','), benchmark_link])
+            if vespa_ordering == None:
+                csv_data.append([app_name, function_name, execution_number, nodes, edges, min_count, max_count, str(block_ordering), str(random_ordering), random_distance, f"{random_hit:.4f}".replace('.',','), str(predictor_ordering), predictor_distance, f"{predictor_hit:.4f}".replace('.',','), str(profile_ordering), profile_distance, f"{profile_hit:.4f}".replace('.',','), 0, '', '', '', benchmark_link])
+            else:
+                csv_data.append([app_name, function_name, execution_number, nodes, edges, min_count, max_count, str(block_ordering), str(random_ordering), random_distance, f"{random_hit:.4f}".replace('.',','), str(predictor_ordering), predictor_distance, f"{predictor_hit:.4f}".replace('.',','), str(profile_ordering), profile_distance, f"{profile_hit:.4f}".replace('.',','), 1, str(vespa_ordering), vespa_distance, f"{vespa_hit:.4f}".replace('.',','), benchmark_link])
 
 with open(base_dir+'/Cross Experiments/cBench/'+exp_folder+'/cBenchTableOrdering.csv', mode='w', newline='') as file:
     writer = csv.writer(file, delimiter=';', quoting=csv.QUOTE_MINIMAL)

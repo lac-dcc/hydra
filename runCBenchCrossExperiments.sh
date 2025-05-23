@@ -2,8 +2,8 @@
 
 BASE_DIR="/home/jvf/Codes/hydra"
 
-# simplifycfg
-"$BASE_DIR/Cross Experiments/cBench/scripts/runExperiment.sh" --exp-folder="simplifycfg" --new-passes="simplifycfg lcssa loop-rotate"
+# # simplifycfg
+# "$BASE_DIR/Cross Experiments/cBench/scripts/runExperiment.sh" --exp-folder="simplifycfg" --new-passes="simplifycfg lcssa loop-rotate"
 
 # empty
 "$BASE_DIR/Cross Experiments/cBench/scripts/runExperiment.sh"

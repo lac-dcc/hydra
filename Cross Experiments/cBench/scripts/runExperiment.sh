@@ -58,51 +58,54 @@ export BASE_DIR="/home/jvf/Codes/hydra"
 export SCRIPT_DIR="$BASE_DIR/Cross Experiments/cBench/scripts"
 RESULT_DIR="$BASE_DIR/Cross Experiments/cBench/$EXP_FOLDER"
 
-if [[ -d "$RESULT_DIR" ]]
-then
-    BACKUP_DIR="$BASE_DIR/Cross Experiments/cBench/backup"
-    mkdir -p "$BACKUP_DIR/$EXP_FOLDER"
-    CUR_BKP=1
-    while [[ -d "$BACKUP_DIR/$EXP_FOLDER/$CUR_BKP" ]]
-    do
-        CUR_BKP=`expr $CUR_BKP + 1`
-    done
-    mv "$RESULT_DIR" "$BACKUP_DIR/$EXP_FOLDER/$CUR_BKP"
-fi
+# if [[ -d "$RESULT_DIR" ]]
+# then
+#     BACKUP_DIR="$BASE_DIR/Cross Experiments/cBench/backup"
+#     mkdir -p "$BACKUP_DIR/$EXP_FOLDER"
+#     CUR_BKP=1
+#     while [[ -d "$BACKUP_DIR/$EXP_FOLDER/$CUR_BKP" ]]
+#     do
+#         CUR_BKP=`expr $CUR_BKP + 1`
+#     done
+#     mv "$RESULT_DIR" "$BACKUP_DIR/$EXP_FOLDER/$CUR_BKP"
+# fi
 
-mkdir -p "$RESULT_DIR/JSON Files"
-mkdir -p "$RESULT_DIR/LL Files/pre"
-mkdir -p "$RESULT_DIR/LL Files/opt"
+# mkdir -p "$RESULT_DIR/JSON Files"
+# mkdir -p "$RESULT_DIR/LL Files/pre"
+# mkdir -p "$RESULT_DIR/LL Files/opt"
 
-echo "Running nisse_all script"
-bash "$SCRIPT_DIR/cBench/nisse_all.sh"
-ret_code=$?
-if [[ $ret_code -ne 0 ]]
-then
-    echo "Internal error"
-    echo "Terminating..."
-    exit 1
-fi
+# echo "Running nisse_all script"
+# bash "$SCRIPT_DIR/cBench/nisse_all.sh"
+# ret_code=$?
+# if [[ $ret_code -ne 0 ]]
+# then
+#     echo "Internal error"
+#     echo "Terminating..."
+#     exit 1
+# fi
 
-echo "Running hot block prediction heuristics"
-bash "$SCRIPT_DIR/runHotBlock.sh"
-ret_code=$?
-if [[ $ret_code -ne 0 ]]
-then
-    echo "Internal error"
-    echo "Terminating..."
-    exit 1
-fi
+# echo "Running hot block prediction heuristics"
+# bash "$SCRIPT_DIR/runHotBlock.sh"
+# ret_code=$?
+# if [[ $ret_code -ne 0 ]]
+# then
+#     echo "Internal error"
+#     echo "Terminating..."
+#     exit 1
+# fi
 
-echo "Running block ordering prediction heuristics"
-bash "$SCRIPT_DIR/runBlockOrdering.sh"
-ret_code=$?
-if [[ $ret_code -ne 0 ]]
-then
-    echo "Internal error"
-    echo "Terminating..."
-    exit 1
-fi
+# echo "Running block ordering prediction heuristics"
+# bash "$SCRIPT_DIR/runBlockOrdering.sh"
+# ret_code=$?
+# if [[ $ret_code -ne 0 ]]
+# then
+#     echo "Internal error"
+#     echo "Terminating..."
+#     exit 1
+# fi
+
+echo "Adapting Vespa JSON files"
+python3 "$SCRIPT_DIR/extract_json.py"
 
 echo "Generating CSV files"
 python3 "$SCRIPT_DIR/genHBPCsv.py"

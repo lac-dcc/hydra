@@ -3,7 +3,7 @@ import csv
 import os
 
 csv_data = [
-    ['Benchmark Name', 'Function Name', 'Execution', 'Number of vertices', 'Number of edges', 'Min count', 'Max count', 'Hottest blocks', 'Random hottest guess', 'Random hit', 'Nested hottest guess', 'Nested hit', 'Predictor guess', 'Predictor hit', 'Profile guess', 'Profile hit', 'Benchmark link']
+    ['Benchmark Name', 'Function Name', 'Execution', 'Number of vertices', 'Number of edges', 'Min count', 'Max count', 'Hottest blocks', 'Random hottest guess', 'Random hit', 'Nested hottest guess', 'Nested hit', 'Predictor guess', 'Predictor hit', 'Profile guess', 'Profile hit', 'Vespa worked', 'Vespa guess', 'Vespa hit', 'Benchmark link']
 ]
 
 base_dir = os.environ.get('BASE_DIR', '/home/jvf/Codes/hydra/')
@@ -14,6 +14,10 @@ random_data = json.load(open(base_dir+'/Cross Experiments/cBench/'+exp_folder+'/
 nested_data = json.load(open(base_dir+'/Cross Experiments/cBench/'+exp_folder+'/JSON Files/cBenchNestedBlock.json','r'))
 predictor_data = json.load(open(base_dir+'/Cross Experiments/cBench/'+exp_folder+'/JSON Files/cBenchPredictorBlock.json','r'))
 profile_data = json.load(open(base_dir+'/Cross Experiments/cBench/'+exp_folder+'/JSON Files/cBenchProfileBlock.json','r'))
+try:
+    vespa_data = json.load(open(base_dir+'/Cross Experiments/cBench/'+exp_folder+'/JSON Files/cBenchVespaBlock.json','r'))
+except:
+    vespa_data = {}
 
 benchmarks = os.listdir(base_dir+'/Benchmark/cBench')
 
@@ -23,6 +27,10 @@ for app_name in gt_data:
         nested_guess = nested_data[app_name][function_name]
         predictor_guess = predictor_data[app_name][function_name]
         profile_guess = profile_data[app_name][function_name]
+        try:
+            vespa_guess = vespa_data[app_name][function_name]
+        except:
+            vespa_guess = None
         benchmark_link = 'https://github.com/lac-dcc/hydra/blob/main/Benchmark/cBench/'+app_name
         for execution_number in range(1,len(gt_data[app_name][function_name])):
             graph = gt_data[app_name][function_name][execution_number]
@@ -68,7 +76,16 @@ for app_name in gt_data:
             profile_hit = 0
             if frequencies[profile_guess] == max_count:
                 profile_hit = 1
-            csv_data.append([app_name, function_name, execution_number, nodes, edges, min_count, max_count, str(hottest_blocks), random_guess, random_hit, nested_guess, nested_hit, predictor_guess, predictor_hit, profile_guess, profile_hit, benchmark_link])
+            vespa_hit = 0
+            vespa_worked = 0
+            if vespa_guess != None and vespa_guess in frequencies:
+                vespa_worked = 1
+                if frequencies[vespa_guess] == max_count:
+                    vespa_hit = 1
+            else:
+                vespa_guess = ''
+                vespa_hit = ''
+            csv_data.append([app_name, function_name, execution_number, nodes, edges, min_count, max_count, str(hottest_blocks), random_guess, random_hit, nested_guess, nested_hit, predictor_guess, predictor_hit, profile_guess, profile_hit, vespa_worked, vespa_guess, vespa_hit, benchmark_link])
 
 with open(base_dir+'/Cross Experiments/cBench/'+exp_folder+'/cBenchTable.csv', mode='w', newline='') as file:
     writer = csv.writer(file, delimiter=';', quoting=csv.QUOTE_MINIMAL)
