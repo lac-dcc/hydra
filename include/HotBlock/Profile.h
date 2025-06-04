@@ -11,6 +11,7 @@
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/Operator.h"
+#include "llvm/Analysis/BranchProbabilityInfo.h"
 
 namespace llvm {
 
@@ -24,7 +25,7 @@ private:
     std::map<std::string, std::vector<std::pair<std::string, uint64_t>>> profile;
     std::map<std::string, std::vector<std::pair<std::string, uint64_t>>> new_profile;
 
-    void projectProfile(Function &oldFunction, Function &newFunction);
+    void projectProfile(Function &oldFunction, Function &newFunction, BranchProbabilityInfo &bpi);
     bool readProfile(std::string functionName);
 };
 

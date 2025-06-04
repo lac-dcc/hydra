@@ -1,4 +1,5 @@
 #include "Profile.h"
+#include "WeightedProfileInference.h"
 #include <string>
 #include <regex>
 #include <iostream>
@@ -6,18 +7,24 @@
 #include <unordered_map>
 #include <unordered_set>
 #include "llvm/Support/CommandLine.h"
+#include "llvm/ADT/Bitfields.h"
+#include "llvm/ADT/Hashing.h"
 #include "llvm/IRReader/IRReader.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Instruction.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/Support/SourceMgr.h"
-#include "llvm/Transforms/Utils/SampleProfileInference.h"
+#include "llvm/Support/xxhash.h"
 
 
 using namespace llvm;
 
 cl::opt<std::string> LLFilename("prog", cl::desc("<program ll file>"), cl::Required);
 cl::opt<std::string> ProfilesFolder("prof", cl::desc("<profiles folder>"), cl::Required);
+cl::opt<unsigned> MatchingThreshold(
+    "matching-threshold",
+    cl::desc("The threshold for matching blocks"),
+    cl::init(0), cl::Hidden);
 
 namespace opts {
 
@@ -206,11 +213,13 @@ private:
   // std::unordered_map<OpcodeHistogram *, FlowBlock *> OpHistToBlocks;
 };
 
+long double getEdgeProbability(BranchProbabilityInfo &bpi, BasicBlock *src, BasicBlock *dst) {
+  auto EdgeProbability = bpi.getEdgeProbability(src, dst);
+  return ((long double)EdgeProbability.getNumerator())/EdgeProbability.getDenominator();
+}
 
-
-FlowFunction createFlowFunction(std::vector<BasicBlock *> &BlockOrder) {
+FlowFunction createFlowFunction(std::vector<BasicBlock *> &BlockOrder, BranchProbabilityInfo &bpi) {
   FlowFunction Func;
-  //         << succ << " with frequency " << freq << "\n";
 
   // Add a special "dummy" source so that there is always a unique entry point.
   // Because of the extra source, for all other blocks in FlowFunction it holds
@@ -245,6 +254,7 @@ FlowFunction createFlowFunction(std::vector<BasicBlock *> &BlockOrder) {
       Jump.Target = BlockIndex[DstBB];
       InDegree[Jump.Target]++;
       UniqueSuccs.insert(DstBB);
+      Func.JumpProbability[&Jump] = getEdgeProbability(bpi, SrcBB, DstBB);
     }
     // // Collect jumps to landing pads
     // for (const BinaryBasicBlock *DstBB : SrcBB->landing_pads()) {
@@ -305,7 +315,7 @@ OpcodeHistogram initializeHistogram(BasicBlock &BB) {
   return OpcodeHistogram(opcodes, frequency);
 }
 
-void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction) {
+void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction, BranchProbabilityInfo &bpi) {
   std::vector<BasicBlock *> oldBlockOrder, newBlockOrder;
   std::map<std::string, size_t> oldBlockIndex, newBlockIndex;
   new_profile.clear();
@@ -320,7 +330,7 @@ void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction) {
   }
 
   // Initialize Flow Function
-  FlowFunction flowFunc = createFlowFunction(newBlockOrder);
+  FlowFunction flowFunc = createFlowFunction(newBlockOrder, bpi);
   size_t numBlocks = flowFunc.Blocks.size();
   // Initialize histograms
 
@@ -351,7 +361,7 @@ void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction) {
   for (BasicBlock *oldBB : oldBlockOrder) {
     std::string oldBBName = extractAndFormatDigits(oldBB->getName().str());
     OpcodeHistogram oldHistogram = initializeHistogram(*oldBB);
-    FlowBlock *matchedBlock = OHM.matchBlock(oldHistogram, 0);
+    FlowBlock *matchedBlock = OHM.matchBlock(oldHistogram, MatchingThreshold);
 
     if (matchedBlock == nullptr && oldBlockIndex[oldBBName] == 0) {
       matchedBlock = blocks[0];
@@ -540,6 +550,32 @@ void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction) {
 
   using bbd = std::pair<BasicBlock *, uint64_t>;
   std::vector<bbd> orderedBlocks;
+  
+  // /// Outputting old block ordering
+  // std::vector<bbd> orderedOldBlocks;
+  // for (BasicBlock *BB : oldBlockOrder) {
+  //   uint64_t p = 0;
+  //   auto BBName = extractAndFormatDigits(BB->getName().str());
+  //   for (auto [DstBlock, Freq] : profile[BBName]) {
+  //     p += Freq;
+  //   }
+  //   orderedOldBlocks.emplace_back(BB, p);
+  // }
+
+  // std::sort(orderedOldBlocks.begin(), orderedOldBlocks.end(), [](bbd &a, bbd &b) {
+  //   auto [aBB, aFreq] = a;
+  //   auto [bBB, bFreq] = b;
+  //   std::string aName = extractAndFormatDigits(aBB->getName().str());
+  //   std::string bName = extractAndFormatDigits(bBB->getName().str());
+  //   return aFreq > bFreq || (aFreq == bFreq && aName < bName);
+  // });
+
+  // std::cout << "Old block ordering\n";
+  // for (auto [BB, Freq] : orderedOldBlocks) {
+  //   auto BBName = extractAndFormatDigits(BB->getName().str());
+  //   std::cout << BBName << " " << Freq << "\n";
+  // }
+  // /// End of old block ordering
 
   for (FlowBlock &block : flowFunc.Blocks) {
     if (block.Index > 0) {
@@ -558,9 +594,13 @@ void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction) {
     return aFreq > bFreq || (aFreq == bFreq && aName < bName);
   });
 
+  // std::cout << "Profiled block ordering\n";
   for (auto [BB, Freq] : orderedBlocks) {
-    outfile << extractAndFormatDigits(BB->getName().str()) << "\n";
+    auto BBName = extractAndFormatDigits(BB->getName().str());
+    outfile << BBName << "\n";
+    // std::cout << BBName << " " << Freq << "\n";
   }
+
 }
 
 // Read a profile file
@@ -606,6 +646,8 @@ PreservedAnalyses ProfilePass::run(Function &F,
 
   StringRef oldFileName = LLFilename;
 
+  llvm::BranchProbabilityInfo &bpi = AM.getResult<llvm::BranchProbabilityAnalysis>(F);
+
   std::unique_ptr<Module> oldProgram = parseIRFile(LLFilename, err, context);
 
   bool foundFunction = false;
@@ -614,7 +656,8 @@ PreservedAnalyses ProfilePass::run(Function &F,
     // Project profile from the function with the same name in the old program
     // Check if -O3 don't change function names
     if (fun.getName().str() == functionName) {
-      this->projectProfile(fun, F);
+      // std::cout << "Running projection for function " << functionName << "\n";
+      this->projectProfile(fun, F, bpi);
       foundFunction = true;
       break;
     }

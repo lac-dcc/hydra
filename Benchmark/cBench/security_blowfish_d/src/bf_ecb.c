@@ -77,11 +77,7 @@ char *BF_options()
 #endif
 	}
 
-void BF_ecb_encrypt(in, out, ks, encrypt)
-unsigned char *in;
-unsigned char *out;
-BF_KEY *ks;
-int encrypt;
+void BF_ecb_encrypt(unsigned char *in, unsigned char *out, BF_KEY *ks, int encrypt)
 	{
 	BF_LONG l,d[2];
 

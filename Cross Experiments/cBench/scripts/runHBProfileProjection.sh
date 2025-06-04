@@ -85,7 +85,8 @@ done
 
 START_TIME=`date +%s.%N`
 $LLVM_OPT -disable-output -load-pass-plugin $PASS_FILE_PROFILE \
-    -passes="hotblock-profile" "$BENCH_NAME.ll" -prog $LL_FILE -prof $PROFILES
+    -passes="hotblock-profile" "$BENCH_NAME.ll" -prog $LL_FILE \
+    -prof $PROFILES -matching-threshold $THRESHOLD
 ret_code=$?
 if [[ $ret_code -ne 0 ]]; then
     echo "Pass failed"

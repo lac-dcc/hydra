@@ -70,11 +70,7 @@ static int stepsizeTable[89] = {
 };
     
 void
-adpcm_coder(indata, outdata, len, state)
-    short indata[];
-    char outdata[];
-    int len;
-    struct adpcm_state *state;
+adpcm_coder(short indata[], char outdata[], int len, struct adpcm_state *state)
 {
     short *inp;			/* Input buffer pointer */
     signed char *outp;		/* output buffer pointer */
@@ -173,11 +169,7 @@ adpcm_coder(indata, outdata, len, state)
 }
 
 void
-adpcm_decoder(indata, outdata, len, state)
-    char indata[];
-    short outdata[];
-    int len;
-    struct adpcm_state *state;
+adpcm_decoder(char indata[], short outdata[], int len, struct adpcm_state *state)
 {
     signed char *inp;		/* Input buffer pointer */
     short *outp;		/* output buffer pointer */

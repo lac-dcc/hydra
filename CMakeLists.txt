@@ -18,6 +18,9 @@ endif()
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
 
+add_library(WeightedProfileInference MODULE
+    lib/Utils/WeightedProfileInference.cpp
+)
 
 add_library(HotBlockRandom MODULE
     lib/HotBlock/Random.cpp
@@ -54,6 +57,10 @@ add_library(BlockOrderingProfile MODULE
     lib/BlockOrdering/ProfilePlugin.cpp
 )
 
+target_include_directories(WeightedProfileInference PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/Utils"
+)
+
 target_include_directories(HotBlockRandom PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/include/HotBlock"
 )
@@ -68,6 +75,7 @@ target_include_directories(HotBlockPredictor PRIVATE
 
 target_include_directories(HotBlockProfile PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/include/HotBlock"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/Utils"
 )
 
 target_include_directories(BlockOrderingRandom PRIVATE
@@ -80,4 +88,5 @@ target_include_directories(BlockOrderingPredictor PRIVATE
 
 target_include_directories(BlockOrderingProfile PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/include/BlockOrdering"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/Utils"
 )
