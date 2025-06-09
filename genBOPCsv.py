@@ -14,10 +14,10 @@ csv_data = [
     ['File Name', 'Execution', 'Number of vertices', 'Number of edges', 'Min count', 'Max count', 'Block Ordering', 'Random guess', 'Random distance', 'Random hit', 'Predictor guess', 'Predictor distance', 'Predictor hit', 'Profile guess', 'Profile distance', 'Profile hit', 'Benchmark link']
 ]
 
-gt_data = json.load(open('JSON Files/jotaiMerlinResults.json','r'))
-random_data = json.load(open('JSON Files/jotaiRandomOrdering.json','r'))
-predictor_data = json.load(open('JSON Files/jotaiPredictorOrdering.json','r'))
-profile_data = json.load(open('JSON Files/jotaiProfileOrdering.json','r'))
+gt_data = json.load(open('JSON_Files/jotaiMerlinResults.json','r'))
+random_data = json.load(open('JSON_Files/jotaiRandomOrdering.json','r'))
+predictor_data = json.load(open('JSON_Files/jotaiPredictorOrdering.json','r'))
+profile_data = json.load(open('JSON_Files/jotaiProfileOrdering.json','r'))
 
 benchmarks = os.listdir('Benchmark/Jotai')
 

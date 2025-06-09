@@ -6,13 +6,16 @@ csv_data = [
     ['File Name', 'Execution', 'Number of vertices', 'Number of edges', 'Min count', 'Max count', 'Hottest blocks', 'Random hottest guess', 'Random hit', 'Nested hottest guess', 'Nested hit', 'Predictor guess', 'Predictor hit', 'Profile guess', 'Profile hit', 'Benchmark link']
 ]
 
-gt_data = json.load(open('JSON_Files/jotaiMerlinResults.json','r'))
-random_data = json.load(open('JSON_Files/jotaiRandomBlock.json','r'))
-nested_data = json.load(open('JSON_Files/jotaiNestedBlock.json','r'))
-predictor_data = json.load(open('JSON_Files/jotaiPredictorBlock.json','r'))
-profile_data = json.load(open('JSON_Files/jotaiProfileBlock.json','r'))
+base_dir = os.environ.get('BASE_DIR', '/home/jvf/Codes/hydra/')
+exp_folder = os.environ.get('EXP_FOLDER', '')
 
-benchmarks = os.listdir('Benchmark/Jotai')
+gt_data = json.load(open(base_dir+'/Cross_Experiments/Jotai/'+exp_folder+'/JSON_Files/jotaiMerlinResults.json','r'))
+random_data = json.load(open(base_dir+'/Cross_Experiments/Jotai/'+exp_folder+'/JSON_Files/jotaiRandomBlock.json','r'))
+nested_data = json.load(open(base_dir+'/Cross_Experiments/Jotai/'+exp_folder+'/JSON_Files/jotaiNestedBlock.json','r'))
+predictor_data = json.load(open(base_dir+'/Cross_Experiments/Jotai/'+exp_folder+'/JSON_Files/jotaiPredictorBlock.json','r'))
+profile_data = json.load(open(base_dir+'/Cross_Experiments/Jotai/'+exp_folder+'/JSON_Files/jotaiProfileBlock.json','r'))
+
+benchmarks = os.listdir(base_dir+'/Benchmark/Jotai')
 
 for app_name in gt_data:
     for function_name in gt_data[app_name]:
@@ -52,8 +55,12 @@ for app_name in gt_data:
             if frequencies[random_guess] == max_count:
                 random_hit = 1
             nested_hit = 0
-            if frequencies[nested_guess] == max_count:
-                nested_hit = 1
+            try:
+                if frequencies[nested_guess] == max_count:
+                    nested_hit = 1
+            except:
+                print(nested_guess, file_name)
+                exit(0)
             predictor_hit = 0
             if frequencies[predictor_guess] == max_count:
                 predictor_hit = 1
@@ -62,6 +69,6 @@ for app_name in gt_data:
                 profile_hit = 1
             csv_data.append([file_name, execution_number, nodes, edges, min_count, max_count, str(hottest_blocks), random_guess, random_hit, nested_guess, nested_hit, predictor_guess, predictor_hit, profile_guess, profile_hit, benchmark_link])
 
-with open('jotaiMerlinTable.csv', mode='w', newline='') as file:
+with open(base_dir+'/Cross_Experiments/Jotai/'+exp_folder+'/jotaiMerlinTable.csv', mode='w', newline='') as file:
     writer = csv.writer(file, delimiter=';', quoting=csv.QUOTE_MINIMAL)
     writer.writerows(csv_data)

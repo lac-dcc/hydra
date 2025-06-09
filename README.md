@@ -22,7 +22,7 @@ Now, you need to adjust some parameters that suit your environment:
 - In the [nisse_all.sh](./Benchmark%20Scripts/Jotai/nisse_all.sh) script:
   - `BASE_DIR` (line 3): must point to your hydra (this repository) source directory
 
-With these configurations correctly set, running the script `nisse_all.sh` must generate a file named `jotaiMerlinResults2.json` in the folder `JSON Files`. You can compare it with the `jotaiMerlinResults.json` using `diff`.
+With these configurations correctly set, running the script `nisse_all.sh` must generate a file named `jotaiMerlinResults2.json` in the folder `JSON_Files`. You can compare it with the `jotaiMerlinResults.json` using `diff`.
 
 ## How to get the heuristics results
 
@@ -45,7 +45,7 @@ Also, there are some parameters to adjust:
   - `LLVM_INSTALL_DIR` (line 3): must point to your LLVM installation directory
   - `BASE_DIR` (line 4): must point to your hydra (this repository) source directory
 
-With these configurations correctly set, you must run the scripts `build.sh` and `run.sh` in this order, and it must generate the JSONs `jotaiRandomBlock2.json`, `jotaiNestedBlock2.json` and `jotaiPredictorBlock2.json` in the folder `JSON Files`. Also, they can be compared with their respective original files using `diff`.
+With these configurations correctly set, you must run the scripts `build.sh` and `run.sh` in this order, and it must generate the JSONs `jotaiRandomBlock2.json`, `jotaiNestedBlock2.json` and `jotaiPredictorBlock2.json` in the folder `JSON_Files`. Also, they can be compared with their respective original files using `diff`.
 
 ## How to get the CSV table
 

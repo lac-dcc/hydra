@@ -1004,8 +1004,8 @@ private:
       return;
     assert(BlockDegree > 0 && "all outgoing jumps are ignored");
 
-    // Each of the Block's successors gets the following amount of flow.
-    // Rounding the value up so that all flow is propagated
+    // // Each of the Block's successors gets the following amount of flow.
+    // // Rounding the value up so that all flow is propagated
     // uint64_t SuccFlow = (BlockFlow + BlockDegree - 1) / BlockDegree;
     // for (auto *Jump : Block->SuccJumps) {
     //   if (ignoreJump(SrcBlock, DstBlock, Jump))
@@ -1014,6 +1014,9 @@ private:
     //   Jump->Flow = Flow;
     //   BlockFlow -= Flow;
     // }
+
+    // assert(BlockFlow == 0 && "not all flow is propagated");
+
     uint64_t UsedFlow = 0;
     for (size_t I = 0; I < Block->SuccJumps.size(); I++) {
         auto *Jump = Block->SuccJumps[I];

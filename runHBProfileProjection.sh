@@ -17,7 +17,7 @@ BASE_DIR="/home/jvf/Codes/hydra"
 LLVM_OPT="$LLVM_INSTALL_DIR/bin/opt"
 CLANG="$LLVM_INSTALL_DIR/bin/clang"
 
-NISSE_SCRIPT="$BASE_DIR/Benchmark Scripts/nisse_profiler.sh"
+NISSE_SCRIPT="$BASE_DIR/Benchmark_Scripts/nisse_profiler.sh"
 
 PASS_FILE_PROFILE=$BASE_DIR/build/lib/libHotBlockProfile.so
 CFLAGS="-Xclang -disable-O0-optnone -Wno-everything -std=c99 -c -S -emit-llvm"
