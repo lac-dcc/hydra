@@ -678,7 +678,7 @@ TOTAL_TYPE total;
   else
     mask_size = 1;
 
-  total=0.1; /* test for total's type */
+  total=0; /* test for total's type */
   if ( (dt>15) && (total==0) )
   {
     printf("Distance_thresh (%f) too big for integer arithmetic.\n",dt);

@@ -82,7 +82,7 @@ done
 START_TIME=`date +%s.%N`
 $LLVM_OPT -disable-output -load-pass-plugin $PASS_FILE_PROFILE \
     -passes="block-ordering-profile" "$BENCH_NAME.ll" -prog $LL_FILE \
-    -prof $PROFILES -matching-threshold $THRESHOLD
+    -prof $PROFILES -matching-threshold $THRESHOLD -max-iterations $MAX_ITER
 ret_code=$?
 if [[ $ret_code -ne 0 ]]; then
     echo "Pass failed"
@@ -99,4 +99,4 @@ mv *-profile.txt $RESULTS_FOLDER/$BENCH_NAME/.
 echo $RUNTIME > $RESULTS_FOLDER/$BENCH_NAME/execution_time.txt
 
 cd ..
-rm -rf tmp
+# rm -rf tmp

@@ -12,8 +12,9 @@ NEW_OPT="disable-O0-optnone"
 PRE_PASSES=""
 PASSES=""
 THRESHOLD="0"
+MAX_ITER="3"
 
-TEMP=$(getopt -o '' --long exp-folder:,old-opt:,new-opt:,pre-passes:,new-passes:,matching-threshold: -n "$0" -- "$@")
+TEMP=$(getopt -o '' --long exp-folder:,old-opt:,new-opt:,pre-passes:,new-passes:,matching-threshold:,max-iterations: -n "$0" -- "$@")
 
 if [[ $? != 0 ]]
 then
@@ -32,6 +33,7 @@ do
         --pre-passes) PRE_PASSES="$2"; shift 2 ;;
         --new-passes) PASSES="$2"; shift 2 ;;
         --matching-threshold) THRESHOLD="$2"; shift 2 ;;
+        --max-iterations) MAX_ITER="$2"; shift 2 ;;
         --) shift; break ;;
         *) echo "Internal error!"; exit 1 ;;
     esac
@@ -39,7 +41,7 @@ done
 
 if [[ -z "$EXP_FOLDER" || -z "$OLD_OPT" || -z "$NEW_OPT" ]]
 then
-    echo "Usage: $0 --exp-folder <folder> --old-opt <opt flag> --new-opt <opt flag> --pre-passes <passes> --new-passes <passes> --matching-threshold <threshold>"
+    echo "Usage: $0 --exp-folder <folder> --old-opt <opt flag> --new-opt <opt flag> --pre-passes <passes> --new-passes <passes> --matching-threshold <threshold> --max-iterations <iterations>"
     exit 1
 fi
 
@@ -49,6 +51,7 @@ echo "$NEW_OPT"
 echo "$PRE_PASSES"
 echo "$PASSES"
 echo "$THRESHOLD"
+echo "$MAX_ITER"
 
 export EXP_FOLDER
 export OLD_OPT
@@ -56,6 +59,7 @@ export NEW_OPT
 export PRE_PASSES
 export PASSES
 export THRESHOLD
+export MAX_ITER
 
 export LLVM_INSTALL_DIR="/usr/local"
 export BASE_DIR="/home/jvf/Codes/hydra"
@@ -78,18 +82,24 @@ then
     cp "$BACKUP_DIR/$EXP_FOLDER/$CUR_BKP/JSON_Files/cBenchResults.json" "$RESULT_DIR/JSON_Files/"
 fi
 
+mkdir -p "$RESULT_DIR/JSON_Files"
 mkdir -p "$RESULT_DIR/LL_Files/pre"
 mkdir -p "$RESULT_DIR/LL_Files/opt"
 
-# echo "Running nisse_all script"
-# bash "$SCRIPT_DIR/cBench/nisse_all.sh"
-# ret_code=$?
-# if [[ $ret_code -ne 0 ]]
-# then
-#     echo "Internal error"
-#     echo "Terminating..."
-#     exit 1
-# fi
+if ! [[ -f "$RESULT_DIR/JSON_Files/cBenchResults.json" ]]
+then
+    echo "Running nisse_all script"
+    bash "$SCRIPT_DIR/cBench/nisse_all.sh"
+    ret_code=$?
+    if [[ $ret_code -ne 0 ]]
+    then
+        echo "Internal error"
+        echo "Terminating..."
+        exit 1
+    fi
+fi
+
+
 
 echo "Running hot block prediction heuristics"
 bash "$SCRIPT_DIR/runHotBlock.sh"

@@ -96,7 +96,7 @@ fi
 # Print the instrumented CFG
 #
 $LLVM_OPT -S -passes="dot-cfg" -stats \
-    $PF_NAME -o $PF_NAME
+    $LL_NAME -o $LL_NAME
 
 # Compile the newly instrumented program, and link it against the profiler
 #
