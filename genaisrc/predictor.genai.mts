@@ -6,7 +6,7 @@ script({
 });
 
 // Helper function to save or append to a file
-const saveToFile = (filePath:string, content:string) => {
+const saveToFile = (filePath: string, content: string) => {
   if (!fs.existsSync(filePath)) {
     fs.writeFileSync(filePath, content);
   } else {
@@ -14,8 +14,107 @@ const saveToFile = (filePath:string, content:string) => {
   }
 };
 
+type ParsedResult = {
+  jsonObj: {
+    benchmarkInfo: {
+      benchmarkName: string;
+      funcName: string;
+    };
+    hottestBB: {
+      bbName: string;
+    };
+    bbOrderByHotness: { name: string }[];
+    additionalNotes: string;
+  };
+  jsonSchema: any;
+};
+
+export const parseMarkdownToJson = (
+  markdownContent: string,
+  fileNameWithoutExt: string,
+  funcName: string,
+  bbSet: string[]
+): ParsedResult => {
+  const hottestBB =
+    markdownContent.match(/\*\*Hottest Basic Block\*\*:\s*`([^`]+)`/)?.[1] ??
+    "";
+
+  const bbLines =
+    markdownContent
+      .match(/```text([\s\S]+?)```/)?.[1]
+      .trim()
+      .split("\n")
+      .map((line) => line.replace(/^\s*\d+\.\s*/, "").trim()) ?? [];
+
+  const additionalNotes =
+    markdownContent
+      .match(/- \*\*Additional Notes\*\*:\s*([\s\S]+)/)?.[1]
+      .trim() ?? "";
+
+  const jsonObj = {
+    benchmarkInfo: {
+      benchmarkName: fileNameWithoutExt,
+      funcName,
+    },
+    hottestBB: {
+      bbName: hottestBB,
+    },
+    bbOrderByHotness: bbLines.map((name) => ({ name })),
+    additionalNotes,
+  };
+
+  const jsonSchema = {
+    type: "object",
+    properties: {
+      benchmarkInfo: {
+        type: "object",
+        properties: {
+          benchmarkName: {
+            type: "string",
+            enum: [fileNameWithoutExt],
+          },
+          funcName: {
+            type: "string",
+            enum: [funcName],
+          },
+        },
+        required: ["benchmarkName", "funcName"],
+      },
+      hottestBB: {
+        type: "object",
+        properties: {
+          bbName: {
+            type: "string",
+            enum: bbSet,
+          },
+        },
+        required: ["bbName"],
+      },
+      bbOrderByHotness: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            name: {
+              type: "string",
+              enum: bbSet,
+            },
+          },
+        },
+        required: ["bbOrderByHotness"],
+      },
+      additionalNotes: {
+        type: "string",
+      },
+    },
+    required: ["hottestBB", "bbOrderByHotness", "additionalNotes"],
+  };
+
+  return { jsonObj, jsonSchema };
+};
+
 // Main function for processing the files
-const processFiles = async (env:ExpansionVariables) => {
+const processFiles = async (env: ExpansionVariables) => {
   const dbg = env.dbg;
   const output = env.output;
   const files = env.files;
@@ -55,7 +154,7 @@ const processFiles = async (env:ExpansionVariables) => {
     // Iterate over each function for deeper analysis
     for (const func of funcSet) {
       const funcNameMatch = func.match(/@([a-zA-Z_][\w\.]*)\(/m);
-      const funcName = funcNameMatch ?.[1];
+      const funcName = funcNameMatch?.[1];
 
       if (!funcName) {
         output.error("Function name not found");
@@ -66,17 +165,27 @@ const processFiles = async (env:ExpansionVariables) => {
       const bbSet = bbSetMatch ? bbSetMatch.map((id) => id.slice(0, -1)) : [];
       dbg(`bbSet: ${bbSet}`);
 
-      output.heading(3, `${fun_counter}) Analysis report of function: ${funcName}`);
-      output.detailsFenced("Function being analized:",func);
+      output.heading(
+        3,
+        `${fun_counter}) Analysis report of function: ${funcName}`
+      );
+      output.detailsFenced("Function being analized:", func);
+      output.detailsFenced(
+        `Function ${funcName} has ${bbSet.length} blocks :`,
+        bbSet.join(", ")
+      );
 
       fun_counter += 1;
       console.log("Function content: \n", func);
 
+      let bbList = bbSet.join(", ");
       // Run the prompt for hot block estimation and ranking
       try {
         const res = await runPrompt(
           (ctxt) => {
-            const completeFunc = ctxt.def("function", func,{maxTokens:16000});
+            const completeFunc = ctxt.def("function", func, {
+              maxTokens: 16384,
+            });
             ctxt.$` ## Role:
             You are a Compiler Engineer with over 20 years of experience 
             in compiler construction, LLVM internals, and advanced optimizations techniques. 
@@ -95,82 +204,60 @@ const processFiles = async (env:ExpansionVariables) => {
             be executed more often?
             
             Question 2. *Hotness Ranking*:
-            This function has ${bbSet.length} basic blocks: ${bbSet.join(", ")}.
+            This function has ${bbSet.length} basic blocks: ${bbList}.
             Could you sort this sequence of basic blocks by *hotness*?
             That is, if a basic block \`bb_x\` appears ahead of another 
             block \`bb_y\`, it means you think \`bb_y\` will not be executed 
             more often than \`bb_x\`, though they might have equal frequency.
             
-            **Reasoning and Heuristics**:
-                Please provide a brief explanation of your reasoning for the
-                hottest basic block and the order of the other basic blocks as 
-                you did. If relevant, include any insights from control-flow 
-                structure, loop presence, loop header, branching behavior, or 
-                any other heuristics you applied during your analysis.
+            ---
+    
+            ** Expected Output Format**:
+            
+            - **Hottest Basic Block**: \`<name of the hottest basic block>\`
+            
+            - **Sorted Basic Blocks by Hotness**:
+            \`\`\`text
+            1. <basic_block_1>
+            2. <basic_block_2> 
+            3. ...
+            \`\`\`
+            
+            - **Additional Notes**: <any additional notes or comments>
+            ---
+            Please provide your response in the format above, thanks!
+            Make sure that the Sorted Basic Blocks by Hotness has all
+            ${bbSet.length} basic blocks listed here.
             `;
           },
           {
             temperature: 0,
             model: "vision",
             systemSafety: true,
-            responseType: "json_schema",
-            responseSchema: {
-              type: "object",
-              properties: {
-                benchmarkInfo: {
-                  type: "object",
-                  properties: {
-                    benchmarkName: {
-                      type: "string",
-                      enum: [fileNameWithoutExt],
-                    },
-                    funcName: { type: "string", enum: [funcName] },
-                  },
-                  required: ["benchmarkName", "funcName"],
-                },
-                hottestBB: {
-                  type: "object",
-                  properties: {
-                    bbName: { type: "string", enum: bbSet },
-                    explanation: { type: "string" },
-                  },
-                  required: ["bbName", "explanation"],
-                },
-                bbOrderByHotness: {
-                  type: "array",
-                  items: {
-                    type: "object",
-                    properties: {
-                      name: { type: "string", enum: bbSet },
-                      explanation: { type: "string" },
-                    },
-                    required: ["name", "explanation"],
-                  },
-                },
-                additionalNotes: { type: "string" },
-              },
-              required: ["hottestBB", "bbOrderByHotness"],
-            },
+            responseType: "text",
           }
         );
 
-        output.detailsFenced("LLM Output:",res.json);
-        const data: {
-          hottestBB: { explanation: string; name: string }[];
-        } = res.json;
+        output.detailsFenced("LLM Output Text:", res.text);
 
-        console.log("Response Json: ", res.json);
+        const jsonObj = parseMarkdownToJson(
+          res.text,
+          fileNameWithoutExt,
+          funcName,
+          bbSet
+        ).jsonObj;
+        console.log("Response Json: ", jsonObj);
         // Define the output file name
         const outFileName = `${filePath}/${fileNameWithoutExt}.json`;
-
         // Save or append the results to the file
-        saveToFile(outFileName, res.text);
+        saveToFile(outFileName, JSON.stringify(jsonObj, null, 2));
       } catch (error) {
         console.error("Error during prompt execution:", error);
         output.error("Error analyzing function");
       }
     }
   }
+  output.heading(1, "End of benchmarking.");
 };
 
 await processFiles(env).catch((err) =>
