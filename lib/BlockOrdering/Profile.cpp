@@ -106,6 +106,8 @@ std::string extractAndFormatDigits(const std::string &s) {
     aux = s.substr(pos+1);
     if (aux == "loopexit") {
       return bb1+".le";
+    } else if (aux == "preheader") {
+      return bb1+".ph";
     }
     pos = aux.find("_");
     bb2 = aux.substr(0,pos);
@@ -619,25 +621,13 @@ void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction, B
   }
 
   // Assign weights from matched blocks
-  if (Debug) {
-    std::cout << "\nAssigning weights to matched blocks\n\n";
-  }
   for (FlowBlock &Block : flowFunc.Blocks) {
     if (OutWeight[Block.Index] == 0 && InWeight[Block.Index] == 0) {
       assert(Block.HasUnknownWeight && "unmatched block with a positive count");
-      if (Debug) {
-        if (Block.Index)
-          std::cout << Block.Index-1 << "\n";
-          std::cout << extractAndFormatDigits(newBlockOrder[Block.Index-1]->getName().str()) << " : 0\n";
-      }
       continue;
     }
     Block.HasUnknownWeight = false;
     Block.Weight = std::max(OutWeight[Block.Index], InWeight[Block.Index]);
-    if (Debug) {
-      std::cout << extractAndFormatDigits(newBlockOrder[Block.Index-1]->getName().str()) << " : "
-              << Block.Weight << "\n";
-    }
   }
 
   // Use a BFS to find all blocks that are reachable from source and do not
@@ -803,6 +793,7 @@ bool ProfilePass::readProfile(std::string functionName) {
 PreservedAnalyses ProfilePass::run(Function &F,
                                       FunctionAnalysisManager &AM) {
   std::string functionName = F.getName().str();
+  // if (functionName != "bit_shifter") return PreservedAnalyses::all();
   outfile.open(functionName + "-profile.txt");
 
   if (!this->readProfile(functionName)) {

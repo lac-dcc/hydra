@@ -110,34 +110,19 @@ bb:
 define dso_local i32 @bit_count(i64 noundef %arg) #0 {
 bb:
   %i = icmp ne i64 %arg, 0
-  br i1 %i, label %bb2, label %bb.bb10_crit_edge
+  br i1 %i, label %bb3, label %bb10
 
-bb.bb10_crit_edge:                                ; preds = %bb
-  br label %bb10
-
-bb2:                                              ; preds = %bb
-  br label %bb3
-
-bb3:                                              ; preds = %bb5.bb3_crit_edge, %bb2
-  %.01 = phi i32 [ 0, %bb2 ], [ %i4, %bb5.bb3_crit_edge ]
-  %.0 = phi i64 [ %arg, %bb2 ], [ %i7, %bb5.bb3_crit_edge ]
+bb3:                                              ; preds = %bb3, %bb
+  %.01 = phi i32 [ 0, %bb ], [ %i4, %bb3 ]
+  %.0 = phi i64 [ %arg, %bb ], [ %i7, %bb3 ]
   %i4 = add nsw i32 %.01, 1
-  br label %bb5
-
-bb5:                                              ; preds = %bb3
   %i6 = sub nsw i64 %.0, 1
   %i7 = and i64 %.0, %i6
   %i8 = icmp ne i64 0, %i7
-  br i1 %i8, label %bb5.bb3_crit_edge, label %bb9, !llvm.loop !8
+  br i1 %i8, label %bb3, label %bb10, !llvm.loop !8
 
-bb5.bb3_crit_edge:                                ; preds = %bb5
-  br label %bb3
-
-bb9:                                              ; preds = %bb5
-  br label %bb10
-
-bb10:                                             ; preds = %bb.bb10_crit_edge, %bb9
-  %.1 = phi i32 [ %i4, %bb9 ], [ 0, %bb.bb10_crit_edge ]
+bb10:                                             ; preds = %bb3, %bb
+  %.1 = phi i32 [ 0, %bb ], [ %i4, %bb3 ]
   ret i32 %.1
 }
 
@@ -316,18 +301,15 @@ bb:
   %i5 = sext i8 %i4 to i32
   %i6 = ashr i64 %arg, 4
   %i7 = icmp ne i64 0, %i6
-  br i1 %i7, label %bb8, label %bb.bb11_crit_edge
-
-bb.bb11_crit_edge:                                ; preds = %bb
-  br label %bb11
+  br i1 %i7, label %bb8, label %bb11
 
 bb8:                                              ; preds = %bb
   %i9 = call i32 @ntbl_bitcnt(i64 noundef %i6)
   %i10 = add nsw i32 %i5, %i9
   br label %bb11
 
-bb11:                                             ; preds = %bb.bb11_crit_edge, %bb8
-  %.0 = phi i32 [ %i10, %bb8 ], [ %i5, %bb.bb11_crit_edge ]
+bb11:                                             ; preds = %bb, %bb8
+  %.0 = phi i32 [ %i10, %bb8 ], [ %i5, %bb ]
   ret i32 %.0
 }
 
@@ -348,10 +330,7 @@ bb:
   %i10 = ashr i64 %i9, 8
   store i64 %i10, ptr %i, align 8
   %i11 = icmp ne i64 0, %i10
-  br i1 %i11, label %bb12, label %bb.bb16_crit_edge
-
-bb.bb16_crit_edge:                                ; preds = %bb
-  br label %bb16
+  br i1 %i11, label %bb12, label %bb16
 
 bb12:                                             ; preds = %bb
   %i13 = load i64, ptr %i, align 8
@@ -359,8 +338,8 @@ bb12:                                             ; preds = %bb
   %i15 = add nsw i32 %i8, %i14
   br label %bb16
 
-bb16:                                             ; preds = %bb.bb16_crit_edge, %bb12
-  %.0 = phi i32 [ %i15, %bb12 ], [ %i8, %bb.bb16_crit_edge ]
+bb16:                                             ; preds = %bb, %bb12
+  %.0 = phi i32 [ %i15, %bb12 ], [ %i8, %bb ]
   ret i32 %.0
 }
 
@@ -381,30 +360,24 @@ bb9:                                              ; preds = %bb
   %i11 = load ptr, ptr %i10, align 8
   %i12 = call i32 @atoi(ptr noundef %i11) #9
   %i13 = icmp ne i32 %arg5, 0
-  br i1 %i13, label %bb14, label %bb9.bb16_crit_edge
-
-bb9.bb16_crit_edge:                               ; preds = %bb9
-  br label %bb16
+  br i1 %i13, label %bb14, label %bb16
 
 bb14:                                             ; preds = %bb9
   %i15 = call i32 @puts(ptr noundef @.str.8)
   br label %bb16
 
-bb16:                                             ; preds = %bb9.bb16_crit_edge, %bb14
+bb16:                                             ; preds = %bb9, %bb14
   br label %bb17
 
 bb17:                                             ; preds = %bb41, %bb16
   %.03 = phi i32 [ 0, %bb16 ], [ %i42, %bb41 ]
   %i18 = icmp slt i32 %.03, 7
-  br i1 %i18, label %bb19, label %bb43
+  br i1 %i18, label %bb20, label %bb43
 
-bb19:                                             ; preds = %bb17
-  br label %bb20
-
-bb20:                                             ; preds = %bb30, %bb19
-  %.02 = phi i64 [ 0, %bb19 ], [ %i31, %bb30 ]
-  %.01 = phi i64 [ 0, %bb19 ], [ %i29, %bb30 ]
-  %.0 = phi i64 [ 1, %bb19 ], [ %i32, %bb30 ]
+bb20:                                             ; preds = %bb17, %bb23
+  %.02 = phi i64 [ %i31, %bb23 ], [ 0, %bb17 ]
+  %.01 = phi i64 [ %i29, %bb23 ], [ 0, %bb17 ]
+  %.0 = phi i64 [ %i32, %bb23 ], [ 1, %bb17 ]
   %i21 = sext i32 %i12 to i64
   %i22 = icmp slt i64 %.02, %i21
   br i1 %i22, label %bb23, label %bb33
@@ -416,31 +389,22 @@ bb23:                                             ; preds = %bb20
   %i27 = call i32 %i26(i64 noundef %.0)
   %i28 = sext i32 %i27 to i64
   %i29 = add nsw i64 %.01, %i28
-  br label %bb30
-
-bb30:                                             ; preds = %bb23
   %i31 = add nsw i64 %.02, 1
   %i32 = add nsw i64 %.0, 13
   br label %bb20, !llvm.loop !10
 
 bb33:                                             ; preds = %bb20
   %i34 = icmp ne i32 %arg5, 0
-  br i1 %i34, label %bb35, label %bb33.bb40_crit_edge
-
-bb33.bb40_crit_edge:                              ; preds = %bb33
-  br label %bb40
+  br i1 %i34, label %bb35, label %bb41
 
 bb35:                                             ; preds = %bb33
   %i36 = sext i32 %.03 to i64
   %i37 = getelementptr inbounds [7 x ptr], ptr @main1.text, i64 0, i64 %i36
   %i38 = load ptr, ptr %i37, align 8
   %i39 = call i32 (ptr, ...) @printf(ptr noundef @.str.9, ptr noundef %i38, i64 noundef %.01)
-  br label %bb40
-
-bb40:                                             ; preds = %bb33.bb40_crit_edge, %bb35
   br label %bb41
 
-bb41:                                             ; preds = %bb40
+bb41:                                             ; preds = %bb35, %bb33
   %i42 = add nsw i32 %.03, 1
   br label %bb17, !llvm.loop !11
 
@@ -465,37 +429,25 @@ define internal i32 @bit_shifter(i64 noundef %arg) #0 {
 bb:
   br label %bb3
 
-bb3:                                              ; preds = %bb13, %bb
-  %.02 = phi i32 [ 0, %bb ], [ %i12, %bb13 ]
-  %.01 = phi i32 [ 0, %bb ], [ %i14, %bb13 ]
-  %.0 = phi i64 [ %arg, %bb ], [ %i15, %bb13 ]
+bb3:                                              ; preds = %bb9, %bb
+  %.02 = phi i32 [ 0, %bb ], [ %i12, %bb9 ]
+  %.01 = phi i32 [ 0, %bb ], [ %i14, %bb9 ]
+  %.0 = phi i64 [ %arg, %bb ], [ %i15, %bb9 ]
   %i = icmp ne i64 %.0, 0
-  br i1 %i, label %bb4, label %bb3.bb7_crit_edge
-
-bb3.bb7_crit_edge:                                ; preds = %bb3
-  br label %bb7
-
-bb4:                                              ; preds = %bb3
   %i5 = sext i32 %.01 to i64
   %i6 = icmp ult i64 %i5, 64
-  br label %bb7
-
-bb7:                                              ; preds = %bb3.bb7_crit_edge, %bb4
-  %i8 = phi i1 [ false, %bb3.bb7_crit_edge ], [ %i6, %bb4 ]
+  %i8 = select i1 %i, i1 %i6, i1 false
   br i1 %i8, label %bb9, label %bb16
 
-bb9:                                              ; preds = %bb7
+bb9:                                              ; preds = %bb3
   %i10 = and i64 %.0, 1
   %i11 = trunc i64 %i10 to i32
   %i12 = add nsw i32 %.02, %i11
-  br label %bb13
-
-bb13:                                             ; preds = %bb9
   %i14 = add nsw i32 %.01, 1
   %i15 = ashr i64 %.0, 1
   br label %bb3, !llvm.loop !12
 
-bb16:                                             ; preds = %bb7
+bb16:                                             ; preds = %bb3
   ret i32 %.02
 }
 
@@ -504,10 +456,7 @@ define dso_local ptr @bfopen(ptr noundef %arg, ptr noundef %arg1) #0 {
 bb:
   %i = call noalias ptr @malloc(i64 noundef 16) #10
   %i2 = icmp eq ptr null, %i
-  br i1 %i2, label %bb3, label %bb4
-
-bb3:                                              ; preds = %bb
-  br label %bb14
+  br i1 %i2, label %bb14, label %bb4
 
 bb4:                                              ; preds = %bb
   %i5 = call noalias ptr @fopen(ptr noundef %arg, ptr noundef %arg1)
@@ -529,8 +478,8 @@ bb11:                                             ; preds = %bb4
   store i8 0, ptr %i13, align 1
   br label %bb14
 
-bb14:                                             ; preds = %bb11, %bb10, %bb3
-  %.0 = phi ptr [ null, %bb3 ], [ null, %bb10 ], [ %i, %bb11 ]
+bb14:                                             ; preds = %bb, %bb11, %bb10
+  %.0 = phi ptr [ null, %bb10 ], [ %i, %bb11 ], [ null, %bb ]
   ret ptr %.0
 }
 
@@ -549,10 +498,7 @@ bb:
   %i1 = load i8, ptr %i, align 1
   %i2 = sext i8 %i1 to i32
   %i3 = icmp eq i32 0, %i2
-  br i1 %i3, label %bb4, label %bb.bb11_crit_edge
-
-bb.bb11_crit_edge:                                ; preds = %bb
-  br label %bb11
+  br i1 %i3, label %bb4, label %bb11
 
 bb4:                                              ; preds = %bb
   %i5 = getelementptr inbounds %struct.bfile, ptr %arg, i32 0, i32 0
@@ -565,7 +511,7 @@ bb4:                                              ; preds = %bb
   store i8 8, ptr %i10, align 1
   br label %bb11
 
-bb11:                                             ; preds = %bb.bb11_crit_edge, %bb4
+bb11:                                             ; preds = %bb, %bb4
   %i12 = getelementptr inbounds %struct.bfile, ptr %arg, i32 0, i32 2
   %i13 = load i8, ptr %i12, align 1
   %i14 = add i8 %i13, -1
@@ -592,10 +538,7 @@ bb:
   %i2 = load i8, ptr %i, align 1
   %i3 = sext i8 %i2 to i32
   %i4 = icmp eq i32 8, %i3
-  br i1 %i4, label %bb5, label %bb.bb13_crit_edge
-
-bb.bb13_crit_edge:                                ; preds = %bb
-  br label %bb13
+  br i1 %i4, label %bb5, label %bb13
 
 bb5:                                              ; preds = %bb
   %i6 = getelementptr inbounds %struct.bfile, ptr %arg1, i32 0, i32 3
@@ -608,7 +551,7 @@ bb5:                                              ; preds = %bb
   store i8 0, ptr %i12, align 1
   br label %bb13
 
-bb13:                                             ; preds = %bb.bb13_crit_edge, %bb5
+bb13:                                             ; preds = %bb, %bb5
   %i14 = getelementptr inbounds %struct.bfile, ptr %arg1, i32 0, i32 4
   %i15 = load i8, ptr %i14, align 1
   %i16 = add i8 %i15, 1
@@ -656,27 +599,21 @@ bb:
   %i12 = sub nsw i32 %arg5, %i11
   br label %bb13
 
-bb13:                                             ; preds = %bb17, %bb
-  %.01 = phi i32 [ 0, %bb ], [ %i18, %bb17 ]
-  %.0 = phi ptr [ %arg, %bb ], [ %i16, %bb17 ]
+bb13:                                             ; preds = %bb15, %bb
+  %.01 = phi i32 [ 0, %bb ], [ %i18, %bb15 ]
+  %.0 = phi ptr [ %arg, %bb ], [ %i16, %bb15 ]
   %i14 = icmp slt i32 %.01, %i12
-  br i1 %i14, label %bb15, label %bb19
+  br i1 %i14, label %bb15, label %bb20
 
 bb15:                                             ; preds = %bb13
   %i16 = getelementptr inbounds i8, ptr %.0, i32 1
   store i8 32, ptr %.0, align 1
-  br label %bb17
-
-bb17:                                             ; preds = %bb15
   %i18 = add nsw i32 %.01, 1
   br label %bb13, !llvm.loop !13
 
-bb19:                                             ; preds = %bb13
-  br label %bb20
-
-bb20:                                             ; preds = %bb36, %bb19
-  %.02 = phi i32 [ %arg4, %bb19 ], [ %i21, %bb36 ]
-  %.1 = phi ptr [ %.0, %bb19 ], [ %.2, %bb36 ]
+bb20:                                             ; preds = %bb13, %bb36
+  %.02 = phi i32 [ %i21, %bb36 ], [ %arg4, %bb13 ]
+  %.1 = phi ptr [ %.2, %bb36 ], [ %.0, %bb13 ]
   %i21 = add nsw i32 %.02, -1
   %i22 = icmp sge i32 %i21, 0
   br i1 %i22, label %bb23, label %bb37
@@ -690,26 +627,18 @@ bb23:                                             ; preds = %bb20
   %i29 = getelementptr inbounds i8, ptr %.1, i32 1
   store i8 %i28, ptr %.1, align 1
   %i30 = srem i32 %i21, 4
-  %i31 = icmp ne i32 %i30, 0
-  br i1 %i31, label %bb23.bb36_crit_edge, label %bb32
-
-bb23.bb36_crit_edge:                              ; preds = %bb23
-  br label %bb36
-
-bb32:                                             ; preds = %bb23
+  %i31 = icmp eq i32 %i30, 0
   %i33 = icmp ne i32 %i21, 0
-  br i1 %i33, label %bb34, label %bb32.bb36_crit_edge
+  %or.cond = and i1 %i31, %i33
+  br i1 %or.cond, label %bb34, label %bb36
 
-bb32.bb36_crit_edge:                              ; preds = %bb32
-  br label %bb36
-
-bb34:                                             ; preds = %bb32
+bb34:                                             ; preds = %bb23
   %i35 = getelementptr inbounds i8, ptr %i29, i32 1
   store i8 32, ptr %i29, align 1
   br label %bb36
 
-bb36:                                             ; preds = %bb32.bb36_crit_edge, %bb23.bb36_crit_edge, %bb34
-  %.2 = phi ptr [ %i29, %bb23.bb36_crit_edge ], [ %i35, %bb34 ], [ %i29, %bb32.bb36_crit_edge ]
+bb36:                                             ; preds = %bb23, %bb34
+  %.2 = phi ptr [ %i35, %bb34 ], [ %i29, %bb23 ]
   br label %bb20, !llvm.loop !14
 
 bb37:                                             ; preds = %bb20
@@ -726,32 +655,22 @@ bb2:                                              ; preds = %bb14, %bb
   %.01 = phi i32 [ 0, %bb ], [ %i21, %bb14 ]
   %.0 = phi ptr [ %arg, %bb ], [ %i15, %bb14 ]
   %i = icmp ne ptr %.0, null
-  br i1 %i, label %bb3, label %bb2.bb12_crit_edge
-
-bb2.bb12_crit_edge:                               ; preds = %bb2
-  br label %bb12
+  br i1 %i, label %bb3, label %bb22
 
 bb3:                                              ; preds = %bb2
   %i4 = load i8, ptr %.0, align 1
   %i5 = sext i8 %i4 to i32
   %i6 = icmp ne i32 %i5, 0
-  br i1 %i6, label %bb7, label %bb3.bb12_crit_edge
-
-bb3.bb12_crit_edge:                               ; preds = %bb3
-  br label %bb12
+  br i1 %i6, label %bb7, label %bb22
 
 bb7:                                              ; preds = %bb3
   %i8 = load i8, ptr %.0, align 1
   %i9 = sext i8 %i8 to i32
   %i10 = call ptr @strchr(ptr noundef @.str.10, i32 noundef %i9) #9
   %i11 = icmp ne ptr %i10, null
-  br label %bb12
+  br i1 %i11, label %bb14, label %bb22
 
-bb12:                                             ; preds = %bb3.bb12_crit_edge, %bb2.bb12_crit_edge, %bb7
-  %i13 = phi i1 [ false, %bb3.bb12_crit_edge ], [ false, %bb2.bb12_crit_edge ], [ %i11, %bb7 ]
-  br i1 %i13, label %bb14, label %bb22
-
-bb14:                                             ; preds = %bb12
+bb14:                                             ; preds = %bb7
   %i15 = getelementptr inbounds i8, ptr %.0, i32 1
   %i16 = load i8, ptr %.0, align 1
   %i17 = sext i8 %i16 to i32
@@ -761,7 +680,7 @@ bb14:                                             ; preds = %bb12
   %i21 = or i32 %i19, %i20
   br label %bb2, !llvm.loop !15
 
-bb22:                                             ; preds = %bb12
+bb22:                                             ; preds = %bb2, %bb3, %bb7
   ret i32 %.01
 }
 
@@ -786,11 +705,11 @@ bb8:                                              ; preds = %bb
   %i10 = call i32 @fclose(ptr noundef %i3)
   br label %bb11
 
-bb11:                                             ; preds = %bb20, %bb8
-  %.01 = phi i64 [ 0, %bb8 ], [ %i21, %bb20 ]
+bb11:                                             ; preds = %bb14, %bb8
+  %.01 = phi i64 [ 0, %bb8 ], [ %i21, %bb14 ]
   %i12 = load i64, ptr %i, align 8
   %i13 = icmp slt i64 %.01, %i12
-  br i1 %i13, label %bb14, label %bb22
+  br i1 %i13, label %bb14, label %bb23
 
 bb14:                                             ; preds = %bb11
   %i15 = add nsw i64 %.01, 1
@@ -798,17 +717,11 @@ bb14:                                             ; preds = %bb11
   %i17 = icmp eq i64 %i15, %i16
   %i18 = zext i1 %i17 to i32
   %i19 = call i32 @main1(i32 noundef %arg, ptr noundef %arg2, i32 noundef %i18)
-  br label %bb20
-
-bb20:                                             ; preds = %bb14
   %i21 = add nsw i64 %.01, 1
   br label %bb11, !llvm.loop !16
 
-bb22:                                             ; preds = %bb11
-  br label %bb23
-
-bb23:                                             ; preds = %bb22, %bb5
-  %.0 = phi i32 [ 1, %bb5 ], [ 0, %bb22 ]
+bb23:                                             ; preds = %bb11, %bb5
+  %.0 = phi i32 [ 1, %bb5 ], [ 0, %bb11 ]
   ret i32 %.0
 }
 

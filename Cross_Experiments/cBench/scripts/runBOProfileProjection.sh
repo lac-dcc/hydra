@@ -82,7 +82,7 @@ done
 START_TIME=`date +%s.%N`
 $LLVM_OPT -disable-output -load-pass-plugin $PASS_FILE_PROFILE \
     -passes="block-ordering-profile" "$BENCH_NAME.ll" -prog $LL_FILE \
-    -prof $PROFILES -matching-threshold $THRESHOLD -max-iterations $MAX_ITER
+    -prof $PROFILES -matching-threshold $THRESHOLD -max-iterations $MAX_ITER -d
 ret_code=$?
 if [[ $ret_code -ne 0 ]]; then
     echo "Pass failed"

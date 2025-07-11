@@ -1,12 +1,15 @@
 #include "Predictor.h"
 #include "llvm/Passes/PassBuilder.h"
 #include "llvm/Passes/PassPlugin.h"
+#include "llvm/Transforms/Utils/BreakCriticalEdges.h"
 
 using namespace llvm;
 
 bool registerPipeline(StringRef Name, FunctionPassManager &FPM,
                       ArrayRef<PassBuilder::PipelineElement>) {
     if (Name == "hotblock-predictor") {
+        FPM.addPass(LoopSimplifyPass());
+        FPM.addPass(BreakCriticalEdgesPass());
         FPM.addPass(PredictorPass());
         return true;
     }
