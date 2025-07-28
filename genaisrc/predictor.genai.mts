@@ -1,8 +1,8 @@
 import * as fs from "fs";
 script({
   temperature: 0,
-  provider: "openai",
-  model: "vision",
+  // provider:  "openai",
+  model: "github:openai/gpt-4o",//"vision",
 });
 
 // Helper function to save or append to a file
@@ -13,6 +13,27 @@ const saveToFile = (filePath: string, content: string) => {
     fs.appendFileSync(filePath, content);
   }
 };
+
+const saveJsonObjectToArrayFile = (filePath: string, newObj: any) => {
+  let jsonArray: any[] = [];
+
+  if (fs.existsSync(filePath)) {
+    const existingContent = fs.readFileSync(filePath, "utf-8");
+    try {
+      jsonArray = JSON.parse(existingContent);
+      if (!Array.isArray(jsonArray)) {
+        throw new Error("Expected JSON array");
+      }
+    } catch (e) {
+      console.error("Failed to parse existing JSON file:", e);
+      return;
+    }
+  }
+
+  jsonArray.push(newObj);
+  fs.writeFileSync(filePath, JSON.stringify(jsonArray, null, 2));
+};
+
 
 type ParsedResult = {
   jsonObj: {
@@ -232,7 +253,7 @@ const processFiles = async (env: ExpansionVariables) => {
           },
           {
             temperature: 0,
-            model: "vision",
+            model: "github:openai/gpt-4o",//"vision",
             systemSafety: true,
             responseType: "text",
           }
@@ -250,7 +271,9 @@ const processFiles = async (env: ExpansionVariables) => {
         // Define the output file name
         const outFileName = `${filePath}/${fileNameWithoutExt}.json`;
         // Save or append the results to the file
-        saveToFile(outFileName, JSON.stringify(jsonObj, null, 2));
+        // saveJsonObjectToArrayFile(outFileName, JSON.stringify(jsonObj, null, 2));
+        saveJsonObjectToArrayFile(outFileName, jsonObj);
+
       } catch (error) {
         console.error("Error during prompt execution:", error);
         output.error("Error analyzing function");
