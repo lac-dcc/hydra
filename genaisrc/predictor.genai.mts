@@ -1,8 +1,9 @@
+// npx --yes genaiscript run predictor <file path | folder path>
 import * as fs from "fs";
 script({
   temperature: 0,
-  // provider:  "openai",
-  model: "github:openai/gpt-4o",//"vision",
+  provider: "openai",
+  model: "vision", //"github:openai/gpt-4o",//"vision",
 });
 
 // Helper function to save or append to a file
@@ -34,7 +35,6 @@ const saveJsonObjectToArrayFile = (filePath: string, newObj: any) => {
   fs.writeFileSync(filePath, JSON.stringify(jsonArray, null, 2));
 };
 
-
 type ParsedResult = {
   jsonObj: {
     benchmarkInfo: {
@@ -56,16 +56,23 @@ export const parseMarkdownToJson = (
   funcName: string,
   bbSet: string[]
 ): ParsedResult => {
-  const hottestBB =
-    markdownContent.match(/\*\*Hottest Basic Block\*\*:\s*`([^`]+)`/)?.[1] ??
-    "";
+  const hottestBBMatch = markdownContent.match(
+    /\*\*Hottest Basic Block\*\*:\s*`?([a-zA-Z_][\w\.]*)`?/
+  );
+  const hottestBB = hottestBBMatch?.[1] ?? "";
 
-  const bbLines =
-    markdownContent
-      .match(/```text([\s\S]+?)```/)?.[1]
-      .trim()
+  const hotnessBlockMatch = markdownContent.match(
+    /- \*\*Sorted Basic Blocks by Hotness\*\*:\s*([\s\S]+?)(?:- \*\*Additional Notes\*\*|$)/
+  );
+  let bbLines: string[] = [];
+
+  if (hotnessBlockMatch) {
+    bbLines = hotnessBlockMatch[1]
       .split("\n")
-      .map((line) => line.replace(/^\s*\d+\.\s*/, "").trim()) ?? [];
+      .map((line) => line.trim())
+      .filter((line) => /^\d+\.\s+/.test(line))
+      .map((line) => line.replace(/^\d+\.\s+/, ""));
+  }
 
   const additionalNotes =
     markdownContent
@@ -253,7 +260,7 @@ const processFiles = async (env: ExpansionVariables) => {
           },
           {
             temperature: 0,
-            model: "github:openai/gpt-4o",//"vision",
+            model: "vision", //"github:openai/gpt-4o",//"vision",
             systemSafety: true,
             responseType: "text",
           }
@@ -271,9 +278,7 @@ const processFiles = async (env: ExpansionVariables) => {
         // Define the output file name
         const outFileName = `${filePath}/${fileNameWithoutExt}.json`;
         // Save or append the results to the file
-        // saveJsonObjectToArrayFile(outFileName, JSON.stringify(jsonObj, null, 2));
         saveJsonObjectToArrayFile(outFileName, jsonObj);
-
       } catch (error) {
         console.error("Error during prompt execution:", error);
         output.error("Error analyzing function");
