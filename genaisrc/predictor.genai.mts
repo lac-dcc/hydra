@@ -61,9 +61,10 @@ export const parseMarkdownToJson = (
   );
   const hottestBB = hottestBBMatch?.[1] ?? "";
 
-  const hotnessBlockMatch = markdownContent.match(
-    /- \*\*Sorted Basic Blocks by Hotness\*\*:\s*([\s\S]+?)(?:- \*\*Additional Notes\*\*|$)/
-  );
+  const hotnessBlockMatch =
+    markdownContent.match(/- \*\*Sorted Basic Blocks by Hotness\*\*:\s*```text\s*([\s\S]*?)```/m) ??
+    markdownContent.match(/- \*\*Sorted Basic Blocks by Hotness\*\*:\s*([\s\S]+?)(?:- \*\*Additional Notes\*\*|$)/);
+
   let bbLines: string[] = [];
 
   if (hotnessBlockMatch) {
@@ -74,10 +75,8 @@ export const parseMarkdownToJson = (
       .map((line) => line.replace(/^\d+\.\s+/, ""));
   }
 
-  const additionalNotes =
-    markdownContent
-      .match(/- \*\*Additional Notes\*\*:\s*([\s\S]+)/)?.[1]
-      .trim() ?? "";
+  const additionalNotesMatch = markdownContent.match(/- \*\*Additional Notes\*\*:\s*([\s\S]+)/);
+  const additionalNotes = additionalNotesMatch ? additionalNotesMatch[1].trim() : "";
 
   const jsonObj = {
     benchmarkInfo: {
