@@ -1,0 +1,465 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "alloc_bit_array"
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "The function has only one basic block (`bb`), so it is trivially the hottest block. All operations, including the computation of the size, memory allocation, and the return statement, are executed within this block. There are no conditional branches or loops in the function, so the execution frequency of `bb` is always 1 per function call."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "getbit"
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "The function consists of only one basic block (`bb`), so it is trivially the hottest block. All operations, including arithmetic, memory access, and bit manipulation, are performed within this block. There are no conditional branches or loops in the function, so the execution frequency of `bb` is determined solely by the function's invocation frequency."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "setbit"
+    },
+    "hottestBB": {
+      "bbName": ""
+    },
+    "bbOrderByHotness": [],
+    "additionalNotes": "- The \"hotness\" of a block depends on the branching condition and the likelihood of execution. In this function, the branching in `bb` depends on the value of `%arg2`. If `%arg2` is non-zero, the flow goes to `bb6`; otherwise, it goes to `bb13`. Typically, in such scenarios, one branch (e.g., `%arg2 != 0`) is more likely than the other, making `bb6` the hottest block.\n  - `bb13` is the second hottest as it is the alternative branch.\n  - `bb` is executed once at the start, making it less hot than the conditional blocks.\n  - `bb21` is the final block and is executed exactly once after either `bb6` or `bb13`, making it the least hot."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "flipbit"
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "The function has only one basic block (`bb`), so it is trivially the hottest block. All operations, including the computation of indices, bit manipulation, and memory access, occur within this block. There are no conditional branches or loops in the function, so the execution frequency of `bb` is determined solely by the function's invocation frequency."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "bit_count"
+    },
+    "hottestBB": {
+      "bbName": "bb5"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb5.bb3_crit_edge"
+      },
+      {
+        "name": "bb3"
+      },
+      {
+        "name": "bb2"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb.bb10_crit_edge"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb5` because it contains the loop body and is repeatedly executed as long as the condition `%i8` evaluates to true. This makes it the most frequently executed block.\n  - `bb5.bb3_crit_edge` is the next hottest because it serves as the critical edge for the loop and is traversed on every iteration.\n  - `bb3` is executed once per loop iteration, making it less hot than the above two.\n  - `bb2` is executed only once at the start of the loop.\n  - `bb9` and `bb10` are executed after the loop exits, with `bb9` being the immediate post-loop block.\n  - `bb.bb10_crit_edge` and `bb` are executed only once at the beginning and end of the function, respectively, making them the least hot."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "bitcount"
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "This function consists of only one basic block (`bb`), which performs a series of bitwise operations and reductions to count the number of set bits in a 64-bit integer. Since there is only one basic block, it is trivially the hottest block. The function does not contain any branching or conditional logic, so all instructions in `bb` are executed exactly once per function call."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "ntbl_bitcount"
+    },
+    "hottestBB": {
+      "bbName": ""
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "The function consists of only one basic block (`bb`), which performs a series of bitwise operations, shifts, and table lookups to calculate the bit count of the input argument. Since there is only one basic block, it is trivially the hottest and the only block in the function."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "BW_btbl_bitcount"
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "The function consists of only one basic block (`bb`), so it is trivially the hottest block. All the operations, including memory loads, arithmetic operations, and return, are performed within this single block. There is no branching or conditional logic, so no other blocks exist to compare hotness."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "AR_btbl_bitcount"
+    },
+    "hottestBB": {
+      "bbName": ""
+    },
+    "bbOrderByHotness": [],
+    "additionalNotes": "The function contains only one basic block (`bb`), so it is trivially the hottest block. All operations, including memory loads, stores, and arithmetic, are performed within this single block. There is no branching or other control flow to analyze for hotness distribution."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "ntbl_bitcnt"
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [],
+    "additionalNotes": "- The `bb` block is the entry point and is always executed, making it the hottest block.\n  - The `bb8` block is executed if the condition `%i7` evaluates to true, which depends on the value of `%arg`. This block is likely executed frequently in recursive calls.\n  - The `bb11` block is executed after either `bb8` or `bb.bb11_crit_edge`, making it less hot than `bb8` but hotter than `bb.bb11_crit_edge`.\n  - The `bb.bb11_crit_edge` block is executed only when `%i7` is false, which is less frequent compared to the other blocks."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "btbl_bitcnt"
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [],
+    "additionalNotes": "- The basic block `bb` is the entry point and contains the main loop structure, making it the most frequently executed block.\n  - The block `bb.bb16_crit_edge` is a critical edge that directly leads to `bb16`, so it is executed whenever the loop exits without entering `bb12`.\n  - The block `bb16` is the final block where the result is returned, so it is executed once per function invocation.\n  - The block `bb12` is executed only when the condition `%i11` evaluates to true, which depends on the input value and the number of iterations required. This makes it less frequently executed than the other blocks."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "main1"
+    },
+    "hottestBB": {
+      "bbName": "bb20"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb30"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb33"
+      },
+      {
+        "name": "bb35"
+      },
+      {
+        "name": "bb40"
+      },
+      {
+        "name": "bb41"
+      },
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb33.bb40_crit_edge"
+      },
+      {
+        "name": "bb9.bb16_crit_edge"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb43"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb20` because it contains a nested loop structure that iterates over two variables (`%.02` and `%.03`), making it the most frequently executed block.\n  - Blocks `bb23` and `bb30` are part of the inner loop, so they are also very hot.\n  - Blocks like `bb6` and `bb` are cold because they are executed only once during the function's execution (e.g., error handling or initial checks).\n  - The ranking assumes typical loop behavior where the inner loop dominates execution frequency."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "bit_shifter"
+    },
+    "hottestBB": {
+      "bbName": ""
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb3"
+      },
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb3.bb7_crit_edge"
+      },
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb3` because it contains the main loop header and is revisited repeatedly during the loop execution.\n  - `bb13` is the second hottest as it updates the loop variables and branches back to `bb3`.\n  - `bb9` is executed within the loop when the condition in `bb7` evaluates true, making it the next most frequently executed block.\n  - `bb4` and `bb7` are executed less frequently as they are part of the loop's conditional checks.\n  - `bb3.bb7_crit_edge` is a critical edge block and is executed only during specific transitions, making it less hot.\n  - `bb16` is the function's exit block and is executed only once after the loop terminates.\n  - `bb` is the entry block and is executed only once at the start of the function."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "bfopen"
+    },
+    "hottestBB": {
+      "bbName": ""
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb3"
+      },
+      {
+        "name": "bb10"
+      }
+    ],
+    "additionalNotes": "- The \"hottest\" block is bb4 because it is the main block where the file opening logic occurs, and it leads to further processing in bb11 or cleanup in bb10.  \n  - bb11 is likely the second hottest because it represents the successful path after the file is opened.  \n  - bb14 is executed in all cases as it consolidates the control flow, but it is less \"hot\" than bb4 and bb11 because it is only a final step.  \n  - bb is the entry block, but it primarily branches to bb3 or bb4, so its execution frequency is lower than bb4.  \n  - bb3 is executed only when memory allocation fails, which is less common.  \n  - bb10 is executed only when file opening fails, which is also less common than the successful path."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "bfread"
+    },
+    "hottestBB": {
+      "bbName": ""
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb.bb11_crit_edge"
+      }
+    ],
+    "additionalNotes": "- The basic block `bb11` is the hottest because it is the final block where the function performs the main computation and returns the result. It is executed regardless of the branch taken earlier in the function.  \n  - The entry block `bb` is the second hottest as it is always executed once at the start of the function.  \n  - The block `bb4` is executed only when the condition `%i3` evaluates to true, making it less hot than `bb`.  \n  - The block `bb.bb11_crit_edge` is the least hot because it serves as a critical edge and does not perform significant computation. It is executed only when `%i3` evaluates to false."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "bfwrite"
+    },
+    "hottestBB": {
+      "bbName": "bb13"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb.bb13_crit_edge"
+      }
+    ],
+    "additionalNotes": "- The `bb13` block is the hottest because it is the final block in the function and is executed unconditionally after both `bb` and `bb5`. This makes it the most frequently executed block in the function.  \n  - The `bb` block is the entry point and is executed at least once, making it the second hottest.  \n  - The `bb5` block is conditionally executed based on the comparison in `bb`, so its execution frequency depends on the input data.  \n  - The `bb.bb13_crit_edge` block is a simple transition block and is only executed when the condition in `bb` fails, making it the least hot."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "bfclose"
+    },
+    "hottestBB": {
+      "bbName": ""
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "The function has only one basic block (`bb`), so it is trivially the hottest block. All operations, including pointer dereferencing, file closing, memory deallocation, and returning, occur within this block."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "bitstring"
+    },
+    "hottestBB": {
+      "bbName": "bb13"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb23.bb36_crit_edge"
+      },
+      {
+        "name": "bb32"
+      },
+      {
+        "name": "bb32.bb36_crit_edge"
+      },
+      {
+        "name": "bb34"
+      },
+      {
+        "name": "bb36"
+      },
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb37"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb13` because it contains the main loop that iterates over a range determined by `%i12`, which is derived from `%arg4` and `%arg5`. This loop is likely to execute many times depending on the input values.\n  - Blocks `bb15` and `bb17` are part of the same loop as `bb13`, so they are also executed frequently.\n  - The second loop starts at `bb20` and involves blocks like `bb23`, `bb23.bb36_crit_edge`, `bb32`, and `bb36`."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "bstr_i"
+    },
+    "hottestBB": {
+      "bbName": "bb2"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb2"
+      },
+      {
+        "name": "bb3"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb2.bb12_crit_edge"
+      },
+      {
+        "name": "bb3.bb12_crit_edge"
+      },
+      {
+        "name": "bb22"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb2` because it serves as the main loop header and is revisited repeatedly during the loop execution.  \n  - `bb3` is the next hottest as it is part of the loop body and checks the condition for further processing.  \n  - `bb7` is executed when the condition in `bb3` is true, making it less frequent than `bb3` but still part of the loop.  \n  - `bb14` is executed when the condition in `bb12` is true, contributing to the loop's progression.  \n  - `bb12` acts as a decision point for exiting the loop or continuing, making it less frequent than the loop body blocks.  \n  - `bb` is the entry block and is executed only once.  \n  - `bb2.bb12_crit_edge` and `bb3.bb12_crit_edge` are critical edge blocks that are executed less frequently than the main loop blocks.  \n  - `bb22` is the function's exit block and is executed only once when the loop terminates."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "main"
+    },
+    "hottestBB": {
+      "bbName": ""
+    },
+    "bbOrderByHotness": [],
+    "additionalNotes": "- The hottest block is `bb11` because it contains a loop structure (`phi` node and back edge to itself), which is likely to execute multiple iterations depending on the value of `%i12`.  \n  - `bb14` and `bb20` are part of the loop, so they are also hot but slightly less frequent than `bb11` due to the control flow.  \n  - `bb22` is executed after the loop exits, making it less hot than the loop blocks.  \n  - `bb8` is executed once if the file opens successfully, while `bb23` is the final block executed after all other paths.  \n  - `bb5` is executed only if the file fails to open, making it colder.  \n  - `bb` is the entry block and is executed only once, making it the coldest."
+  }
+]

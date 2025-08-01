@@ -1,0 +1,287 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_c",
+      "funcName": "adpcm_coder"
+    },
+    "hottestBB": {
+      "bbName": "bb32"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb32"
+      },
+      {
+        "name": "bb34"
+      },
+      {
+        "name": "bb45"
+      },
+      {
+        "name": "bb58"
+      },
+      {
+        "name": "bb64"
+      },
+      {
+        "name": "bb70"
+      },
+      {
+        "name": "bb77"
+      },
+      {
+        "name": "bb85"
+      },
+      {
+        "name": "bb88"
+      },
+      {
+        "name": "bb105"
+      },
+      {
+        "name": "bb51"
+      },
+      {
+        "name": "bb54"
+      },
+      {
+        "name": "bb61"
+      },
+      {
+        "name": "bb43"
+      },
+      {
+        "name": "bb66"
+      },
+      {
+        "name": "bb68"
+      },
+      {
+        "name": "bb73"
+      },
+      {
+        "name": "bb76"
+      },
+      {
+        "name": "bb101"
+      },
+      {
+        "name": "bb96"
+      },
+      {
+        "name": "bb93"
+      },
+      {
+        "name": "bb107"
+      },
+      {
+        "name": "bb112"
+      },
+      {
+        "name": "bb34.bb45_crit_edge"
+      },
+      {
+        "name": "bb45.bb51_crit_edge"
+      },
+      {
+        "name": "bb51.bb58_crit_edge"
+      },
+      {
+        "name": "bb58.bb64_crit_edge"
+      },
+      {
+        "name": "bb73.bb76_crit_edge"
+      },
+      {
+        "name": "bb77.bb85_crit_edge"
+      },
+      {
+        "name": "bb85.bb88_crit_edge"
+      },
+      {
+        "name": "bb72"
+      },
+      {
+        "name": "bb75"
+      },
+      {
+        "name": "bb87"
+      },
+      {
+        "name": "bb84"
+      },
+      {
+        "name": "bb109"
+      },
+      {
+        "name": "bb107.bb112_crit_edge"
+      },
+      {
+        "name": "bb48"
+      },
+      {
+        "name": "bb43"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb32` because it is the main loop header and is revisited repeatedly due to the loop structure (`br label %bb32, !llvm.loop !8`).\n  - Blocks like `bb34`, `bb45`, `bb58`, and `bb64` are part of the loop body and are executed frequently, making them relatively hot.\n  - Blocks such as `bb107`, `bb112`, and their critical edges are less frequently executed as they are part of the function's exit or cleanup paths.\n  - Blocks like `bb72`, `bb75`, and `bb87` are cold because they handle specific edge cases (e.g., clamping values) and are unlikely to be executed often."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_c",
+      "funcName": "adpcm_decoder"
+    },
+    "hottestBB": {
+      "bbName": "bb27"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb27"
+      },
+      {
+        "name": "bb29"
+      },
+      {
+        "name": "bb39"
+      },
+      {
+        "name": "bb52"
+      },
+      {
+        "name": "bb60"
+      },
+      {
+        "name": "bb66"
+      },
+      {
+        "name": "bb72"
+      },
+      {
+        "name": "bb78"
+      },
+      {
+        "name": "bb85"
+      },
+      {
+        "name": "bb91"
+      },
+      {
+        "name": "bb93"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb33"
+      },
+      {
+        "name": "bb49"
+      },
+      {
+        "name": "bb58"
+      },
+      {
+        "name": "bb63"
+      },
+      {
+        "name": "bb69"
+      },
+      {
+        "name": "bb74"
+      },
+      {
+        "name": "bb76"
+      },
+      {
+        "name": "bb80"
+      },
+      {
+        "name": "bb81"
+      },
+      {
+        "name": "bb84"
+      },
+      {
+        "name": "bb39.bb49_crit_edge"
+      },
+      {
+        "name": "bb49.bb52_crit_edge"
+      },
+      {
+        "name": "bb52.bb60_crit_edge"
+      },
+      {
+        "name": "bb60.bb66_crit_edge"
+      },
+      {
+        "name": "bb66.bb72_crit_edge"
+      },
+      {
+        "name": "bb81.bb84_crit_edge"
+      },
+      {
+        "name": "bb48"
+      },
+      {
+        "name": "bb51"
+      },
+      {
+        "name": "bb83"
+      },
+      {
+        "name": "bb39.bb49_crit_edge"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb27` because it serves as the main loop header and is revisited repeatedly during the loop execution. \n  - Blocks like `bb29`, `bb39`, and `bb52` are also frequently executed as they are part of the loop body and contain key computations.\n  - Blocks such as `bb93` and `bb91` are executed only once at the end of the function, making them less hot.\n  - Critical edge blocks (e.g., `bb39.bb49_crit_edge`) are less likely to be hot as they primarily serve as connectors between other blocks."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_c",
+      "funcName": "main"
+    },
+    "hottestBB": {
+      "bbName": "bb19"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb24"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb18"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb30"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb19` because it contains a loop structure (`phi` node and back edge to itself), which is likely to execute multiple iterations depending on the value of `%i`.\n  - Blocks `bb22`, `bb24`, and `bb26` are part of the loop body and are executed in each iteration, making them relatively hot.\n  - `bb10` serves as a hub for control flow and is revisited after each loop iteration, making it moderately hot.\n  - Blocks like `bb7` and `bb15` are executed once during the function's execution, making them less hot.\n  - Blocks `bb4` and `bb14` handle error conditions and are unlikely to be executed unless specific conditions are met, making them among the least hot.\n  - The entry block `bb` is executed only once, making it the least hot."
+  }
+]

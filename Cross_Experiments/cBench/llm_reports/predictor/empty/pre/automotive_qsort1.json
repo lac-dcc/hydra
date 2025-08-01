@@ -1,0 +1,241 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_qsort1",
+      "funcName": "main"
+    },
+    "hottestBB": {
+      "bbName": "bb14"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb5"
+      }
+    ],
+    "additionalNotes": "- `bb14` is part of the loop and performs the main computation, making it the hottest block.\n  - `bb20` is the loop increment block, executed once per iteration, so it is the second hottest.\n  - `bb11` is the loop header, executed once per iteration, but slightly less hot than `bb14` and `bb20` due to its role in controlling the loop.\n  - `bb8` handles file reading and is executed once before entering the loop.\n  - `bb22` and `bb23` are exit blocks, executed after the loop terminates.\n  - `bb` is the entry block, executed only once.\n  - `bb5` is the error-handling block, executed only if the file fails to open, making it the least likely to execute."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_qsort1",
+      "funcName": "compare"
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb6"
+      }
+    ],
+    "additionalNotes": "- The entry block `bb` is always executed, making it the hottest block.\n  - `bb7` is likely executed more often than `bb6` because the equality comparison (`fcmp oeq`) is more common than the greater-than comparison (`fcmp ogt`) in typical scenarios.\n  - `bb11` is executed after either `bb6` or `bb7`, so its frequency is lower than `bb` and `bb7` but higher than `bb6`.\n  - `bb6` is the least hot because it is only executed when the `ogt` condition is true, which is less frequent compared to the equality condition."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_qsort1",
+      "funcName": "main1"
+    },
+    "hottestBB": {
+      "bbName": "bb15"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb18"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb24"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb28"
+      },
+      {
+        "name": "bb73"
+      },
+      {
+        "name": "bb75"
+      },
+      {
+        "name": "bb89"
+      },
+      {
+        "name": "bb92"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb57"
+      },
+      {
+        "name": "bb59"
+      },
+      {
+        "name": "bb63"
+      },
+      {
+        "name": "bb66"
+      },
+      {
+        "name": "bb72"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb69"
+      },
+      {
+        "name": "bb61"
+      },
+      {
+        "name": "bb94"
+      },
+      {
+        "name": "bb15.bb26_crit_edge"
+      },
+      {
+        "name": "bb18.bb26_crit_edge"
+      },
+      {
+        "name": "bb21.bb26_crit_edge"
+      },
+      {
+        "name": "bb59.bb63_crit_edge"
+      },
+      {
+        "name": "bb63.bb94_crit_edge"
+      },
+      {
+        "name": "bb59.bb63_crit_edge"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb15` because it contains the main loop that processes up to 60,000 iterations, making it the most frequently executed block.\n  - Blocks like `bb18`, `bb21`, `bb24`, and `bb26` are part of the same loop and are also hot, but slightly"
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_qsort1",
+      "funcName": "qsortx"
+    },
+    "hottestBB": {
+      "bbName": "bb20"
+    },
+    "bbOrderByHotness": [],
+    "additionalNotes": ""
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_qsort1",
+      "funcName": "shortsort"
+    },
+    "hottestBB": {
+      "bbName": "bb10"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb12.bb16_crit_edge"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb24"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb10` because it is part of the inner loop structure, which iterates over elements and performs comparisons. This block is likely to be executed the most due to the nested loop behavior.\n  - Blocks `bb12`, `bb16`, and `bb17` are also part of the inner loop and are executed frequently, but slightly less than `bb10` due to conditional branches.\n  - `bb6` and `bb7` are part of the outer loop, so they are executed less frequently than the inner loop blocks.\n  - `bb15` is executed conditionally within the inner loop, making it less hot than the main loop blocks.\n  - `bb20` is executed when swapping occurs, which is less frequent than the main loop iterations.\n  - `bb12.bb16_crit_edge` is a critical edge block and is executed only when the condition in `bb12` fails.\n  - `bb` is the entry block and is executed only once.\n  - `bb24` is the exit block and is executed only once."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_qsort1",
+      "funcName": "swap"
+    },
+    "hottestBB": {
+      "bbName": "bb9"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb.bb15_crit_edge"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb9` because it is part of the loop and contains the core operations of swapping elements. Loops typically dominate execution frequency in such functions.\n  - `bb6` is the loop header and is executed once per iteration, making it the second hottest block.\n  - `bb5` is executed once to branch into the loop, so it is less hot than the loop blocks.\n  - `bb` is the entry block and is executed only once, so it is cooler than the loop-related blocks.\n  - `bb14` is executed after the loop exits, making it cooler than the entry block.\n  - `bb15` is the function exit block and is executed once, making it cooler than `bb14`.\n  - `bb.bb15_crit_edge` is a critical edge block that simply branches to `bb15` and is the least hot."
+  }
+]

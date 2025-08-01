@@ -1,0 +1,246 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_dijkstra",
+      "funcName": "print_path"
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [],
+    "additionalNotes": "- The basic block `bb` is the entry block and is always executed, making it the hottest block.\n  - The block `bb6` is executed if the condition `%i5` evaluates to true, which depends on the value loaded from `%i3`. This block contains a recursive call, so it is likely to be executed frequently in recursive scenarios.\n  - The block `bb11` is executed after either `bb6` or `bb.bb11_crit_edge`, making it less hot than `bb6` but still executed in all cases.\n  - The block `bb.bb11_crit_edge` is executed only when `%i5` evaluates to false, making it the least hot block."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_dijkstra",
+      "funcName": "enqueue"
+    },
+    "hottestBB": {
+      "bbName": "bb16"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb25"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb5"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb16` because it contains a loop structure (`br label %bb16`) that iterates over the queue items, making it the most frequently executed block.\n  - `bb20` and `bb23` are part of the loop, so they are also hot but slightly less frequent than `bb16` due to branching.\n  - `bb15` is executed once before entering the loop, making it less hot than the loop blocks.\n  - `bb8` initializes the queue item and branches to either `bb14` or `bb15`, so it is executed once per function call.\n  - `bb14` and `bb25` handle queue head initialization and final updates, respectively, and are executed once per function call.\n  - `bb` is the entry block, executed once per function call.\n  - `bb5` is a failure path for memory allocation, which is rarely executed under normal conditions."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_dijkstra",
+      "funcName": "dequeue"
+    },
+    "hottestBB": {
+      "bbName": "bb5"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb.bb20_crit_edge"
+      }
+    ],
+    "additionalNotes": "- The block `bb5` is the hottest because it is executed when the queue is non-empty (`@qHead != null`), which is likely the common case in a dequeue operation.\n  - The block `bb` is the entry point and is executed once per function call, making it less hot than `bb5`.\n  - The block `bb20` is the exit block and is executed once per function call, similar to `bb`.\n  - The block `bb.bb20_crit_edge` is a critical edge block that is executed only when the queue is empty (`@qHead == null`), which is likely less frequent than the non-empty case."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_dijkstra",
+      "funcName": "qcount"
+    },
+    "hottestBB": {
+      "bbName": ""
+    },
+    "bbOrderByHotness": [],
+    "additionalNotes": "The function has only one basic block (`bb`), so it is trivially the hottest block. The function simply loads a value from a global variable (`@g_qCount`) and returns it. There are no conditional branches or loops, so no other blocks exist to compare hotness."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_dijkstra",
+      "funcName": "dijkstra"
+    },
+    "hottestBB": {
+      "bbName": "bb36"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb36"
+      },
+      {
+        "name": "bb40"
+      },
+      {
+        "name": "bb91"
+      },
+      {
+        "name": "bb92"
+      },
+      {
+        "name": "bb59"
+      },
+      {
+        "name": "bb70"
+      },
+      {
+        "name": "bb90"
+      },
+      {
+        "name": "bb51"
+      },
+      {
+        "name": "bb32"
+      },
+      {
+        "name": "bb35"
+      },
+      {
+        "name": "bb59.bb70_crit_edge"
+      },
+      {
+        "name": "bb59.bb90_crit_edge"
+      },
+      {
+        "name": "bb51.bb70_crit_edge"
+      },
+      {
+        "name": "bb40.bb91_crit_edge"
+      },
+      {
+        "name": "bb95"
+      },
+      {
+        "name": "bb2"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb96"
+      },
+      {
+        "name": "bb97"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The \"hottest\" block is `bb36` because it is part of the main loop iterating over nodes (`NUM_NODES`) and contains the core logic for processing each node.\n  - Blocks like `bb40`, `bb91`, and `bb92` are also hot because they are part of the inner loop and handle adjacency matrix traversal and updates.\n  - Blocks such as `bb59`, `bb70`, and `bb90` are executed conditionally within the inner loop, making them less hot than the main loop blocks but still significant.\n  - Blocks like `bb2`, `bb5`, and `bb16` are part of initialization and are executed only once, making them less hot.\n  - Blocks like `bb21`, `bb96`, and `bb97` are terminal or error-handling blocks and are the least likely to be executed."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_dijkstra",
+      "funcName": "main"
+    },
+    "hottestBB": {
+      "bbName": "bb59"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb59"
+      },
+      {
+        "name": "bb56"
+      },
+      {
+        "name": "bb68"
+      },
+      {
+        "name": "bb52"
+      },
+      {
+        "name": "bb71"
+      },
+      {
+        "name": "bb76"
+      },
+      {
+        "name": "bb82"
+      },
+      {
+        "name": "bb85"
+      },
+      {
+        "name": "bb86"
+      },
+      {
+        "name": "bb88"
+      },
+      {
+        "name": "bb79"
+      },
+      {
+        "name": "bb98"
+      },
+      {
+        "name": "bb73"
+      },
+      {
+        "name": "bb18"
+      },
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb70"
+      },
+      {
+        "name": "bb101"
+      },
+      {
+        "name": "bb55"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb59` because it is part of a nested loop structure, and the innermost loop typically executes the most iterations.\n  - Blocks like `bb56`, `bb68`, and `bb52` are also hot due to their involvement in the outer loop structure.\n  - Blocks such as `bb7` and `bb15` are less hot because they are part of error-handling paths, which are less likely to be executed in normal program execution.\n  - The block `bb101` is executed only once at the end of the function, making it one of the least hot blocks."
+  }
+]

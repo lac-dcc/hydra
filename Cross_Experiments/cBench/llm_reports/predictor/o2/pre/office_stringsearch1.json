@@ -1,0 +1,743 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "office_stringsearch1",
+      "funcName": "bmha_init"
+    },
+    "hottestBB": {
+      "bbName": "bb3"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb3"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb30"
+      },
+      {
+        "name": "bb28"
+      },
+      {
+        "name": "bb32"
+      },
+      {
+        "name": "bb34"
+      },
+      {
+        "name": "bb40"
+      },
+      {
+        "name": "bb47"
+      },
+      {
+        "name": "bb48"
+      },
+      {
+        "name": "bb50"
+      },
+      {
+        "name": "bb52"
+      },
+      {
+        "name": "bb56"
+      },
+      {
+        "name": "bb76"
+      },
+      {
+        "name": "bb80"
+      },
+      {
+        "name": "bb81"
+      },
+      {
+        "name": "bb44"
+      },
+      {
+        "name": "bb29"
+      },
+      {
+        "name": "bb32.bb40_crit_edge"
+      },
+      {
+        "name": "bb40.bb47_crit_edge"
+      },
+      {
+        "name": "bb56.bb80_crit_edge"
+      },
+      {
+        "name": "bb32.loopexit"
+      },
+      {
+        "name": "bb83"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb3` because it is the header of the outermost loop, which iterates over a range of values (up to 256). This block is likely executed the most frequently.\n  - Blocks like `bb5`, `bb11`, and `bb13` are part of nested loops and are also executed frequently, but their execution depends on the conditions within the loops.\n  - Blocks such as `bb83` and `bb` are executed only once (function entry/exit) and are therefore the least hot."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "office_stringsearch1",
+      "funcName": "bmha_search"
+    },
+    "hottestBB": {
+      "bbName": "bb12"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb33"
+      },
+      {
+        "name": "bb36"
+      },
+      {
+        "name": "bb53"
+      },
+      {
+        "name": "bb55"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb59"
+      },
+      {
+        "name": "bb56"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb64"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb25"
+      },
+      {
+        "name": "bb58"
+      },
+      {
+        "name": "bb63"
+      },
+      {
+        "name": "bb33.bb53_crit_edge"
+      },
+      {
+        "name": "bb65"
+      },
+      {
+        "name": "bb8"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb12` because it contains a loop structure (`llvm.loop` metadata) and is likely to be executed repeatedly.\n  - Blocks like `bb33`, `bb36`, `bb53`, and `bb55` are also part of nested loops, making them relatively hot.\n  - Blocks such as `bb7`, `bb25`, and `bb65` are less likely to be executed frequently as they are part of conditional branches or exit points.\n  - The exact hotness ranking depends on runtime data, but this estimation is based on static analysis of the control flow and loop structures."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "office_stringsearch1",
+      "funcName": "bmhi_init"
+    },
+    "hottestBB": {
+      "bbName": "bb12"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb25"
+      },
+      {
+        "name": "bb28"
+      },
+      {
+        "name": "bb30"
+      },
+      {
+        "name": "bb34"
+      },
+      {
+        "name": "bb37"
+      },
+      {
+        "name": "bb41"
+      },
+      {
+        "name": "bb62"
+      },
+      {
+        "name": "bb78"
+      },
+      {
+        "name": "bb82"
+      },
+      {
+        "name": "bb93"
+      },
+      {
+        "name": "bb94"
+      },
+      {
+        "name": "bb27"
+      },
+      {
+        "name": "bb36"
+      },
+      {
+        "name": "bb64"
+      },
+      {
+        "name": "bb89"
+      },
+      {
+        "name": "bb82.bb93_crit_edge"
+      },
+      {
+        "name": "bb96"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The \"hottest\" block `bb12` is part of the main loop that processes the input string and converts characters to uppercase. This loop iterates over the length of the input string, making it the most frequently executed block.\n  - Blocks like `bb15` and `bb25` are part of this loop and are also executed frequently.\n  - Blocks `bb28`, `bb30`, and `bb34` are part of another loop that initializes the `skip` table, which is executed 256 times, making them relatively hot.\n  - Blocks `bb37`, `bb41`, and `bb62` are part of a loop that processes the pattern string, iterating over its length minus one, making them moderately hot.\n  - Blocks `bb78`, `bb82`, and `bb93` are part of another loop that adjusts the `skip2` table, iterating over the pattern length minus one, making them less hot than the previous loops.\n  - Blocks like `bb8` and `bb96` are executed only once, making them the least hot."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "office_stringsearch1",
+      "funcName": "bhmi_cleanup"
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "This function contains only one basic block (`bb`), so it is trivially the hottest block. The block performs a memory load, a call to `free`, and then returns. Since there are no conditional branches or loops, the execution frequency of this block is entirely determined by how often the function `bhmi_cleanup` is called."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "office_stringsearch1",
+      "funcName": "bmhi_search"
+    },
+    "hottestBB": {
+      "bbName": "bb12"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb33"
+      },
+      {
+        "name": "bb36"
+      },
+      {
+        "name": "bb48"
+      },
+      {
+        "name": "bb50"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb59"
+      },
+      {
+        "name": "bb54"
+      },
+      {
+        "name": "bb51"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb25"
+      },
+      {
+        "name": "bb53"
+      },
+      {
+        "name": "bb58"
+      },
+      {
+        "name": "bb33.bb48_crit_edge"
+      },
+      {
+        "name": "bb60"
+      },
+      {
+        "name": "bbbb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb12` because it contains a loop structure (`llvm.loop` metadata) and is likely to be executed repeatedly.\n  - Blocks like `bb33`, `bb36`, `bb48`, and `bb50` are also part of nested loops, making them relatively hot.\n  - Blocks such as `bb7`, `bb25`, and `bb60` are less likely to be executed frequently as they are part of conditional branches or exit points.\n  - The exact hotness ranking depends on runtime data, but this estimation is based on static analysis of the control flow and loop structures."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "office_stringsearch1",
+      "funcName": "bmh_init"
+    },
+    "hottestBB": {
+      "bbName": "bb2"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb2"
+      },
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb24"
+      },
+      {
+        "name": "bb37"
+      },
+      {
+        "name": "bb41"
+      },
+      {
+        "name": "bb52"
+      },
+      {
+        "name": "bb53"
+      },
+      {
+        "name": "bb48"
+      },
+      {
+        "name": "bb41.bb52_crit_edge"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb55"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The \"hottest\" block is `bb2` because it contains the main loop that iterates over the range `[0, 255]`, which is likely to execute the most iterations.\n  - Blocks like `bb4` and `bb8` are part of this loop and are also executed frequently.\n  - The second loop starting at `bb11` processes the pattern string and is likely to execute fewer iterations than the first loop, making its blocks (`bb11`, `bb14`, `bb24`, etc.) less hot.\n  - Blocks like `bb26`, `bb10`, and `bb55` are executed only once or conditionally, making them colder.\n  - The entry block `bb` is executed only once, making it the coldest."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "office_stringsearch1",
+      "funcName": "bmh_search"
+    },
+    "hottestBB": {
+      "bbName": "bb12"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb33"
+      },
+      {
+        "name": "bb36"
+      },
+      {
+        "name": "bb47"
+      },
+      {
+        "name": "bb49"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb50"
+      },
+      {
+        "name": "bb53"
+      },
+      {
+        "name": "bb58"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb33.bb47_crit_edge"
+      },
+      {
+        "name": "bb52"
+      },
+      {
+        "name": "bb59"
+      },
+      {
+        "name": "bb25"
+      },
+      {
+        "name": "bb57"
+      },
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb12` because it contains a loop structure (`llvm.loop` metadata) and is likely to be executed repeatedly.\n  - Blocks like `bb33`, `bb36`, `bb47`, and `bb49` are also part of nested loops or loop-related structures, making them relatively hot.\n  - Blocks such as `bb7`, `bb`, and `bb59` are less likely to be executed frequently as they are primarily entry/exit points or conditional branches that terminate loops."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "office_stringsearch1",
+      "funcName": "init_search"
+    },
+    "hottestBB": {
+      "bbName": "bb1"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb1"
+      },
+      {
+        "name": "bb3"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb22"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb1` because it contains the main loop that iterates over a range of values (0 to 255), making it the most frequently executed block.\n  - Blocks `bb3` and `bb6` are part of the same loop as `bb1`, so they are also executed frequently but slightly less often due to the control flow.\n  - The second loop starts at `bb9` and involves blocks `bb12` and `bb20`, which are executed based on the length of the input string. These blocks are less hot than the first loop but still significant.\n  - Blocks `bb` and `bb8` are executed only once during initialization and setup.\n  - Block `bb22` is the final block and is executed only once at the end of the function."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "office_stringsearch1",
+      "funcName": "strsearch"
+    },
+    "hottestBB": {
+      "bbName": "bb10"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb23.bb38_crit_edge"
+      },
+      {
+        "name": "bb38"
+      },
+      {
+        "name": "bb35"
+      },
+      {
+        "name": "bb37"
+      },
+      {
+        "name": "bb25"
+      },
+      {
+        "name": "bb34"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb10.bb19_crit_edge"
+      },
+      {
+        "name": "bb39"
+      },
+      {
+        "name": "bb40"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb10` because it contains the main loop structure and is responsible for iterating through the input string. It is likely to execute the most iterations.\n  - Blocks like `bb12`, `bb19`, and `bb21` are also hot because they are part of the loop body and perform key operations such as character checks and table lookups.\n  - Blocks like `bb23` and `bb38` are less hot but still significant as they handle conditions and transitions within the loop.\n  - Blocks like `bb25`, `bb34`, and `bb35` are colder as they are part of specific conditional branches that are less likely to execute frequently.\n  - The entry block `bb` and the exit blocks (`bb39`, `bb40`) are the least hot as they are executed only once."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "office_stringsearch1",
+      "funcName": "main"
+    },
+    "hottestBB": {
+      "bbName": "bb165"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb165"
+      },
+      {
+        "name": "bb173"
+      },
+      {
+        "name": "bb156"
+      },
+      {
+        "name": "bb43"
+      },
+      {
+        "name": "bb51"
+      },
+      {
+        "name": "bb57"
+      },
+      {
+        "name": "bb65"
+      },
+      {
+        "name": "bb94"
+      },
+      {
+        "name": "bb109"
+      },
+      {
+        "name": "bb120"
+      },
+      {
+        "name": "bb135"
+      },
+      {
+        "name": "bb175"
+      },
+      {
+        "name": "bb191"
+      },
+      {
+        "name": "bb46"
+      },
+      {
+        "name": "bb49"
+      },
+      {
+        "name": "bb60"
+      },
+      {
+        "name": "bb63"
+      },
+      {
+        "name": "bb97"
+      },
+      {
+        "name": "bb100"
+      },
+      {
+        "name": "bb102"
+      },
+      {
+        "name": "bb128"
+      },
+      {
+        "name": "bb131"
+      },
+      {
+        "name": "bb168"
+      },
+      {
+        "name": "bb144"
+      },
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb34"
+      },
+      {
+        "name": "bb85"
+      },
+      {
+        "name": "bb93"
+      },
+      {
+        "name": "bb161"
+      },
+      {
+        "name": "bb187"
+      },
+      {
+        "name": "bb189"
+      },
+      {
+        "name": "bb70"
+      },
+      {
+        "name": "bb56"
+      },
+      {
+        "name": "bb118"
+      },
+      {
+        "name": "bb123"
+      },
+      {
+        "name": "bb126"
+      },
+      {
+        "name": "bb128.bb135_crit_edge"
+      },
+      {
+        "name": "bb102.bb109_crit_edge"
+      },
+      {
+        "name": "bb94.bb100_crit_edge"
+      },
+      {
+        "name": "bb120.bb126_crit_edge"
+      },
+      {
+        "name": "bb43.bb49_crit_edge"
+      },
+      {
+        "name": "bb57.bb63_crit_edge"
+      },
+      {
+        "name": "bb175.bb189_crit_edge"
+      },
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb39"
+      },
+      {
+        "name": "bb82"
+      },
+      {
+        "name": "bb90"
+      },
+      {
+        "name": "bb152"
+      },
+      {
+        "name": "bb155"
+      },
+      {
+        "name": "bb193"
+      },
+      {
+        "name": "bb105"
+      },
+      {
+        "name": "bb189"
+      },
+      {
+        "name": "bb (entry block)"
+      }
+    ],
+    "additionalNotes": "- The hottest block, `bb165`, is part of a nested loop structure that iterates over data structures, making it the most frequently executed block.\n  - Blocks like `bb173`, `bb156`, and `bb43` are also part of loops or repetitive operations, contributing to their high hotness ranking.\n  - Blocks such as `bb16`, `bb23`, and `bb31` are error-handling blocks and are less likely to be executed frequently, hence their lower ranking.\n  - Critical edges (e.g., `bb43.bb49_crit_edge`) are included but are generally less significant in terms of execution frequency."
+  }
+]
