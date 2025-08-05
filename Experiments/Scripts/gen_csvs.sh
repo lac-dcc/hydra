@@ -3,44 +3,44 @@
 SCRIPTS_FOLDER="$BASE_DIR/Experiments/Scripts"
 
 # # Gen CSVs for opt flags experiments
-# for i in o0 o1 o2 o3
-# do
-#     export GT_JSON_FILE="$BASE_DIR/Experiments/Ground_Truth/JSON_Files/Flags/$i.json"
-#     # Profile predictor heuristics
-#     for j in LLVM Random
-#     do
-#         export H_JSON_FILE="$BASE_DIR/Experiments/Profile_Prediction/JSON_Files/$j/$i.json"
-#         export CSV_FILE="$BASE_DIR/Experiments/Profile_Prediction/CSV_Files/$j/$i.csv"
-#         python3 "$SCRIPTS_FOLDER/gen_csv_report.py"
-#     done
-#     # Profile projection heuristics
-#     for j in o0 o1 o2 o3
-#     do
-#         for k in Hydra
-#         do
-#             export H_JSON_FILE="$BASE_DIR/Experiments/Profile_Projection/JSON_Files/$k/$j/$i.json"
-#             export CSV_FILE="$BASE_DIR/Experiments/Profile_Projection/CSV_Files/$k/$j/$i.csv"
-#             python3 "$SCRIPTS_FOLDER/gen_csv_report.py"
-#         done
-#     done
-# done
-
-# Gen CSVs for opt passes experiments
-GT_FOLDER="$BASE_DIR/Experiments/Ground_Truth/JSON_Files/Opts"
-H_FOLDER="$BASE_DIR/Experiments/Profile_Projection/JSON_Files/Hydra/Opts/o0"
-UB_FOLDER="$BASE_DIR/Experiments/Profile_Projection/JSON_Files/Hydra/Opts/Upper_Bound"
-
-export CSV_FILES_DIR="$BASE_DIR/Experiments/Profile_Projection/CSV_Files/Hydra/Opts"
-
-for i in $(ls $GT_FOLDER)
+for i in o0 o1 o2 o3
 do
-    export GT_JSON_FILE="$GT_FOLDER/$i"
-    export UB_JSON_FILE="$UB_FOLDER/$i"
-    export H_JSON_FILE="$H_FOLDER/$i"
-    export CSV_FILE="$CSV_FILES_DIR/${i%.json}.csv"
-
-    python3 "$BASE_DIR/Experiments/Profile_Projection/Scripts/gen_opt_csv_report.py"
+    export GT_JSON_FILE="$BASE_DIR/Experiments/Ground_Truth/JSON_Files/Flags/$i.json"
+    # Profile predictor heuristics
+    for j in LLVM Random Vespa
+    do
+        export H_JSON_FILE="$BASE_DIR/Experiments/Profile_Prediction/JSON_Files/$j/$i.json"
+        export CSV_FILE="$BASE_DIR/Experiments/Profile_Prediction/CSV_Files/$j/$i.csv"
+        python3 "$SCRIPTS_FOLDER/gen_csv_report.py"
+    done
+    # Profile projection heuristics
+    # for j in o0 o1 o2 o3
+    # do
+    #     for k in Hydra
+    #     do
+    #         export H_JSON_FILE="$BASE_DIR/Experiments/Profile_Projection/JSON_Files/$k/$j/$i.json"
+    #         export CSV_FILE="$BASE_DIR/Experiments/Profile_Projection/CSV_Files/$k/$j/$i.csv"
+    #         python3 "$SCRIPTS_FOLDER/gen_csv_report.py"
+    #     done
+    # done
 done
 
-export CSV_FILE="$CSV_FILES_DIR/final_results.csv"
-python3 "$SCRIPTS_FOLDER/gen_summarized_opt_csv_report.py"
+# # Gen CSVs for opt passes experiments
+# GT_FOLDER="$BASE_DIR/Experiments/Ground_Truth/JSON_Files/Opts"
+# H_FOLDER="$BASE_DIR/Experiments/Profile_Projection/JSON_Files/Hydra/Opts/o0"
+# UB_FOLDER="$BASE_DIR/Experiments/Profile_Projection/JSON_Files/Hydra/Opts/Upper_Bound"
+
+# export CSV_FILES_DIR="$BASE_DIR/Experiments/Profile_Projection/CSV_Files/Hydra/Opts"
+
+# for i in $(ls $GT_FOLDER)
+# do
+#     export GT_JSON_FILE="$GT_FOLDER/$i"
+#     export UB_JSON_FILE="$UB_FOLDER/$i"
+#     export H_JSON_FILE="$H_FOLDER/$i"
+#     export CSV_FILE="$CSV_FILES_DIR/${i%.json}.csv"
+
+#     python3 "$BASE_DIR/Experiments/Profile_Projection/Scripts/gen_opt_csv_report.py"
+# done
+
+# export CSV_FILE="$CSV_FILES_DIR/final_results.csv"
+# python3 "$SCRIPTS_FOLDER/gen_summarized_opt_csv_report.py"

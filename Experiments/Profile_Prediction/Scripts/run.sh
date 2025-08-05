@@ -42,6 +42,7 @@ export PASSES
 
 export LLVM_INSTALL_DIR="/usr/local"
 export SCRIPTS_FOLDER="$BASE_DIR/Experiments/Profile_Prediction/Scripts"
+export LL_FOLDER="$BASE_DIR/Experiments/Profile_Prediction/LL_Files"
 
 echo "Running block ordering profile prediction heuristics"
 bash "$SCRIPTS_FOLDER/block_ordering.sh"

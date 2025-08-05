@@ -26,7 +26,29 @@ print('Generating CSV File for ' + h_json)
 
 for app_name in gt_data:
     for function_name in gt_data[app_name]:
-        guess = h_data[app_name][function_name]
+        try:
+            guess = h_data[app_name][function_name]
+        except:
+            nodes = 0
+            for execution_number in range(1,len(gt_data[app_name][function_name])):
+                graph = gt_data[app_name][function_name][execution_number]
+                frequencies = {}
+                nodes = set()
+                edges = 0
+                for u in graph:
+                    nodes.add(u)
+                    for v in graph[u]:
+                        edges += 1
+                        nodes.add(v)
+                        if v in frequencies:
+                            frequencies[v] += graph[u][v]
+                        else:
+                            frequencies[v] = graph[u][v]
+                nodes = len(nodes)
+                break
+            print(app_name + '/' + function_name  + ' (' + str(nodes) + ') not found')
+            continue
+        worked = True
         for execution_number in range(1,len(gt_data[app_name][function_name])):
             graph = gt_data[app_name][function_name][execution_number]
             frequencies = {}
@@ -60,7 +82,14 @@ for app_name in gt_data:
             
             indices = []
             for block in guess:
-                indices.append(sorted_block_indices[block])
+                try:
+                    indices.append(sorted_block_indices[block])
+                except:
+                    print(app_name + '/' + function_name  + ' (' + str(nodes) + ')' + ': ' + block)
+                    worked = False
+                    break
+            
+            if not worked: break
             distance = compute_swap_distance(indices)
             hit = round(1.0-distance/(nodes*(nodes-1.0)/2.0),4)
                 
