@@ -1,0 +1,2933 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_e",
+      "funcName": "main"
+    },
+    "hottestBB": {
+      "bbName": "bb12"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb12.bb12_crit_edge"
+      },
+      {
+        "name": "bb12.preheader"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb7.bb17_crit_edge"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb17.loopexit"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb4"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb12` because it is part of a loop structure, and loops typically dominate execution frequency. The loop iterates based on the value loaded from `%i`, which is compared against `%i14` in `bb12`.\n  - `bb12.bb12_crit_edge` and `bb12.preheader` are closely tied to the loop, so they are also hot but slightly less frequent than `bb12` itself.\n  - `bb7` is executed if the file opened successfully, and it leads to the loop, making it moderately hot.\n  - `bb7.bb17_crit_edge` is a transition block, so it is less hot than `bb7`.\n  - `bb` is the entry block, executed once, so it is cooler than the loop-related blocks.\n  - `bb17.loopexit` and `bb17` are executed after the loop exits, making them cooler.\n  - `bb4` is the coldest block because it is only executed if the file fails to open, which is an exceptional case."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_e",
+      "funcName": "usage"
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The function contains only one basic block (`bb`), so it is trivially the hottest block.\n  - The block executes a series of `puts` calls followed by an `exit` call. Since `exit` terminates the program, the block will execute exactly once during the function's invocation. There are no loops or conditional branches, so no other block exists to compare hotness."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_e",
+      "funcName": "getint"
+    },
+    "hottestBB": {
+      "bbName": "bb11"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb11.bb11_crit_edge"
+      },
+      {
+        "name": "bb11.preheader"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb8.bb1_crit_edge"
+      },
+      {
+        "name": "bb1"
+      },
+      {
+        "name": "bb1.bb8_crit_edge"
+      },
+      {
+        "name": "bb3"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb20"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb11` because it contains the main loop where the function processes input digits and accumulates the result. This block is part of a loop structure, and its execution frequency is determined by the number of digits in the input.\n  - `bb11.bb11_crit_edge` and `bb11.preheader` are closely tied to the loop in `bb11`, so they are also hot.\n  - `bb8` and `bb8.bb1_crit_edge` are part of the outer loop that handles input processing, making them moderately hot.\n  - `bb1` and `bb1.bb8_crit_edge` are part of the control flow leading to the outer loop, so they are less frequently executed than the inner loop blocks.\n  - `bb3` handles specific input cases (e.g., `#`), making it less likely to execute often.\n  - `bb` is the entry block, executed only once.\n  - `bb5` and `bb20` handle error and exit conditions, which are rare paths."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_e",
+      "funcName": "get_image"
+    },
+    "hottestBB": {
+      "bbName": "bb19"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb33"
+      },
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb30"
+      }
+    ],
+    "additionalNotes": "- The \"hottest\" block is `bb19` because it contains the main logic for processing the image data, including reading dimensions, allocating memory, and reading the image content. This block is likely executed for every valid input file.\n  - `bb8` is the second hottest because it checks the file header and determines whether to proceed to `bb19` or exit to `bb16`.\n  - `bb` is the entry block and is executed once per function call, making it less hot than `bb8` and `bb19`.\n  - `bb33` is executed after successful processing in `bb19`, making it less frequent than the earlier blocks.\n  - `bb16` and `bb5` are error-handling blocks. `bb16` handles invalid file headers, while `bb5` handles file opening errors. These are less likely to execute than the main processing blocks.\n  - `bb30` is the least hot because it handles a rare error case where reading the image data fails after memory allocation."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_e",
+      "funcName": "put_image"
+    },
+    "hottestBB": {
+      "bbName": "bb8"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb16"
+      }
+    ],
+    "additionalNotes": "- The \"hottest\" block is `bb8` because it is the main processing block where the majority of the function's work is performed, including writing data and performing calculations. It is reached directly from the entry block (`bb`) and leads to either `bb19` or `bb16` based on the success of the `fwrite` operation.\n  - `bb19` is the next most likely block to execute because it represents the successful completion of the function after `bb8`.\n  - `bb` is the entry block and is executed exactly once, making it less \"hot\" than `bb8` and `bb19`.\n  - `bb5` is a failure-handling block for the `fopen` operation. It is executed only if the file fails to open, which is less likely in normal scenarios.\n  - `bb16` is another failure-handling block, executed only if the `fwrite` operation fails. This is even less likely than the `fopen` failure, making it the least \"hot\" block."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_e",
+      "funcName": "int_to_uchar"
+    },
+    "hottestBB": {
+      "bbName": "bb23"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb.bb16_crit_edge"
+      },
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb16.bb34_crit_edge"
+      },
+      {
+        "name": "bb34"
+      },
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb6.bb6_crit_edge"
+      },
+      {
+        "name": "bb23.bb23_crit_edge"
+      },
+      {
+        "name": "bb34.loopexit"
+      },
+      {
+        "name": "bb16.loopexit"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb23` because it contains the inner loop responsible for processing the array and performing the main computation. This block is executed for each element in the input array, making it the most frequently executed block.\n  - The second hottest block is `bb6`, which is part of the outer loop that determines the min and max values of the array. This block is executed once for each element in the array.\n  - Blocks like `bb.bb16_crit_edge`, `bb16`, and `bb16.bb34_crit_edge` are executed less frequently as they are part of the control flow between loops or handle edge cases.\n  - Blocks like `bb`, `bb16.loopexit`, and `bb34.loopexit` are executed only once or a few times, making them the least hot."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_e",
+      "funcName": "setup_brightness_lut"
+    },
+    "hottestBB": {
+      "bbName": "bb6"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb6.bb6_crit_edge"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb24"
+      }
+    ],
+    "additionalNotes": "- The `bb6` block contains the main loop body and is executed repeatedly until the loop condition (`%i23 = icmp eq i64 %i22, 257`) is met. This makes it the hottest block.  \n  - The `bb6.bb6_crit_edge` block serves as a critical edge for the loop and is executed once per iteration, making it slightly less hot than `bb6`.  \n  - The `bb` block is executed only once at the start of the function, initializing the loop.  \n  - The `bb24` block is the exit block and is executed only once when the loop terminates."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_e",
+      "funcName": "free_brightness_lut"
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "This function contains only one basic block (`bb`), so it is trivially the hottest block. The block performs a pointer adjustment (`getelementptr`), calls the `free` function, and then returns. Since there are no conditional branches or loops, the execution frequency of this block is determined solely by how often the function itself is invoked."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_e",
+      "funcName": "susan_principle"
+    },
+    "hottestBB": {
+      "bbName": "bb30"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb30"
+      },
+      {
+        "name": "bb329"
+      },
+      {
+        "name": "bb332"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb326"
+      },
+      {
+        "name": "bb332.bb21_crit_edge"
+      },
+      {
+        "name": "bb30.bb329_crit_edge"
+      },
+      {
+        "name": "bb329.bb30_crit_edge"
+      },
+      {
+        "name": "bb332.loopexit"
+      },
+      {
+        "name": "bb335.loopexit"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb.bb335_crit_edge"
+      },
+      {
+        "name": "bb335"
+      },
+      {
+        "name": "bb21.bb332_crit_edge"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "1. The hottest block, `bb30`, is part of a nested loop structure, as evidenced by the `llvm.loop` metadata and the presence of loop-carried dependencies. It is likely executed the most due to its inner-loop position.\n2. Blocks like `bb329` and `bb332` are also part of the loop structure but are less frequently executed than `bb30` because they represent loop control or outer-loop iterations.\n3. Blocks such as `bb9` and `bb.bb335_crit_edge` are executed conditionally and are less likely to dominate execution frequency compared to the loop-heavy blocks.\n4. Blocks like `bb` and `bb21.bb332_crit_edge` are entry or transition blocks and are executed only once or infrequently."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_e",
+      "funcName": "susan_principle_small"
+    },
+    "hottestBB": {
+      "bbName": "bb27"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb27"
+      },
+      {
+        "name": "bb102"
+      },
+      {
+        "name": "bb102.bb27_crit_edge"
+      },
+      {
+        "name": "bb99"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb18"
+      },
+      {
+        "name": "bb18.bb105_crit_edge"
+      },
+      {
+        "name": "bb105"
+      },
+      {
+        "name": "bb105.bb18_crit_edge"
+      },
+      {
+        "name": "bb105.loopexit"
+      },
+      {
+        "name": "bb108.loopexit"
+      },
+      {
+        "name": "bb108"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb.bb108_crit_edge"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb27.bb102_crit_edge"
+      }
+    ],
+    "additionalNotes": "1. **Hottest Block (`bb27`)**: This block is part of the innermost loop and contains multiple memory operations and computations. It is likely to be executed repeatedly for each iteration of the loop, making it the hottest block.\n2. **Loop Structure**: The function has nested loops, with `bb27` and `bb102` forming the core of the inner loop. These blocks are executed for each iteration of the outer loop (`bb18` and `bb105`), contributing to their high execution frequency.\n3. **Critical Edges**: Blocks like `bb102.bb27_crit_edge` and `bb18.bb105_crit_edge` are connectors between loops and are executed frequently but less so than the core loop blocks.\n4. **Outer Blocks**: Blocks like `bb`, `bb9`, and `bb.bb108_crit_edge` are executed only once or a few times during the function's execution, making them less hot."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_e",
+      "funcName": "median"
+    },
+    "hottestBB": {
+      "bbName": "bb62"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb62"
+      },
+      {
+        "name": "bb53"
+      },
+      {
+        "name": "bb64"
+      },
+      {
+        "name": "bb47"
+      },
+      {
+        "name": "bb64.bb47_crit_edge"
+      },
+      {
+        "name": "bb53.bb62_crit_edge"
+      },
+      {
+        "name": "bb62.bb53_crit_edge"
+      },
+      {
+        "name": "bb47.bb64_crit_edge"
+      },
+      {
+        "name": "bb61"
+      },
+      {
+        "name": "bb64.loopexit"
+      },
+      {
+        "name": "bb51"
+      },
+      {
+        "name": "bb67"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb62` because it is part of the inner loop that performs sorting operations. This block is executed repeatedly for each iteration of the inner loop, making it the most frequently executed block.\n  - The second hottest block is `bb53`, as it is the entry point of the inner loop and is executed for each iteration of the outer loop.\n  - `bb64` is part of the outer loop, which controls the iterations of the inner loop, so it is executed less frequently than the inner loop blocks but more frequently than other blocks.\n  - Blocks like `bb47`, `bb64.bb47_crit_edge`, and `bb53.bb62_crit_edge` are part of loop control and branching, so they are executed moderately often.\n  - Blocks like `bb61` and `bb64.loopexit` are executed conditionally within the loops, so their frequency is lower.\n  - `bb67` is the final block where the result is computed, and `bb` is the entry block, both of which are executed only once. Hence, they are the least hot."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_e",
+      "funcName": "enlarge"
+    },
+    "hottestBB": {
+      "bbName": "bb17"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb38"
+      },
+      {
+        "name": "bb74"
+      },
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb33"
+      },
+      {
+        "name": "bb68"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb35"
+      },
+      {
+        "name": "bb103"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb106"
+      },
+      {
+        "name": "bb10.loopexit"
+      },
+      {
+        "name": "bb33.loopexit"
+      },
+      {
+        "name": "bb103.loopexit"
+      },
+      {
+        "name": "bb106.loopexit"
+      },
+      {
+        "name": "bb17.bb17_crit_edge"
+      },
+      {
+        "name": "bb38.bb38_crit_edge"
+      },
+      {
+        "name": "bb74.bb74_crit_edge"
+      },
+      {
+        "name": "bb.bb10_crit_edge"
+      },
+      {
+        "name": "bb10.bb33_crit_edge"
+      },
+      {
+        "name": "bb33.bb106_crit_edge"
+      },
+      {
+        "name": "bb68.bb103_crit_edge"
+      },
+      {
+        "name": "bb103.bb68_crit_edge"
+      },
+      {
+        "name": "bb10.bb33_crit_edge"
+      }
+    ],
+    "additionalNotes": "1. **Hottest Block Analysis**: `bb17` is the hottest block because it contains a loop structure with a back edge (`bb17.bb17_crit_edge`) and performs iterative memory operations (`llvm.memcpy` calls). This suggests it will execute multiple times depending on the loop condition.\n2. **Hotness Ranking**: Blocks like `bb38` and `bb74` are also part of loops and are likely to execute frequently. Blocks such as `bb`, `bb106`, and `bb10.loopexit` are less likely to execute as often because they serve as entry points, exit points, or intermediate control flow.\n3. **Critical Edges**: Blocks like `bb.bb10_crit_edge` and `bb17.bb17_crit_edge` are primarily used for control flow and are less likely to execute as frequently as the main loop blocks."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_e",
+      "funcName": "susan_smoothing"
+    },
+    "hottestBB": {
+      "bbName": "bb79"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb79"
+      },
+      {
+        "name": "bb94"
+      },
+      {
+        "name": "bb56"
+      },
+      {
+        "name": "bb133"
+      },
+      {
+        "name": "bb388"
+      },
+      {
+        "name": "bb373"
+      },
+      {
+        "name": "bb214"
+      },
+      {
+        "name": "bb203"
+      },
+      {
+        "name": "bb250"
+      },
+      {
+        "name": "bb429"
+      },
+      {
+        "name": "bb438"
+      },
+      {
+        "name": "bb97"
+      },
+      {
+        "name": "bb226"
+      },
+      {
+        "name": "bb161"
+      },
+      {
+        "name": "bb390"
+      },
+      {
+        "name": "bb35"
+      },
+      {
+        "name": "bb242"
+      },
+      {
+        "name": "bb341"
+      },
+      {
+        "name": "bb197"
+      },
+      {
+        "name": "bb60"
+      },
+      {
+        "name": "bb64"
+      },
+      {
+        "name": "bb214.bb197_crit_edge"
+      },
+      {
+        "name": "bb373.bb390_crit_edge"
+      },
+      {
+        "name": "bb203.bb212_crit_edge"
+      },
+      {
+        "name": "bb212"
+      },
+      {
+        "name": "bb212.bb203_crit_edge"
+      },
+      {
+        "name": "bb214.loopexit"
+      },
+      {
+        "name": "bb214.bb197_crit_edge"
+      },
+      {
+        "name": "bb390.loopexit"
+      },
+      {
+        "name": "bb390.bb373_crit_edge"
+      },
+      {
+        "name": "bb94.bb56_crit_edge"
+      },
+      {
+        "name": "bb56.preheader"
+      },
+      {
+        "name": "bb46"
+      },
+      {
+        "name": "bb46.bb60_crit_edge"
+      },
+      {
+        "name": "bb60.loopexit"
+      },
+      {
+        "name": "bb60.bb241_crit_edge"
+      },
+      {
+        "name": "bb241"
+      },
+      {
+        "name": "bb241.loopexit"
+      },
+      {
+        "name": "bb235"
+      },
+      {
+        "name": "bb235.bb97_crit_edge"
+      },
+      {
+        "name": "bb235.loopexit"
+      },
+      {
+        "name": "bb226.bb107_crit_edge"
+      },
+      {
+        "name": "bb107"
+      },
+      {
+        "name": "bb107.bb161_crit_edge"
+      },
+      {
+        "name": "bb120"
+      },
+      {
+        "name": "bb126"
+      },
+      {
+        "name": "bb156"
+      },
+      {
+        "name": "bb156.bb126_crit_edge"
+      },
+      {
+        "name": "bb161.loopexit"
+      },
+      {
+        "name": "bb222"
+      },
+      {
+        "name": "bb217"
+      },
+      {
+        "name": "bb103"
+      },
+      {
+        "name": "bb97.bb235_crit_edge"
+      },
+      {
+        "name": "bb242.bb438_crit_edge"
+      },
+      {
+        "name": "bb438.bb242_crit_edge"
+      },
+      {
+        "name": "bb438.loopexit"
+      },
+      {
+        "name": "bb444"
+      },
+      {
+        "name": "bb444.loopexit"
+      },
+      {
+        "name": "bb247"
+      },
+      {
+        "name": "bb398"
+      },
+      {
+        "name": "bb393"
+      },
+      {
+        "name": "bb377"
+      },
+      {
+        "name": "bb387"
+      },
+      {
+        "name": "bb379"
+      },
+      {
+        "name": "bb379.bb388_crit_edge"
+      },
+      {
+        "name": "bb133.bb133_crit_edge"
+      },
+      {
+        "name": "bb133.bb133_crit_edge"
+      },
+      {
+        "name": "bb35.bb444_crit_edge"
+      },
+      {
+        "name": "bb38"
+      },
+      {
+        "name": "bb27"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb201"
+      },
+      {
+        "name": "bb211"
+      },
+      {
+        "name": "bb203.bb212_crit_edge"
+      },
+      {
+        "name": "bb212.bb203_crit_edge"
+      },
+      {
+        "name": "bb214.bb197_crit_edge"
+      },
+      {
+        "name": "bb373.bb390_crit_edge"
+      }
+    ],
+    "additionalNotes": "1. **Hottest Block (`bb79`)**: This block contains a loop structure with a high likelihood of multiple iterations, making it the most frequently executed block.\n2. **Sorting Methodology**: The hotness ranking is based on the control flow structure, loop nesting, and the likelihood of execution paths. Blocks within loops or those with high iteration counts are ranked higher.\n3. **Critical Edges**: Blocks like `bb94.bb56_crit_edge` and `bb133.bb133_crit_edge` are included but are less likely to dominate execution frequency compared to their parent loops.\n4. **Exit Blocks**: Blocks like `bb444` and `bb444.loopexit` are executed once at the end, making them the least hot."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_e",
+      "funcName": "edge_draw"
+    },
+    "hottestBB": {
+      "bbName": "bb15"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb40"
+      },
+      {
+        "name": "bb49"
+      },
+      {
+        "name": "bb45"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb35"
+      },
+      {
+        "name": "bb38"
+      },
+      {
+        "name": "bb53"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb.bb35_crit_edge"
+      },
+      {
+        "name": "bb5.bb35_crit_edge"
+      },
+      {
+        "name": "bb31.bb15_crit_edge"
+      },
+      {
+        "name": "bb35.loopexit"
+      },
+      {
+        "name": "bb35.bb53_crit_edge"
+      },
+      {
+        "name": "bb49.bb40_crit_edge"
+      },
+      {
+        "name": "bb53.loopexit"
+      },
+      {
+        "name": "bb15.bb31_crit_edge"
+      },
+      {
+        "name": "bb40.bb49_crit_edge"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "1. **Hottest Block Analysis**: `bb15` is the hottest block because it is part of a loop that iterates over elements, performing multiple operations and branching to itself (`bb15.bb31_crit_edge`). This loop is likely to dominate execution time.\n2. **Hotness Ranking**: Blocks like `bb31` and `bb20` are also part of the same loop structure, making them relatively hot. Blocks like `bb40` and `bb49` are part of another loop, making them moderately hot. Entry and exit blocks (`bb`, `bb53`) are executed only once, making them the least hot.\n3. **Critical Edges**: Blocks like `bb.bb35_crit_edge` and `bb5.bb35_crit_edge` are connectors and are less likely to dominate execution."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_e",
+      "funcName": "susan_thin"
+    },
+    "hottestBB": {
+      "bbName": "bb23"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb516"
+      },
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb248"
+      },
+      {
+        "name": "bb441"
+      },
+      {
+        "name": "bb529"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb254"
+      },
+      {
+        "name": "bb285"
+      },
+      {
+        "name": "bb362"
+      },
+      {
+        "name": "bb445"
+      },
+      {
+        "name": "bb478"
+      },
+      {
+        "name": "bb84"
+      },
+      {
+        "name": "bb226"
+      },
+      {
+        "name": "bb122"
+      },
+      {
+        "name": "bb128"
+      },
+      {
+        "name": "bb132"
+      },
+      {
+        "name": "bb138"
+      },
+      {
+        "name": "bb142"
+      },
+      {
+        "name": "bb148"
+      },
+      {
+        "name": "bb152"
+      },
+      {
+        "name": "bb158"
+      },
+      {
+        "name": "bb162"
+      },
+      {
+        "name": "bb168"
+      },
+      {
+        "name": "bb172"
+      },
+      {
+        "name": "bb178"
+      },
+      {
+        "name": "bb182"
+      },
+      {
+        "name": "bb188"
+      },
+      {
+        "name": "bb198"
+      },
+      {
+        "name": "bb199"
+      },
+      {
+        "name": "bb206"
+      },
+      {
+        "name": "bb221"
+      },
+      {
+        "name": "bb224"
+      },
+      {
+        "name": "bb293"
+      },
+      {
+        "name": "bb296"
+      },
+      {
+        "name": "bb299"
+      },
+      {
+        "name": "bb316"
+      },
+      {
+        "name": "bb317"
+      },
+      {
+        "name": "bb326"
+      },
+      {
+        "name": "bb330"
+      },
+      {
+        "name": "bb334"
+      },
+      {
+        "name": "bb335"
+      },
+      {
+        "name": "bb344"
+      },
+      {
+        "name": "bb350"
+      },
+      {
+        "name": "bb356"
+      },
+      {
+        "name": "bb385"
+      },
+      {
+        "name": "bb390"
+      },
+      {
+        "name": "bb436"
+      },
+      {
+        "name": "bb511"
+      },
+      {
+        "name": "bb523"
+      },
+      {
+        "name": "bb81"
+      },
+      {
+        "name": "bb82"
+      },
+      {
+        "name": "bb241"
+      },
+      {
+        "name": "bb523.loopexit"
+      },
+      {
+        "name": "bb529.loopexit"
+      },
+      {
+        "name": "bb23.preheader"
+      },
+      {
+        "name": "bb23.bb516_crit_edge"
+      },
+      {
+        "name": "bb19.bb523_crit_edge"
+      },
+      {
+        "name": "bb34"
+      },
+      {
+        "name": "bb34.bb248_crit_edge"
+      },
+      {
+        "name": "bb82.bb248_crit_edge"
+      },
+      {
+        "name": "bb226.bb248_crit_edge"
+      },
+      {
+        "name": "bb224.bb248_crit_edge"
+      },
+      {
+        "name": "bb248.bb441_crit_edge"
+      },
+      {
+        "name": "bb254.bb362_crit_edge"
+      },
+      {
+        "name": "bb285.bb362_crit_edge"
+      },
+      {
+        "name": "bb299.bb441_crit_edge"
+      },
+      {
+        "name": "bb316.bb334_crit_edge"
+      },
+      {
+        "name": "bb317.bb334_crit_edge"
+      },
+      {
+        "name": "bb326.bb334_crit_edge"
+      },
+      {
+        "name": "bb330.bb334_crit_edge"
+      },
+      {
+        "name": "bb330.bb356_crit_edge"
+      },
+      {
+        "name": "bb334.bb441_crit_edge"
+      },
+      {
+        "name": "bb335.bb441_crit_edge"
+      },
+      {
+        "name": "bb344.bb441_crit_edge"
+      },
+      {
+        "name": "bb350.bb441_crit_edge"
+      },
+      {
+        "name": "bb350.bb356_crit_edge"
+      },
+      {
+        "name": "bb362.bb441_crit_edge"
+      },
+      {
+        "name": "bb385.bb441_crit_edge"
+      },
+      {
+        "name": "bb390.bb441_crit_edge"
+      },
+      {
+        "name": "bb441.bb516_crit_edge"
+      },
+      {
+        "name": "bb445.bb516_crit_edge"
+      },
+      {
+        "name": "bb478.bb516_crit_edge"
+      },
+      {
+        "name": "bb206.bb206_crit_edge"
+      },
+      {
+        "name": "bb221.bb199_crit_edge"
+      },
+      {
+        "name": "bb523.bb19_crit_edge"
+      },
+      {
+        "name": "bb188.bb198_crit_edge"
+      },
+      {
+        "name": "bb188"
+      },
+      {
+        "name": "bb82.bb248_crit_edge"
+      },
+      {
+        "name": "bb529"
+      },
+      {
+        "name": "bb.bb529_crit_edge"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb23` because it is part of the innermost loop and contains significant computation and branching logic. It is likely to be executed repeatedly due to the nested loop structure.\n  - Blocks like `bb516`, `bb19`, and `bb248` are also hot because they are part of the loop structure and control flow.\n  - Blocks with `.crit_edge` suffixes are less likely to be hot as they represent critical edges in the control flow graph, often executed less frequently than the main loop blocks.\n  - The analysis assumes that the loops dominate execution, and the function's structure suggests heavy reliance on nested loops and conditionals."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_e",
+      "funcName": "susan_edges"
+    },
+    "hottestBB": {
+      "bbName": "bb1180"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb1180"
+      },
+      {
+        "name": "bb378"
+      },
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb355"
+      },
+      {
+        "name": "bb53"
+      },
+      {
+        "name": "bb352"
+      },
+      {
+        "name": "bb358"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb1183"
+      },
+      {
+        "name": "bb33"
+      },
+      {
+        "name": "bb391"
+      },
+      {
+        "name": "bb776"
+      },
+      {
+        "name": "bb1125"
+      },
+      {
+        "name": "bb1133"
+      },
+      {
+        "name": "bb718"
+      },
+      {
+        "name": "bb728"
+      },
+      {
+        "name": "bb744"
+      },
+      {
+        "name": "bb754"
+      },
+      {
+        "name": "bb766"
+      },
+      {
+        "name": "bb1145"
+      },
+      {
+        "name": "bb1155"
+      },
+      {
+        "name": "bb1167"
+      },
+      {
+        "name": "bb384"
+      },
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb24"
+      },
+      {
+        "name": "bb360"
+      },
+      {
+        "name": "bb349"
+      },
+      {
+        "name": "bb1050"
+      },
+      {
+        "name": "bb730"
+      },
+      {
+        "name": "bb31.loopexit"
+      },
+      {
+        "name": "bb355.loopexit"
+      },
+      {
+        "name": "bb1183.loopexit"
+      },
+      {
+        "name": "bb1186"
+      },
+      {
+        "name": "bb31.bb1186_crit_edge"
+      },
+      {
+        "name": "bb22.bb355_crit_edge"
+      },
+      {
+        "name": "bb355.bb22_crit_edge"
+      },
+      {
+        "name": "bb53.bb352_crit_edge"
+      },
+      {
+        "name": "bb352.bb53_crit_edge"
+      },
+      {
+        "name": "bb358.bb1183_crit_edge"
+      },
+      {
+        "name": "bb378.bb1180_crit_edge"
+      },
+      {
+        "name": "bb384.bb776_crit_edge"
+      },
+      {
+        "name": "bb391.bb776_crit_edge"
+      },
+      {
+        "name": "bb718.bb732_crit_edge"
+      },
+      {
+        "name": "bb728.bb732_crit_edge"
+      },
+      {
+        "name": "bb732"
+      },
+      {
+        "name": "bb732.bb1180_crit_edge"
+      },
+      {
+        "name": "bb744.bb1180_crit_edge"
+      },
+      {
+        "name": "bb754.bb1180_crit_edge"
+      },
+      {
+        "name": "bb766.bb1180_crit_edge"
+      },
+      {
+        "name": "bb766.bb1177_crit_edge"
+      },
+      {
+        "name": "bb776.bb1125_crit_edge"
+      },
+      {
+        "name": "bb1125.bb1133_crit_edge"
+      },
+      {
+        "name": "bb1128"
+      },
+      {
+        "name": "bb1128.bb1133_crit_edge"
+      },
+      {
+        "name": "bb1130"
+      },
+      {
+        "name": "bb1133.bb1180_crit_edge"
+      },
+      {
+        "name": "bb1145.bb1180_crit_edge"
+      },
+      {
+        "name": "bb1155.bb1180_crit_edge"
+      },
+      {
+        "name": "bb1167.bb1180_crit_edge"
+      },
+      {
+        "name": "bb1167.bb1177_crit_edge"
+      },
+      {
+        "name": "bb1177"
+      },
+      {
+        "name": "bb1180.bb378_crit_edge"
+      },
+      {
+        "name": "bb1183.bb358_crit_edge"
+      },
+      {
+        "name": "bb1186.loopexit"
+      },
+      {
+        "name": "bb.bb31_crit_edge"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block, `bb1180`, is part of a nested loop structure and is the most frequently executed due to its position in the innermost loop.\n  - Blocks like `bb378`, `bb22`, and `bb355` are also part of the loop structure and are executed frequently as they contribute to the iteration logic.\n  - Blocks such as `bb`, `bb.bb31_crit_edge`, and `bb1186.loopexit` are less frequently executed as they are either entry points, exit points, or part of less frequently taken paths.\n  - Critical edges (e.g., `bb22.bb355_crit_edge`) are included but are less likely to dominate execution frequency compared to the main loop blocks."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_e",
+      "funcName": "susan_edges_small"
+    },
+    "hottestBB": {
+      "bbName": "bb40"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb40"
+      },
+      {
+        "name": "bb115"
+      },
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb118"
+      },
+      {
+        "name": "bb370"
+      },
+      {
+        "name": "bb121"
+      },
+      {
+        "name": "bb137"
+      },
+      {
+        "name": "bb373"
+      },
+      {
+        "name": "bb28"
+      },
+      {
+        "name": "bb376"
+      },
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb30"
+      },
+      {
+        "name": "bb143"
+      },
+      {
+        "name": "bb263"
+      },
+      {
+        "name": "bb337"
+      },
+      {
+        "name": "bb345"
+      },
+      {
+        "name": "bb253"
+      },
+      {
+        "name": "bb357"
+      },
+      {
+        "name": "bb316"
+      },
+      {
+        "name": "bb149"
+      },
+      {
+        "name": "bb227"
+      },
+      {
+        "name": "bb241"
+      },
+      {
+        "name": "bb340"
+      },
+      {
+        "name": "bb342"
+      },
+      {
+        "name": "bb239"
+      },
+      {
+        "name": "bb237"
+      },
+      {
+        "name": "bb376.loopexit"
+      },
+      {
+        "name": "bb373.loopexit"
+      },
+      {
+        "name": "bb28.loopexit"
+      },
+      {
+        "name": "bb118.loopexit"
+      },
+      {
+        "name": "bb253.bb370_crit_edge"
+      },
+      {
+        "name": "bb357.bb370_crit_edge"
+      },
+      {
+        "name": "bb241.bb370_crit_edge"
+      },
+      {
+        "name": "bb345.bb370_crit_edge"
+      },
+      {
+        "name": "bb137.bb370_crit_edge"
+      },
+      {
+        "name": "bb370.bb137_crit_edge"
+      },
+      {
+        "name": "bb121.bb373_crit_edge"
+      },
+      {
+        "name": "bb373.bb121_crit_edge"
+      },
+      {
+        "name": "bb263.bb337_crit_edge"
+      },
+      {
+        "name": "bb337.bb345_crit_edge"
+      },
+      {
+        "name": "bb340.bb345_crit_edge"
+      },
+      {
+        "name": "bb227.bb241_crit_edge"
+      },
+      {
+        "name": "bb237.bb241_crit_edge"
+      },
+      {
+        "name": "bb143.bb263_crit_edge"
+      },
+      {
+        "name": "bb149.bb263_crit_edge"
+      },
+      {
+        "name": "bb115.bb40_crit_edge"
+      },
+      {
+        "name": "bb40.bb115_crit_edge"
+      },
+      {
+        "name": "bb19.bb118_crit_edge"
+      },
+      {
+        "name": "bb118.bb19_crit_edge"
+      },
+      {
+        "name": "bb28.bb376_crit_edge"
+      },
+      {
+        "name": "bb28.bb28_crit_edge"
+      },
+      {
+        "name": "bb253.bb367_crit_edge"
+      },
+      {
+        "name": "bb357.bb367_crit_edge"
+      },
+      {
+        "name": "bb263.bb337_crit_edge"
+      },
+      {
+        "name": "bb316"
+      },
+      {
+        "name": "bb376"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb112"
+      }
+    ],
+    "additionalNotes": "- The hottest block, `bb40`, is part of a nested loop structure and contains significant computation and memory operations, making it likely to be executed frequently.\n  - Blocks like `bb115`, `bb19`, and `bb118` are also part of the loop structure and are executed in sequence, contributing to their high hotness.\n  - Blocks such as `bb376.loopexit`, `bb373.loopexit`, and other `.loopexit` blocks are less hot as they are executed only once when exiting loops.\n  - Critical edge blocks (e.g., `bb40.bb115_crit_edge`) are generally less hot as they serve as connectors between hot blocks."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_e",
+      "funcName": "corner_draw"
+    },
+    "hottestBB": {
+      "bbName": "bb38"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb38"
+      },
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb38.bb10_crit_edge"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb.bb44_crit_edge"
+      },
+      {
+        "name": "bb44.loopexit"
+      },
+      {
+        "name": "bb44"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb38` because it is the core of the loop structure, and loops typically dominate execution frequency in such functions. The loop iterates until a condition (`icmp eq i32 %i42, 7`) is met, making `bb38` the most frequently executed block.\n  - `bb10` is the next hottest because it is the entry point of the loop and directly feeds into the loop body.\n  - `bb15` and `bb31` are conditional blocks within the loop, with `bb15` likely being hotter due to its handling of more complex operations (e.g., multiple `store` instructions).\n  - `bb38.bb10_crit_edge` is a helper block for the loop, executed once per iteration, but less frequently than the main loop body.\n  - `bb6` is executed once before entering the loop, making it less hot than the loop-related blocks.\n  - `bb.bb44_crit_edge`, `bb44.loopexit`, and `bb44` are exit-related blocks, executed only once when the loop terminates.\n  - `bb` is the entry block and is executed only once, making it the least hot."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_e",
+      "funcName": "susan_corners"
+    },
+    "hottestBB": {
+      "bbName": "bb593"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb593"
+      },
+      {
+        "name": "bb623"
+      },
+      {
+        "name": "bb843"
+      },
+      {
+        "name": "bb847"
+      },
+      {
+        "name": "bb599"
+      },
+      {
+        "name": "bb53"
+      },
+      {
+        "name": "bb53.bb593_crit_edge"
+      },
+      {
+        "name": "bb596"
+      },
+      {
+        "name": "bb596.bb24_crit_edge"
+      },
+      {
+        "name": "bb24"
+      },
+      {
+        "name": "bb24.bb596_crit_edge"
+      },
+      {
+        "name": "bb39"
+      },
+      {
+        "name": "bb39.bb853_crit_edge"
+      },
+      {
+        "name": "bb847.bb599_crit_edge"
+      },
+      {
+        "name": "bb843.bb623_crit_edge"
+      },
+      {
+        "name": "bb822"
+      },
+      {
+        "name": "bb822.bb843_crit_edge"
+      },
+      {
+        "name": "bb818"
+      },
+      {
+        "name": "bb818.bb843_crit_edge"
+      },
+      {
+        "name": "bb814"
+      },
+      {
+        "name": "bb814.bb843_crit_edge"
+      },
+      {
+        "name": "bb810"
+      },
+      {
+        "name": "bb810.bb843_crit_edge"
+      },
+      {
+        "name": "bb807"
+      },
+      {
+        "name": "bb807.bb843_crit_edge"
+      },
+      {
+        "name": "bb803"
+      },
+      {
+        "name": "bb803.bb843_crit_edge"
+      },
+      {
+        "name": "bb799"
+      },
+      {
+        "name": "bb799.bb843_crit_edge"
+      },
+      {
+        "name": "bb794"
+      },
+      {
+        "name": "bb794.bb843_crit_edge"
+      },
+      {
+        "name": "bb790"
+      },
+      {
+        "name": "bb790.bb843_crit_edge"
+      },
+      {
+        "name": "bb786"
+      },
+      {
+        "name": "bb786.bb843_crit_edge"
+      },
+      {
+        "name": "bb782"
+      },
+      {
+        "name": "bb782.bb843_crit_edge"
+      },
+      {
+        "name": "bb779"
+      },
+      {
+        "name": "bb779.bb843_crit_edge"
+      },
+      {
+        "name": "bb775"
+      },
+      {
+        "name": "bb775.bb843_crit_edge"
+      },
+      {
+        "name": "bb771"
+      },
+      {
+        "name": "bb771.bb843_crit_edge"
+      },
+      {
+        "name": "bb766"
+      },
+      {
+        "name": "bb766.bb843_crit_edge"
+      },
+      {
+        "name": "bb762"
+      },
+      {
+        "name": "bb762.bb843_crit_edge"
+      },
+      {
+        "name": "bb758"
+      },
+      {
+        "name": "bb758.bb843_crit_edge"
+      },
+      {
+        "name": "bb754"
+      },
+      {
+        "name": "bb754.bb843_crit_edge"
+      },
+      {
+        "name": "bb751"
+      },
+      {
+        "name": "bb751.bb843_crit_edge"
+      },
+      {
+        "name": "bb747"
+      },
+      {
+        "name": "bb747.bb843_crit_edge"
+      },
+      {
+        "name": "bb743"
+      },
+      {
+        "name": "bb743.bb843_crit_edge"
+      },
+      {
+        "name": "bb738"
+      },
+      {
+        "name": "bb738.bb843_crit_edge"
+      },
+      {
+        "name": "bb734"
+      },
+      {
+        "name": "bb734.bb843_crit_edge"
+      },
+      {
+        "name": "bb730"
+      },
+      {
+        "name": "bb730.bb843_crit_edge"
+      },
+      {
+        "name": "bb726"
+      },
+      {
+        "name": "bb726.bb843_crit_edge"
+      },
+      {
+        "name": "bb722"
+      },
+      {
+        "name": "bb722.bb843_crit_edge"
+      },
+      {
+        "name": "bb718"
+      },
+      {
+        "name": "bb718.bb843_crit_edge"
+      },
+      {
+        "name": "bb714"
+      },
+      {
+        "name": "bb714.bb843_crit_edge"
+      },
+      {
+        "name": "bb710"
+      },
+      {
+        "name": "bb710.bb843_crit_edge"
+      },
+      {
+        "name": "bb706"
+      },
+      {
+        "name": "bb706.bb843_crit_edge"
+      },
+      {
+        "name": "bb702"
+      },
+      {
+        "name": "bb702.bb843_crit_edge"
+      },
+      {
+        "name": "bb699"
+      },
+      {
+        "name": "bb699.bb843_crit_edge"
+      },
+      {
+        "name": "bb695"
+      },
+      {
+        "name": "bb695.bb843_crit_edge"
+      },
+      {
+        "name": "bb691"
+      },
+      {
+        "name": "bb691.bb843_crit_edge"
+      },
+      {
+        "name": "bb686"
+      },
+      {
+        "name": "bb686.bb843_crit_edge"
+      },
+      {
+        "name": "bb682"
+      },
+      {
+        "name": "bb682.bb843_crit_edge"
+      },
+      {
+        "name": "bb678"
+      },
+      {
+        "name": "bb678.bb843_crit_edge"
+      },
+      {
+        "name": "bb674"
+      },
+      {
+        "name": "bb674.bb843_crit_edge"
+      },
+      {
+        "name": "bb671"
+      },
+      {
+        "name": "bb671.bb843_crit_edge"
+      },
+      {
+        "name": "bb667"
+      },
+      {
+        "name": "bb667.bb843_crit_edge"
+      },
+      {
+        "name": "bb663"
+      },
+      {
+        "name": "bb663.bb843_crit_edge"
+      },
+      {
+        "name": "bb658"
+      },
+      {
+        "name": "bb658.bb843_crit_edge"
+      },
+      {
+        "name": "bb654"
+      },
+      {
+        "name": "bb654.bb843_crit_edge"
+      },
+      {
+        "name": "bb650"
+      },
+      {
+        "name": "bb650.bb843_crit_edge"
+      },
+      {
+        "name": "bb646"
+      },
+      {
+        "name": "bb646.bb843_crit_edge"
+      },
+      {
+        "name": "bb643"
+      },
+      {
+        "name": "bb643.bb843_crit_edge"
+      },
+      {
+        "name": "bb639"
+      },
+      {
+        "name": "bb639.bb843_crit_edge"
+      },
+      {
+        "name": "bb635"
+      },
+      {
+        "name": "bb635.bb843_crit_edge"
+      },
+      {
+        "name": "bb630"
+      },
+      {
+        "name": "bb630.bb843_crit_edge"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb205"
+      },
+      {
+        "name": "bb205.bb593_crit_edge"
+      },
+      {
+        "name": "bb215"
+      },
+      {
+        "name": "bb215.bb593_crit_edge"
+      },
+      {
+        "name": "bb226"
+      },
+      {
+        "name": "bb226.bb593_crit_edge"
+      },
+      {
+        "name": "bb235"
+      },
+      {
+        "name": "bb235.bb593_crit_edge"
+      },
+      {
+        "name": "bb245"
+      },
+      {
+        "name": "bb245.bb593_crit_edge"
+      },
+      {
+        "name": "bb255"
+      },
+      {
+        "name": "bb255.bb593_crit_edge"
+      },
+      {
+        "name": "bb265"
+      },
+      {
+        "name": "bb265.bb593_crit_edge"
+      },
+      {
+        "name": "bb275"
+      },
+      {
+        "name": "bb275.bb593_crit_edge"
+      },
+      {
+        "name": "bb285"
+      },
+      {
+        "name": "bb285.bb593_crit_edge"
+      },
+      {
+        "name": "bb296"
+      },
+      {
+        "name": "bb296.bb593_crit_edge"
+      },
+      {
+        "name": "bb305"
+      },
+      {
+        "name": "bb305.bb593_crit_edge"
+      },
+      {
+        "name": "bb315"
+      },
+      {
+        "name": "bb315.bb593_crit_edge"
+      },
+      {
+        "name": "bb325"
+      },
+      {
+        "name": "bb325.bb593_crit_edge"
+      },
+      {
+        "name": "bb335"
+      },
+      {
+        "name": "bb335.bb593_crit_edge"
+      },
+      {
+        "name": "bb346"
+      },
+      {
+        "name": "bb346.bb593_crit_edge"
+      },
+      {
+        "name": "bb355"
+      },
+      {
+        "name": "bb355.bb593_crit_edge"
+      },
+      {
+        "name": "bb365"
+      },
+      {
+        "name": "bb365.bb593_crit_edge"
+      },
+      {
+        "name": "bb375"
+      },
+      {
+        "name": "bb375.bb593_crit_edge"
+      },
+      {
+        "name": "bb385"
+      },
+      {
+        "name": "bb385.bb593_crit_edge"
+      },
+      {
+        "name": "bb456"
+      },
+      {
+        "name": "bb459"
+      },
+      {
+        "name": "bb515"
+      },
+      {
+        "name": "bb571"
+      },
+      {
+        "name": "bb571.bb593_crit_edge"
+      },
+      {
+        "name": "bb584"
+      },
+      {
+        "name": "bb596.loopexit"
+      },
+      {
+        "name": "bb39.loopexit"
+      },
+      {
+        "name": "bb847.loopexit"
+      },
+      {
+        "name": "bb851"
+      },
+      {
+        "name": "bb853"
+      },
+      {
+        "name": "bb41"
+      },
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb840"
+      },
+      {
+        "name": "bb599.bb847_crit_edge"
+      },
+      {
+        "name": "bb39.bb39_crit_edge"
+      },
+      {
+        "name": "bb39.bb853_crit_edge"
+      },
+      {
+        "name": "bb593.bb53_crit_edge"
+      },
+      {
+        "name": "bb847.bb599_crit_edge"
+      },
+      {
+        "name": "bb.bb39_crit_edge"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb593` because it is the central block in the nested loops and is the target of numerous critical edges. It is executed repeatedly as part of the loop structure.\n  - Blocks like `bb623`, `bb843`, and `bb847` are also hot due to their involvement in nested loops and frequent branching.\n  - Blocks such as `bb840` and `bb851` are less hot as they are part of exit conditions or error handling paths.\n  - The ranking is based on the structure of the loops, the number of incoming edges, and the likelihood of execution paths."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_e",
+      "funcName": "susan_corners_quick"
+    },
+    "hottestBB": {
+      "bbName": "bb407"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb407"
+      },
+      {
+        "name": "bb414"
+      },
+      {
+        "name": "bb419"
+      },
+      {
+        "name": "bb423"
+      },
+      {
+        "name": "bb427"
+      },
+      {
+        "name": "bb430"
+      },
+      {
+        "name": "bb434"
+      },
+      {
+        "name": "bb438"
+      },
+      {
+        "name": "bb442"
+      },
+      {
+        "name": "bb448"
+      },
+      {
+        "name": "bb453"
+      },
+      {
+        "name": "bb458"
+      },
+      {
+        "name": "bb461"
+      },
+      {
+        "name": "bb466"
+      },
+      {
+        "name": "bb471"
+      },
+      {
+        "name": "bb475"
+      },
+      {
+        "name": "bb481"
+      },
+      {
+        "name": "bb486"
+      },
+      {
+        "name": "bb491"
+      },
+      {
+        "name": "bb494"
+      },
+      {
+        "name": "bb499"
+      },
+      {
+        "name": "bb504"
+      },
+      {
+        "name": "bb508"
+      },
+      {
+        "name": "bb512"
+      },
+      {
+        "name": "bb517"
+      },
+      {
+        "name": "bb522"
+      },
+      {
+        "name": "bb527"
+      },
+      {
+        "name": "bb532"
+      },
+      {
+        "name": "bb536"
+      },
+      {
+        "name": "bb542"
+      },
+      {
+        "name": "bb547"
+      },
+      {
+        "name": "bb552"
+      },
+      {
+        "name": "bb555"
+      },
+      {
+        "name": "bb560"
+      },
+      {
+        "name": "bb565"
+      },
+      {
+        "name": "bb569"
+      },
+      {
+        "name": "bb575"
+      },
+      {
+        "name": "bb580"
+      },
+      {
+        "name": "bb585"
+      },
+      {
+        "name": "bb588"
+      },
+      {
+        "name": "bb593"
+      },
+      {
+        "name": "bb598"
+      },
+      {
+        "name": "bb602"
+      },
+      {
+        "name": "bb607"
+      },
+      {
+        "name": "bb611"
+      },
+      {
+        "name": "bb615"
+      },
+      {
+        "name": "bb618"
+      },
+      {
+        "name": "bb622"
+      },
+      {
+        "name": "bb626"
+      },
+      {
+        "name": "bb630"
+      },
+      {
+        "name": "bb834"
+      },
+      {
+        "name": "bb381"
+      },
+      {
+        "name": "bb46"
+      },
+      {
+        "name": "bb198"
+      },
+      {
+        "name": "bb208"
+      },
+      {
+        "name": "bb219"
+      },
+      {
+        "name": "bb228"
+      },
+      {
+        "name": "bb238"
+      },
+      {
+        "name": "bb248"
+      },
+      {
+        "name": "bb258"
+      },
+      {
+        "name": "bb268"
+      },
+      {
+        "name": "bb278"
+      },
+      {
+        "name": "bb289"
+      },
+      {
+        "name": "bb298"
+      },
+      {
+        "name": "bb308"
+      },
+      {
+        "name": "bb318"
+      },
+      {
+        "name": "bb328"
+      },
+      {
+        "name": "bb339"
+      },
+      {
+        "name": "bb348"
+      },
+      {
+        "name": "bb358"
+      },
+      {
+        "name": "bb368"
+      },
+      {
+        "name": "bb378"
+      },
+      {
+        "name": "bb384"
+      },
+      {
+        "name": "bb387"
+      },
+      {
+        "name": "bb390"
+      },
+      {
+        "name": "bb842"
+      },
+      {
+        "name": "bb844"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb25"
+      },
+      {
+        "name": "bb32"
+      },
+      {
+        "name": "bb34"
+      },
+      {
+        "name": "bb32.loopexit"
+      },
+      {
+        "name": "bb384.loopexit"
+      },
+      {
+        "name": "bb838"
+      },
+      {
+        "name": "bb838.loopexit"
+      },
+      {
+        "name": "bb831"
+      },
+      {
+        "name": "bb.bb32_crit_edge"
+      },
+      {
+        "name": "bb23.bb384_crit_edge"
+      },
+      {
+        "name": "bb381.bb46_crit_edge"
+      },
+      {
+        "name": "bb198.bb381_crit_edge"
+      },
+      {
+        "name": "bb208.bb381_crit_edge"
+      },
+      {
+        "name": "bb219.bb381_crit_edge"
+      },
+      {
+        "name": "bb228.bb381_crit_edge"
+      },
+      {
+        "name": "bb238.bb381_crit_edge"
+      },
+      {
+        "name": "bb248.bb381_crit_edge"
+      },
+      {
+        "name": "bb258.bb381_crit_edge"
+      },
+      {
+        "name": "bb268.bb381_crit_edge"
+      },
+      {
+        "name": "bb278.bb381_crit_edge"
+      },
+      {
+        "name": "bb289.bb381_crit_edge"
+      },
+      {
+        "name": "bb298.bb381_crit_edge"
+      },
+      {
+        "name": "bb308.bb381_crit_edge"
+      },
+      {
+        "name": "bb318.bb381_crit_edge"
+      },
+      {
+        "name": "bb328.bb381_crit_edge"
+      },
+      {
+        "name": "bb339.bb381_crit_edge"
+      },
+      {
+        "name": "bb348.bb381_crit_edge"
+      },
+      {
+        "name": "bb358.bb381_crit_edge"
+      },
+      {
+        "name": "bb368.bb381_crit_edge"
+      },
+      {
+        "name": "bb378.bb381_crit_edge"
+      },
+      {
+        "name": "bb384.bb23_crit_edge"
+      },
+      {
+        "name": "bb387.bb838_crit_edge"
+      },
+      {
+        "name": "bb407.bb834_crit_edge"
+      },
+      {
+        "name": "bb414.bb834_crit_edge"
+      },
+      {
+        "name": "bb419.bb834_crit_edge"
+      },
+      {
+        "name": "bb423.bb834_crit_edge"
+      },
+      {
+        "name": "bb427.bb834_crit_edge"
+      },
+      {
+        "name": "bb430.bb834_crit_edge"
+      },
+      {
+        "name": "bb434.bb834_crit_edge"
+      },
+      {
+        "name": "bb438.bb834_crit_edge"
+      },
+      {
+        "name": "bb442.bb834_crit_edge"
+      },
+      {
+        "name": "bb448.bb834_crit_edge"
+      },
+      {
+        "name": "bb453.bb834_crit_edge"
+      },
+      {
+        "name": "bb458.bb834_crit_edge"
+      },
+      {
+        "name": "bb461.bb834_crit_edge"
+      },
+      {
+        "name": "bb466.bb834_crit_edge"
+      },
+      {
+        "name": "bb471.bb834_crit_edge"
+      },
+      {
+        "name": "bb475.bb834_crit_edge"
+      },
+      {
+        "name": "bb481.bb834_crit_edge"
+      },
+      {
+        "name": "bb486.bb834_crit_edge"
+      },
+      {
+        "name": "bb491.bb834_crit_edge"
+      },
+      {
+        "name": "bb494.bb834_crit_edge"
+      },
+      {
+        "name": "bb499.bb834_crit_edge"
+      },
+      {
+        "name": "bb504.bb834_crit_edge"
+      },
+      {
+        "name": "bb508.bb834_crit_edge"
+      },
+      {
+        "name": "bb512.bb834_crit_edge"
+      },
+      {
+        "name": "bb517.bb834_crit_edge"
+      },
+      {
+        "name": "bb522.bb834_crit_edge"
+      },
+      {
+        "name": "bb527.bb834_crit_edge"
+      },
+      {
+        "name": "bb532.bb834_crit_edge"
+      },
+      {
+        "name": "bb536.bb834_crit_edge"
+      },
+      {
+        "name": "bb542.bb834_crit_edge"
+      },
+      {
+        "name": "bb547.bb834_crit_edge"
+      },
+      {
+        "name": "bb552.bb834_crit_edge"
+      },
+      {
+        "name": "bb555.bb834_crit_edge"
+      },
+      {
+        "name": "bb560.bb834_crit_edge"
+      },
+      {
+        "name": "bb565.bb834_crit_edge"
+      },
+      {
+        "name": "bb569.bb834_crit_edge"
+      },
+      {
+        "name": "bb575.bb834_crit_edge"
+      },
+      {
+        "name": "bb580.bb834_crit_edge"
+      },
+      {
+        "name": "bb585.bb834_crit_edge"
+      },
+      {
+        "name": "bb588.bb834_crit_edge"
+      },
+      {
+        "name": "bb593.bb834_crit_edge"
+      },
+      {
+        "name": "bb598.bb834_crit_edge"
+      },
+      {
+        "name": "bb602.bb834_crit_edge"
+      },
+      {
+        "name": "bb607.bb834_crit_edge"
+      },
+      {
+        "name": "bb611.bb834_crit_edge"
+      },
+      {
+        "name": "bb615.bb834_crit_edge"
+      },
+      {
+        "name": "bb618.bb834_crit_edge"
+      },
+      {
+        "name": "bb622.bb834_crit_edge"
+      },
+      {
+        "name": "bb626.bb834_crit_edge"
+      },
+      {
+        "name": "bb630.bb834_crit_edge"
+      },
+      {
+        "name": "bb834.bb407_crit_edge"
+      },
+      {
+        "name": "bb838.bb387_crit_edge"
+      },
+      {
+        "name": "bb32.bb844_crit_edge"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb407` because it is part of a deeply nested loop structure and contains a significant amount of computation and branching logic. This block is likely to be executed repeatedly due to the loop structure.\n  - Blocks with `.bb834_crit_edge` and `.bb381_crit_edge` suffixes are less likely to be executed as frequently as their parent blocks, as they represent critical edges in the control flow graph.\n  - Blocks like `bb831` and `bb842` are less hot because they are part of exit conditions or cleanup logic, which are executed less frequently."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_e",
+      "funcName": "main1"
+    },
+    "hottestBB": {
+      "bbName": "bb62"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb62"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb164"
+      },
+      {
+        "name": "bb148"
+      },
+      {
+        "name": "bb285"
+      },
+      {
+        "name": "bb269"
+      },
+      {
+        "name": "bb245"
+      },
+      {
+        "name": "bb119"
+      },
+      {
+        "name": "bb91"
+      },
+      {
+        "name": "bb196"
+      },
+      {
+        "name": "bb220"
+      },
+      {
+        "name": "bb338"
+      },
+      {
+        "name": "bb279"
+      },
+      {
+        "name": "bb310"
+      },
+      {
+        "name": "bb234"
+      },
+      {
+        "name": "bb216"
+      },
+      {
+        "name": "bb263"
+      },
+      {
+        "name": "bb142"
+      },
+      {
+        "name": "bb158"
+      },
+      {
+        "name": "bb37"
+      },
+      {
+        "name": "bb50"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb29"
+      },
+      {
+        "name": "bb30"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb32"
+      },
+      {
+        "name": "bb33"
+      },
+      {
+        "name": "bb34"
+      },
+      {
+        "name": "bb35"
+      },
+      {
+        "name": "bb36"
+      },
+      {
+        "name": "bb49"
+      },
+      {
+        "name": "bb55"
+      },
+      {
+        "name": "bb87"
+      },
+      {
+        "name": "bb109"
+      },
+      {
+        "name": "bb135"
+      },
+      {
+        "name": "bb140"
+      },
+      {
+        "name": "bb141"
+      },
+      {
+        "name": "bb175"
+      },
+      {
+        "name": "bb179"
+      },
+      {
+        "name": "bb180"
+      },
+      {
+        "name": "bb183"
+      },
+      {
+        "name": "bb189"
+      },
+      {
+        "name": "bb201"
+      },
+      {
+        "name": "bb225"
+      },
+      {
+        "name": "bb229"
+      },
+      {
+        "name": "bb233"
+      },
+      {
+        "name": "bb296"
+      },
+      {
+        "name": "bb299"
+      },
+      {
+        "name": "bb300"
+      },
+      {
+        "name": "bb301"
+      },
+      {
+        "name": "bb306"
+      },
+      {
+        "name": "bb315"
+      },
+      {
+        "name": "bb331"
+      },
+      {
+        "name": "bb344"
+      },
+      {
+        "name": "bb346"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb7.bb74_crit_edge"
+      },
+      {
+        "name": "bb11.preheader"
+      },
+      {
+        "name": "bb26.bb62_crit_edge"
+      },
+      {
+        "name": "bb42"
+      },
+      {
+        "name": "bb42.bb62_crit_edge"
+      },
+      {
+        "name": "bb53"
+      },
+      {
+        "name": "bb61"
+      },
+      {
+        "name": "bb74"
+      },
+      {
+        "name": "bb74.loopexit"
+      },
+      {
+        "name": "bb105"
+      },
+      {
+        "name": "bb137"
+      },
+      {
+        "name": "bb142.bb158_crit_edge"
+      },
+      {
+        "name": "bb146"
+      },
+      {
+        "name": "bb158.loopexit"
+      },
+      {
+        "name": "bb158.bb234_crit_edge"
+      },
+      {
+        "name": "bb162"
+      },
+      {
+        "name": "bb164.bb164_crit_edge"
+      },
+      {
+        "name": "bb181"
+      },
+      {
+        "name": "bb181.bb184_crit_edge"
+      },
+      {
+        "name": "bb184"
+      },
+      {
+        "name": "bb184.bb216_crit_edge"
+      },
+      {
+        "name": "bb189"
+      },
+      {
+        "name": "bb196.bb212_crit_edge"
+      },
+      {
+        "name": "bb212"
+      },
+      {
+        "name": "bb212.bb196_crit_edge"
+      },
+      {
+        "name": "bb216.loopexit"
+      },
+      {
+        "name": "bb216.bb233_crit_edge"
+      },
+      {
+        "name": "bb218"
+      },
+      {
+        "name": "bb220.bb229_crit_edge"
+      },
+      {
+        "name": "bb229.bb220_crit_edge"
+      },
+      {
+        "name": "bb233.loopexit"
+      },
+      {
+        "name": "bb234.loopexit"
+      },
+      {
+        "name": "bb235"
+      },
+      {
+        "name": "bb245.bb245_crit_edge"
+      },
+      {
+        "name": "bb261"
+      },
+      {
+        "name": "bb263.bb279_crit_edge"
+      },
+      {
+        "name": "bb267"
+      },
+      {
+        "name": "bb269.bb269_crit_edge"
+      },
+      {
+        "name": "bb279.bb344_crit_edge"
+      },
+      {
+        "name": "bb283"
+      },
+      {
+        "name": "bb285.bb285_crit_edge"
+      },
+      {
+        "name": "bb301.bb344_crit_edge"
+      },
+      {
+        "name": "bb338.bb310_crit_edge"
+      },
+      {
+        "name": "bb344.loopexit"
+      },
+      {
+        "name": "bb344.loopexit1"
+      },
+      {
+        "name": "bb345"
+      },
+      {
+        "name": "bb119.bb119_crit_edge"
+      },
+      {
+        "name": "bb91.bb91_crit_edge"
+      },
+      {
+        "name": "bb148.bb148_crit_edge"
+      },
+      {
+        "name": "bb164.bb164_crit_edge"
+      },
+      {
+        "name": "bb310.bb338_crit_edge"
+      },
+      {
+        "name": "bb344.bb301_crit_edge"
+      }
+    ],
+    "additionalNotes": "1. **Hottest Block (`bb62`)**: This block is part of a loop structure and is revisited multiple times due to the nature of the `phi` nodes and the loop conditions. It is the central block for processing iterations.\n2. **Hotness Ranking**: The ranking is based on the control flow structure, loop nesting, and the likelihood of execution frequency. Blocks within loops or those controlling loop iterations are ranked higher.\n3. **Cold Blocks**: Blocks like `bb6`, `bb345`, and `bb7.bb74_crit_edge` are less likely to be executed frequently as they are part of error handling or one-time setup/exit paths."
+  }
+]

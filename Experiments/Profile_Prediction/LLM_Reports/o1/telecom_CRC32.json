@@ -1,0 +1,173 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "updateCRC32"
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "This function consists of only one basic block (`bb`), so it is trivially the hottest block. The block performs a CRC32 update operation, which involves bitwise operations, a table lookup, and a memory load. Since there are no conditional branches or multiple blocks, the execution flow does not diverge, and `bb` is executed every time the function is called."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "crc32file"
+    },
+    "hottestBB": {
+      "bbName": "bb9"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb5.preheader"
+      },
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb19.bb23_crit_edge"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb9` because it is part of the main loop (`bb5 -> bb9 -> bb5`) that processes each character of the file. This loop will execute once for every character in the file, making it the most frequently executed block.\n  - `bb5` is the loop header and is executed once per iteration of the loop, making it the second hottest block.\n  - `bb5.preheader` is executed once before entering the loop, so it is less hot than the loop body but hotter than blocks outside the loop.\n  - `bb19` handles the loop exit condition and error checking, so it is executed once after the loop finishes.\n  - `bb19.bb23_crit_edge` and `bb23` are part of the cleanup and finalization process, executed after the loop exits.\n  - `bb22` handles error reporting in case of a file error, which is less likely than normal execution.\n  - `bb26` is the final return block, executed once at the end of the function.\n  - `bb4` handles the case where the file cannot be opened, which is less likely than normal execution.\n  - `bb` is the entry block and is executed only once, making it the least hot."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "crc32buf"
+    },
+    "hottestBB": {
+      "bbName": "bb2"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb2"
+      },
+      {
+        "name": "bb2.bb2_crit_edge"
+      },
+      {
+        "name": "bb2.preheader"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb.bb19_crit_edge"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb2` because it contains the main loop body, which iterates over the input buffer. Loops are typically the hottest regions in a function due to repeated execution.\n  - `bb2.bb2_crit_edge` is the next hottest because it serves as the loop backedge, which is traversed on every iteration except the last.\n  - `bb2.preheader` is executed once before entering the loop, making it less hot than the loop body.\n  - `bb17` is executed once after the loop completes, making it cooler than the loop-related blocks.\n  - `bb19` is the final block where the function returns, executed once after `bb17`.\n  - `bb.bb19_crit_edge` is a connector block executed only when the input size is zero, making it cooler than the main blocks.\n  - `bb` is the entry block, executed only once, and is the least hot."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "main1"
+    },
+    "hottestBB": {
+      "bbName": "bb7"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb21.bb7_crit_edge"
+      },
+      {
+        "name": "bb7.bb21_crit_edge"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb.bb26_crit_edge"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb7` because it contains a loop structure with a `phi` node and is revisited multiple times due to the branching from `bb21.bb7_crit_edge` and `bb7.bb21_crit_edge`. Loops typically dominate execution frequency.\n  - `bb21` is the second hottest as it controls the loop continuation and is executed on every iteration.\n  - `bb21.bb7_crit_edge` and `bb7.bb21_crit_edge` are critical edges that facilitate the loop, so they are also frequently executed.\n  - `bb5` is executed once before entering the loop, making it less hot than the loop blocks.\n  - `bb16` is executed conditionally within the loop, so its frequency depends on the loop's behavior.\n  - `bb23` and `bb26` are executed after the loop terminates, making them less hot.\n  - `bb.bb26_crit_edge` and `bb` are executed only once at the start and end, respectively, making them the least hot."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "main"
+    },
+    "hottestBB": {
+      "bbName": "bb12"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb12.bb12_crit_edge"
+      },
+      {
+        "name": "bb12.preheader"
+      },
+      {
+        "name": "bb21.loopexit"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb7.bb21_crit_edge"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb4"
+      }
+    ],
+    "additionalNotes": "1. The hottest block is `bb12` because it is part of the main loop, which iterates based on the value of `%i10` (loaded from `%i`). Loops are typically the hottest regions in a function.\n2. `bb12.bb12_crit_edge` and `bb12.preheader` are closely tied to the loop and will execute frequently as part of the loop's control flow.\n3. `bb21.loopexit` is executed once when the loop exits, making it less hot than the loop blocks but still hotter than non-loop blocks.\n4. `bb7` is executed if the file opens successfully, and it leads to the loop. It is less hot than the loop but more frequent than error-handling blocks.\n5. `bb7.bb21_crit_edge` is a connector block and will execute once per loop iteration, but it is less significant than the main loop body.\n6. `bb` is the entry block and executes once, making it cooler than the loop-related blocks.\n7. `bb21` is the final block where the function concludes, executed once after all other blocks.\n8. `bb4` handles the error case when the file fails to open. It is the coldest block since it only executes in an exceptional scenario."
+  }
+]

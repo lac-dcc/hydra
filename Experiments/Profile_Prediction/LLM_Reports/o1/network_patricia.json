@@ -1,0 +1,344 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_patricia",
+      "funcName": "main"
+    },
+    "hottestBB": {
+      "bbName": "bb12"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb12.bb12_crit_edge"
+      },
+      {
+        "name": "bb12.preheader"
+      },
+      {
+        "name": "bb21.loopexit"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb7.bb21_crit_edge"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb4"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb12` because it is part of the loop structure, and loops typically dominate execution frequency. The loop iterates based on the value of `%i10`, which is loaded from `%i` and compared against `%i15`. This suggests that the loop could execute multiple times depending on the input.\n  - `bb12.bb12_crit_edge` and `bb12.preheader` are closely tied to the loop, so they are also hot but slightly less frequent than `bb12` itself.\n  - `bb21.loopexit` is executed once when the loop exits, making it less hot than the loop blocks.\n  - `bb7` is executed if the file pointer `%i2` is not null, and it leads to the loop. It is less hot than the loop but more frequent than error-handling blocks.\n  - `bb7.bb21_crit_edge` is a connector block and is executed once per loop iteration, but it does not contain significant computation.\n  - `bb` is the entry block and is executed once.\n  - `bb21` is the final block where the function returns, executed once after all other blocks.\n  - `bb4` handles the error case when the file pointer `%i2` is null, making it the least hot block since it depends on an error condition."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_patricia",
+      "funcName": "pat_insert"
+    },
+    "hottestBB": {
+      "bbName": "bb12"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb63"
+      },
+      {
+        "name": "bb76"
+      },
+      {
+        "name": "bb42"
+      },
+      {
+        "name": "bb45"
+      },
+      {
+        "name": "bb94"
+      },
+      {
+        "name": "bb100"
+      },
+      {
+        "name": "bb28"
+      },
+      {
+        "name": "bb33"
+      },
+      {
+        "name": "bb54"
+      },
+      {
+        "name": "bb85"
+      },
+      {
+        "name": "bb89"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb38"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb50"
+      },
+      {
+        "name": "bb116"
+      },
+      {
+        "name": "bb112"
+      },
+      {
+        "name": "bb103"
+      },
+      {
+        "name": "bb88"
+      },
+      {
+        "name": "bb73"
+      },
+      {
+        "name": "bb75"
+      },
+      {
+        "name": "bb61"
+      },
+      {
+        "name": "bb83"
+      },
+      {
+        "name": "bb54.loopexit"
+      },
+      {
+        "name": "bb54.bb85_crit_edge"
+      },
+      {
+        "name": "bb85.bb89_crit_edge"
+      },
+      {
+        "name": "bb94.bb103_crit_edge"
+      },
+      {
+        "name": "bb100.bb94_crit_edge"
+      },
+      {
+        "name": "bb33.bb54_crit_edge"
+      },
+      {
+        "name": "bb42.bb45_crit_edge"
+      },
+      {
+        "name": "bb76.bb63_crit_edge"
+      },
+      {
+        "name": "bb103split"
+      },
+      {
+        "name": "bb.bb120_crit_edge"
+      },
+      {
+        "name": "bb4.bb120_crit_edge"
+      },
+      {
+        "name": "bb12.bb12_crit_edge"
+      },
+      {
+        "name": "bb120"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block, `bb12`, is part of a loop structure with a `phi` node and a back edge, indicating repeated execution.\n  - Blocks like `bb63`, `bb76`, and `bb42` are also part of nested loops, making them likely to be executed frequently.\n  - Blocks such as `bb4`, `bb8`, and `bb28` are executed conditionally but are less likely to dominate execution compared to loop-heavy blocks.\n  - Blocks like `bb.bb120_crit_edge` and `bb4.bb120_crit_edge` are primarily used for control flow and are less likely to be executed repeatedly."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_patricia",
+      "funcName": "insertR"
+    },
+    "hottestBB": {
+      "bbName": "bb29"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb29"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb7.bb11_crit_edge"
+      },
+      {
+        "name": "bb.bb11_crit_edge"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb35"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb29` because it serves as the final merging point for multiple control flow paths (`bb35`, `bb31`, and `bb11`). This makes it highly likely to be executed in every invocation of the function.\n  - The entry block `bb` is also frequently executed as it initializes the control flow.\n  - Blocks like `bb7` and `bb11` are part of the main decision-making logic and are executed often, but less frequently than `bb29`.\n  - Blocks `bb23`, `bb31`, and `bb35` are deeper in the control flow and depend on specific conditions, making them less likely to execute as often. Among these, `bb31` and `bb35` are recursive calls, which further reduces their likelihood of execution in a single invocation."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_patricia",
+      "funcName": "pat_remove"
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "`bb`"
+      }
+    ],
+    "additionalNotes": "The function contains only one basic block (`bb`), which directly returns a constant value (`i32 0`). Since there are no conditional branches, loops, or other control flow constructs, `bb` is the only block and is executed unconditionally whenever the function is called. Thus, it is trivially the hottest block."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_patricia",
+      "funcName": "pat_search"
+    },
+    "hottestBB": {
+      "bbName": "bb2"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb2"
+      },
+      {
+        "name": "bb2.bb2_crit_edge"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb34"
+      },
+      {
+        "name": "bb.bb34_crit_edge"
+      },
+      {
+        "name": "bb2.preheader"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb2` because it contains the main loop structure, as indicated by the `br` instruction with the `!llvm.loop` metadata. Loops are typically the most frequently executed parts of a function.\n  - `bb2.bb2_crit_edge` is the next hottest because it serves as the critical edge for the loop, meaning it is traversed during each iteration.\n  - `bb26` is likely executed less frequently than `bb2` because it is reached only when the condition in `bb2` (`icmp slt i8 %i13, %i24`) evaluates to false.\n  - `bb34` is executed after the loop completes, making it less hot than the loop-related blocks.\n  - `bb.bb34_crit_edge` is a simple transition block leading to `bb34`, so it is less frequently executed.\n  - `bb2.preheader` is executed only once before entering the loop, making it colder than the loop-related blocks.\n  - `bb` is the entry block and is executed only once, making it the coldest block."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_patricia",
+      "funcName": "main1"
+    },
+    "hottestBB": {
+      "bbName": "bb36"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb36"
+      },
+      {
+        "name": "bb39"
+      },
+      {
+        "name": "bb44"
+      },
+      {
+        "name": "bb49"
+      },
+      {
+        "name": "bb54"
+      },
+      {
+        "name": "bb68"
+      },
+      {
+        "name": "bb70"
+      },
+      {
+        "name": "bb70.bb36_crit_edge"
+      },
+      {
+        "name": "bb63"
+      },
+      {
+        "name": "bb76"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb25"
+      },
+      {
+        "name": "bb30"
+      },
+      {
+        "name": "bb43"
+      },
+      {
+        "name": "bb48"
+      },
+      {
+        "name": "bb53"
+      },
+      {
+        "name": "bb73"
+      },
+      {
+        "name": "bb63"
+      }
+    ],
+    "additionalNotes": "1. **Hottest Block (`bb36`)**: This block is part of the main loop that processes input lines using `fgets`. It is likely to be executed repeatedly for each line in the input file, making it the hottest block.\n2. **Loop Structure**: The loop spans `bb36`, `bb39`, `bb44`, `bb49`, `bb54`, `bb68`, and `bb70`. These blocks are executed repeatedly, with `bb36` being the entry point of the loop.\n3. **Exit Conditions**: Blocks like `bb76` handle the termination of the loop, while blocks like `bb6`, `bb14`, and `bb20` handle early exits due to errors or invalid input. These are less likely to be executed frequently.\n4. **Error Handling**: Blocks such as `bb43`, `bb48`, `bb53`, and `bb73` handle specific error cases and are expected to be executed less often.\n5. **Critical Edge (`bb70.bb36_crit_edge`)**: This block is part of the loop back edge and is executed as part of the loop iteration, making it relatively hot."
+  }
+]

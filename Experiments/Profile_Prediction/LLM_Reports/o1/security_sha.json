@@ -1,0 +1,371 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_sha",
+      "funcName": "main"
+    },
+    "hottestBB": {
+      "bbName": "bb12"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb12.bb12_crit_edge"
+      },
+      {
+        "name": "bb12.preheader"
+      },
+      {
+        "name": "bb21.loopexit"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb7.bb21_crit_edge"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb4"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb12` because it is part of a loop, and loops typically dominate execution frequency. The loop iterates based on the value loaded into `%i`, making `bb12` and its associated critical edge (`bb12.bb12_crit_edge`) and preheader (`bb12.preheader`) the most frequently executed blocks.\n  - `bb21.loopexit` is executed once when the loop exits, making it less hot than the loop blocks but still hotter than non-loop blocks.\n  - `bb7` is executed if the file opens successfully, and it leads to the loop. Its critical edge (`bb7.bb21_crit_edge`) is executed once after the loop.\n  - `bb` is the entry block, executed once.\n  - `bb21` is the final block, executed once after all other blocks.\n  - `bb4` is executed only if the file fails to open, making it the least likely to execute."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_sha",
+      "funcName": "main1"
+    },
+    "hottestBB": {
+      "bbName": "bb13"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb24"
+      },
+      {
+        "name": "bb25"
+      },
+      {
+        "name": "bb26.bb13_crit_edge"
+      },
+      {
+        "name": "bb24.bb26_crit_edge"
+      },
+      {
+        "name": "bb30.loopexit"
+      },
+      {
+        "name": "bb30"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb9.bb30_crit_edge"
+      },
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb4.bb30_crit_edge"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb13` because it is part of the main loop that processes multiple files, and it contains the loop's core logic, including the `phi` nodes and the `fopen` call.\n  - `bb26` is also hot as it handles the loop's continuation and termination conditions.\n  - Blocks like `bb24` and `bb25` are executed within the loop but are conditional, making them slightly less hot than `bb13` and `bb26`.\n  - Blocks like `bb20` and `bb` are less likely to be executed frequently because they handle error cases or initial conditions.\n  - The `bb30` block and its predecessors (`bb30.loopexit`, `bb9.bb30_crit_edge`, etc.) are executed at the end of the loop or function, making them less hot than the core loop blocks."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_sha",
+      "funcName": "sha_init"
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "This function contains only one basic block (`bb`), so it is trivially the hottest block. The function initializes a SHA_INFO structure, performing a series of `store` operations and a `llvm.memset` call. Since there are no conditional branches or loops, the execution flow is straightforward, and `bb` is executed exactly once per function call."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_sha",
+      "funcName": "sha_update"
+    },
+    "hottestBB": {
+      "bbName": "bb24"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb24"
+      },
+      {
+        "name": "bb24.bb24_crit_edge"
+      },
+      {
+        "name": "bb37"
+      },
+      {
+        "name": "bb37.bb21_crit_edge"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb41.loopexit"
+      },
+      {
+        "name": "bb41"
+      },
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb12.bb41_crit_edge"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb.bb12_crit_edge"
+      }
+    ],
+    "additionalNotes": "1. **Hot Block Estimation**: The hottest block is `bb24` because it contains a loop structure (`br` with `!llvm.loop` metadata) that iterates over data, performing byte-wise operations. This loop is likely to execute multiple times depending on the input size, making it the most frequently executed block.\n2. **Critical Edges**: Blocks like `bb24.bb24_crit_edge` and `bb37.bb21_crit_edge` are part of the loop structure and are executed as part of the loop's control flow, making them relatively hot.\n3. **Loop Exit and Cleanup**: Blocks like `bb41.loopexit` and `bb41` handle the loop's exit and final operations, so they are less hot than the loop body but still significant.\n4. **Conditional Execution**: Blocks like `bb8` and `bb19` are conditionally executed based on specific input values, making them less likely to be executed frequently.\n5. **Entry and Rare Paths**: Blocks like `bb` and `bb.bb12_crit_edge` are executed once during function entry or in rare conditions, making them the least hot."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_sha",
+      "funcName": "sha_transform"
+    },
+    "hottestBB": {
+      "bbName": "bb32"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb32"
+      },
+      {
+        "name": "bb57"
+      },
+      {
+        "name": "bb80"
+      },
+      {
+        "name": "bb105"
+      },
+      {
+        "name": "bb2"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb32.bb32_crit_edge"
+      },
+      {
+        "name": "bb57.bb57_crit_edge"
+      },
+      {
+        "name": "bb80.bb80_crit_edge"
+      },
+      {
+        "name": "bb105.bb105_crit_edge"
+      },
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb57.preheader"
+      },
+      {
+        "name": "bb80.preheader"
+      },
+      {
+        "name": "bb105.preheader"
+      },
+      {
+        "name": "bb128"
+      },
+      {
+        "name": "bb2.bb2_crit_edge"
+      }
+    ],
+    "additionalNotes": "- The \"hotness\" of a basic block is determined by the number of iterations it is likely to execute in loops and its position in the control flow. \n  - `bb32` is the hottest because it is part of the first major loop (iterating 20 times) and is directly involved in the core computation.\n  - `bb57`, `bb80`, and `bb105` follow in hotness as they are part of subsequent loops (iterating 20 times each).\n  - `bb2` and `bb` are executed once but are predecessors to the loops, making them less hot than the loop blocks.\n  - Critical edge blocks like `bb32.bb32_crit_edge` are less hot as they serve as intermediate transitions.\n  - `bb128` is the final block and executes only once, making it one of the least hot blocks.\n  - `bb2.bb2_crit_edge` is the least hot as it is a transition block with minimal execution."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_sha",
+      "funcName": "sha_final"
+    },
+    "hottestBB": {
+      "bbName": "bb17"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb35"
+      },
+      {
+        "name": "bb17.bb17_crit_edge"
+      },
+      {
+        "name": "bb35.bb35_crit_edge"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb34"
+      },
+      {
+        "name": "bb30"
+      },
+      {
+        "name": "bb48"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb17` because it contains a loop that iterates until a condition (`%i29`) is met, making it likely to execute multiple times. The presence of the `br` instruction with a back edge to itself (`bb17.bb17_crit_edge`) reinforces this.\n  - Similarly, `bb35` is another loop block with a similar structure, making it the second hottest block.\n  - Blocks like `bb17.bb17_crit_edge` and `bb35.bb35_crit_edge` are part of the loop mechanics, so they are also frequently executed but slightly less than their parent blocks.\n  - Entry block `bb` is executed once, and blocks like `bb14`, `bb31`, and `bb34` are conditionally executed based on branching, making them less hot.\n  - `bb30` and `bb48` are executed only once at the end of their respective paths, making them the least hot."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_sha",
+      "funcName": "sha_stream"
+    },
+    "hottestBB": {
+      "bbName": "bb11"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb16.bb24_crit_edge"
+      },
+      {
+        "name": "bb24"
+      },
+      {
+        "name": "bb24.bb50_crit_edge"
+      },
+      {
+        "name": "bb50"
+      },
+      {
+        "name": "bb30.preheader"
+      },
+      {
+        "name": "bb30"
+      },
+      {
+        "name": "bb33"
+      },
+      {
+        "name": "bb33.bb33_crit_edge"
+      },
+      {
+        "name": "bb46"
+      },
+      {
+        "name": "bb46.bb30_crit_edge"
+      },
+      {
+        "name": "bb50.loopexit"
+      },
+      {
+        "name": "bb54"
+      },
+      {
+        "name": "bb67"
+      },
+      {
+        "name": "bb70"
+      },
+      {
+        "name": "bb70.bb70_crit_edge"
+      },
+      {
+        "name": "bb83"
+      },
+      {
+        "name": "bb84"
+      },
+      {
+        "name": "bb87"
+      },
+      {
+        "name": "bb88"
+      },
+      {
+        "name": "bb88.bb88_crit_edge"
+      },
+      {
+        "name": "bb101"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The \"hotness\" of a basic block is determined by its position in loops and the likelihood of its execution based on control flow. \n  - `bb11` is the hottest because it is the header of the main loop that processes input data, and it branches back to itself, making it the most frequently executed block.\n  - Blocks like `bb16`, `bb24`, and `bb50` are also hot because they are part of the main loop and handle critical computations or branching.\n  - Blocks like `bb101` and `bb` are colder because they are executed only once (e.g., initialization or finalization).\n  - Critical edges (e.g., `bb16.bb24_crit_edge`) are included in the ranking as they are part of the loop structure."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_sha",
+      "funcName": "sha_print"
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "`bb`"
+      }
+    ],
+    "additionalNotes": "The function contains only one basic block (`bb`), so it is trivially the hottest block. The block performs a sequence of memory loads and a call to `printf`, which suggests it is responsible for the entirety of the function's execution. There are no conditional branches or loops, so no other blocks exist to compare hotness."
+  }
+]
