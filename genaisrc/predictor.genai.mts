@@ -1,18 +1,18 @@
 // npx --yes genaiscript run predictor <file path | folder path>
 import * as fs from "fs";
+// npm install js-tiktoken
+import {encodingForModel} from "js-tiktoken";
+
 script({
   temperature: 0,
   provider: "openai",
   model: "vision", //"github:openai/gpt-4o",//"vision",
 });
 
-// Helper function to save or append to a file
-const saveToFile = (filePath: string, content: string) => {
-  if (!fs.existsSync(filePath)) {
-    fs.writeFileSync(filePath, content);
-  } else {
-    fs.appendFileSync(filePath, content);
-  }
+const countTokens = (text: string): number => {
+  const enc = encodingForModel("gpt-4-turbo-preview");
+  const tokens = enc.encode(text).length;
+  return tokens;
 };
 
 const saveJsonObjectToArrayFile = (filePath: string, newObj: any) => {
@@ -177,7 +177,7 @@ const processFiles = async (env: ExpansionVariables) => {
       `Analyzing ${funcSet.length} functions of benchmark: ${fileNameWithoutExt}`
     );
 
-    let fun_counter = 1;
+    let funCounter = 1;
     // Iterate over each function for deeper analysis
     for (const func of funcSet) {
       const funcNameMatch = func.match(/@([a-zA-Z_][\w\.]*)\(/m);
@@ -194,7 +194,7 @@ const processFiles = async (env: ExpansionVariables) => {
 
       output.heading(
         3,
-        `${fun_counter}) Analysis report of function: ${funcName}`
+        `${funCounter}) Analysis report of function: ${funcName}`
       );
       output.detailsFenced("Function being analized:", func);
       output.detailsFenced(
@@ -202,7 +202,14 @@ const processFiles = async (env: ExpansionVariables) => {
         bbSet.join(", ")
       );
 
-      fun_counter += 1;
+      const tokenCount = countTokens(func);
+      output.detailsFenced("Token Count: ", `${tokenCount}`);
+
+      if (tokenCount > 16000){
+        
+      }
+
+      funCounter += 1;
       console.log("Function content: \n", func);
 
       let bbList = bbSet.join(", ");
@@ -252,9 +259,16 @@ const processFiles = async (env: ExpansionVariables) => {
             
             - **Additional Notes**: <any additional notes or comments>
             ---
-            Please provide your response in the format above, thanks!
+            
+            # **Instructions:**
+            1) Please provide your response in the format above, thanks!
             Make sure that the Sorted Basic Blocks by Hotness has all
             ${bbSet.length} basic blocks listed here.
+
+            2) Do not repeat or fully echo the entire function. 
+            Focus on analyzing it. You may refer to specific lines or blocks but 
+            avoid copying the whole code in your response.
+
             `;
           },
           {
