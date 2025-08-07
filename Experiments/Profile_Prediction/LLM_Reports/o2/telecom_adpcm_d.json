@@ -1,0 +1,146 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_d",
+      "funcName": "adpcm_coder"
+    },
+    "hottestBB": {
+      "bbName": "bb72"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb72"
+      },
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb78"
+      },
+      {
+        "name": "bb84"
+      },
+      {
+        "name": "bb82"
+      },
+      {
+        "name": "bb68"
+      },
+      {
+        "name": "bb65"
+      },
+      {
+        "name": "bb78.bb84_crit_edge"
+      },
+      {
+        "name": "bb72.bb13_crit_edge"
+      },
+      {
+        "name": "bb.bb84_crit_edge"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb72` because it contains a loop structure (`br i1 %i77, label %bb72.bb13_crit_edge, label %bb78`) and is revisited multiple times during the loop iterations. This makes it the most frequently executed block.\n  - `bb13` is the next hottest because it is the main body of the loop and is executed in each iteration.\n  - `bb7` is executed once before entering the loop, initializing loop-related variables, making it less hot than the loop body but still significant.\n  - `bb78` and `bb84` are executed after the loop terminates, with `bb84` being the final block.\n  - Blocks like `bb82`, `bb68`, and `bb65` are conditionally executed within the loop, making them less hot than the main loop body.\n  - Blocks like `bb78.bb84_crit_edge`, `bb72.bb13_crit_edge`, and `bb.bb84_crit_edge` are primarily used for control flow and are less frequently executed.\n  - The entry block `bb` is executed only once, making it the least hot."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_d",
+      "funcName": "adpcm_decoder"
+    },
+    "hottestBB": {
+      "bbName": "bb28"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb28"
+      },
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb28.bb13_crit_edge"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb69"
+      },
+      {
+        "name": "bb71"
+      },
+      {
+        "name": "bb.bb71_crit_edge"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb13.bb28_crit_edge"
+      }
+    ],
+    "additionalNotes": "1. The hottest block is `bb28` because it is part of the main loop structure and contains the majority of the computation and decision-making logic. It is revisited repeatedly as long as the loop condition (`%i68`) holds true.\n2. `bb13` is the entry point to the loop and is executed every time the loop iterates, making it the second hottest block.\n3. `bb28.bb13_crit_edge` serves as a critical edge connecting `bb28` back to `bb13`, so it is also frequently executed.\n4. `bb23` is executed within the loop but only when a specific condition (`%i22`) is met, making it less hot than the main loop blocks.\n5. `bb7` is executed once before entering the loop, so it is less hot than the loop blocks.\n6. `bb69` is executed at the end of the loop when the loop condition fails, making it less frequent.\n7. `bb71` is the final block executed after the loop terminates, so it is cooler than the loop-related blocks.\n8. `bb.bb71_crit_edge` is a simple edge block executed only once, making it cooler.\n9. `bb` is the entry block and is executed only once, so it is among the least hot.\n10. `bb13.bb28_crit_edge` is a critical edge but is less significant in terms of computation compared to other blocks, making it the least hot."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_d",
+      "funcName": "main"
+    },
+    "hottestBB": {
+      "bbName": "bb22"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb22.bb22_crit_edge"
+      },
+      {
+        "name": "bb27"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb17.bb27_crit_edge"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb27.loopexit"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb3"
+      },
+      {
+        "name": "bb14"
+      }
+    ],
+    "additionalNotes": "1. The hottest block is `bb22` because it is part of a loop that iterates based on the value of `%i25`, which is loaded from `%i`. This loop is likely to execute multiple times, making `bb22` and its critical edge (`bb22.bb22_crit_edge`) the most frequently executed blocks.\n2. `bb27` is also part of the loop structure and is executed after the loop completes, making it relatively hot.\n3. `bb9` serves as a central hub for control flow, revisiting the loop and handling other paths, so it is moderately hot.\n4. Blocks like `bb3` and `bb14` handle error conditions and are less likely to execute unless specific failures occur.\n5. The entry block (`bb`) and the exit block (`bb31`) are executed only once, making them among the least hot."
+  }
+]

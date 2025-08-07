@@ -1,0 +1,539 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_blowfish_e",
+      "funcName": "BF_cbc_encrypt"
+    },
+    "hottestBB": {
+      "bbName": "bb46"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb46"
+      },
+      {
+        "name": "bb235"
+      },
+      {
+        "name": "bb305"
+      },
+      {
+        "name": "bb43"
+      },
+      {
+        "name": "bb116"
+      },
+      {
+        "name": "bb312"
+      },
+      {
+        "name": "bb138"
+      },
+      {
+        "name": "bb223"
+      },
+      {
+        "name": "bb387"
+      },
+      {
+        "name": "bb404"
+      },
+      {
+        "name": "bb46.bb46_crit_edge"
+      },
+      {
+        "name": "bb235.bb235_crit_edge"
+      },
+      {
+        "name": "bb305.bb387_crit_edge"
+      },
+      {
+        "name": "bb312.bb387_crit_edge"
+      },
+      {
+        "name": "bb312.bb377_crit_edge"
+      },
+      {
+        "name": "bb312.bb372_crit_edge"
+      },
+      {
+        "name": "bb312.bb368_crit_edge"
+      },
+      {
+        "name": "bb312.bb363_crit_edge"
+      },
+      {
+        "name": "bb312.bb358_crit_edge"
+      },
+      {
+        "name": "bb312.bb382_crit_edge"
+      },
+      {
+        "name": "bb138.bb194_crit_edge"
+      },
+      {
+        "name": "bb138.bb185_crit_edge"
+      },
+      {
+        "name": "bb138.bb176_crit_edge"
+      },
+      {
+        "name": "bb138.bb167_crit_edge"
+      },
+      {
+        "name": "bb138.bb161_crit_edge"
+      },
+      {
+        "name": "bb138.bb153_crit_edge"
+      },
+      {
+        "name": "bb138.bb145_crit_edge"
+      },
+      {
+        "name": "bb44"
+      },
+      {
+        "name": "bb233"
+      },
+      {
+        "name": "bb123"
+      },
+      {
+        "name": "bb140"
+      },
+      {
+        "name": "bb145"
+      },
+      {
+        "name": "bb153"
+      },
+      {
+        "name": "bb161"
+      },
+      {
+        "name": "bb167"
+      },
+      {
+        "name": "bb176"
+      },
+      {
+        "name": "bb185"
+      },
+      {
+        "name": "bb194"
+      },
+      {
+        "name": "bb354"
+      },
+      {
+        "name": "bb358"
+      },
+      {
+        "name": "bb363"
+      },
+      {
+        "name": "bb368"
+      },
+      {
+        "name": "bb372"
+      },
+      {
+        "name": "bb377"
+      },
+      {
+        "name": "bb382"
+      },
+      {
+        "name": "bb43.bb116_crit_edge"
+      },
+      {
+        "name": "bb232"
+      },
+      {
+        "name": "bb232.bb305_crit_edge"
+      },
+      {
+        "name": "bb305.loopexit"
+      },
+      {
+        "name": "bb116.loopexit"
+      },
+      {
+        "name": "bb43.bb116_crit_edge"
+      }
+    ],
+    "additionalNotes": "1. **Hottest Block Analysis**: `bb46` is the hottest block because it is part of a loop that processes chunks of data in 8-byte increments. This loop is likely to execute many times depending on the input size (`%arg2`).\n2. **Hotness Ranking**: Blocks like `bb235` and `bb305` are also part of loops and are ranked high. Blocks like `bb138` and its successors are part of a switch-case structure and are less likely to execute as frequently as the main processing loops.\n3. **Cold Blocks**: Blocks like `bb116.loopexit` and `bb305.loopexit` are loop exit points and are executed only once per loop, making them less hot. Similarly, blocks like `bb43.bb116_crit_edge` are critical edges and are rarely executed."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_blowfish_e",
+      "funcName": "BF_cfb64_encrypt"
+    },
+    "hottestBB": {
+      "bbName": "bb82"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb82"
+      },
+      {
+        "name": "bb30"
+      },
+      {
+        "name": "bb93"
+      },
+      {
+        "name": "bb145"
+      },
+      {
+        "name": "bb37"
+      },
+      {
+        "name": "bb100"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb156"
+      },
+      {
+        "name": "bb156.loopexit1"
+      },
+      {
+        "name": "bb156.loopexit"
+      },
+      {
+        "name": "bb145.bb93_crit_edge"
+      },
+      {
+        "name": "bb93.bb145_crit_edge"
+      },
+      {
+        "name": "bb82.bb30_crit_edge"
+      },
+      {
+        "name": "bb30.bb82_crit_edge"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb20.bb156_crit_edge"
+      },
+      {
+        "name": "bb10.bb156_crit_edge"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "1. **Hot Block Estimation**: The hottest block is `bb82` because it is part of a loop (`bb82 -> bb30 -> bb82`) that processes the main encryption logic. Loops are typically the hottest regions in a function.\n2. **Hotness Ranking**: Blocks like `bb30`, `bb93`, and `bb145` are also part of loops or loop-related paths, making them relatively hot. Blocks like `bb`, `bb10`, and `bb20` are initialization or branching blocks that execute less frequently.\n3. **Critical Edges**: Blocks like `bb10.bb156_crit_edge` and `bb20.bb156_crit_edge` are critical edges and are less likely to be executed frequently compared to the main loop blocks."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_blowfish_e",
+      "funcName": "BF_options"
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "The function contains only one basic block (`bb`), which directly returns a pointer to a string constant. Since there are no conditional branches or loops, the single basic block (`bb`) is the only block executed and is therefore the \"hottest\" by default."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_blowfish_e",
+      "funcName": "BF_ecb_encrypt"
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The function consists of only one basic block (`bb`), so it is trivially the hottest block.  \n  - The block performs a sequence of operations, including memory loads, stores, bitwise operations, and a call to `BF_encrypt`. Since there are no conditional branches or loops, the execution flow is linear, and the block is executed exactly once per function invocation.  \n  - The \"hotness\" ranking is straightforward due to the absence of multiple blocks or control flow."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_blowfish_e",
+      "funcName": "BF_encrypt"
+    },
+    "hottestBB": {
+      "bbName": "bb7"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb815"
+      },
+      {
+        "name": "bb411"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The \"hotness\" of a basic block is determined by its likelihood of being executed frequently. In this function:\n    - `bb7` is the main block executed when `%arg2 != 0`, which is likely the common case in most scenarios. It contains the bulk of the computation and is the most complex block.\n    - `bb815` is the final block that merges the results from `bb7` and `bb411`. It is executed unconditionally, but its execution depends on the control flow leading to it.\n    - `bb411` is executed only when `%arg2 == 0`, which is likely a less common case, making it less hot than `bb7`.\n    - `bb` is the entry block and only performs initial setup and branching, making it the least hot."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_blowfish_e",
+      "funcName": "main"
+    },
+    "hottestBB": {
+      "bbName": "bb97"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb97"
+      },
+      {
+        "name": "bb104"
+      },
+      {
+        "name": "bb119"
+      },
+      {
+        "name": "bb124"
+      },
+      {
+        "name": "bb93"
+      },
+      {
+        "name": "bb96"
+      },
+      {
+        "name": "bb110"
+      },
+      {
+        "name": "bb114"
+      },
+      {
+        "name": "bb25"
+      },
+      {
+        "name": "bb47"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb42"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb61"
+      },
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb85"
+      },
+      {
+        "name": "bb75"
+      },
+      {
+        "name": "bb69"
+      },
+      {
+        "name": "bb133"
+      },
+      {
+        "name": "bb136"
+      },
+      {
+        "name": "bb93.preheader"
+      },
+      {
+        "name": "bb119.preheader"
+      },
+      {
+        "name": "bb124.bb124_crit_edge"
+      },
+      {
+        "name": "bb119.bb119_crit_edge"
+      },
+      {
+        "name": "bb114.loopexit"
+      },
+      {
+        "name": "bb114.bb132_crit_edge"
+      },
+      {
+        "name": "bb132"
+      },
+      {
+        "name": "bb132.loopexit"
+      },
+      {
+        "name": "bb110.bb114_crit_edge"
+      },
+      {
+        "name": "bb25.bb63_crit_edge"
+      },
+      {
+        "name": "bb61.bb25_crit_edge"
+      },
+      {
+        "name": "bb47.bb61_crit_edge"
+      },
+      {
+        "name": "bb31.bb47_crit_edge"
+      },
+      {
+        "name": "bb42.bb47_crit_edge"
+      },
+      {
+        "name": "bb13.bb21_crit_edge"
+      },
+      {
+        "name": "bb13.bb21_crit_edge1"
+      },
+      {
+        "name": "bb13.bb17_crit_edge"
+      },
+      {
+        "name": "bb13.bb17_crit_edge2"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb18"
+      },
+      {
+        "name": "bb55"
+      },
+      {
+        "name": "bb63"
+      },
+      {
+        "name": "bb63split"
+      },
+      {
+        "name": "bb67"
+      },
+      {
+        "name": "bb72"
+      },
+      {
+        "name": "bb82"
+      },
+      {
+        "name": "bb90"
+      },
+      {
+        "name": "bb45"
+      },
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb133"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block, `bb97`, is part of a loop that processes input data (`getc` calls) and iterates until EOF or a specific condition is met. This loop is likely to execute many times, making it the hottest.\n  - Blocks like `bb104`, `bb119`, and `bb124` are also part of loops or repetitive operations, contributing to their high hotness ranking.\n  - Blocks such as `bb10`, `bb18`, and `bb45` are error-handling or exit blocks, which are less likely to be executed frequently, placing them lower in the ranking.\n  - The ranking considers control flow, loop structures, and the likelihood of execution paths based on the function's logic."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_blowfish_e",
+      "funcName": "BF_ofb64_encrypt"
+    },
+    "hottestBB": {
+      "bbName": "bb80"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb80"
+      },
+      {
+        "name": "bb52"
+      },
+      {
+        "name": "bb62"
+      },
+      {
+        "name": "bb52.bb80_crit_edge"
+      },
+      {
+        "name": "bb94"
+      },
+      {
+        "name": "bb96"
+      },
+      {
+        "name": "bb94.bb111_crit_edge"
+      },
+      {
+        "name": "bb52.preheader"
+      },
+      {
+        "name": "bb.bb111_crit_edge"
+      },
+      {
+        "name": "bb111"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb80.bb52_crit_edge"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb80` because it is part of the main loop and contains the `phi` nodes that accumulate values across iterations, indicating it is executed repeatedly.\n  - `bb52` is the loop header and is executed once per loop iteration, making it the second hottest.\n  - `bb62` is part of the loop body and is executed conditionally within the loop, so it is slightly less hot than `bb52`.\n  - Blocks like `bb94` and `bb96` are executed after the loop exits, making them cooler than the loop-related blocks.\n  - Blocks like `bb` and `bb.bb111_crit_edge` are executed only once at the start or end of the function, making them among the least hot.\n  - `bb80.bb52_crit_edge` is a critical edge block but does not perform significant computation, so it is the least hot."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_blowfish_e",
+      "funcName": "BF_set_key"
+    },
+    "hottestBB": {
+      "bbName": "bb6"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb6.bb6_crit_edge"
+      },
+      {
+        "name": "bb78"
+      },
+      {
+        "name": "bb78.bb78_crit_edge"
+      },
+      {
+        "name": "bb40"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb87"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb6` because it contains a loop that iterates up to 18 times (`icmp eq i64 %i38, 18`), making it the most frequently executed block. The `bb6.bb6_crit_edge` block is also part of this loop, so it is the second hottest.\n  - The `bb78` block contains another loop that iterates up to 1023 times (`icmp ult i64 %i79, 1022`), making it the next hottest block. Its critical edge block, `bb78.bb78_crit_edge`, is closely tied to it and follows in hotness.\n  - The `bb40` block is executed once after the `bb6` loop completes, so it is less hot than the loop blocks.\n  - The `bb` block is the entry block and is executed only once, making it cooler than the loop-related blocks.\n  - The `bb87` block is the function's exit block and is executed only once, making it the least hot."
+  }
+]
