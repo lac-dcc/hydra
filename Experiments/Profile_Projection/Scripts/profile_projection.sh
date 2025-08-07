@@ -14,6 +14,30 @@ fi
 # export LLVM_INSTALL_DIR="/usr/local"
 # export BASE_DIR="/home/jvf/Codes/hydra"
 
+OLD_FOLDER="o0"
+if [ $OLD_OPT = "O1" ]
+then
+    OLD_FOLDER="o1"
+elif [ $OLD_OPT = "O2" ]
+then
+    OLD_FOLDER="o2"
+elif [ $OLD_OPT = "O3" ]
+then
+    OLD_FOLDER="o3"
+fi
+
+NEW_FOLDER="o0"
+if [ $NEW_OPT = "O1" ]
+then
+    NEW_FOLDER="o1"
+elif [ $NEW_OPT = "O2" ]
+then
+    NEW_FOLDER="o2"
+elif [ $NEW_OPT = "O3" ]
+then
+    NEW_FOLDER="o3"
+fi
+
 
 LLVM_OPT="$LLVM_INSTALL_DIR/bin/opt"
 CLANG="$LLVM_INSTALL_DIR/bin/clang"
@@ -54,6 +78,9 @@ mv $DIR_NAME/$BENCH_NAME.profiling .
 LL_FILE=$BENCH_NAME.profiling/compiled/$BENCH_NAME.ll
 PROFILES=$BENCH_NAME.profiling/profiles
 
+cp $LL_FILE $LL_FILES/Old/$OLD_FOLDER/
+cp -r $PROFILES $PROF_FILES/$OLD_FOLDER/$BENCH_NAME
+
 cp $DIR_NAME/$BENCH_NAME/src_work/*.c $DIR_NAME/$BENCH_NAME/src_work/*.h .
 $CLANG -Xclang -"$NEW_OPT" -flto -emit-llvm -c *.c
 ret_code=$?
@@ -79,6 +106,8 @@ do
 done
 
 $LLVM_OPT -S -passes="loop-simplify,break-crit-edges" "$BENCH_NAME.ll" -o "$BENCH_NAME.ll"
+
+cp "$BENCH_NAME.ll" $LL_FILES/New/$NEW_FOLDER/
 
 START_TIME=`date +%s.%N`
 $LLVM_OPT -disable-output -load-pass-plugin $PASS_FILE_PROFILE \

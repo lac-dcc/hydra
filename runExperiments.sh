@@ -29,41 +29,41 @@ export BASE_DIR="/home/jvf/Codes/hydra"
 
 # Part 3: Run the profile projection algorithms (just hydra for now)
 
-# for OLD in o0 o1 o2 o3
-# do
-#     for NEW in o0 o1 o2 o3
-#     do
-#         OLD_OPT=$OLD
-#         NEW_OPT=$NEW
-#         if [ $OLD_OPT = "o0" ]
-#         then
-#             OLD_OPT="disable-O0-optnone"
-#         elif [ $OLD_OPT = "o1" ]
-#         then
-#             OLD_OPT="O1"
-#         elif [ $OLD_OPT = "o2" ]
-#         then
-#             OLD_OPT="O2"
-#         elif [ $OLD_OPT = "o3" ]
-#         then
-#             OLD_OPT="O3"
-#         fi
-#         if [ $NEW_OPT = "o0" ]
-#         then
-#             NEW_OPT="disable-O0-optnone"
-#         elif [ $NEW_OPT = "o1" ]
-#         then
-#             NEW_OPT="O1"
-#         elif [ $NEW_OPT = "o2" ]
-#         then
-#             NEW_OPT="O2"
-#         elif [ $NEW_OPT = "o3" ]
-#         then
-#             NEW_OPT="O3"
-#         fi
-#         "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="$OLD/$NEW" --old-opt="$OLD_OPT" --new-opt="$NEW_OPT" --matching-threshold="25"
-#     done
-# done
+for OLD in o0 o1 o2 o3
+do
+    for NEW in o0 o1 o2 o3
+    do
+        OLD_OPT=$OLD
+        NEW_OPT=$NEW
+        if [ $OLD_OPT = "o0" ]
+        then
+            OLD_OPT="disable-O0-optnone"
+        elif [ $OLD_OPT = "o1" ]
+        then
+            OLD_OPT="O1"
+        elif [ $OLD_OPT = "o2" ]
+        then
+            OLD_OPT="O2"
+        elif [ $OLD_OPT = "o3" ]
+        then
+            OLD_OPT="O3"
+        fi
+        if [ $NEW_OPT = "o0" ]
+        then
+            NEW_OPT="disable-O0-optnone"
+        elif [ $NEW_OPT = "o1" ]
+        then
+            NEW_OPT="O1"
+        elif [ $NEW_OPT = "o2" ]
+        then
+            NEW_OPT="O2"
+        elif [ $NEW_OPT = "o3" ]
+        then
+            NEW_OPT="O3"
+        fi
+        "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="$OLD/$NEW" --old-opt="$OLD_OPT" --new-opt="$NEW_OPT" --matching-threshold="25"
+    done
+done
 
 # Experiment 2: Opt passes experiment
 # List of optimizations retired from https://homepages.dcc.ufmg.br/~fernando/publications/papers/FaustinoCC21.pdf
@@ -465,4 +465,4 @@ export BASE_DIR="/home/jvf/Codes/hydra"
 # # callsite-splitting
 # "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/callsite-splitting" --new-passes="callsite-splitting" --matching-threshold="25"
 
-"$BASE_DIR/Experiments/Scripts/gen_csvs.sh"
+# "$BASE_DIR/Experiments/Scripts/gen_csvs.sh"
