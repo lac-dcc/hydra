@@ -1,0 +1,155 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "updateCRC32"
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "This function consists of only one basic block (`bb`), which means all the operations are executed sequentially within this block. Since there are no branches or multiple blocks, `bb` is the only block and is inherently the \"hottest\" by default."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "crc32file"
+    },
+    "hottestBB": {
+      "bbName": "bb7"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb21.bb25_crit_edge"
+      },
+      {
+        "name": "bb25"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb28"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb24"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb7` because it contains the main loop that processes each character of the file. This block is repeatedly executed for every character until the end of the file is reached.\n  - `bb10` is the second hottest block as it is part of the loop and handles the CRC computation for each character.\n  - `bb21` is executed once the loop ends to check for file errors, making it less hot than the loop blocks but still significant.\n  - `bb21.bb25_crit_edge` and `bb25` handle the cleanup and final CRC computation, so they are executed after the loop but less frequently.\n  - `bb6` initializes the loop, and `bb28` handles the function's return, making them less hot than the loop-related blocks.\n  - `bb5` and `bb24` handle error cases, which are less likely to occur, making them colder.\n  - `bb` is the entry block and is executed only once, making it the coldest."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "crc32buf"
+    },
+    "hottestBB": {
+      "bbName": "bb5"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- `bb5` is the hottest block because it is part of the loop body and executes for every iteration of the loop. The loop iterates as long as `%arg3` (the input size) is non-zero, making `bb5` the most frequently executed block.\n  - `bb14` is the loop increment block, which is executed once per iteration, just like `bb5`, but it performs fewer operations.\n  - `bb4` is the loop header and is executed once per loop iteration, but it only serves as a control flow decision point.\n  - `bb17` is the exit block, executed only once after the loop terminates.\n  - `bb` is the entry block and is executed only once at the start of the function."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "main1"
+    },
+    "hottestBB": {
+      "bbName": "bb9"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb9.bb20_crit_edge"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb21"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb9` because it is part of the main loop (`bb6`) and contains the core computation (`crc32file` call). It is executed repeatedly as long as the loop condition holds.\n  - `bb6` is the loop header and is executed once per iteration, making it the second hottest block.\n  - `bb9.bb20_crit_edge` is a critical edge block that transitions to `bb20` and is executed when the loop continues, so it is less hot than `bb9` but still part of the loop.\n  - `bb20` is the loop latch, ensuring the loop iterates, but it does not perform significant computation.\n  - `bb15` is executed conditionally within the loop, depending on `arg4`, so it is less hot than the loop-related blocks.\n  - `bb` is the entry block and is executed only once at the start of the function.\n  - `bb21` is the exit block and is executed only once after the loop terminates."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "main"
+    },
+    "hottestBB": {
+      "bbName": "bb11"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb11` because it contains a loop structure (`br label %bb11`) that iterates based on the comparison of `%.01` and `%i12`. Loops are typically the hottest regions in a function due to repeated execution.\n  - `bb14` and `bb20` are part of the loop body, so they are also hot but slightly less frequent than `bb11` due to branching conditions.\n  - `bb22` is executed after the loop exits, making it less hot than the loop blocks.\n  - `bb8` is executed once after the file is opened, so it is cooler than the loop-related blocks.\n  - `bb23` is the final block, executed once at the end of the function.\n  - `bb5` is executed only if the file opening fails, making it less frequent.\n  - `bb` is the entry block and is executed only once, making it the least hot."
+  }
+]
