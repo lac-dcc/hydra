@@ -54,6 +54,8 @@ export const parseMarkdownToJson = (
   markdownContent: string,
   fileNameWithoutExt: string,
   funcName: string,
+  tokenCount:number,
+  numBB: number,
   bbSet: string[]
 ): ParsedResult => {
   const hottestBBMatch = markdownContent.match(
@@ -75,6 +77,9 @@ export const parseMarkdownToJson = (
       .map((line) => line.replace(/^\d+\.\s+/, ""));
   }
 
+  
+  let discrepancy = numBB !== bbLines.length;
+  let exceed = tokenCount > 131072;
   const additionalNotesMatch = markdownContent.match(/- \*\*Additional Notes\*\*:\s*([\s\S]+)/);
   const additionalNotes = additionalNotesMatch ? additionalNotesMatch[1].trim() : "";
 
@@ -82,6 +87,10 @@ export const parseMarkdownToJson = (
     benchmarkInfo: {
       benchmarkName: fileNameWithoutExt,
       funcName,
+      numBB,
+      tokenCount,
+      discrepancy,
+      exceed
     },
     hottestBB: {
       bbName: hottestBB,
@@ -104,8 +113,24 @@ export const parseMarkdownToJson = (
             type: "string",
             enum: [funcName],
           },
+          numBB: {
+            type: "number",
+            enum: [numBB],
+          },
+          tokenCount: {
+            type: "number",
+            enum: [tokenCount],
+          },
+          discrepancy:{
+            type: "boolean",
+            enum: [discrepancy],
+          },
+          exceed:{
+            type: "boolean",
+            enum: [exceed],
+          }
         },
-        required: ["benchmarkName", "funcName"],
+        required: ["benchmarkName", "funcName", "numBB", "tokenCount", "discrepancy", "exceed"],
       },
       hottestBB: {
         type: "object",
@@ -134,7 +159,7 @@ export const parseMarkdownToJson = (
         type: "string",
       },
     },
-    required: ["hottestBB", "bbOrderByHotness", "additionalNotes"],
+    required: ["benchmarkInfo","hottestBB", "bbOrderByHotness", "additionalNotes"],
   };
 
   return { jsonObj, jsonSchema };
@@ -190,6 +215,7 @@ const processFiles = async (env: ExpansionVariables) => {
 
       const bbSetMatch = func.match(/^([a-zA-Z_][\w\.]*):(?=\s|$)/gm);
       const bbSet = bbSetMatch ? bbSetMatch.map((id) => id.slice(0, -1)) : [];
+      const numBB = bbSet.length;
       dbg(`bbSet: ${bbSet}`);
 
       output.heading(
@@ -198,16 +224,12 @@ const processFiles = async (env: ExpansionVariables) => {
       );
       output.detailsFenced("Function being analized:", func);
       output.detailsFenced(
-        `Function ${funcName} has ${bbSet.length} blocks :`,
+        `Function ${funcName} has ${numBB} blocks :`,
         bbSet.join(", ")
       );
 
       const tokenCount = countTokens(func);
       output.detailsFenced("Token Count: ", `${tokenCount}`);
-
-      if (tokenCount > 16000){
-        
-      }
 
       funCounter += 1;
       console.log("Function content: \n", func);
@@ -218,7 +240,7 @@ const processFiles = async (env: ExpansionVariables) => {
         const res = await runPrompt(
           (ctxt) => {
             const completeFunc = ctxt.def("function", func, {
-              maxTokens: 16384,
+              maxTokens: 131072, //128k
             });
             ctxt.$` ## Role:
             You are a Compiler Engineer with over 20 years of experience 
@@ -238,7 +260,7 @@ const processFiles = async (env: ExpansionVariables) => {
             be executed more often?
             
             Question 2. *Hotness Ranking*:
-            This function has ${bbSet.length} basic blocks: ${bbList}.
+            This function has ${numBB} basic blocks: ${bbList}.
             Could you sort this sequence of basic blocks by *hotness*?
             That is, if a basic block \`bb_x\` appears ahead of another 
             block \`bb_y\`, it means you think \`bb_y\` will not be executed 
@@ -263,7 +285,7 @@ const processFiles = async (env: ExpansionVariables) => {
             # **Instructions:**
             1) Please provide your response in the format above, thanks!
             Make sure that the Sorted Basic Blocks by Hotness has all
-            ${bbSet.length} basic blocks listed here.
+            ${numBB} basic blocks listed here.
 
             2) Do not repeat or fully echo the entire function. 
             Focus on analyzing it. You may refer to specific lines or blocks but 
@@ -285,6 +307,8 @@ const processFiles = async (env: ExpansionVariables) => {
           res.text,
           fileNameWithoutExt,
           funcName,
+          tokenCount,
+          numBB,
           bbSet
         ).jsonObj;
         console.log("Response Json: ", jsonObj);
