@@ -15,6 +15,16 @@ const countTokens = (text: string): number => {
   return tokens;
 };
 
+const arraysHaveSameValues = (arr1: string[], arr2: string[]): boolean => {
+  if (arr1.length !== arr2.length) return false;
+
+  const sorted1 = [...arr1].sort();
+  const sorted2 = [...arr2].sort();
+
+  return sorted1.every((val, idx) => val === sorted2[idx]);
+};
+
+
 const saveJsonObjectToArrayFile = (filePath: string, newObj: any) => {
   let jsonArray: any[] = [];
 
@@ -77,8 +87,7 @@ export const parseMarkdownToJson = (
       .map((line) => line.replace(/^\d+\.\s+/, ""));
   }
 
-  
-  let discrepancy = numBB !== bbLines.length;
+  let discrepancy = !arraysHaveSameValues(bbLines, bbSet);
   let exceed = tokenCount > 131072;
   const additionalNotesMatch = markdownContent.match(/- \*\*Additional Notes\*\*:\s*([\s\S]+)/);
   const additionalNotes = additionalNotesMatch ? additionalNotesMatch[1].trim() : "";
@@ -228,9 +237,6 @@ const processFiles = async (env: ExpansionVariables) => {
         bbSet.join(", ")
       );
 
-      const tokenCount = countTokens(func);
-      output.detailsFenced("Token Count: ", `${tokenCount}`);
-
       funCounter += 1;
       console.log("Function content: \n", func);
 
@@ -301,6 +307,8 @@ const processFiles = async (env: ExpansionVariables) => {
           }
         );
 
+        const tokenCount = res.usage.total;
+        output.detailsFenced("Token Count: ", `${tokenCount}`);
         output.detailsFenced("LLM Output Text:", res.text);
 
         const jsonObj = parseMarkdownToJson(
