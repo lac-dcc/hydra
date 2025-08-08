@@ -1,0 +1,146 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_d",
+      "funcName": "adpcm_coder"
+    },
+    "hottestBB": {
+      "bbName": "bb72"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb72"
+      },
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb78"
+      },
+      {
+        "name": "bb82"
+      },
+      {
+        "name": "bb84"
+      },
+      {
+        "name": "bb68"
+      },
+      {
+        "name": "bb65"
+      },
+      {
+        "name": "bb78.bb84_crit_edge"
+      },
+      {
+        "name": "bb72.bb13_crit_edge"
+      },
+      {
+        "name": "bb.bb84_crit_edge"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "1. **Hottest Block Analysis**: The block `bb72` is part of a loop structure, as indicated by the `br i1 %i77` instruction and the `!llvm.loop` metadata. Loops are typically the hottest regions in a function due to repeated execution. Within the loop, `bb72` is the central block where most of the computation and control flow decisions occur, making it the hottest.\n\n2. **Hotness Ranking**: \n   - Blocks like `bb13` and `bb7` are also part of the loop and are executed frequently, but they are less central than `bb72`.\n   - Blocks `bb78` and `bb82` are executed after the loop exits, but their execution depends on the loop's state, making them less hot than the loop blocks.\n   - Blocks like `bb68` and `bb65` are conditionally executed within the loop, but their frequency is lower than the main loop body.\n   - Blocks such as `bb78.bb84_crit_edge`, `bb72.bb13_crit_edge`, and `bb.bb84_crit_edge` are primarily used for control flow transitions and are executed less frequently.\n   - The entry block `bb` is executed only once, making it the least hot."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_d",
+      "funcName": "adpcm_decoder"
+    },
+    "hottestBB": {
+      "bbName": "bb28"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb28"
+      },
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb28.bb13_crit_edge"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb69"
+      },
+      {
+        "name": "bb71"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb.bb71_crit_edge"
+      },
+      {
+        "name": "bb13.bb28_crit_edge"
+      }
+    ],
+    "additionalNotes": "1. **Hottest Block Analysis**: The block `bb28` is part of the main loop structure, as evidenced by the `br` instruction with the `!llvm.loop` metadata. This indicates that it is likely to be executed repeatedly, making it the hottest block.\n2. **Hotness Ranking**: \n   - Blocks `bb28`, `bb13`, and `bb28.bb13_crit_edge` are part of the loop, with `bb28` being the core of the loop body. \n   - `bb23` is a predecessor to `bb28` and is executed conditionally within the loop.\n   - `bb7` initializes loop-related variables and is executed once per loop entry.\n   - `bb69` and `bb71` are part of the loop exit and cleanup, executed less frequently than the loop body.\n   - `bb` and `bb.bb71_crit_edge` are part of the function's entry and setup, executed only once.\n   - `bb13.bb28_crit_edge` is a critical edge block, likely executed less frequently than the main loop body."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_d",
+      "funcName": "main"
+    },
+    "hottestBB": {
+      "bbName": "bb22"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb22.bb22_crit_edge"
+      },
+      {
+        "name": "bb27"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb17.bb27_crit_edge"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb27.loopexit"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb3"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is `bb22` because it is part of the innermost loop, which iterates based on the value of `%i25` and `%i24`. This loop is likely to execute many times, making `bb22` and its critical edge (`bb22.bb22_crit_edge`) the most frequently executed blocks.\n  - `bb27` is also part of the loop structure but is executed once per outer loop iteration, making it less hot than `bb22`.\n  - `bb9` serves as a hub for the loop and is executed once per outer loop iteration, making it relatively hot.\n  - Blocks like `bb3`, `bb14`, and `bb31` are less hot because they are part of error handling or function termination paths, which are less likely to be executed frequently."
+  }
+]
