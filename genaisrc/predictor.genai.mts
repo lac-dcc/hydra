@@ -15,11 +15,13 @@ const countTokens = (text: string): number => {
   return tokens;
 };
 
+const clean = (s:string) => s.replace(/`/g, "");
+
 const arraysHaveSameValues = (arr1: string[], arr2: string[]): boolean => {
   if (arr1.length !== arr2.length) return false;
 
-  const sorted1 = [...arr1].sort();
-  const sorted2 = [...arr2].sort();
+  const sorted1 = [...arr1].map(s => clean(s.toLowerCase().trim())).sort();
+  const sorted2 = [...arr2].map(s => clean(s.toLowerCase().trim())).sort();
 
   return sorted1.every((val, idx) => val === sorted2[idx]);
 };
@@ -92,11 +94,16 @@ export const parseMarkdownToJson = (
   const additionalNotesMatch = markdownContent.match(/- \*\*Additional Notes\*\*:\s*([\s\S]+)/);
   const additionalNotes = additionalNotesMatch ? additionalNotesMatch[1].trim() : "";
 
+  const originalSet = bbSet.join(", ");
+  const predictedSet = bbLines.join(", ");
+
   const jsonObj = {
     benchmarkInfo: {
       benchmarkName: fileNameWithoutExt,
       funcName,
       numBB,
+      originalSet,
+      predictedSet,
       tokenCount,
       discrepancy,
       exceed
@@ -126,6 +133,14 @@ export const parseMarkdownToJson = (
             type: "number",
             enum: [numBB],
           },
+          originalSet: {
+            type: "string",
+            enum: [originalSet],
+          },
+          predictedSet: {
+            type: "string",
+            enum: [predictedSet],
+          },
           tokenCount: {
             type: "number",
             enum: [tokenCount],
@@ -139,7 +154,7 @@ export const parseMarkdownToJson = (
             enum: [exceed],
           }
         },
-        required: ["benchmarkName", "funcName", "numBB", "tokenCount", "discrepancy", "exceed"],
+        required: ["benchmarkName", "funcName", "numBB", "originalSet", "predictedSet", "tokenCount", "discrepancy", "exceed"],
       },
       hottestBB: {
         type: "object",
@@ -288,14 +303,26 @@ const processFiles = async (env: ExpansionVariables) => {
             - **Additional Notes**: <any additional notes or comments>
             ---
             
-            # **Instructions:**
-            1) Please provide your response in the format above, thanks!
-            Make sure that the Sorted Basic Blocks by Hotness has all
-            ${numBB} basic blocks listed here.
+            ## Instructions:
 
-            2) Do not repeat or fully echo the entire function. 
-            Focus on analyzing it. You may refer to specific lines or blocks but 
-            avoid copying the whole code in your response.
+            1) Please respond using the format above. 
+
+            2) **Ensure that the “Sorted Basic Blocks by Hotness” section 
+            includes every one of the ${numBB} basic blocks listed in ${bbList}, 
+            without omission or duplication.**
+
+            3) After listing the sorted blocks, please provide a **summary line** 
+            confirming that the total number of blocks in your list is exactly ${numBB}.
+
+            4) If any block from ${bbList} is missing or duplicated in your 
+            sorted list, please explicitly acknowledge it and correct the list 
+            before finalizing your answer.
+
+            5) Do not repeat or fully echo the entire function. Focus on 
+            analysis. You may refer to specific lines or blocks but avoid 
+            copying the whole code.
+
+            Thank you!
 
             `;
           },
