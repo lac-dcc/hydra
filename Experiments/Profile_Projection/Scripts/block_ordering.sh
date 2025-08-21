@@ -17,8 +17,6 @@ BENCH_DIR=$BASE_DIR/Benchmark/cBench
 export RESULTS_FOLDER_PROFILE=$BASE_DIR/Results/cBench/Profile
 export PROJECTION_JSON_FILE="$BASE_DIR/Experiments/Profile_Projection/JSON_Files/Hydra/$EXP.json"
 
-rm -rf $RESULTS_FOLDER_RANDOM
-rm -rf $RESULTS_FOLDER_PREDICTOR
 rm -rf $RESULTS_FOLDER_PROFILE
 
 cd $BENCH_DIR

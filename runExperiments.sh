@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export BASE_DIR="/home/jvf/Codes/hydra"
+export BASE_DIR="/home/elisa/Codes/hydra"
 
 # Experiment 1:
 # Optimization flags experiments
@@ -27,7 +27,7 @@ export BASE_DIR="/home/jvf/Codes/hydra"
 # "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="o3" --opt-flag="O3" --passes=""
 
 
-# Part 3: Run the profile projection algorithms (just hydra for now)
+# # Part 3: Run the profile projection algorithms (just hydra for now)
 
 for OLD in o0 o1 o2 o3
 do
@@ -465,4 +465,4 @@ done
 # # callsite-splitting
 # "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/callsite-splitting" --new-passes="callsite-splitting" --matching-threshold="25"
 
-# "$BASE_DIR/Experiments/Scripts/gen_csvs.sh"
+"$BASE_DIR/Experiments/Scripts/gen_csvs.sh"

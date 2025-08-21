@@ -1004,33 +1004,33 @@ private:
       return;
     assert(BlockDegree > 0 && "all outgoing jumps are ignored");
 
-    // // Each of the Block's successors gets the following amount of flow.
-    // // Rounding the value up so that all flow is propagated
-    // uint64_t SuccFlow = (BlockFlow + BlockDegree - 1) / BlockDegree;
-    // for (auto *Jump : Block->SuccJumps) {
-    //   if (ignoreJump(SrcBlock, DstBlock, Jump))
-    //     continue;
-    //   uint64_t Flow = std::min(SuccFlow, BlockFlow);
-    //   Jump->Flow = Flow;
-    //   BlockFlow -= Flow;
-    // }
+    // Each of the Block's successors gets the following amount of flow.
+    // Rounding the value up so that all flow is propagated
+    uint64_t SuccFlow = (BlockFlow + BlockDegree - 1) / BlockDegree;
+    for (auto *Jump : Block->SuccJumps) {
+      if (ignoreJump(SrcBlock, DstBlock, Jump))
+        continue;
+      uint64_t Flow = std::min(SuccFlow, BlockFlow);
+      Jump->Flow = Flow;
+      BlockFlow -= Flow;
+    }
 
     // assert(BlockFlow == 0 && "not all flow is propagated");
 
-    uint64_t UsedFlow = 0;
-    for (size_t I = 0; I < Block->SuccJumps.size(); I++) {
-        auto *Jump = Block->SuccJumps[I];
-        if (ignoreJump(SrcBlock, DstBlock, Jump))
-            continue;
-        uint64_t SuccFlow = BlockFlow*Func.JumpProbability[Jump];
-        uint64_t Flow = std::min(SuccFlow, UsedFlow-BlockFlow);
-        if (I == Block->SuccJumps.size()-1)
-            Flow = UsedFlow-BlockFlow;
-        Jump->Flow = Flow;
-        UsedFlow += Flow;
-    }
+    // uint64_t UsedFlow = 0;
+    // for (size_t I = 0; I < Block->SuccJumps.size(); I++) {
+    //     auto *Jump = Block->SuccJumps[I];
+    //     if (ignoreJump(SrcBlock, DstBlock, Jump))
+    //         continue;
+    //     uint64_t SuccFlow = BlockFlow*Func.JumpProbability[Jump];
+    //     uint64_t Flow = std::min(SuccFlow, UsedFlow-BlockFlow);
+    //     if (I == Block->SuccJumps.size()-1)
+    //         Flow = UsedFlow-BlockFlow;
+    //     Jump->Flow = Flow;
+    //     UsedFlow += Flow;
+    // }
 
-    assert(UsedFlow-BlockFlow == 0 && "not all flow is propagated");
+    // assert(UsedFlow-BlockFlow == 0 && "not all flow is propagated");
   }
 
   /// A constant indicating an arbitrary exit block of a function.

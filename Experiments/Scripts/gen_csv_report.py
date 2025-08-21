@@ -22,10 +22,20 @@ csv_file = os.environ.get('CSV_FILE', '')
 gt_data = json.load(open(gt_json,'r'))
 h_data = json.load(open(h_json,'r'))
 
-print('Generating CSV File for ' + h_json)
+block_names_file = open(base_dir+'/block_names.txt','r')
+block_names_data = {}
+block_size = {}
+for i in block_names_file.readlines():
+    s = i.replace('\n','').split(';')
+    block_names_data[s[1]] = s[0]
+block_names_file.close()
+
+# print('Generating CSV File for ' + h_json)
 
 for app_name in gt_data:
     for function_name in gt_data[app_name]:
+        if (app_name == 'bzip2d' and function_name == 'testStream'):
+            print('Got here')
         try:
             guess = h_data[app_name][function_name]
         except:
@@ -46,7 +56,7 @@ for app_name in gt_data:
                             frequencies[v] = graph[u][v]
                 nodes = len(nodes)
                 break
-            print(app_name + '/' + function_name  + ' (' + str(nodes) + ') not found')
+            print(app_name + '/' + function_name  + ' (' + str(nodes) + ' basic blocks) not found')
             continue
         worked = True
         for execution_number in range(1,len(gt_data[app_name][function_name])):
@@ -69,9 +79,6 @@ for app_name in gt_data:
             max_count = sorted_frequencies[0][1]
             min_count = sorted_frequencies[-1][1]
 
-            if max_count <= 0 or min_count < 0:
-                continue
-
             sorted_block_indices = {}
             idx = 0
             block_ordering_list = []
@@ -81,22 +88,35 @@ for app_name in gt_data:
                 idx += 1
             
             indices = []
+            made_up_blocks = []
             for block in guess:
                 try:
                     indices.append(sorted_block_indices[block])
                 except:
-                    print(app_name + '/' + function_name  + ' (' + str(nodes) + ')' + ': ' + block)
-                    worked = False
-                    break
-            
-            if not worked: break
+                    made_up_blocks.append(block_names_data[block])
+                    continue
             distance = compute_swap_distance(indices)
             hit = round(1.0-distance/(nodes*(nodes-1.0)/2.0),4)
                 
             
             block_ordering = ';'.join(block_ordering_list)
             ordering = ';'.join(guess)
-            if len(ordering) != len(block_ordering):
+            missing_blocks = []
+            # if len(ordering) != len(block_ordering):
+            for block in block_ordering.split(';'):
+                if block not in ordering.split(';'):
+                    missing_blocks.append(block_names_data[block])
+            if len(missing_blocks) > 0 or len(made_up_blocks) > 0:
+                if worked:
+                    print('Error at: ' + app_name + '/' + function_name + '(' + str(nodes) + ' basic blocks)')
+                    if len(missing_blocks) > 0:
+                        print('Missing blocks: ' + ','.join(missing_blocks))
+                    if len(made_up_blocks) > 0:
+                        print('Made up blocks ' + ','.join(made_up_blocks))
+                    print('\n\n',end='')
+                worked = False
+                continue
+            if max_count <= 0 or min_count < 0:
                 continue
             csv_data.append([app_name, function_name, execution_number, nodes, edges, min_count, max_count, str(block_ordering), str(ordering), distance, f"{hit:.4f}".replace('.',',')])
 

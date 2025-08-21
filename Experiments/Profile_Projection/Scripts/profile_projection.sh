@@ -46,7 +46,7 @@ LLVM_DIS=$LLVM_INSTALL_DIR/bin/llvm-dis
 
 NISSE_SCRIPT="$SCRIPTS_FOLDER/nisse.sh"
 
-PASS_FILE_PROFILE=$BASE_DIR/build/lib/libBlockOrderingProfile.so
+PASS_FILE_PROFILE=$BASE_DIR/build/lib/libBlockOrderingHydra.so
 # CFLAGS="-Xclang -disable-O0-optnone -Wno-everything -std=c99 -c -S -emit-llvm"
 
 RESULTS_FOLDER=$BASE_DIR/Results/Profile
@@ -65,54 +65,65 @@ BENCH_NAME=$(basename $1)
 
 # exit 0
 
-bash "$NISSE_SCRIPT" $DIR_NAME/$BENCH_NAME # > /dev/null 2>&1
-ret_code=$?
-if [[ $ret_code -ne 0 ]]; then
-    echo "Nisse failed"
-    cd -
-    echo $BENCH_NAME >> err.txt
-    exit $ret_code
+OLD_PROFILES="$PROF_FILES/$OLD_FOLDER/$BENCH_NAME"
+OLD_LL_FILE="$LL_FILES/Old/$OLD_FOLDER/$BENCH_NAME.ll"
+NEW_LL_FILE="$LL_FILES/New/$New_FOLDER/$BENCH_NAME.ll"
+
+if [ ! -d "$OLD_PROFILES" ] || [ ! -f "$OLD_LL_FILE" ]
+then
+    bash "$NISSE_SCRIPT" $DIR_NAME/$BENCH_NAME # > /dev/null 2>&1
+    ret_code=$?
+    if [[ $ret_code -ne 0 ]]; then
+        echo "Nisse failed"
+        cd -
+        echo $BENCH_NAME >> err.txt
+        exit $ret_code
+    fi
+    mv $DIR_NAME/$BENCH_NAME.profiling .
+
+    LL_FILE=$BENCH_NAME.profiling/compiled/$BENCH_NAME.ll
+    PROFILES=$BENCH_NAME.profiling/profiles
+
+    cp $LL_FILE "$OLD_LL_FILE"
+    cp -r $PROFILES "$OLD_PROFILES"
 fi
-mv $DIR_NAME/$BENCH_NAME.profiling .
 
-LL_FILE=$BENCH_NAME.profiling/compiled/$BENCH_NAME.ll
-PROFILES=$BENCH_NAME.profiling/profiles
+if [ ! -f "$NEW_LL_FILE" ]
+then
+    cp $DIR_NAME/$BENCH_NAME/src_work/*.c $DIR_NAME/$BENCH_NAME/src_work/*.h .
+    $CLANG -Xclang -"$NEW_OPT" -flto -emit-llvm -c *.c
+    ret_code=$?
+    if [[ $ret_code -ne 0 ]]; then
+        echo "Compilation failed"
+        cd -
+        echo $BENCH_NAME >> err.txt
+        exit $ret_code
+    fi
+    $LLVM_LINK *.o -o "$BENCH_NAME.bc"
+    $LLVM_DIS "$BENCH_NAME.bc" -o "$BENCH_NAME.ll"
+    $LLVM_OPT -S -passes="mem2reg,instnamer" "$BENCH_NAME.ll" -o "$BENCH_NAME.ll"
 
-cp $LL_FILE $LL_FILES/Old/$OLD_FOLDER/
-cp -r $PROFILES $PROF_FILES/$OLD_FOLDER/$BENCH_NAME
+    for PASS in $PRE_PASSES
+    do
+        $LLVM_OPT -S -passes="$PASS" "$BENCH_NAME.ll" -o "$BENCH_NAME.ll"
+    done
 
-cp $DIR_NAME/$BENCH_NAME/src_work/*.c $DIR_NAME/$BENCH_NAME/src_work/*.h .
-$CLANG -Xclang -"$NEW_OPT" -flto -emit-llvm -c *.c
-ret_code=$?
-if [[ $ret_code -ne 0 ]]; then
-    echo "Compilation failed"
-    cd -
-    echo $BENCH_NAME >> err.txt
-    exit $ret_code
+    # Apply other optmizations
+    for PASS in $PASSES
+    do
+        $LLVM_OPT -S -passes="$PASS" "$BENCH_NAME.ll" -o "$BENCH_NAME.ll"
+    done
+
+    $LLVM_OPT -S -passes="loop-simplify,break-crit-edges" "$BENCH_NAME.ll" -o "$BENCH_NAME.ll"
+
+    cp "$BENCH_NAME.ll" "$NEW_LL_FILE"
 fi
-$LLVM_LINK *.o -o "$BENCH_NAME.bc"
-$LLVM_DIS "$BENCH_NAME.bc" -o "$BENCH_NAME.ll"
-$LLVM_OPT -S -passes="mem2reg,instnamer" "$BENCH_NAME.ll" -o "$BENCH_NAME.ll"
 
-for PASS in $PRE_PASSES
-do
-    $LLVM_OPT -S -passes="$PASS" "$BENCH_NAME.ll" -o "$BENCH_NAME.ll"
-done
-
-# Apply other optmizations
-for PASS in $PASSES
-do
-    $LLVM_OPT -S -passes="$PASS" "$BENCH_NAME.ll" -o "$BENCH_NAME.ll"
-done
-
-$LLVM_OPT -S -passes="loop-simplify,break-crit-edges" "$BENCH_NAME.ll" -o "$BENCH_NAME.ll"
-
-cp "$BENCH_NAME.ll" $LL_FILES/New/$NEW_FOLDER/
 
 START_TIME=`date +%s.%N`
 $LLVM_OPT -disable-output -load-pass-plugin $PASS_FILE_PROFILE \
-    -passes="block-ordering-profile" "$BENCH_NAME.ll" -prog $LL_FILE \
-    -prof $PROFILES -matching-threshold $THRESHOLD -max-iterations $MAX_ITER
+    -passes="block-ordering-hydra" "$NEW_LL_FILE" -prog "$OLD_LL_FILE" \
+    -prof "$OLD_PROFILES" -matching-threshold $THRESHOLD -max-iterations $MAX_ITER
 ret_code=$?
 if [[ $ret_code -ne 0 ]]; then
     echo "Pass failed"
