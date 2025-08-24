@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export BASE_DIR=/home/jvf/Codes/hydra
+# export BASE_DIR=/home/jvf/Codes/hydra
 export BENCH_DIR="$BASE_DIR/Benchmark/cBench"
 export RESULTS_DIR="$BASE_DIR/Benchmark_Results/cBench/cBench_benchmarks"
 export JSON_FILE="$BASE_DIR/Experiments/Ground_Truth/JSON_Files/$EXP.json"
