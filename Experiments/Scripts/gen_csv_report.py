@@ -30,7 +30,7 @@ for i in block_names_file.readlines():
     block_names_data[s[1]] = s[0]
 block_names_file.close()
 
-# print('Generating CSV File for ' + h_json)
+print('Generating CSV File for ' + h_json)
 
 for app_name in gt_data:
     for function_name in gt_data[app_name]:

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export BASE_DIR="/home/elisa/Codes/hydra"
+export BASE_DIR="/home/jvf/Codes/hydra"
 
 # Experiment 1:
 # Optimization flags experiments
@@ -64,6 +64,8 @@ do
         "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="$OLD/$NEW" --old-opt="$OLD_OPT" --new-opt="$NEW_OPT" --matching-threshold="25"
     done
 done
+
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="o0/o0" --old-opt="disable-O0-optnone" --new-opt="disable-O0-optnone" --matching-threshold="25"
 
 # Experiment 2: Opt passes experiment
 # List of optimizations retired from https://homepages.dcc.ufmg.br/~fernando/publications/papers/FaustinoCC21.pdf
@@ -360,7 +362,7 @@ done
 # # licm
 # "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/licm" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="licm" --matching-threshold="25"
 
-# # loop-rotate
+# # # loop-rotate
 # "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/loop-rotate" --pre-passes="simplifycfg lcssa" --new-passes="loop-rotate" --matching-threshold="25"
 
 # # indvars

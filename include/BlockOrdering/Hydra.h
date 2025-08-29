@@ -28,7 +28,7 @@ private:
     std::map<std::string, uint64_t> blocks_profile;
     std::map<std::string, std::vector<std::pair<std::string, uint64_t>>> new_profile;
 
-    void projectProfile(Function &oldFunction, Function &newFunction, SCC *oldComp, SCC *newComp, FunctionAnalysisManager &AM);
+    void projectProfile(Function &oldFunction, Function &newFunction, SCCPt oldComp, SCCPt newComp, FunctionAnalysisManager &oldAM, FunctionAnalysisManager &newAM);
     bool readProfile(std::string functionName);
 };
 

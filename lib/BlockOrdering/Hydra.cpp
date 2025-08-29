@@ -18,7 +18,12 @@
 #include "llvm/Analysis/LoopInfo.h"
 #include "llvm/Support/SourceMgr.h"
 #include "llvm/Support/xxhash.h"
+#include "llvm/IR/PassManager.h"
+#include "llvm/Passes/PassBuilder.h"
+#include "llvm/Analysis/LoopAnalysisManager.h"
+#include "llvm/Analysis/CGSCCPassManager.h"
 
+size_t my_abs(int x) {return abs(x);}
 
 using namespace llvm;
 
@@ -126,76 +131,10 @@ std::string extractAndFormatDigits(const std::string &s) {
   return "0";
 }
 
-struct BlockMatching {
-private:
-  OpcodeHistogram *BlockHistogram;
-  OpcodeHistogram *SuccsHistogram;
-  OpcodeHistogram *PredsHistogram;
-  size_t NumSuccs, NumPreds;
-  double DistanceMatched;
-public:
-  explicit BlockMatching() {}
-
-  explicit BlockMatching(OpcodeHistogram *_BlockHistogram,
-                         OpcodeHistogram *_SuccsHistograms, size_t _NumSuccs,
-                         OpcodeHistogram *_PredsHistograms, size_t _NumPreds) :
-  BlockHistogram(_BlockHistogram), SuccsHistogram(_SuccsHistograms),
-  PredsHistogram(_PredsHistograms), NumSuccs(_NumSuccs), NumPreds(_NumPreds),
-  DistanceMatched(1e18) {}
-
-  explicit BlockMatching(OpcodeHistogram *_BlockHistogram,
-                         const std::vector<OpcodeHistogram *> &_SuccsHistograms,
-                         const std::vector<OpcodeHistogram *> &_PredsHistograms) {
-    BlockHistogram = _BlockHistogram;
-    NumSuccs = _SuccsHistograms.size();
-    NumPreds = _PredsHistograms.size();
-    SuccsHistogram = new OpcodeHistogram();
-    PredsHistogram = new OpcodeHistogram();
-    for (OpcodeHistogram *Successor : _SuccsHistograms) {
-      *SuccsHistogram += *Successor;
-    }
-    for (OpcodeHistogram *Pred : _PredsHistograms) {
-      *PredsHistogram += *Pred;
-    }
-    this->DistanceMatched = 1e18;
-  }
-
-  size_t getBlockHistogramSize() {
-    return BlockHistogram->getHistogramSize().first;
-  }
-
-  double getDistance() {
-    return this->DistanceMatched;
-  }
-
-  void Match(double Distance) {
-    this->DistanceMatched = Distance;
-  }
-
-  double distance(const BlockMatching &BM, uint64_t Threshold) const {
-    uint64_t BlockDistance = BlockHistogram->distance2(BM.BlockHistogram);
-    if (Debug && VerboseDebug) {
-      outs() << "Block Distance: " << BlockDistance << "\n";
-    }
-    if (BlockDistance > Threshold) return 1e18+5;
-    double SuccDistance = SuccsHistogram->distance2(BM.SuccsHistogram);
-    double PredDistance = PredsHistogram->distance2(BM.PredsHistogram);
-    uint64_t DeltaSucc = abs(NumSuccs-BM.NumSuccs);
-    uint64_t DeltaPred = abs(NumPreds-BM.NumPreds);
-    if (Debug && VerboseDebug) {
-      outs() << "Delta successors: " << DeltaSucc << "\n";
-      outs() << "Successors Distance: " << SuccDistance << "\n";
-      outs() << "Delta predecessors: " << DeltaPred << "\n";
-      outs() << "Predecessors Distance: " << PredDistance << "\n";
-    }
-    return BlockDistance + SuccDistance/(DeltaSucc+1.0) + PredDistance/(DeltaPred+1.0) + sqrt(DeltaSucc) + sqrt(DeltaPred);
-  }
-};
-
 class BlockMatcher {
 public:
   void init(const std::vector<FlowBlock *> &Blocks,
-            const std::vector<BlockMatching *> &BlockMatchings) {
+            const std::vector<SCCPt> &BlockMatchings) {
     this->Blocks = Blocks;
     // this->Blocks = Blocks;
     this->BlockMatchings = BlockMatchings;
@@ -203,22 +142,22 @@ public:
             "incorrect matcher initialization");
   }
 
-  std::pair<FlowBlock *, BlockMatching *> matchEntryBlock() {
+  std::pair<FlowBlock *, SCCPt> matchEntryBlock() {
     FlowBlock *entryBlock  = Blocks[0];
-    BlockMatching *entryMatching = BlockMatchings[0];
+    SCCPt entryMatching = BlockMatchings[0];
     entryMatching->Match(-1);
     return std::make_pair(entryBlock, entryMatching);
   }
 
-  std::pair<FlowBlock *, BlockMatching *> matchBlock(BlockMatching &BM, unsigned Threshold) const {
+  std::pair<FlowBlock *, SCCPt> matchBlock(SCCPt BM, unsigned Threshold) const {
     FlowBlock *BestBlock = nullptr;
-    BlockMatching *MatchedBlock = nullptr;
+    SCCPt MatchedBlock = nullptr;
 
     const double eps = 1e-9;
     double BestDistance = 1e18+5;
 
     FlowBlock *Block = nullptr;
-    BlockMatching *Matching = nullptr;
+    SCCPt Matching = nullptr;
     for (size_t I = 0; I < Blocks.size(); ++I) {
       Block = Blocks[I];
       Matching = BlockMatchings[I];
@@ -237,15 +176,15 @@ public:
     return std::make_pair(BestBlock, MatchedBlock);
   }
 
-  std::pair<FlowBlock *, BlockMatching *> matchBlock(BlockMatching &BM, unsigned Threshold, std::string OldBBName) const {
+  std::pair<FlowBlock *, SCCPt> matchBlock(SCCPt BM, unsigned Threshold, std::string OldBBName) const {
     FlowBlock *BestBlock = nullptr;
-    BlockMatching *MatchedBlock = nullptr;
+    SCCPt MatchedBlock = nullptr;
 
     const double eps = 1e-9;
     double BestDistance = 1e18+5;
 
     FlowBlock *Block = nullptr;
-    BlockMatching *Matching = nullptr;
+    SCCPt Matching = nullptr;
     for (size_t I = 0; I < Blocks.size(); ++I) {
       Block = Blocks[I];
       Matching = BlockMatchings[I];
@@ -272,7 +211,7 @@ public:
   }
 private:
   std::vector<FlowBlock *> Blocks;
-  std::vector<BlockMatching *> BlockMatchings;
+  std::vector<SCCPt> BlockMatchings;
 };
 
 long double getEdgeProbability(BranchProbabilityInfo &bpi, BasicBlock *src, BasicBlock *dst) {
@@ -344,7 +283,7 @@ FlowFunction createFlowFunction(std::vector<BasicBlock *> &BlockOrder, BranchPro
 }
 
 
-FlowFunction createFlowFunction(std::vector<SCC *> &SCCs, SCC *SuperSCC) {
+FlowFunction createFlowFunction(std::vector<SCCPt> &SCCs, SCCPt SuperSCC) {
   FlowFunction Func;
 
   // Add a special "dummy" source so that there is always a unique entry point.
@@ -355,8 +294,8 @@ FlowFunction createFlowFunction(std::vector<SCC *> &SCCs, SCC *SuperSCC) {
   Func.Blocks.push_back(EntryBlock);
 
   // Create FlowBlock for every basic block in the binary function
-  std::map<SCC *, size_t> SCCIndex;
-  for (SCC *Comp : SCCs) {
+  std::map<SCCPt, size_t> SCCIndex;
+  for (SCCPt Comp : SCCs) {
     Func.Blocks.emplace_back();
     FlowBlock &Block = Func.Blocks.back();
     Block.Index = Func.Blocks.size() - 1;
@@ -366,9 +305,10 @@ FlowFunction createFlowFunction(std::vector<SCC *> &SCCs, SCC *SuperSCC) {
 
   // Create FlowJump for each jump between basic blocks in the binary function
   std::vector<uint64_t> InDegree(Func.Blocks.size(), 0);
-  for (SCC *SrcComp : SCCs) {
-    std::unordered_set<SCC *> UniqueSuccs;
-    for (SCC *DstComp : *SrcComp->get_successors()) {
+  for (SCCPt SrcComp : SCCs) {
+    std::unordered_set<SCCPt> UniqueSuccs;
+    for (SCCPt DstComp : SrcComp->get_successors()) {
+
       if (UniqueSuccs.find(DstComp) != UniqueSuccs.end())
         continue;
 
@@ -387,7 +327,7 @@ FlowFunction createFlowFunction(std::vector<SCC *> &SCCs, SCC *SuperSCC) {
   // add an unlikely edge from 0 to the subsequent ones
   assert(InDegree[0] == 0 && "dummy entry blocks shouldn't have predecessors");
   for (uint64_t I = 1; I < Func.Blocks.size(); I++) {
-    SCC *Comp = SCCs[I - 1];
+    SCCPt Comp = SCCs[I - 1];
     if (Comp->isEntryBlock() || InDegree[I] == 0 || (SuperSCC != nullptr && Comp->get_header() == SuperSCC->get_header())) {
       Func.Jumps.emplace_back();
       FlowJump &Jump = Func.Jumps.back();
@@ -397,12 +337,14 @@ FlowFunction createFlowFunction(std::vector<SCC *> &SCCs, SCC *SuperSCC) {
         Jump.IsUnlikely = true;
     }
   }
+  Func.FakeExitBlock = false;
 
   // Add a dummy exit block if we are creating a Flow Function for a sub SCC
   if (SuperSCC != nullptr) {
     FlowBlock ExitBlock;
     ExitBlock.Index = Func.Blocks.size();
     Func.Blocks.push_back(ExitBlock);
+    Func.FakeExitBlock = true;
     for (size_t I = 1; I < Func.Blocks.size()-1; I++) {
       if (SCCs[I-1]->get_exitable()) {
         Func.Jumps.emplace_back();
@@ -425,12 +367,12 @@ FlowFunction createFlowFunction(std::vector<SCC *> &SCCs, SCC *SuperSCC) {
   return Func;
 }
 
-std::vector<SCC *> computeSCCs(SCC *Comp, Function &F, FunctionAnalysisManager &AM) {
+std::vector<SCCPt> computeSCCs(SCCPt Comp, Function &F, FunctionAnalysisManager &AM) {
   LoopInfo &li = AM.getResult<llvm::LoopAnalysis>(F);
-  DenseMap<BasicBlock *, SCC *> root;
-  std::set<SCC *> mergedGraph;
-  std::vector<SCC *> compsOrder;
-  std::set<SCC *> vis;
+  DenseMap<BasicBlock *, SCCPt> root;
+  std::set<SCCPt> mergedGraph;
+  std::vector<SCCPt> compsOrder;
+  std::set<SCCPt> vis;
 
   std::vector<Loop *> Loops;
   size_t LoopDepth;
@@ -455,36 +397,55 @@ std::vector<SCC *> computeSCCs(SCC *Comp, Function &F, FunctionAnalysisManager &
     if (l->getLoopDepth() != LoopDepth+1) continue;
     std::set<BasicBlock *> LoopBlocks;
     std::set<BasicBlock *> LoopPredecessors;
-    std::set<BasicBlock *> LoopSucessors;
+    std::set<BasicBlock *> LoopSuccessors;
     bool ExitableBlock = false;
     for (BasicBlock *BB : l->getBlocks()) {
+      assert(BB != nullptr && "BB is nullptr");
+      if (BB->getParent() != &F) {
+        outs() << "Reached orphan BB\n";
+        continue;
+      }
+      assert(BB->getParent() == &F && "BB is orphan");
       LoopBlocks.emplace(BB);
     }
     for (BasicBlock *BB : l->getBlocks()) {
+      assert(BB != nullptr && "BB is nullptr");
+      if (BB->getParent() != &F) {
+        outs() << "Reached orphan BB\n";
+        continue;
+      }
+      assert(BB->getParent() == &F && "BB is orphan");
       for (BasicBlock *Pred : predecessors(BB)) {
+        assert(Pred != nullptr && "Pred is nullptr");
+        assert(Pred->getParent() == &F && "Pred is orphan");
+        if (isa<UnreachableInst>(Pred->back())) continue;
         if (Comp != nullptr && !Comp->contains(Pred)) {continue;}
         if (!LoopBlocks.count(Pred)) {
           LoopPredecessors.emplace(Pred);
         }
       }
       for (BasicBlock *Succ : successors(BB)) {
+        if (isa<UnreachableInst>(Succ->back())) continue;
         if (Comp != nullptr && !Comp->contains(Succ)) {ExitableBlock = true; continue;}
         if (!LoopBlocks.count(Succ)) {
-          LoopSucessors.emplace(Succ);
+          LoopSuccessors.emplace(Succ);
         }
       }
     }
     BasicBlock *header = l->getHeader();
-    SCC *L = new SCC(header, LoopBlocks, LoopPredecessors, LoopSucessors, l->getLoopDepth());
+    SCCPt L = std::make_shared<SCC>(header, LoopBlocks, LoopPredecessors, LoopSuccessors, l->getLoopDepth());
+    LoopBlocks.clear();
+    LoopPredecessors.clear();
+    LoopSuccessors.clear();
     for (BasicBlock *BB : l->getBlocks()) {
       root[BB] = L;
     }
-    L->compute_block_histogram();
     if (ExitableBlock) L->set_exitable();
     mergedGraph.emplace(L);
   }
 
   for (BasicBlock &BB : F) {
+    if (isa<UnreachableInst>(BB.back())) continue;
     if (Comp != nullptr && !Comp->contains(&BB)) continue;
     if (root[&BB] == nullptr) {
       std::set<BasicBlock *> Blocks;
@@ -493,15 +454,19 @@ std::vector<SCC *> computeSCCs(SCC *Comp, Function &F, FunctionAnalysisManager &
       bool ExitableBlock = false;
       Blocks.emplace(&BB);
       for (BasicBlock *Pred : predecessors(&BB)) {
+        if (isa<UnreachableInst>(Pred->back())) continue;
         if (Comp != nullptr && !Comp->contains(Pred)) continue;
         Predecessors.emplace(Pred);
       }
       for (BasicBlock *Succ : successors(&BB)) {
+        if (isa<UnreachableInst>(Succ->back())) continue;
         if (Comp != nullptr && !Comp->contains(Succ)) {ExitableBlock = true; continue;}
         Successors.emplace(Succ);
       }
-      root[&BB] = new SCC(&BB, Blocks, Predecessors, Successors, LoopDepth);
-      root[&BB]->compute_block_histogram();
+      root[&BB] = std::make_shared<SCC>(&BB, Blocks, Predecessors, Successors, LoopDepth);
+      Blocks.clear();
+      Predecessors.clear();
+      Successors.clear();
       mergedGraph.emplace(root[&BB]);
       if (ExitableBlock) root[&BB]->set_exitable();
     }
@@ -511,18 +476,18 @@ std::vector<SCC *> computeSCCs(SCC *Comp, Function &F, FunctionAnalysisManager &
     compsOrder.emplace_back(root[&BB]);
   }
 
-  for (SCC *SubComp : mergedGraph) {
+  for (SCCPt SubComp : mergedGraph) {
     if (Comp != nullptr && SubComp->get_header() == Comp->get_header()) SubComp->set_entry_block();
-    std::set<OpcodeHistogram *> PredsHistogram;
-    std::set<SCC *> Preds;
-    std::set<SCC *> Succs;
-    for (BasicBlock *Pred : *SubComp->get_predecessors_blocks()) {
+    std::set<OHPt> PredsHistogram;
+    std::set<SCCPt> Preds;
+    std::set<SCCPt> Succs;
+    for (BasicBlock *Pred : SubComp->get_predecessors_blocks()) {
       PredsHistogram.emplace(root[Pred]->get_histogram());
       Preds.emplace(root[Pred]);
     }
     SubComp->compute_preds_histogram(PredsHistogram);
-    std::set<OpcodeHistogram *> SuccsHistogram; 
-    for (BasicBlock *Succ : *SubComp->get_successors_blocks()) {
+    std::set<OHPt> SuccsHistogram; 
+    for (BasicBlock *Succ : SubComp->get_successors_blocks()) {
       SuccsHistogram.emplace(root[Succ]->get_histogram());
       Succs.emplace(root[Succ]);
     }
@@ -534,11 +499,8 @@ std::vector<SCC *> computeSCCs(SCC *Comp, Function &F, FunctionAnalysisManager &
   return compsOrder;
 }
 
-// ======================================
 
-// We need to Rerun this guy with another SCC
-
-void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction, SCC *oldComp, SCC *newComp, FunctionAnalysisManager &AM) {
+void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction, SCCPt oldComp, SCCPt newComp, FunctionAnalysisManager &oldAM, FunctionAnalysisManager &newAM) {
   if (Debug) {
     if (oldComp != nullptr) {
       outs() << "Running with old sub SCC " << *oldComp << "\n";
@@ -552,8 +514,8 @@ void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction, S
     }
   }
   if ((oldComp == nullptr && newComp != nullptr) || (oldComp != nullptr && newComp == nullptr)) return;
-  std::vector<SCC *> oldCompsOrder = computeSCCs(oldComp, oldFunction, AM);
-  std::vector<SCC *> newCompsOrder = computeSCCs(newComp, newFunction, AM);
+  std::vector<SCCPt> oldCompsOrder = computeSCCs(oldComp, oldFunction, oldAM);
+  std::vector<SCCPt> newCompsOrder = computeSCCs(newComp, newFunction, newAM);
 
   if (oldCompsOrder.size() == 0 || newCompsOrder.size() == 0) {
     if (Debug) {
@@ -581,41 +543,21 @@ void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction, S
     blocks.push_back(&flowFunc.Blocks[i+1]);
   }
 
-  std::vector<BlockMatching *> blockMatchingsAddresses;
-  
-  for (size_t i = 0; i < newCompsOrder.size(); ++i) {
-    BlockMatching *newMatching = new BlockMatching(
-      newCompsOrder[i]->get_histogram(),
-      newCompsOrder[i]->get_successors_histogram(),
-      newCompsOrder[i]->get_successors_blocks()->size(),
-      newCompsOrder[i]->get_predecessors_histogram(),
-      newCompsOrder[i]->get_predecessors_blocks()->size()
-    );
-    blockMatchingsAddresses.push_back(newMatching);
-  }
-
   DenseMap<uint64_t, FlowBlock *> matchedBlocks;
-  DenseMap<uint64_t, BlockMatching *> matchings;
+  DenseMap<uint64_t, SCCPt> matchings;
   DenseMap<uint64_t, double> matchedDistances;
 
   BlockMatcher BM;
-  BM.init(blocks, blockMatchingsAddresses);
+  BM.init(blocks, newCompsOrder);
 
   for (int I = 1; I <= MaxIterations; I++) {
     for (size_t oldIdx = 0; oldIdx < oldCompsOrder.size(); oldIdx++) {
       if (matchings.lookup(oldIdx) != nullptr) continue;
       // SCC *oldComp = oldCompsOrder[oldIdx];
-      BlockMatching oldMatching(
-        oldCompsOrder[oldIdx]->get_histogram(),
-        oldCompsOrder[oldIdx]->get_successors_histogram(),
-        oldCompsOrder[oldIdx]->get_successors_blocks()->size(),
-        oldCompsOrder[oldIdx]->get_predecessors_histogram(),
-        oldCompsOrder[oldIdx]->get_predecessors_blocks()->size()
-      );
       FlowBlock *matchedBlock = nullptr;
-      BlockMatching *matching = nullptr;
+      SCCPt matching = nullptr;
 
-      std::tie(matchedBlock, matching) = BM.matchBlock(oldMatching, MatchingThreshold);
+      std::tie(matchedBlock, matching) = BM.matchBlock(oldCompsOrder[oldIdx], MatchingThreshold);
 
       if (matchedBlock == nullptr && oldIdx == 0) {
         std::tie(matchedBlock, matching) = BM.matchEntryBlock();
@@ -632,7 +574,7 @@ void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction, S
     }
     for (size_t oldIdx = 0; oldIdx < oldCompsOrder.size(); oldIdx++) {
       FlowBlock *matchedBlock = matchedBlocks.lookup(oldIdx);
-      BlockMatching *matching = matchings.lookup(oldIdx);
+      SCCPt matching = matchings.lookup(oldIdx);
       double matchedDistance = matchedDistances.lookup(oldIdx);
 
       if (matching != nullptr) {
@@ -724,7 +666,7 @@ void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction, S
     }
     Block.HasUnknownWeight = false;
     Block.Weight = std::max(OutWeight[Block.Index], InWeight[Block.Index]);
-    if (Block.Index == 0 || Block.Index == flowFunc.Blocks.size()-1) continue;
+    if (Block.Index == 0 || Block.Index == flowFunc.Blocks.size()-flowFunc.FakeExitBlock) continue;
     if (Debug) {
       outs() << "Assigned " << Block.Weight << " to block " << *newCompsOrder[Block.Index-1] << "\n";
     }
@@ -839,7 +781,7 @@ void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction, S
     if (oldCompsOrder[oldIndex]->size() <= 1) continue;
     FlowBlock *matchedComp = matchedBlocks.lookup(oldIndex);
     if (matchedComp == nullptr) continue;
-    projectProfile(oldFunction, newFunction, oldCompsOrder[oldIndex], newCompsOrder[matchedComp->Index-1], AM);
+    projectProfile(oldFunction, newFunction, oldCompsOrder[oldIndex], newCompsOrder[matchedComp->Index-1], oldAM, newAM);
   }
 
   using bbd = std::pair<BasicBlock *, uint64_t>;
@@ -847,12 +789,12 @@ void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction, S
 
 
   for (FlowBlock &block : flowFunc.Blocks) {
-    if (block.Index > 0 && block.Index < flowFunc.Blocks.size()-1) {
+    if (block.Index > 0 && block.Index < flowFunc.Blocks.size()-flowFunc.FakeExitBlock) {
       BasicBlock *matchedBlock = newCompsOrder[block.Index-1]->get_header();
       if (matchedBlock != nullptr) {
         std::string blockName = matchedBlock->getName().str();
         if (blocks_profile.count(blockName)) {
-          blocks_profile[blockName] += block.Weight;
+          blocks_profile[blockName] = std::max(block.Weight,blocks_profile[blockName]);
         } else {
           blocks_profile[blockName] = block.Weight;
         }
@@ -920,6 +862,22 @@ bool ProfilePass::readProfile(std::string functionName) {
   return true;
 }
 
+FunctionAnalysisManager createFunctionAnalysisManager(Module &M) {
+  FunctionAnalysisManager FAM;
+  LoopAnalysisManager LAM;
+  CGSCCAnalysisManager CGAM;
+  ModuleAnalysisManager MAM;
+  
+  PassBuilder PB;
+  PB.registerModuleAnalyses(MAM);
+  PB.registerCGSCCAnalyses(CGAM);
+  PB.registerFunctionAnalyses(FAM);
+  PB.registerLoopAnalyses(LAM);
+  PB.crossRegisterProxies(LAM, FAM, CGAM, MAM);
+
+  return FAM;
+}
+
 PreservedAnalyses ProfilePass::run(Function &F,
                                       FunctionAnalysisManager &AM) {
   std::string functionName = F.getName().str();
@@ -944,6 +902,8 @@ PreservedAnalyses ProfilePass::run(Function &F,
 
   std::unique_ptr<Module> oldProgram = parseIRFile(LLFilename, err, context);
 
+  FunctionAnalysisManager oldAM = createFunctionAnalysisManager(*oldProgram);
+
   bool foundFunction = false;
 
   for (Function &fun : *oldProgram) {
@@ -954,18 +914,18 @@ PreservedAnalyses ProfilePass::run(Function &F,
         outs() << "Running projection for function " << functionName << "\n\n";
       }
       blocks_profile.clear();
-      this->projectProfile(fun, F, nullptr, nullptr, AM);
+      // outs() << "Starting " << F.getName() << "\n";
+      this->projectProfile(fun, F, nullptr, nullptr, oldAM, AM);
+      // outs() << "Finishing " << F.getName() << "\n";
       using sd = std::pair<std::string, uint64_t>;
       std::vector<sd> orderedBlocks;
       for (BasicBlock &BB : F) {
-        std::string bbName = BB.getName().str();
-        uint64_t freq;
-        if (blocks_profile.count(bbName)) {
-          freq = blocks_profile[bbName];
+        std::string BBName = BB.getName().str();
+        if (blocks_profile.count(BBName)) {
+          orderedBlocks.emplace_back(extractAndFormatDigits(BBName),blocks_profile[BBName]);
         } else {
-          freq = 0;
+          orderedBlocks.emplace_back(extractAndFormatDigits(BBName),0);
         }
-        orderedBlocks.emplace_back(extractAndFormatDigits(bbName),freq);
       }
       std::sort(orderedBlocks.begin(), orderedBlocks.end(), [](sd &a, sd &b) {
         auto [aName, aFreq] = a;

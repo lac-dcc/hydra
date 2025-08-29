@@ -18,74 +18,76 @@
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/Analysis/LoopInfo.h"
 
+// using OHPt = std::shared_ptr<OpcodeHistogram>;
+typedef std::shared_ptr<OpcodeHistogram> OHPt;
+#define mOHPt(x) std::make_shared<OpcodeHistogram>(x)
+size_t my_abs(int x);
+
 namespace llvm {
 
 class SCC {
 public:
-  SCC(BasicBlock *_Header, std::set<BasicBlock *> &_Blocks, std::set<BasicBlock *> &Preds, std::set<BasicBlock *> &Succs, size_t _Depth) {
-    Header = _Header;
-    for (BasicBlock *BB : _Blocks) {
-      Blocks.emplace(BB);
+  SCC(BasicBlock *_Header,
+      std::set<BasicBlock *> &_Blocks,
+      std::set<BasicBlock *> &Preds,
+      std::set<BasicBlock *> &Succs,
+      size_t _Depth
+    ) :
+      Header(_Header),
+      PredecessorsBlocks(Preds),
+      SuccessorsBlocks(Succs),
+      BlockHistogram(mOHPt(initializeHistogram(_Blocks))),
+      PredsHistogram(nullptr),
+      SuccsHistogram(nullptr),
+      Depth(_Depth),
+      ExitableBlock(false),
+      DistanceMatched(1e18),
+      Size(_Blocks.size()) {
+      EntryBlock = false;
+      for (BasicBlock *BB : _Blocks) {
+        BlockNames.emplace(BB->getName());
+        if (BB->isEntryBlock()) EntryBlock = true;
+      }
     }
-
-    for (BasicBlock *BB : Preds) {
-      PredecessorsBlocks.emplace(BB);
-    }
-    
-    for (BasicBlock *BB : Succs) {
-      SuccessorsBlocks.emplace(BB);
-    }
-
-    BlockHistogram = nullptr;
-    PredsHistogram = nullptr;
-    SuccsHistogram = nullptr;
-    Depth = _Depth;
-
-    EntryBlock = false;
-    ExitableBlock = false;
-  }
 
   bool isEntryBlock() {
-    for (BasicBlock *BB : Blocks) {
-      if (BB->isEntryBlock()) return true;
-    }
     return EntryBlock;
   }
 
+  bool contains(StringRef Name) {
+    return (BlockNames.count(Name) > 0);
+  }
+
   bool contains(BasicBlock *BB) {
-    return (Blocks.count(BB) > 0);
+    return (BlockNames.count(BB->getName()) > 0);
   }
 
   BasicBlock *get_header() {
     return Header;
   }
 
-  std::set<BasicBlock *> *get_predecessors_blocks() {
-    return &PredecessorsBlocks;
+  const std::set<BasicBlock *> &get_predecessors_blocks() const {
+    return PredecessorsBlocks;
   }
 
-  std::set<BasicBlock *> *get_successors_blocks() {
-    return &SuccessorsBlocks;
+  const std::set<BasicBlock *> &get_successors_blocks() const {
+    return SuccessorsBlocks;
   }
 
-  std::set<SCC *> *get_predecessors() {
-    return &Predecessors;
+  const std::set<std::shared_ptr<SCC>> &get_predecessors() const {
+    return Predecessors;
   }
 
-  std::set<SCC *> *get_successors() {
-    return &Successors;
+  const std::set<std::shared_ptr<SCC>> &get_successors() const {
+    return Successors;
   }
 
-  void set_predecessors(std::set<SCC *> &Preds) {
-    for (SCC * Pred : Preds) {
-      Predecessors.emplace(Pred);
-    }
+  void set_predecessors(std::set<std::shared_ptr<SCC>> &Preds) {
+    Predecessors = Preds;
   }
 
-  void set_successors(std::set<SCC *> &Succs) {
-    for (SCC * Succ : Succs) {
-      Successors.emplace(Succ);
-    }
+  void set_successors(std::set<std::shared_ptr<SCC>> &Succs) {
+    Successors = Succs;
   }
 
   void set_entry_block() {
@@ -100,49 +102,29 @@ public:
     return ExitableBlock;
   }
 
-  OpcodeHistogram *initializeHistogram(std::set<BasicBlock *> &Blocks) {
-    DenseMap<uint32_t, uint32_t> frequencies;
-    std::vector<uint32_t> opcodes, frequency;
-    for (BasicBlock *BB: Blocks) {
-      for (Instruction &inst : *BB) {
-        unsigned instOpcode = inst.getOpcode();
-        frequencies[instOpcode]++;
-      }
-    }
-    for (auto [opcode, freq] : frequencies) {
-      opcodes.emplace_back(opcode);
-      frequency.emplace_back(freq);
-    }
-    return new OpcodeHistogram(opcodes, frequency);
-  }
-
-  void compute_block_histogram() {
-    BlockHistogram = initializeHistogram(Blocks);
-  }
-
-  OpcodeHistogram *get_histogram() {
+  const OHPt &get_histogram() const {
     return BlockHistogram;
   }
 
-  void compute_preds_histogram(std::set<OpcodeHistogram *> Preds) {
-    PredsHistogram = new OpcodeHistogram();
-    for (OpcodeHistogram *Pred : Preds) {
-      *PredsHistogram += *Pred;
+  void compute_preds_histogram(std::set<OHPt> &Preds) {
+    PredsHistogram = mOHPt();
+    for (auto Pred : Preds) {
+        *PredsHistogram += *Pred;
     }
   }
 
-  OpcodeHistogram *get_predecessors_histogram() {
+  const OHPt &get_predecessors_histogram() const {
     return PredsHistogram;
   }
 
-  void compute_succs_histogram(std::set<OpcodeHistogram *> Succs) {
-    SuccsHistogram = new OpcodeHistogram();
-    for (OpcodeHistogram *Succ : Succs) {
-      *SuccsHistogram += *Succ;
+  void compute_succs_histogram(std::set<OHPt> Succs) {
+    SuccsHistogram = mOHPt();
+    for (auto Succ : Succs) {
+        *SuccsHistogram += *Succ;
     }
   }
 
-  OpcodeHistogram *get_successors_histogram() {
+  const OHPt &get_successors_histogram() const {
     return SuccsHistogram;
   }
 
@@ -151,7 +133,15 @@ public:
   }
 
   size_t size() {
-    return Blocks.size();
+    return Size;
+  }
+
+  size_t get_successors_size() {
+    return SuccessorsBlocks.size();
+  }
+
+  size_t get_predecessors_size() {
+    return PredecessorsBlocks.size();
   }
 
   std::string get_header_name() {
@@ -180,24 +170,72 @@ public:
     return os;
   }
 
+  double distance(std::shared_ptr<SCC> Comp, uint64_t Threshold) const {
+    uint64_t BlockDistance = BlockHistogram->distance2(Comp->BlockHistogram);
+    // if (Debug && VerboseDebug) {
+    //   outs() << "Block Distance: " << BlockDistance << "\n";
+    // }
+    if (BlockDistance > Threshold) return 1e18+5;
+    double SuccDistance = SuccsHistogram->distance2(Comp->SuccsHistogram);
+    double PredDistance = PredsHistogram->distance2(Comp->PredsHistogram);
+    uint64_t DeltaSucc = my_abs(0+this->SuccessorsBlocks.size()-Comp->get_successors_size());
+    uint64_t DeltaPred = my_abs(0+this->PredecessorsBlocks.size()-Comp->get_predecessors_size());
+    // if (Debug && VerboseDebug) {
+    //   outs() << "Delta successors: " << DeltaSucc << "\n";
+    //   outs() << "Successors Distance: " << SuccDistance << "\n";
+    //   outs() << "Delta predecessors: " << DeltaPred << "\n";
+    //   outs() << "Predecessors Distance: " << PredDistance << "\n";
+    // }
+    return BlockDistance + SuccDistance/(DeltaSucc+1.0) + PredDistance/(DeltaPred+1.0) + sqrt(DeltaSucc) + sqrt(DeltaPred);
+  }
+
+  double getDistance() {
+    return this->DistanceMatched;
+  }
+
+  void Match(double Distance) {
+    this->DistanceMatched = Distance;
+  }
+
 private:
   BasicBlock *Header;
-  std::set<BasicBlock *> Blocks;
+  std::set<StringRef> BlockNames;
   std::set<BasicBlock *> PredecessorsBlocks;
   std::set<BasicBlock *> SuccessorsBlocks;
 
-  std::set<SCC *> Predecessors;
-  std::set<SCC *> Successors;
+  std::set<std::shared_ptr<SCC>> Predecessors;
+  std::set<std::shared_ptr<SCC>> Successors;
 
-  OpcodeHistogram *BlockHistogram;
-  OpcodeHistogram *PredsHistogram;
-  OpcodeHistogram *SuccsHistogram;
+  OHPt BlockHistogram;
+  OHPt PredsHistogram;
+  OHPt SuccsHistogram;
 
   bool EntryBlock;
   bool ExitableBlock;
 
+  double DistanceMatched;
+
   size_t Depth;
+  size_t Size;
+
+  OpcodeHistogram initializeHistogram(std::set<BasicBlock *> &Blocks) {
+    DenseMap<uint32_t, uint32_t> frequencies;
+    std::vector<uint32_t> opcodes, frequency;
+    for (BasicBlock *BB: Blocks) {
+      for (Instruction &inst : *BB) {
+        unsigned instOpcode = inst.getOpcode();
+        frequencies[instOpcode]++;
+      }
+    }
+    for (auto [opcode, freq] : frequencies) {
+      opcodes.emplace_back(opcode);
+      frequency.emplace_back(freq);
+    }
+    return OpcodeHistogram(opcodes, frequency);
+  }
 };
+
+typedef std::shared_ptr<SCC> SCCPt;
 
 }
 

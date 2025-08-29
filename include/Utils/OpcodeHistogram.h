@@ -61,7 +61,7 @@ public:
     }
   }
 
-  uint64_t distance2(const OpcodeHistogram *OH) const {
+  uint64_t distance2(const std::shared_ptr<OpcodeHistogram> OH) const {
     std::map<uint32_t, int64_t> Frequencies;
     for (size_t I = 0; I < Opcodes.size(); I++) {
       Frequencies[Opcodes[I]] = Frequency[I];

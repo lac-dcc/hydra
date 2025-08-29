@@ -46,6 +46,8 @@ struct FlowFunction {
   uint64_t Entry{0};
   /// Probability of a jump being taken
   DenseMap<FlowJump *, long double> JumpProbability;
+  /// Indication that a dummy exit block was created
+  bool FakeExitBlock;
 };
 
 /// Various thresholds and options controlling the behavior of the profile

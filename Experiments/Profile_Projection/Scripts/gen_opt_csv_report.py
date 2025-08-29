@@ -61,17 +61,29 @@ for app_name in gt_data:
                 sorted_block_indices[block] = idx
                 idx += 1
             
+            worked = True
             ub_indices = []
             for block in ub_guess:
-                ub_indices.append(sorted_block_indices[block])
+                try:
+                    ub_indices.append(sorted_block_indices[block])
+                except:
+                    print(app_name + '/' + function_name)
+                    worked = False
             ub_distance = compute_swap_distance(ub_indices)
             ub_hit = round(1.0-ub_distance/(nodes*(nodes-1.0)/2.0),4)
 
             h_indices = []
             for block in h_guess:
-                h_indices.append(sorted_block_indices[block])
+                try:
+                    h_indices.append(sorted_block_indices[block])
+                except:
+                    print(app_name + '/' + function_name)
+                    worked = False
             h_distance = compute_swap_distance(h_indices)
             h_hit = round(1.0-h_distance/(nodes*(nodes-1.0)/2.0),4)
+
+            if not worked:
+                break
                 
             
             block_ordering = ';'.join(block_ordering_list)
