@@ -1,6 +1,9 @@
 #!/bin/bash
 
-export BASE_DIR="/home/jvf/Codes/hydra"
+if [ -z $BASE_DIR ]
+then
+    export BASE_DIR="/home/jvf/Codes/hydra"
+fi
 
 # Experiment 1:
 # Optimization flags experiments
@@ -467,4 +470,4 @@ done
 # # callsite-splitting
 # "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/callsite-splitting" --new-passes="callsite-splitting" --matching-threshold="25"
 
-"$BASE_DIR/Experiments/Scripts/gen_csvs.sh"
+# "$BASE_DIR/Experiments/Scripts/gen_csvs.sh"
