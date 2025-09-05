@@ -15,9 +15,9 @@ cd $CURRENT_DIR
 
 rm -rf "$RESULTS_DIR"
 
-for i in {1..20}
+for i in $(seq 1 $NUM_INPUTS)
 do
-    echo "running dataset $i/20"
+    echo "running dataset $i/$NUM_INPUTS"
     rm -rf $BENCH_DIR/*.profiling
     for d in $(ls $BENCH_DIR)
     do 

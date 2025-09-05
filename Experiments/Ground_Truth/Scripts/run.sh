@@ -3,8 +3,9 @@
 EXP="Flags/o0"
 OPT_FLAG="disable-O0-optnone"
 PASSES=""
+NUM_INPUTS=20
 
-TEMP=$(getopt -o '' --long exp-name:,opt-flag:,passes: -n "$0" -- "$@")
+TEMP=$(getopt -o '' --long exp-name:,opt-flag:,passes:,inputs: -n "$0" -- "$@")
 
 if [[ $? != 0 ]]
 then
@@ -20,6 +21,7 @@ do
         --exp-name) EXP="$2"; shift 2 ;;
         --opt-flag) OPT_FLAG="$2"; shift 2 ;;
         --passes) PASSES="$2"; shift 2 ;;
+        --inputs) NUM_INPUTS=$2; shift 2 ;;
         --) shift; break ;;
         *) echo "Internal error!"; exit 1 ;;
     esac
@@ -35,10 +37,12 @@ echo "Running Nisse with the following options:"
 echo "Experiment name: $EXP"
 echo "Optimization flag: $OPT_FLAG"
 echo "Optimization passes: $PASSES"
+echo "Number of inputs: $NUM_INPUTS"
 
 export EXP
 export OPT_FLAG
 export PASSES
+export NUM_INPUTS
 
 export LLVM_INSTALL_DIR="/usr/local"
 export SCRIPTS_FOLDER="$BASE_DIR/Experiments/Ground_Truth/Scripts"

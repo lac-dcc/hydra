@@ -65,12 +65,14 @@ BENCH_NAME=$(basename $1)
 
 # exit 0
 
-OLD_PROFILES="$PROF_FILES/$OLD_FOLDER/$BENCH_NAME"
-OLD_LL_FILE="$LL_FILES/Old/$OLD_FOLDER/$BENCH_NAME.ll"
-NEW_LL_FILE="$LL_FILES/New/$NEW_FOLDER/$BENCH_NAME.ll"
+OLD_PROFILES="$PROF_FILES/Old/$EXP/$BENCH_NAME"
+OLD_LL_FILE="$LL_FILES/Old/$EXP/$BENCH_NAME.ll"
+NEW_LL_FILE="$LL_FILES/New/$EXP/$BENCH_NAME.ll"
 
 if [ ! -d "$OLD_PROFILES" ] || [ ! -f "$OLD_LL_FILE" ]
 then
+    mkdir -p $OLD_PROFILES
+    mkdir -p $(dirname "$OLD_LL_FILE")
     bash "$NISSE_SCRIPT" $DIR_NAME/$BENCH_NAME # > /dev/null 2>&1
     ret_code=$?
     if [[ $ret_code -ne 0 ]]; then
@@ -85,11 +87,12 @@ then
     PROFILES=$BENCH_NAME.profiling/profiles
 
     cp $LL_FILE "$OLD_LL_FILE"
-    cp -r $PROFILES "$OLD_PROFILES"
+    cp $PROFILES/* "$OLD_PROFILES"
 fi
 
 if [ ! -f "$NEW_LL_FILE" ]
 then
+    mkdir -p $(dirname "$NEW_LL_FILE")
     cp $DIR_NAME/$BENCH_NAME/src_work/*.c $DIR_NAME/$BENCH_NAME/src_work/*.h .
     $CLANG -Xclang -"$NEW_OPT" -flto -emit-llvm -c *.c
     ret_code=$?
@@ -118,7 +121,6 @@ then
 
     cp "$BENCH_NAME.ll" "$NEW_LL_FILE"
 fi
-
 
 START_TIME=`date +%s.%N`
 $LLVM_OPT -disable-output -load-pass-plugin $PASS_FILE_PROFILE \

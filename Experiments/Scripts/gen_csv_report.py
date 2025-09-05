@@ -34,8 +34,6 @@ print('Generating CSV File for ' + h_json)
 
 for app_name in gt_data:
     for function_name in gt_data[app_name]:
-        if (app_name == 'bzip2d' and function_name == 'testStream'):
-            print('Got here')
         try:
             guess = h_data[app_name][function_name]
         except:

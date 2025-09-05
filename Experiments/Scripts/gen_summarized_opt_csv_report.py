@@ -2,7 +2,8 @@ import csv
 import os
 
 csv_data = [
-    ['Optimization', 'Upper Bound Hit Sum', 'Upper Bound Precision', 'Hydra Hit Sum', 'Hydra Precision', 'Staleness']
+    ['Optimization', 'Hydra Hit Sum', 'Hydra Precision', 'Staleness']
+    # ['Optimization', 'Upper Bound Hit Sum', 'Upper Bound Precision', 'Hydra Hit Sum', 'Hydra Precision', 'Staleness']
 ]
 
 base_dir = os.environ.get('BASE_DIR', '/home/jvf/Codes/hydra/')
@@ -15,16 +16,18 @@ for file_name in os.listdir(csv_files_dir):
     dt = csv.reader(csv_file_dt, delimiter=';', quoting=csv.QUOTE_MINIMAL)
     fields = next(dt)
     num_benchmarks = 0
-    ub_sum = 0
+    # ub_sum = 0
     h_sum = 0
     for row in dt:
-        ub_sum += float(row[-4].replace(',','.'))
+        # ub_sum += float(row[-4].replace(',','.'))
         h_sum += float(row[-1].replace(',','.'))
         num_benchmarks += 1
-    ub_precision = ub_sum/(num_benchmarks*1.0)
+    # ub_precision = ub_sum/(num_benchmarks*1.0)
     h_precision = h_sum/(num_benchmarks*1.0)
-    staleness = 1.0-h_precision/ub_precision
-    csv_data.append([opt_name, f"{ub_sum:.4f}".replace('.',','), f"{ub_precision:.6f}".replace('.',','), f"{h_sum:.4f}".replace('.',','), f"{h_precision:.6f}".replace('.',','), f"{staleness:.6f}".replace('.',',')])
+    # staleness = 1.0-h_precision/ub_precision
+    staleness = 1.0-h_precision
+    # csv_data.append([opt_name, f"{ub_sum:.4f}".replace('.',','), f"{ub_precision:.6f}".replace('.',','), f"{h_sum:.4f}".replace('.',','), f"{h_precision:.6f}".replace('.',','), f"{staleness:.6f}".replace('.',',')])
+    csv_data.append([opt_name, f"{h_sum:.4f}".replace('.',','), f"{h_precision:.6f}".replace('.',','), f"{staleness:.6f}".replace('.',',')])
     csv_file_dt.close()
     
 
