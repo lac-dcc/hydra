@@ -61,6 +61,10 @@ add_library(BlockOrderingHydra MODULE
     lib/BlockOrdering/Hydra.cpp
     lib/BlockOrdering/HydraPlugin.cpp)
 
+add_library(BlockOrderingAyupov MODULE
+    lib/BlockOrdering/Ayupov.cpp
+    lib/BlockOrdering/AyupovPlugin.cpp)
+
 target_include_directories(WeightedProfileInference PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/include/Utils"
 )
@@ -96,6 +100,11 @@ target_include_directories(BlockOrderingProfile PRIVATE
 )
 
 target_include_directories(BlockOrderingHydra PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/BlockOrdering"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/Utils"
+)
+
+target_include_directories(BlockOrderingAyupov PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/include/BlockOrdering"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/Utils"
 )
