@@ -13,7 +13,7 @@
 #include "llvm/IR/Operator.h"
 #include "llvm/Analysis/BranchProbabilityInfo.h"
 
-#include "../Utils/SCC.h"
+#include "../Utils/SCC/SCC.h"
 
 namespace llvm {
 
@@ -25,10 +25,12 @@ private:
     std::ifstream profileFile;
 
     std::map<std::string, std::vector<std::pair<std::string, uint64_t>>> profile;
-    std::map<std::string, uint64_t> blocks_profile;
-    std::map<std::string, std::vector<std::pair<std::string, uint64_t>>> new_profile;
+    // std::map<std::string, uint64_t> blocks_profile;
+    // std::map<std::string, std::vector<std::pair<std::string, uint64_t>>> new_profile;
+    std::map<std::string, std::string> matched_blocks;
 
-    void projectProfile(Function &oldFunction, Function &newFunction, SCCPt oldComp, SCCPt newComp, FunctionAnalysisManager &oldAM, FunctionAnalysisManager &newAM);
+    void matchSCCs(Function &oldFunction, Function &newFunction, SCCPt oldComp, SCCPt newComp, FunctionAnalysisManager &oldAM, FunctionAnalysisManager &newAM);
+    void projectProfile(Function &oldFunction, Function &newFunction, BranchProbabilityInfo &bpi);
     bool readProfile(std::string functionName);
 };
 

@@ -1,5 +1,5 @@
-#ifndef BOP_OPCODE_HISTOGRAM_H
-#define BOP_OPCODE_HISTOGRAM_H
+#ifndef BLOCK_OPCODE_HISTOGRAM_H
+#define BLOCK_OPCODE_HISTOGRAM_H
 
 #include <vector>
 #include <map>
@@ -8,7 +8,10 @@
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/Support/raw_ostream.h"
 
-using namespace llvm;
+// using namespace llvm;
+
+namespace llvm {
+namespace Block {
 
 /// An object wrapping two vectors, where one represents the opcodes and the
 /// other the frequency of every opcode.
@@ -85,7 +88,7 @@ public:
     return (uint64_t)Distance2;
   }
 
-  friend raw_ostream &operator<<(raw_ostream &os, const OpcodeHistogram &OH) {
+  friend std::ostream &operator<<(std::ostream &os, const OpcodeHistogram &OH) {
     for (int I = 0; I < OH.Opcodes.size(); ++I) {
       os << OH.Opcodes[I] << ": " << OH.Frequency[I] << "\n";
     }
@@ -93,4 +96,8 @@ public:
   }
 };
 
-#endif // BOP_OPCODE_HISTOGRAM_H
+} // namespace SCC
+
+} // namespace LLVM
+
+#endif // BLOCK_OPCODE_HISTOGRAM_H

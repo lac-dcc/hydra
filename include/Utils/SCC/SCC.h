@@ -1,5 +1,5 @@
-#ifndef BOP_SCC_H
-#define BOP_SCC_H
+#ifndef SCC_SCC_H
+#define SCC_SCC_H
 
 #include "OpcodeHistogram.h"
 #include <string>
@@ -19,12 +19,14 @@
 #include "llvm/Analysis/LoopInfo.h"
 
 // using OHPt = std::shared_ptr<OpcodeHistogram>;
-typedef std::shared_ptr<OpcodeHistogram> OHPt;
-#define mOHPt(x) std::make_shared<OpcodeHistogram>(x)
 size_t my_abs(int x);
 
 namespace llvm {
+namespace SCC {
 
+typedef std::shared_ptr<OpcodeHistogram> OHPt;
+#define mOHPt(x) std::make_shared<OpcodeHistogram>(x)
+    
 class SCC {
 public:
   SCC(BasicBlock *_Header,
@@ -235,10 +237,11 @@ private:
   }
 };
 
-typedef std::shared_ptr<SCC> SCCPt;
+} // namespace SCC
 
-}
+typedef std::shared_ptr<SCC::SCC> SCCPt;
+
+} // namespace LLVM
 
 
-
-#endif // BOP_SCC_H
+#endif // SCC_SCC_H
