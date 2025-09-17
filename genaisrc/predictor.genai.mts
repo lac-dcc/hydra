@@ -73,7 +73,7 @@ export const parseMarkdownToJson = (
   const hottestBBMatch = markdownContent.match(
     /\*\*Hottest Basic Block\*\*:\s*`?([a-zA-Z_][\w\.]*)`?/
   );
-  const hottestBB = hottestBBMatch?.[1] ?? "";
+  const hottestBB = (hottestBBMatch?.[1] ?? "").replace(/`/g, "");
 
   const hotnessBlockMatch =
     markdownContent.match(/- \*\*Sorted Basic Blocks by Hotness\*\*:\s*```text\s*([\s\S]*?)```/m) ??
@@ -81,18 +81,19 @@ export const parseMarkdownToJson = (
 
   let bbLines: string[] = [];
 
-  if (hotnessBlockMatch) {
-    bbLines = hotnessBlockMatch[1]
+  if (hotnessBlockMatch?.[1]) {
+    bbLines = hotnessBlockMatch[1] 
       .split("\n")
       .map((line) => line.trim())
       .filter((line) => /^\d+\.\s+/.test(line))
       .map((line) => line.replace(/^\d+\.\s+/, ""));
+    bbLines = bbLines.map(name => name.replace(/`/g, ""));
   }
 
   let discrepancy = !arraysHaveSameValues(bbLines, bbSet);
   let exceed = tokenCount > 131072;
   const additionalNotesMatch = markdownContent.match(/- \*\*Additional Notes\*\*:\s*([\s\S]+)/);
-  const additionalNotes = additionalNotesMatch ? additionalNotesMatch[1].trim() : "";
+  const additionalNotes = additionalNotesMatch ? (additionalNotesMatch[1] ?? "").trim() : "";
 
   const originalSet = bbSet.join(", ");
   const predictedSet = bbLines.join(", ");
@@ -210,7 +211,7 @@ const processFiles = async (env: ExpansionVariables) => {
     console.log(`Input file name without extension: ${fileNameWithoutExt}`);
 
     // Extract functions from the file content
-    const funcSet = file.content
+    const funcSet = (file.content ?? "")
       .split(/; Function Attrs:/gm)
       .map((func) => {
         const match = func.match(/(define\s.*?\{[^}]*\})/s);
@@ -334,7 +335,7 @@ const processFiles = async (env: ExpansionVariables) => {
           }
         );
 
-        const tokenCount = res.usage.total;
+        const tokenCount = res.usage?.total ?? 0;
         output.detailsFenced("Token Count: ", `${tokenCount}`);
         output.detailsFenced("LLM Output Text:", res.text);
 
