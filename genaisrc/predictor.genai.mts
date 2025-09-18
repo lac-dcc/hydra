@@ -9,21 +9,40 @@ script({
   model: "vision", //"github:openai/gpt-4o",//"vision",
 });
 
-const countTokens = (text: string): number => {
-  const enc = encodingForModel("gpt-4-turbo-preview");
-  const tokens = enc.encode(text).length;
-  return tokens;
-};
-
-const clean = (s:string) => s.replace(/`/g, "");
+const cleanName = (s:string) => s.replace(/`/g, "");
 
 const arraysHaveSameValues = (arr1: string[], arr2: string[]): boolean => {
   if (arr1.length !== arr2.length) return false;
 
-  const sorted1 = [...arr1].map(s => clean(s.toLowerCase().trim())).sort();
-  const sorted2 = [...arr2].map(s => clean(s.toLowerCase().trim())).sort();
+  const sorted1 = [...arr1].map(s => cleanName(s.toLowerCase().trim())).sort();
+  const sorted2 = [...arr2].map(s => cleanName(s.toLowerCase().trim())).sort();
 
   return sorted1.every((val, idx) => val === sorted2[idx]);
+};
+
+const compareBlockSets = (original: string[], predicted: string[]) => {
+  const origClean = original.map(cleanName);
+  const predClean = predicted.map(cleanName);
+
+  const countOccurrences = (arr: string[]) =>
+    arr.reduce((acc, name) => {
+      acc[name] = (acc[name] ?? 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+  const origCounts = countOccurrences(origClean);
+  const predCounts = countOccurrences(predClean);
+
+  const duplicates = Object.entries(predCounts)
+    .filter(([_, count]) => count > 1)
+    .map(([name]) => name);
+
+  const missing = origClean.filter(name => !(name in predCounts));
+  const extra = predClean.filter(name => !(name in origCounts));
+
+  const discrepancy = duplicates.length > 0 || missing.length > 0 || extra.length > 0;
+
+  return {duplicates, missing, extra, discrepancy};
 };
 
 
@@ -70,11 +89,20 @@ export const parseMarkdownToJson = (
   numBB: number,
   bbSet: string[]
 ): ParsedResult => {
-  const hottestBBMatch = markdownContent.match(
-    /\*\*Hottest Basic Block\*\*:\s*`?([a-zA-Z_][\w\.]*)`?/
-  );
-  const hottestBB = (hottestBBMatch?.[1] ?? "").replace(/`/g, "");
 
+  // -----------------------------
+  //  Extract hottest BB
+  // -----------------------------
+
+  const hottestBBMatch = markdownContent.match(
+    /\*\*Hottest Basic Block\*\*:\s*`?([A-Za-z_][A-Za-z0-9_.]*)`?/
+  );
+  const hottestBB = cleanName(hottestBBMatch?.[1] ?? "");
+
+
+  // ---------------------------------
+  //  Extract sorted BBs from markdown
+  // ---------------------------------
   const hotnessBlockMatch =
     markdownContent.match(/- \*\*Sorted Basic Blocks by Hotness\*\*:\s*```text\s*([\s\S]*?)```/m) ??
     markdownContent.match(/- \*\*Sorted Basic Blocks by Hotness\*\*:\s*([\s\S]+?)(?:- \*\*Additional Notes\*\*|$)/);
@@ -86,17 +114,43 @@ export const parseMarkdownToJson = (
       .split("\n")
       .map((line) => line.trim())
       .filter((line) => /^\d+\.\s+/.test(line))
-      .map((line) => line.replace(/^\d+\.\s+/, ""));
-    bbLines = bbLines.map(name => name.replace(/`/g, ""));
+      .map((line) => cleanName(line.replace(/^\d+\.\s+/, "")));
   }
 
-  let discrepancy = !arraysHaveSameValues(bbLines, bbSet);
-  let exceed = tokenCount > 131072;
-  const additionalNotesMatch = markdownContent.match(/- \*\*Additional Notes\*\*:\s*([\s\S]+)/);
-  const additionalNotes = additionalNotesMatch ? (additionalNotesMatch[1] ?? "").trim() : "";
 
-  const originalSet = bbSet.join(", ");
-  const predictedSet = bbLines.join(", ");
+  // -----------------------------
+  // Compare predicted vs original set
+  // -----------------------------
+  // let discrepancy = !arraysHaveSameValues(bbLines, bbSet);
+  const {duplicates, missing, extra, discrepancy} = compareBlockSets(bbSet, bbLines);
+  if (discrepancy) {
+    console.warn(
+      `Discrepancy found in ${funcName}: ` +
+      `Missing: [${missing.join(", ")}] | ` +
+      `Extra: [${extra.join(", ")}] | ` +
+      `Duplicates: [${duplicates.join(", ")}]`
+    );
+  }
+
+  // -----------------------------
+  // Extract additional notes
+  // -----------------------------
+
+  const additionalNotesMatch = markdownContent.match(/- \*\*Additional Notes\*\*:\s*([\s\S]+)/);
+  const additionalNotes = additionalNotesMatch ? cleanName(additionalNotesMatch[1] ?? "").trim() : "";
+
+  // -----------------------------
+  // Check token count against limit
+  // -----------------------------
+
+  const exceed = tokenCount > 131072;
+
+
+  // -----------------------------
+  // Build output object + schema
+  // -----------------------------
+  const originalSet = [...bbSet].sort().join(", ");
+  const predictedSet = [...bbLines].sort().join(", ");
 
   const jsonObj = {
     benchmarkInfo: {
@@ -107,6 +161,9 @@ export const parseMarkdownToJson = (
       predictedSet,
       tokenCount,
       discrepancy,
+      duplicates,
+      missing,
+      extra,
       exceed
     },
     hottestBB: {
@@ -150,12 +207,28 @@ export const parseMarkdownToJson = (
             type: "boolean",
             enum: [discrepancy],
           },
+          duplicates: { 
+            type: "array", 
+            items: { type: "string" } 
+          },
+          missing: { 
+            type: "array", 
+            items: { type: "string" } 
+          },
+          extra: { 
+            type: "array", 
+            items: { type: "string" } 
+          },
           exceed:{
             type: "boolean",
             enum: [exceed],
           }
         },
-        required: ["benchmarkName", "funcName", "numBB", "originalSet", "predictedSet", "tokenCount", "discrepancy", "exceed"],
+        required: [
+          "benchmarkName", "funcName", "numBB", "originalSet", 
+          "predictedSet", "tokenCount", "discrepancy", "duplicates", 
+          "missing", "extra", "exceed"
+        ],
       },
       hottestBB: {
         type: "object",
@@ -184,7 +257,10 @@ export const parseMarkdownToJson = (
         type: "string",
       },
     },
-    required: ["benchmarkInfo","hottestBB", "bbOrderByHotness", "additionalNotes"],
+    required: [
+      "benchmarkInfo","hottestBB", 
+      "bbOrderByHotness", "additionalNotes"
+    ],
   };
 
   return { jsonObj, jsonSchema };
@@ -238,8 +314,11 @@ const processFiles = async (env: ExpansionVariables) => {
         continue;
       }
 
-      const bbSetMatch = func.match(/^([a-zA-Z_][\w\.]*):(?=\s|$)/gm);
-      const bbSet = bbSetMatch ? bbSetMatch.map((id) => id.slice(0, -1)) : [];
+      const bbSetMatch = func.match(/^\s*([A-Za-z_][A-Za-z0-9_.]*):/gm);
+      const bbSet = bbSetMatch
+        ? bbSetMatch.map(line => line.trim().replace(/:$/, ""))
+        : [];
+
       const numBB = bbSet.length;
       dbg(`bbSet: ${bbSet}`);
 
