@@ -1,0 +1,157 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_c",
+      "funcName": "adpcm_coder",
+      "numBB": 12,
+      "originalSet": "bb, bb.bb84_crit_edge, bb13, bb65, bb68, bb7, bb72, bb72.bb13_crit_edge, bb78, bb78.bb84_crit_edge, bb82, bb84",
+      "predictedSet": "bb, bb.bb84_crit_edge, bb13, bb65, bb68, bb7, bb72, bb72.bb13_crit_edge, bb78, bb78.bb84_crit_edge, bb82, bb84",
+      "tokenCount": 8260,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb13"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb72"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb68"
+      },
+      {
+        "name": "bb65"
+      },
+      {
+        "name": "bb78"
+      },
+      {
+        "name": "bb72.bb13_crit_edge"
+      },
+      {
+        "name": "bb82"
+      },
+      {
+        "name": "bb84"
+      },
+      {
+        "name": "bb78.bb84_crit_edge"
+      },
+      {
+        "name": "bb.bb84_crit_edge"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The bb13 block in the optimized function corresponds to the main loop body in the original function, which includes blocks like 34, 45, 51, and 58 in the O0 profile. These blocks have the highest execution counts, making bb13 the hottest block.\n    - bb72 corresponds to the decision-making logic for storing values, which is derived from blocks like 93 and 96 in the O0 profile.\n    - bb7 corresponds to the initialization logic, which maps to the entry block 32 in the O0 profile.\n    - Other blocks like bb68, bb65, and bb78 correspond to specific branches and computations derived from the O0 blocks.\n\n  - **Computed O0 freq(bb) Table**:\n    - bb13: Derived from 34, 45, 51, 58 → ~512M executions.\n    - bb72: Derived from 93, 96 → ~256M executions.\n    - bb7: Derived from 32 → ~513M executions.\n    - bb68: Derived from 68 → ~254M executions.\n    - bb65: Derived from 66 → ~258M executions.\n    - bb78: Derived from 77 → ~512M executions.\n    - bb72.bb13_crit_edge: Derived from loop edges → ~489M executions.\n    - bb82: Derived from 76 → ~512M executions.\n    - bb84: Derived from 84 → ~23M executions.\n    - bb78.bb84_crit_edge: Derived from loop exits → ~237M executions.\n    - bb.bb84_crit_edge: Derived from entry/exit edges → ~518K executions.\n    - bb: Derived from entry block 0 → ~518K executions.\n\n  - **Block Splitting/Merging**:\n    - Several blocks in the O0 version were merged into bb13 in the optimized version.\n    - Some blocks like bb72 and bb78 were split into smaller decision-making blocks.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 12. No blocks are missing or duplicated."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_c",
+      "funcName": "adpcm_decoder",
+      "numBB": 10,
+      "originalSet": "bb, bb.bb71_crit_edge, bb13, bb13.bb28_crit_edge, bb23, bb28, bb28.bb13_crit_edge, bb69, bb7, bb71",
+      "predictedSet": "bb, bb.bb71_crit_edge, bb13, bb13.bb28_crit_edge, bb23, bb28, bb28.bb13_crit_edge, bb69, bb7, bb71",
+      "tokenCount": 6690,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb28"
+      },
+      {
+        "name": "bb13.bb28_crit_edge"
+      },
+      {
+        "name": "bb28.bb13_crit_edge"
+      },
+      {
+        "name": "bb69"
+      },
+      {
+        "name": "bb71"
+      },
+      {
+        "name": "bb.bb71_crit_edge"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**: The mapping between the -O0 and -O2 blocks is based on structural similarity and control flow. For example:\n    - bb in the optimized function corresponds to the entry block in the original function.\n    - bb7 corresponds to the block after the initial condition check (icmp sgt i32 %arg2, 0).\n    - bb13 corresponds to the main loop body.\n    - bb23 and bb28 correspond to parts of the loop handling specific conditions.\n    - bb.bb71_crit_edge and bb71 correspond to the exit and finalization blocks.\n  - **Computed O0 freq(bb) Table**: All basic blocks in the -O0 profile have a frequency of 0. This suggests that the function was not executed during profiling, or the profiling data was not collected correctly.\n  - **Block Splitting/Merging**: Some blocks in the -O0 version were split or merged in the optimized version:\n    - bb13 in the optimized version combines parts of the loop from the original function.\n    - bb13.bb28_crit_edge and bb28.bb13_crit_edge represent critical edges introduced during optimization.\n  - **Total Blocks in Sorted List**: The list contains exactly 10 blocks, as required."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_c",
+      "funcName": "main",
+      "numBB": 14,
+      "originalSet": "bb, bb14, bb15, bb17, bb17.bb27_crit_edge, bb20, bb22, bb22.bb22_crit_edge, bb27, bb27.loopexit, bb3, bb31, bb6, bb9",
+      "predictedSet": "bb19 (partially merged into bb22 in the optimized version), bb22, bb24 (merged into bb22 in the optimized version)",
+      "tokenCount": 3428,
+      "discrepancy": true,
+      "duplicates": [],
+      "missing": [
+        "bb",
+        "bb3",
+        "bb6",
+        "bb9",
+        "bb14",
+        "bb15",
+        "bb17",
+        "bb17.bb27_crit_edge",
+        "bb20",
+        "bb22.bb22_crit_edge",
+        "bb27.loopexit",
+        "bb27",
+        "bb31"
+      ],
+      "extra": [
+        "bb24 (merged into bb22 in the optimized version)",
+        "bb19 (partially merged into bb22 in the optimized version)"
+      ],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb22"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb24 (merged into bb22 in the optimized version)"
+      },
+      {
+        "name": "bb19 (partially merged into bb22 in the optimized version)"
+      }
+    ],
+    "additionalNotes": ""
+  }
+]
