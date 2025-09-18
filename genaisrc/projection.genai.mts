@@ -45,83 +45,114 @@ const saveJsonObjectToArrayFile = (filePath: string, newObj: any) => {
   fs.writeFileSync(filePath, JSON.stringify(jsonArray, null, 2));
 };
 
-const parseMarkdownToJson = (
+type ParsedResult = {
+  jsonObj: {
+    benchmarkInfo: {
+      benchmarkName: string;
+      funcName: string;
+    };
+    hottestBB: {
+      bbName: string;
+    };
+    bbOrderByHotness: { name: string }[];
+    additionalNotes: string;
+  };
+  jsonSchema: any;
+};
+
+export const parseMarkdownToJson = (
   markdownContent: string,
   fileNameWithoutExt: string,
   funcName: string,
-  tokenCount: number,
+  tokenCount:number,
   numBB: number,
   bbSet: string[]
-) => {
+): ParsedResult => {
 
   // -----------------------------
   //  Extract hottest BB
-  // -----------------------------  
-  const hottestBBMatch = markdownContent.match(/\*\*Hottest Basic Block\*\*:\s*`?([A-Za-z_][A-Za-z0-9_.]*)`?/);
+  // -----------------------------
+
+  const hottestBBMatch = markdownContent.match(
+    /\*\*Hottest Basic Block\*\*:\s*`?([A-Za-z_][A-Za-z0-9_.]*)`?/
+  );
   const hottestBB = cleanName(hottestBBMatch?.[1] ?? "");
-  
-  
+
+
   // ---------------------------------
   //  Extract sorted BBs from markdown
-  // --------------------------------- 
+  // ---------------------------------
   const hotnessBlockMatch =
     markdownContent.match(/- \*\*Sorted Basic Blocks by Hotness\*\*:\s*```text\s*([\s\S]*?)```/m) ??
     markdownContent.match(/- \*\*Sorted Basic Blocks by Hotness\*\*:\s*([\s\S]+?)(?:- \*\*Additional Notes\*\*|$)/);
 
   let bbLines: string[] = [];
+
   if (hotnessBlockMatch?.[1]) {
-    bbLines = hotnessBlockMatch[1]
+    bbLines = hotnessBlockMatch[1] 
       .split("\n")
       .map((line) => line.trim())
       .filter((line) => /^\d+\.\s+/.test(line))
       .map((line) => cleanName(line.replace(/^\d+\.\s+/, "")));
   }
 
+
   // -----------------------------
   // Compare predicted vs original set
   // -----------------------------
-  const { duplicates, missing, extra, discrepancy } = compareBlockSets(bbSet, bbLines);
+  // let discrepancy = !arraysHaveSameValues(bbLines, bbSet);
+  const {duplicates, missing, extra, discrepancy} = compareBlockSets(bbSet, bbLines);
   if (discrepancy) {
-    console.warn(`Discrepancy in ${funcName}: Missing [${missing.join(", ")}], Extra [${extra.join(", ")}], Duplicates [${duplicates.join(", ")}]`);
+    console.warn(
+      `Discrepancy found in ${funcName}: ` +
+      `Missing: [${missing.join(", ")}] | ` +
+      `Extra: [${extra.join(", ")}] | ` +
+      `Duplicates: [${duplicates.join(", ")}]`
+    );
   }
 
   // -----------------------------
   // Extract additional notes
   // -----------------------------
+
   const additionalNotesMatch = markdownContent.match(/- \*\*Additional Notes\*\*:\s*([\s\S]+)/);
   const additionalNotes = additionalNotesMatch ? cleanName(additionalNotesMatch[1] ?? "").trim() : "";
 
   // -----------------------------
   // Check token count against limit
-  // ----------------------------- 
+  // -----------------------------
+
   const exceed = tokenCount > 131072;
+
 
   // -----------------------------
   // Build output object + schema
-  // ----------------------------- 
+  // -----------------------------
   const originalSet = [...bbSet].sort().join(", ");
   const predictedSet = [...bbLines].sort().join(", ");
 
   const jsonObj = {
-      benchmarkInfo: {
-        benchmarkName: fileNameWithoutExt,
-        funcName,
-        numBB,
-        originalSet,
-        predictedSet,
-        tokenCount,
-        discrepancy,
-        duplicates,
-        missing,
-        extra,
-        exceed,
-      },
-      hottestBB: { bbName: hottestBB },
-      bbOrderByHotness: bbLines.map((name) => ({ name })),
-      additionalNotes,
-    };
+    benchmarkInfo: {
+      benchmarkName: fileNameWithoutExt,
+      funcName,
+      numBB,
+      originalSet,
+      predictedSet,
+      tokenCount,
+      discrepancy,
+      duplicates,
+      missing,
+      extra,
+      exceed
+    },
+    hottestBB: {
+      bbName: hottestBB,
+    },
+    bbOrderByHotness: bbLines.map((name) => ({ name })),
+    additionalNotes,
+  };
 
-    const jsonSchema = {
+  const jsonSchema = {
     type: "object",
     properties: {
       benchmarkInfo: {
@@ -223,10 +254,10 @@ const extractFunction = (fileContent: string, funcName: string): string => {
 };
 
 const processFiles = async (env: ExpansionVariables) => {
+  const dbg = env.dbg;
   const output = env.output;
   const inputItems = env.files;
 
-  // Accept folder or file
   const filesToAnalyze: string[] = [];
   for (const item of inputItems) {
     if (fs.statSync(item.filename).isDirectory()) {
@@ -241,16 +272,13 @@ const processFiles = async (env: ExpansionVariables) => {
   for (const optFile of filesToAnalyze) {
     const filePath = path.dirname(optFile);
     const fileNameWithoutExt = path.basename(optFile, path.extname(optFile));
-    const optLevel = path.basename(path.dirname(optFile)); // o0, o1, o2, o3
+    const optLevel = path.basename(path.dirname(optFile)); 
     const benchmarkName = fileNameWithoutExt;
 
     const optContent = fs.readFileSync(optFile, "utf-8");
     const o0File = optFile.replace(`/New/${optLevel}/`, `/New/o0/`);
-    // const profileDir = `/home/anmoreira/hydra/Experiments/Profile_Projection/Profiles/o0/${benchmarkName}`;
 
-    // Go up from .../LL_Files/New/o1/... to .../Profile_Projection
     const baseRoot = path.resolve(optFile, "../../../../"); 
-    // Build the profile dir path
     const profileDir = path.join(baseRoot, "Profiles", "o0", benchmarkName);
 
     if (!fs.existsSync(o0File)) {
@@ -260,25 +288,42 @@ const processFiles = async (env: ExpansionVariables) => {
 
     const o0Content = fs.readFileSync(o0File, "utf-8");
 
+    // Extract functions from the file content
     const optFuncSet = optContent
-      .split(/; Function Attrs:/gm)
-      .map((func) => func.match(/(define\s.*?\{[^}]*\})/s)?.[0] ?? null)
-      .filter((x) => x !== null);
+    .split(/; Function Attrs:/gm)
+    .map((chunk) => {
+        const match = chunk.match(/(define\s.*?\{[^}]*\})/s);
+        return match ? match[0] : null;
+    })
+    .filter((fn): fn is string => fn !== null);
 
-    output.heading(1, `Projecting from ${optLevel} for ${benchmarkName}`);
+    console.log(optFuncSet);
+    dbg(optFuncSet);
 
+    output.heading(1, `Projecting O0 profile data onto ${optLevel.toUpperCase()} for ${benchmarkName}`);
+
+    let funCounter = 1;
     for (const optFunc of optFuncSet) {
       const funcNameMatch = optFunc.match(/@([a-zA-Z_][\w\.]*)\(/m);
       const funcName = funcNameMatch?.[1];
-      if (!funcName) continue;
+      if (!funcName) {
+        output.error("Function name not found");
+        continue;
+      }
 
       const bbSetMatch = optFunc.match(/^\s*([A-Za-z_][A-Za-z0-9_.]*):/gm);
       const bbSet = bbSetMatch ? bbSetMatch.map(l => l.trim().replace(/:$/, "")) : [];
       const numBB = bbSet.length;
+      dbg(`bbSet: ${bbSet}`);
 
-      const profilePath = `${profileDir}/${funcName}.prof.full.edges`;
-      if (!fs.existsSync(profilePath)) {
-        console.warn(`Skipping ${funcName}: Missing profile at ${profilePath}`);
+      const edgeProfilePath = `${profileDir}/${funcName}.prof.full.edges`;
+      const bbProfilePath = `${profileDir}/${funcName}.prof.full.bb`;
+
+      const hasEdges = fs.existsSync(edgeProfilePath);
+      const hasBB = fs.existsSync(bbProfilePath);
+
+      if (!hasEdges && !hasBB) {
+        console.warn(`Skipping ${funcName}: Missing both edge and bb profiles`);
         continue;
       }
 
@@ -288,67 +333,71 @@ const processFiles = async (env: ExpansionVariables) => {
         continue;
       }
 
-      const profileContent = fs.readFileSync(profilePath, "utf-8");
+      const edgeContent = hasEdges ? fs.readFileSync(edgeProfilePath, "utf-8") : "";
+      const bbContent = hasBB ? fs.readFileSync(bbProfilePath, "utf-8") : "";
 
-      output.heading(3, `Function: ${funcName}`);
+      const bbList = bbSet.join(", ");
+
+      output.heading(
+        3,
+        `${funCounter}) Analysis report of function: ${funcName}`
+      );
+      output.detailsFenced("Function being projected:", optFunc);
+      output.detailsFenced(
+        `Function ${funcName} has ${numBB} blocks:`,
+        bbSet.join(", ")
+      );
+
+      funCounter += 1;
+      console.log("Function content: \n", optFunc);
 
       try {
         const res = await runPrompt(
           (ctxt) => {
-            const o0def = ctxt.def("original", o0Func, { maxTokens: 65536 });
-            const oNdef = ctxt.def("optimized", optFunc, { maxTokens: 65536 });
-            const profdef = ctxt.def("profile", profileContent, { maxTokens: 16384 });
-            ctxt.$`
-## Role
-You are a Compiler Engineer with over 20 years of experience in compiler construction, LLVM internals, and profile-guided optimization.
-You are an expert in CFG analysis, IR transformations, and mapping profile data across optimized code versions.
+            const o0def = ctxt.def("original_function_o0", o0Func, { maxTokens: 65536 });
+            const oNdef = ctxt.def("optimized_function", optFunc, { maxTokens: 65536 });
+            if (hasBB) ctxt.def("bb_profile", bbContent, { maxTokens: 8192 });
+            if (hasEdges) ctxt.def("edge_profile", edgeContent, { maxTokens: 16384 });
 
-## Task
-You are given:
-- The original LLVM IR function compiled at -O0
-- Its edge-level profile in the format \`SRC -> DST : COUNT\`
-- The same function compiled at ${optLevel.toUpperCase()} (optimized LLVM IR)
+            ctxt.$` 
+## Role:
+You are a Compiler Engineer with over 20 years of experience 
+in compiler construction, LLVM internals, and advanced optimization techniques. 
+You have deep expertise in low-level code generation, IR transformations, and 
+performance tuning for modern architectures, with a strong track record in static analysis, 
+JIT compilation, and custom backend development.
 
-### Step 1 — Build O0 block frequencies
-Compute the approximate execution frequency of each basic block in the O0 function as:
+## Task:
+You are given a function that exists in two versions:
+- Its original LLVM IR at -O0 (**${o0def}**)
+${hasBB ? "- Its basic block counts (.bb profile)\n" : ""}${hasEdges ? "- Its edge-level profile (.edges profile)\n" : ""}- Its optimized LLVM IR at ${optLevel.toUpperCase()} (**${oNdef}**)
 
-\`\`\`
-freq(bb) = sum(counts of all incoming edges to bb)
-\`\`\`
+Your goal is to project the profile information from the -O0 version onto the optimized version.
 
-If a block has no incoming edges (entry block), estimate its frequency from its outgoing edges.
+I have two questions regarding this function:
 
-### Step 2 — Project frequencies into ${optLevel.toUpperCase()}
-Map the O0 basic blocks to their corresponding basic blocks in the optimized version.
-- If an O0 block was split, distribute its count to all resulting optimized blocks.
-- If several O0 blocks were merged into one optimized block, sum their counts.
-- If any block disappeared, note it and distribute its weight to successors.
+**Question 1 — Hot Block Estimation:**
+Estimate which basic block in the optimized function would be the *"hottest"*, 
+where "hottest" means the block that is most likely to be executed most frequently.
+Use the -O0 profile data (${hasBB ? "basic block counts" : ""}${hasBB && hasEdges ? " and " : ""}${hasEdges ? "edge counts" : ""}) to support your reasoning.
 
-### Step 3 — Sort and output
-Produce the list of all optimized basic blocks sorted by projected execution frequency.
-
----
-
-**Original Function (-O0):**
-\`\`\`llvm
-${o0def}
-\`\`\`
-
-**Edge Profile (O0):**
-\`\`\`text
-${profdef}
-\`\`\`
-
-**Optimized Function (${optLevel.toUpperCase()}):**
-\`\`\`llvm
-${oNdef}
-\`\`\`
+**Question 2 — Hotness Ranking:**
+This optimized function has ${numBB} basic blocks: ${bbList}.
+Could you sort this sequence of basic blocks by *hotness*?
+That is, if a basic block \`bb_x\` appears ahead of another 
+block \`bb_y\`, it means you think \`bb_y\` will not be executed 
+more often than \`bb_x\`, though they might have equal frequency.
 
 ---
 
-## Expected Output Format
+${hasBB ? `**Basic Block Profile (O0):**\n\`\`\`text\n${bbContent}\n\`\`\`\n` : ""}
+${hasEdges ? `**Edge Profile (O0):**\n\`\`\`text\n${edgeContent}\n\`\`\`\n` : ""}
 
-- **Hottest Basic Block**: \`<name of the hottest basic block in the optimized function>\`
+---
+
+** Expected Output Format**:
+
+- **Hottest Basic Block**: \`<name of the hottest basic block>\`
 
 - **Sorted Basic Blocks by Hotness**:
 \`\`\`text
@@ -358,17 +407,39 @@ ${oNdef}
 \`\`\`
 
 - **Additional Notes**: 
+  - Explain how you mapped old blocks to new blocks
   - Show your computed O0 \`freq(bb)\` table
-  - Explain how you mapped old blocks to new ones
   - Mention if any blocks were split, merged, or removed
 
-- **Summary**: Confirm your list contains all optimized function blocks exactly once.
+---
+
+## Instructions:
+
+1) Please respond using the format above. 
+
+2) **Ensure that the “Sorted Basic Blocks by Hotness” section 
+includes every one of the ${numBB} basic blocks listed in ${bbList}, 
+without omission or duplication.**
+
+3) After listing the sorted blocks, please provide a **summary line** 
+confirming that the total number of blocks in your list is exactly ${numBB}.
+
+4) If any block from ${bbList} is missing or duplicated in your 
+sorted list, please explicitly acknowledge it and correct the list 
+before finalizing your answer.
+
+5) Do not repeat or fully echo the entire function. Focus on 
+analysis. You may refer to specific lines or blocks but avoid 
+copying the whole code.
+
+Thank you!
 `;
           },
           { temperature: 0, model: "vision", systemSafety: true, responseType: "text" }
         );
 
         const tokenCount = res.usage?.total ?? 0;
+        output.detailsFenced("Token Count: ", `${tokenCount}`);
         output.detailsFenced("LLM Output", res.text);
 
         const jsonObj = parseMarkdownToJson(res.text, benchmarkName, funcName, tokenCount, numBB, bbSet).jsonObj;
