@@ -326,9 +326,9 @@ const processFiles = async (env: ExpansionVariables) => {
         3,
         `${funCounter}) Analysis report of function: ${funcName}`
       );
-      output.detailsFenced("Function being analized:", func);
+      output.detailsFenced("Function being analyzed:", func);
       output.detailsFenced(
-        `Function ${funcName} has ${numBB} blocks :`,
+        `Function ${funcName} has ${numBB} blocks:`,
         bbSet.join(", ")
       );
 
