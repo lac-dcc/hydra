@@ -6,8 +6,11 @@
       "numBB": 1,
       "originalSet": "bb",
       "predictedSet": "bb",
-      "tokenCount": 981,
+      "tokenCount": 977,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -18,7 +21,7 @@
         "name": "bb"
       }
     ],
-    "additionalNotes": "The function has only one basic block (`bb`), so it is trivially the hottest block. All operations, including the computation of the size, memory allocation, and return, occur within this block.\n\n- **Summary**: The total number of blocks in the list is exactly 1."
+    "additionalNotes": "The function has only one basic block (bb), so it is trivially the hottest block. All operations, including arithmetic, division, and memory allocation, occur within this block.\n\n- **Summary**: The total number of blocks in the list is exactly 1."
   },
   {
     "benchmarkInfo": {
@@ -29,6 +32,9 @@
       "predictedSet": "bb",
       "tokenCount": 1079,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -39,17 +45,20 @@
         "name": "bb"
       }
     ],
-    "additionalNotes": "The function has only one basic block (`bb`), so it is trivially the hottest block. All operations, including arithmetic, memory access, and bit manipulation, occur within this block.\n\n- **Summary**: The total number of blocks in the list is exactly 1."
+    "additionalNotes": "The function has only one basic block (bb), so it is trivially the hottest block. All operations, including arithmetic, memory access, and comparisons, are performed within this block.\n\n- **Summary**: The total number of blocks in the list is exactly 1."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "automotive_bitcount",
       "funcName": "setbit",
       "numBB": 4,
-      "originalSet": "bb, bb6, bb13, bb21",
-      "predictedSet": "bb6, bb13, bb, bb21",
-      "tokenCount": 1441,
+      "originalSet": "bb, bb13, bb21, bb6",
+      "predictedSet": "bb, bb13, bb21, bb6",
+      "tokenCount": 1461,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -69,7 +78,7 @@
         "name": "bb21"
       }
     ],
-    "additionalNotes": "- The \"hotness\" of a block depends on the likelihood of its execution. In this function:\n    - `bb6` and `bb13` are conditional branches, and one of them will always execute depending on the value of `%arg2`. Since both are mutually exclusive, they are likely to be the hottest blocks, with `bb6` slightly prioritized due to the common pattern of setting bits (when `%arg2 != 0`).\n    - `bb` is the entry block and executes once per function call, making it less hot than the conditional blocks.\n    - `bb21` is the exit block and is executed exactly once, making it the least hot.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 4."
+    "additionalNotes": "- The \"hotness\" of a block depends on the control flow and the likelihood of branching. In this function:\n    - bb6 and bb13 are the two branches from bb, and one of them will always execute based on the condition %i5. Since both are mutually exclusive, they are likely to be executed equally often, but bb6 is listed first as it corresponds to the \"true\" branch, which is often slightly more likely in many scenarios.\n    - bb is the entry block and is executed once per function call, making it less \"hot\" than the branches.\n    - bb21 is the exit block and is executed once after either bb6 or bb13, making it the least \"hot.\"\n\n- **Summary**: The total number of blocks in the sorted list is exactly 4."
   },
   {
     "benchmarkInfo": {
@@ -78,8 +87,11 @@
       "numBB": 1,
       "originalSet": "bb",
       "predictedSet": "bb",
-      "tokenCount": 1079,
+      "tokenCount": 1084,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -90,49 +102,36 @@
         "name": "bb"
       }
     ],
-    "additionalNotes": "The function contains only one basic block (`bb`), which performs all the operations, including bit manipulation and memory access. Since there are no other blocks, `bb` is trivially the hottest block.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 1."
+    "additionalNotes": "The function consists of only one basic block (bb), which performs all the operations, including arithmetic, bit manipulation, memory access, and storing the result. Since there are no other blocks, bb is trivially the hottest block.\n\n- **Summary**: The total number of blocks in the list is exactly 1."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "automotive_bitcount",
       "funcName": "bit_count",
       "numBB": 8,
-      "originalSet": "bb, bb.bb10_crit_edge, bb2, bb3, bb5, bb5.bb3_crit_edge, bb9, bb10",
-      "predictedSet": "bb5, bb5.bb3_crit_edge, bb3, bb2, bb9, bb, bb10, bb.bb10_crit_edge",
-      "tokenCount": 1585,
-      "discrepancy": false,
+      "originalSet": "bb, bb.bb10_crit_edge, bb10, bb2, bb3, bb5, bb5.bb3_crit_edge, bb9",
+      "predictedSet": "",
+      "tokenCount": 1253,
+      "discrepancy": true,
+      "duplicates": [],
+      "missing": [
+        "bb",
+        "bb.bb10_crit_edge",
+        "bb2",
+        "bb3",
+        "bb5",
+        "bb5.bb3_crit_edge",
+        "bb9",
+        "bb10"
+      ],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
-      "bbName": "bb5"
+      "bbName": ""
     },
-    "bbOrderByHotness": [
-      {
-        "name": "bb5"
-      },
-      {
-        "name": "bb5.bb3_crit_edge"
-      },
-      {
-        "name": "bb3"
-      },
-      {
-        "name": "bb2"
-      },
-      {
-        "name": "bb9"
-      },
-      {
-        "name": "bb"
-      },
-      {
-        "name": "bb10"
-      },
-      {
-        "name": "bb.bb10_crit_edge"
-      }
-    ],
-    "additionalNotes": "- The hottest block is `bb5` because it contains the loop body and is executed repeatedly as long as the condition `%i8` evaluates to true. This makes it the most frequently executed block.\n  - `bb5.bb3_crit_edge` is the next hottest because it serves as the critical edge for the loop and is traversed on every iteration.\n  - `bb3` is executed once per loop iteration, making it less hot than the above two blocks.\n  - `bb2` is executed once at the start of the loop, so it is less hot than the loop-related blocks.\n  - `bb9` is executed once when the loop exits, making it cooler than the loop-related blocks.\n  - `bb` is the entry block and is executed only once, so it is cooler than the above blocks.\n  - `bb10` is the function's exit block and is executed once, making it cooler than `bb`.\n  - `bb.bb10_crit_edge` is the coldest block because it is only executed when the input `%arg` is zero, which is a rare case.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 8."
+    "bbOrderByHotness": [],
+    "additionalNotes": ""
   },
   {
     "benchmarkInfo": {
@@ -141,8 +140,11 @@
       "numBB": 1,
       "originalSet": "bb",
       "predictedSet": "bb",
-      "tokenCount": 1276,
+      "tokenCount": 1274,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -153,7 +155,7 @@
         "name": "bb"
       }
     ],
-    "additionalNotes": "This function consists of only one basic block (`bb`), which performs a series of bitwise operations and reductions to count the number of set bits in a 64-bit integer. Since there is only one block, it is trivially the hottest block.\n\n- **Summary**: The total number of blocks in the list is exactly 1."
+    "additionalNotes": "This function consists of only one basic block (bb), which performs a series of bitwise operations and reductions to count the number of set bits in a 64-bit integer. Since there is only one block, it is trivially the hottest block.\n\n- **Summary**: The total number of blocks in the list is exactly 1."
   },
   {
     "benchmarkInfo": {
@@ -162,8 +164,11 @@
       "numBB": 1,
       "originalSet": "bb",
       "predictedSet": "bb",
-      "tokenCount": 2042,
+      "tokenCount": 2046,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -174,7 +179,7 @@
         "name": "bb"
       }
     ],
-    "additionalNotes": "The function consists of only one basic block (`bb`), which performs a series of bitwise operations, shifts, and table lookups. Since there are no branches or conditionals, the block `bb` is executed exactly once per function call. Therefore, it is both the hottest and the only block.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 1."
+    "additionalNotes": "The function consists of only one basic block (bb), which performs a series of bitwise operations, shifts, and table lookups. Since there are no conditional branches or loops, the block bb is executed exactly once per function call. Therefore, it is both the hottest and the only block in the function.\n\n- **Summary**: The total number of blocks in the list is exactly 1."
   },
   {
     "benchmarkInfo": {
@@ -183,8 +188,11 @@
       "numBB": 1,
       "originalSet": "bb",
       "predictedSet": "bb",
-      "tokenCount": 1522,
+      "tokenCount": 1530,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -195,7 +203,7 @@
         "name": "bb"
       }
     ],
-    "additionalNotes": "This function contains only one basic block (`bb`), which performs all the operations sequentially. Since there are no branches or loops, `bb` is the only block and is executed exactly once per function call. Therefore, it is the hottest block by default.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 1."
+    "additionalNotes": "This function contains only one basic block (bb), which performs a series of memory loads, arithmetic operations, and table lookups. Since there are no branches or conditional statements, the block bb is executed exactly once per function call. Therefore, it is both the hottest and the only block.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 1."
   },
   {
     "benchmarkInfo": {
@@ -203,9 +211,12 @@
       "funcName": "AR_btbl_bitcount",
       "numBB": 1,
       "originalSet": "bb",
-      "predictedSet": "`bb`",
-      "tokenCount": 1469,
+      "predictedSet": "bb",
+      "tokenCount": 1454,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -213,20 +224,23 @@
     },
     "bbOrderByHotness": [
       {
-        "name": "`bb`"
+        "name": "bb"
       }
     ],
-    "additionalNotes": "The function consists of only one basic block (`bb`), which performs a series of operations to calculate the bit count using a lookup table. Since there is only one block, it is trivially the hottest block. All operations, including memory loads, arithmetic, and return, are executed within this block.\n\n- **Summary**: The total number of blocks in the list is exactly 1."
+    "additionalNotes": "The function consists of only one basic block (bb), which performs a series of operations to calculate the bit count using a lookup table. Since there is only one block, it is trivially the hottest block.  \n\n- **Summary**: The total number of blocks in the list is exactly 1."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "automotive_bitcount",
       "funcName": "ntbl_bitcnt",
       "numBB": 4,
-      "originalSet": "bb, bb.bb11_crit_edge, bb8, bb11",
-      "predictedSet": "bb8, bb, bb11, bb.bb11_crit_edge",
-      "tokenCount": 1320,
+      "originalSet": "bb, bb.bb11_crit_edge, bb11, bb8",
+      "predictedSet": "bb, bb.bb11_crit_edge, bb11, bb8",
+      "tokenCount": 1372,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -246,7 +260,7 @@
         "name": "bb.bb11_crit_edge"
       }
     ],
-    "additionalNotes": "- The block `bb8` is the recursive call site, which makes it the most likely to be executed repeatedly, especially for large input values. \n  - The entry block `bb` is executed once per function invocation, making it the second hottest.\n  - The block `bb11` is the merge point and is executed once per function invocation after recursion resolves.\n  - The block `bb.bb11_crit_edge` is a simple transition block and is the least likely to be executed frequently.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 4."
+    "additionalNotes": "- The block bb8 is the hottest because it contains the recursive call to @ntbl_bitcnt, which is likely to be executed repeatedly for each 4-bit chunk of the input argument until the argument becomes zero. This recursive nature makes it the most frequently executed block.\n  - The block bb is the entry point and will always execute once, making it the second hottest.\n  - The block bb11 is the final block where the result is returned, and it is executed once per function call, making it less hot than bb8 and bb.\n  - The block bb.bb11_crit_edge is a simple transition block and is executed only when the recursion terminates, making it the least hot.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 4."
   },
   {
     "benchmarkInfo": {
@@ -254,9 +268,12 @@
       "funcName": "btbl_bitcnt",
       "numBB": 4,
       "originalSet": "bb, bb.bb16_crit_edge, bb12, bb16",
-      "predictedSet": "`bb`, `bb.bb16_crit_edge`, `bb16`, `bb12`",
-      "tokenCount": 1461,
+      "predictedSet": "bb, bb.bb16_crit_edge, bb12, bb16",
+      "tokenCount": 1471,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -264,29 +281,32 @@
     },
     "bbOrderByHotness": [
       {
-        "name": "`bb`"
+        "name": "bb"
       },
       {
-        "name": "`bb.bb16_crit_edge`"
+        "name": "bb.bb16_crit_edge"
       },
       {
-        "name": "`bb16`"
+        "name": "bb16"
       },
       {
-        "name": "`bb12`"
+        "name": "bb12"
       }
     ],
-    "additionalNotes": "- The `bb` block is the entry point and contains the main loop logic, making it the most frequently executed block.  \n  - The `bb.bb16_crit_edge` block is a simple transition block and will be executed whenever the loop exits.  \n  - The `bb16` block is the final block where the result is returned, so it is executed once per function call.  \n  - The `bb12` block is executed only when the recursive call is made, which depends on the input value, making it the least frequently executed block.  \n\n- **Summary**: The total number of blocks in the sorted list is exactly 4."
+    "additionalNotes": "- The bb block is the entry point and contains the main loop logic, making it the most frequently executed block.  \n  - The bb.bb16_crit_edge block is a simple transition block and is executed whenever the loop condition in bb fails.  \n  - The bb16 block is the final block where the result is returned, so it is executed once per function call.  \n  - The bb12 block is executed only when the loop condition in bb succeeds, making it less frequent than bb.bb16_crit_edge and bb16.  \n\n- **Summary**: The total number of blocks in the sorted list is exactly 4."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "automotive_bitcount",
       "funcName": "main1",
       "numBB": 17,
-      "originalSet": "bb, bb6, bb9, bb9.bb16_crit_edge, bb14, bb16, bb17, bb19, bb20, bb23, bb30, bb33, bb33.bb40_crit_edge, bb35, bb40, bb41, bb43",
-      "predictedSet": "bb20, bb23, bb30, bb17, bb19, bb33, bb35, bb40, bb41, bb16, bb9, bb9.bb16_crit_edge, bb33.bb40_crit_edge, bb14, bb, bb6, bb43",
-      "tokenCount": 2313,
+      "originalSet": "bb, bb14, bb16, bb17, bb19, bb20, bb23, bb30, bb33, bb33.bb40_crit_edge, bb35, bb40, bb41, bb43, bb6, bb9, bb9.bb16_crit_edge",
+      "predictedSet": "bb, bb14, bb16, bb17, bb19, bb20, bb23, bb30, bb33, bb33.bb40_crit_edge, bb35, bb40, bb41, bb43, bb6, bb9, bb9.bb16_crit_edge",
+      "tokenCount": 2255,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -336,26 +356,29 @@
         "name": "bb14"
       },
       {
-        "name": "bb"
+        "name": "bb43"
       },
       {
         "name": "bb6"
       },
       {
-        "name": "bb43"
+        "name": "bb"
       }
     ],
-    "additionalNotes": "- The hottest block is `bb20` because it contains a nested loop structure (`bb20 -> bb23 -> bb30 -> bb20`) that iterates based on the value of `%i21` (derived from `%i12`), which is likely user-controlled and can lead to high iteration counts.\n  - Blocks like `bb23` and `bb30` are also hot due to their participation in the loop.\n  - Blocks `bb17`, `bb19`, and `bb33` are part of the outer control flow and are executed less frequently than the inner loop but more frequently than other blocks.\n  - Blocks like `bb6` and `bb43` are cold because they are either early exits or terminal blocks.\n  - The total number of blocks in the sorted list is **17**, matching the original count. No blocks are missing or duplicated."
+    "additionalNotes": "- The hottest block is bb20 because it is part of a nested loop structure, iterating over two variables (%.02 and %.03), making it the most frequently executed block.\n  - Blocks bb23 and bb30 are also part of the inner loop, so they are ranked high in hotness.\n  - Blocks like bb6 and bb are less likely to be executed often due to their placement in the early exit path.\n  - The total number of blocks in the sorted list is exactly 17, as required."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "automotive_bitcount",
       "funcName": "bit_shifter",
       "numBB": 8,
-      "originalSet": "bb, bb3, bb3.bb7_crit_edge, bb4, bb7, bb9, bb13, bb16",
-      "predictedSet": "bb3, bb9, bb13, bb7, bb4, bb3.bb7_crit_edge, bb, bb16",
-      "tokenCount": 1530,
+      "originalSet": "bb, bb13, bb16, bb3, bb3.bb7_crit_edge, bb4, bb7, bb9",
+      "predictedSet": "bb, bb13, bb16, bb3, bb3.bb7_crit_edge, bb4, bb7, bb9",
+      "tokenCount": 1596,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -366,10 +389,10 @@
         "name": "bb3"
       },
       {
-        "name": "bb9"
+        "name": "bb13"
       },
       {
-        "name": "bb13"
+        "name": "bb9"
       },
       {
         "name": "bb7"
@@ -387,17 +410,20 @@
         "name": "bb16"
       }
     ],
-    "additionalNotes": "- `bb3` is the loop header and is revisited repeatedly during the loop execution, making it the hottest block.  \n  - `bb9` and `bb13` are part of the loop body and are executed frequently, but slightly less often than `bb3`.  \n  - `bb7` and `bb4` are conditional blocks that determine the loop's behavior, executed less frequently than the loop body.  \n  - `bb3.bb7_crit_edge` is a critical edge block, executed only during specific transitions.  \n  - `bb` is the entry block, executed only once.  \n  - `bb16` is the return block, executed once after the loop terminates.  \n\n- **Summary**: The total number of blocks in the sorted list is exactly 8."
+    "additionalNotes": "- bb3 is the loop header and is revisited repeatedly during the loop execution, making it the hottest block.  \n  - bb13 is part of the loop body and is executed once per iteration, making it the second hottest.  \n  - bb9 is also part of the loop body but is conditionally executed, so it is slightly less hot than bb13.  \n  - bb7 serves as a decision point for the loop and is executed once per iteration, but it is less hot than the loop body blocks.  \n  - bb4 is executed only when the condition in bb3 evaluates to true, making it less hot than the loop-related blocks.  \n  - bb3.bb7_crit_edge is a connector block and is executed less frequently than the main loop blocks.  \n  - bb is the entry block and is executed only once.  \n  - bb16 is the function exit block and is executed only once after the loop terminates.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 8."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "automotive_bitcount",
       "funcName": "bfopen",
       "numBB": 6,
-      "originalSet": "bb, bb3, bb4, bb10, bb11, bb14",
-      "predictedSet": "`bb4`, `bb11`, `bb14`, `bb10`, `bb`, `bb3`",
-      "tokenCount": 1512,
+      "originalSet": "bb, bb10, bb11, bb14, bb3, bb4",
+      "predictedSet": "bb, bb10, bb11, bb14, bb3, bb4",
+      "tokenCount": 1573,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -405,35 +431,38 @@
     },
     "bbOrderByHotness": [
       {
-        "name": "`bb4`"
+        "name": "bb4"
       },
       {
-        "name": "`bb11`"
+        "name": "bb11"
       },
       {
-        "name": "`bb14`"
+        "name": "bb14"
       },
       {
-        "name": "`bb10`"
+        "name": "bb10"
       },
       {
-        "name": "`bb`"
+        "name": "bb"
       },
       {
-        "name": "`bb3`"
+        "name": "bb3"
       }
     ],
-    "additionalNotes": "- `bb4` is the hottest block because it is the main block where the function proceeds after memory allocation and performs the core operations, including file opening and subsequent checks.  \n  - `bb11` is likely the second hottest because it handles the successful case of file opening and continues execution.  \n  - `bb14` is a common exit block, so it is executed frequently but only after other blocks.  \n  - `bb10` is executed when the file opening fails, making it less frequent than `bb11`.  \n  - `bb` is the entry block, executed once per function call.  \n  - `bb3` is the least hot because it handles the rare case of memory allocation failure.  \n\n**Summary**: The total number of blocks in the sorted list is exactly 6."
+    "additionalNotes": "- bb4 is the hottest block because it is the main block where the file is opened and subsequent operations are performed. It leads to either bb10 or bb11, depending on the success of the fopen call.\n  - bb11 is likely the second hottest because it handles the successful case of fopen and performs further initialization.\n  - bb14 is the final block where the function returns, and it is reached from multiple predecessors (bb3, bb10, bb11), making it moderately hot.\n  - bb10 is less hot than bb11 because it handles the failure case of fopen, which is less frequent in typical scenarios.\n  - bb is executed only once at the start of the function, making it cooler than the blocks involved in the main logic.\n  - bb3 is the coldest block as it handles the rare case where malloc fails, which is uncommon in most environments.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 6."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "automotive_bitcount",
       "funcName": "bfread",
       "numBB": 4,
-      "originalSet": "bb, bb.bb11_crit_edge, bb4, bb11",
-      "predictedSet": "bb11, bb, bb4, bb.bb11_crit_edge",
-      "tokenCount": 1643,
+      "originalSet": "bb, bb.bb11_crit_edge, bb11, bb4",
+      "predictedSet": "bb, bb.bb11_crit_edge, bb11, bb4",
+      "tokenCount": 1664,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -453,17 +482,20 @@
         "name": "bb.bb11_crit_edge"
       }
     ],
-    "additionalNotes": "- The block `bb11` is the hottest because it is the final block where the function performs its main computation and is reached regardless of the branch taken in `bb`.  \n  - The entry block `bb` is executed once per function call, making it the second hottest.  \n  - The block `bb4` is executed only when the condition in `bb` evaluates true, making it less frequent than `bb`.  \n  - The block `bb.bb11_crit_edge` is a simple edge connector and is executed only when the condition in `bb` evaluates false, making it the least hot.  \n\n- **Summary**: The total number of blocks in the sorted list is exactly 4."
+    "additionalNotes": "- The bb11 block is the hottest because it is the final block where the main computation and return occur. It is executed regardless of the branch taken earlier in the function.  \n  - The bb block is the entry point and is executed once per function call, making it the second hottest.  \n  - The bb4 block is executed only when the condition %i3 evaluates to true, making it less frequent than bb.  \n  - The bb.bb11_crit_edge block is a critical edge block that simply redirects control flow to bb11 and is executed only when %i3 evaluates to false, making it the least hot.  \n\n- **Summary**: The total number of blocks in the sorted list is exactly 4."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "automotive_bitcount",
       "funcName": "bfwrite",
       "numBB": 4,
-      "originalSet": "bb, bb.bb13_crit_edge, bb5, bb13",
-      "predictedSet": "`bb13`, `bb`, `bb.bb13_crit_edge`, `bb5`",
-      "tokenCount": 1741,
+      "originalSet": "bb, bb.bb13_crit_edge, bb13, bb5",
+      "predictedSet": "bb, bb.bb13_crit_edge, bb13, bb5",
+      "tokenCount": 1757,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -471,19 +503,19 @@
     },
     "bbOrderByHotness": [
       {
-        "name": "`bb13`"
+        "name": "bb13"
       },
       {
-        "name": "`bb`"
+        "name": "bb"
       },
       {
-        "name": "`bb.bb13_crit_edge`"
+        "name": "bb5"
       },
       {
-        "name": "`bb5`"
+        "name": "bb.bb13_crit_edge"
       }
     ],
-    "additionalNotes": "- `bb13` is the hottest block because it is the final block in the function and is executed unconditionally after both `bb` and `bb5`. It contains the majority of the computation and updates, making it the most frequently executed block.  \n  - `bb` is the entry block and is executed once per function call, making it the second hottest.  \n  - `bb.bb13_crit_edge` is a simple transition block that leads to `bb13` when the condition in `bb` is false. It is less hot than `bb` but still executed in some cases.  \n  - `bb5` is executed only when the condition in `bb` evaluates to true, making it the least hot block.  \n\n- **Summary**: The total number of blocks in the sorted list is exactly 4."
+    "additionalNotes": "- bb13 is the hottest block because it is the final block in the function and is executed unconditionally after both bb and bb5. It contains the main logic for updating the state and is likely executed every time the function is called.  \n  - bb is the entry block and is executed once per function call, making it the second hottest.  \n  - bb5 is conditionally executed based on the comparison in bb. It is executed only if %i3 == 8, making it less frequent than bb.  \n  - bb.bb13_crit_edge is a simple transition block that leads to bb13 when the condition in bb is false. It is the least hot because it does not contain significant logic and is only a connector.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 4."
   },
   {
     "benchmarkInfo": {
@@ -492,8 +524,11 @@
       "numBB": 1,
       "originalSet": "bb",
       "predictedSet": "bb",
-      "tokenCount": 1011,
+      "tokenCount": 987,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -504,7 +539,7 @@
         "name": "bb"
       }
     ],
-    "additionalNotes": "The function has only one basic block (`bb`), so it is trivially the hottest block. The block contains all the operations, including pointer dereferencing, function calls (`fclose` and `free`), and the return statement. Since there are no conditional branches or loops, the execution frequency of `bb` is always 1 per function call.\n\n- **Summary**: The total number of blocks in the list is exactly 1."
+    "additionalNotes": "The function has only one basic block (bb), so it is trivially the hottest block. All operations, including pointer dereferencing, function calls (fclose and free), and the return statement, occur within this block.\n\n- **Summary**: The total number of blocks in the list is exactly 1."
   },
   {
     "benchmarkInfo": {
@@ -512,27 +547,18 @@
       "funcName": "bitstring",
       "numBB": 13,
       "originalSet": "bb, bb13, bb15, bb17, bb19, bb20, bb23, bb23.bb36_crit_edge, bb32, bb32.bb36_crit_edge, bb34, bb36, bb37",
-      "predictedSet": "bb23, bb23.bb36_crit_edge, bb36, bb20, bb13, bb15, bb17, bb32, bb32.bb36_crit_edge, bb34, bb19, bb37, bb",
-      "tokenCount": 2166,
+      "predictedSet": "bb, bb13, bb15, bb17, bb19, bb20, bb23, bb23.bb36_crit_edge, bb32, bb32.bb36_crit_edge, bb34, bb36, bb37",
+      "tokenCount": 2212,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
-      "bbName": "bb23"
+      "bbName": "bb13"
     },
     "bbOrderByHotness": [
-      {
-        "name": "bb23"
-      },
-      {
-        "name": "bb23.bb36_crit_edge"
-      },
-      {
-        "name": "bb36"
-      },
-      {
-        "name": "bb20"
-      },
       {
         "name": "bb13"
       },
@@ -541,6 +567,15 @@
       },
       {
         "name": "bb17"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb23.bb36_crit_edge"
+      },
+      {
+        "name": "bb36"
       },
       {
         "name": "bb32"
@@ -552,6 +587,9 @@
         "name": "bb34"
       },
       {
+        "name": "bb20"
+      },
+      {
         "name": "bb19"
       },
       {
@@ -561,17 +599,20 @@
         "name": "bb"
       }
     ],
-    "additionalNotes": "- `bb23` is the hottest block because it contains the main loop that iterates over the bits of `%arg3` and performs operations on them. This block is likely executed the most due to the loop structure.\n  - `bb23.bb36_crit_edge` and `bb36` are closely tied to `bb23` as they handle loop continuation and critical edge transitions, making them the next hottest.\n  - Blocks like `bb13`, `bb15`, and `bb17` are part of the initial setup loop and are executed less frequently than the main loop.\n  - Blocks like `bb19` and `bb37` are exit or cleanup blocks and are executed only once, making them the least hot.\n  - The total number of blocks in the sorted list is exactly 13, as required."
+    "additionalNotes": "- bb13 is the hottest block because it contains the main loop controlling the first phase of the function, iterating over a range determined by %i12. This loop is likely to execute many times depending on the input values.\n  - bb15 and bb17 are part of the same loop as bb13, making them the next hottest blocks.\n  - bb23 and its successors (bb23.bb36_crit_edge, bb36, etc.) form the second loop, which processes bits of %arg3. These blocks are executed less frequently than the first loop but still dominate the function's execution.\n  - bb20 and bb19 are transition blocks and are executed less frequently than the loops.\n  - bb37 is the function's exit block, executed only once.\n  - bb is the entry block and is executed only once.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 13. No blocks are missing or duplicated."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "automotive_bitcount",
       "funcName": "bstr_i",
       "numBB": 9,
-      "originalSet": "bb, bb2, bb2.bb12_crit_edge, bb3, bb3.bb12_crit_edge, bb7, bb12, bb14, bb22",
-      "predictedSet": "bb2, bb3, bb7, bb14, bb12, bb, bb3.bb12_crit_edge, bb2.bb12_crit_edge, bb22",
-      "tokenCount": 1771,
+      "originalSet": "bb, bb12, bb14, bb2, bb2.bb12_crit_edge, bb22, bb3, bb3.bb12_crit_edge, bb7",
+      "predictedSet": "bb, bb12, bb14, bb2, bb2.bb12_crit_edge, bb22, bb3, bb3.bb12_crit_edge, bb7",
+      "tokenCount": 1808,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -606,17 +647,20 @@
         "name": "bb22"
       }
     ],
-    "additionalNotes": "- `bb2` is the loop header and is revisited repeatedly due to the loop structure, making it the hottest block.\n  - `bb3` and `bb7` are part of the loop body and are executed frequently, but less often than `bb2`.\n  - `bb14` is executed within the loop but depends on the condition in `bb12`, so it is slightly less hot than `bb3` and `bb7`.\n  - `bb12` acts as a decision point and is executed less frequently than the loop body.\n  - `bb` is the entry block and is executed only once.\n  - `bb3.bb12_crit_edge` and `bb2.bb12_crit_edge` are critical edges and are executed less frequently than the main loop blocks.\n  - `bb22` is the function's exit block and is executed only once.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 9."
+    "additionalNotes": "- bb2 is the hottest block because it contains the main loop header and is revisited repeatedly during the loop execution.  \n  - bb3 is the next hottest as it is part of the loop body and checks the condition for further processing.  \n  - bb7 is executed when the condition in bb3 is true, making it less frequent than bb3 but still part of the loop.  \n  - bb14 is executed when the condition in bb12 is true, contributing to the loop's computation.  \n  - bb12 acts as a decision point for exiting the loop or continuing, making it less frequent than the loop body blocks.  \n  - bb is the entry block and is executed only once.  \n  - bb3.bb12_crit_edge and bb2.bb12_crit_edge are critical edges and are executed less frequently than the main loop blocks.  \n  - bb22 is the return block and is executed only once when the loop terminates.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 9."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "automotive_bitcount",
       "funcName": "main",
       "numBB": 8,
-      "originalSet": "bb, bb5, bb8, bb11, bb14, bb20, bb22, bb23",
-      "predictedSet": "bb11, bb14, bb20, bb22, bb8, bb23, bb, bb5",
-      "tokenCount": 1714,
+      "originalSet": "bb, bb11, bb14, bb20, bb22, bb23, bb5, bb8",
+      "predictedSet": "bb, bb11, bb14, bb20, bb22, bb23, bb5, bb8",
+      "tokenCount": 1695,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -633,10 +677,10 @@
         "name": "bb20"
       },
       {
-        "name": "bb22"
+        "name": "bb8"
       },
       {
-        "name": "bb8"
+        "name": "bb22"
       },
       {
         "name": "bb23"
@@ -648,6 +692,6 @@
         "name": "bb5"
       }
     ],
-    "additionalNotes": "- `bb11` is the hottest block because it contains a loop structure (`br label %bb11`) that iterates based on the comparison of `%.01` and `%i12`. Loops are typically the hottest regions in a function.\n  - `bb14` and `bb20` are part of the loop body, so they are also hot but slightly less frequent than `bb11` due to loop control flow.\n  - `bb22` is the exit block of the loop, executed once after the loop finishes.\n  - `bb8` is executed once for file reading and initialization, making it less hot than the loop-related blocks.\n  - `bb23` is the final return block, executed once at the end of the function.\n  - `bb` is the entry block, executed once at the start.\n  - `bb5` is a rare block, executed only if the file opening fails (`%i4` is true).\n\n- **Summary**: The total number of blocks in the sorted list is exactly 8."
+    "additionalNotes": "- The hottest block is bb11 because it contains a loop structure (br label %bb11) that iterates based on the comparison of %.01 and %i12. Loops are typically the hottest regions in a function.\n  - bb14 and bb20 are part of the loop body, so they are also hot but slightly less frequent than bb11 due to loop control flow.\n  - bb8 is executed once before entering the loop, making it less hot than the loop blocks.\n  - bb22 and bb23 are executed after the loop, with bb23 being the final return block.\n  - bb is the entry block, executed only once.\n  - bb5 is a rare block executed only if the file opening fails (%i4 is true).\n\n- **Summary**: The total number of blocks in the sorted list is exactly 8."
   }
 ]

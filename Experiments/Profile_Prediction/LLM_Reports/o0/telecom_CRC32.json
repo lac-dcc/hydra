@@ -6,8 +6,11 @@
       "numBB": 1,
       "originalSet": "bb",
       "predictedSet": "bb",
-      "tokenCount": 1051,
+      "tokenCount": 1055,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -18,17 +21,20 @@
         "name": "bb"
       }
     ],
-    "additionalNotes": "The function consists of only one basic block (`bb`), which contains all the operations. Since there are no other blocks or branching, `bb` is the only block executed and is therefore the hottest by default.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 1."
+    "additionalNotes": "This function contains only one basic block (bb), which performs all the operations, including bitwise manipulations, memory access, and the return statement. Since there are no other blocks, bb is trivially the hottest block.\n\n- **Summary**: The total number of blocks in the list is exactly 1."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "telecom_CRC32",
       "funcName": "crc32file",
       "numBB": 10,
-      "originalSet": "bb, bb5, bb6, bb7, bb10, bb21, bb21.bb25_crit_edge, bb24, bb25, bb28",
-      "predictedSet": "bb7, bb10, bb21, bb21.bb25_crit_edge, bb25, bb6, bb, bb28, bb5, bb24",
-      "tokenCount": 1908,
+      "originalSet": "bb, bb10, bb21, bb21.bb25_crit_edge, bb24, bb25, bb28, bb5, bb6, bb7",
+      "predictedSet": "bb, bb10, bb21, bb21.bb25_crit_edge, bb24, bb25, bb28, bb5, bb6, bb7",
+      "tokenCount": 1923,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -54,9 +60,6 @@
         "name": "bb6"
       },
       {
-        "name": "bb"
-      },
-      {
         "name": "bb28"
       },
       {
@@ -64,19 +67,25 @@
       },
       {
         "name": "bb24"
+      },
+      {
+        "name": "bb"
       }
     ],
-    "additionalNotes": "- The hottest block is `bb7` because it contains the main loop that processes each character of the file, making it the most frequently executed block.\n  - `bb10` is the second hottest as it is part of the loop body and performs the CRC computation.\n  - `bb21` handles the loop exit condition and error checking, making it less frequent than the loop body but still significant.\n  - `bb21.bb25_crit_edge` and `bb25` are part of the cleanup and error handling paths, executed after the loop exits.\n  - `bb6` initializes the loop, and `bb` is the entry block, both executed only once.\n  - `bb28` is the final return block, executed once after cleanup.\n  - `bb5` and `bb24` are error-handling blocks, executed only in specific failure scenarios, making them the least hot.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 10."
+    "additionalNotes": "- The hottest block is bb7 because it contains the main loop that processes each character of the file, making it the most frequently executed block.\n  - bb10 is the second hottest as it is part of the loop and updates the CRC computation.\n  - bb21 handles the loop exit condition and error checking, making it less frequent than the loop body but still significant.\n  - bb21.bb25_crit_edge and bb25 are part of the cleanup and error handling, executed after the loop exits.\n  - bb6 initializes the loop, executed once.\n  - bb28 is the final return block, executed once after cleanup.\n  - bb5 handles the error case when the file cannot be opened, less frequent than the main path.\n  - bb24 is executed only if an error occurs during file reading, making it rare.\n  - bb is the entry block, executed once.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 10."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "telecom_CRC32",
       "funcName": "crc32buf",
       "numBB": 5,
-      "originalSet": "bb, bb4, bb5, bb14, bb17",
-      "predictedSet": "bb5, bb14, bb4, bb, bb17",
-      "tokenCount": 1433,
+      "originalSet": "bb, bb14, bb17, bb4, bb5",
+      "predictedSet": "bb, bb14, bb17, bb4, bb5",
+      "tokenCount": 1478,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -93,23 +102,26 @@
         "name": "bb4"
       },
       {
-        "name": "bb"
+        "name": "bb17"
       },
       {
-        "name": "bb17"
+        "name": "bb"
       }
     ],
-    "additionalNotes": "- `bb5` is the hottest block because it is part of the main loop and performs the core computation (loading, XOR, table lookup, etc.).\n  - `bb14` is the second hottest as it updates the loop variables and branches back to `bb4`.\n  - `bb4` is the loop header, executed once per iteration, making it less hot than `bb5` and `bb14`.\n  - `bb` is the entry block, executed only once at the start.\n  - `bb17` is the exit block, executed only once when the loop terminates.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 5."
+    "additionalNotes": "- bb5 is the hottest block because it is part of the main loop and performs the core computation (loading, XOR, table lookup, etc.). It is executed once per iteration of the loop.\n  - bb14 is the second hottest block as it updates the loop variables and branches back to bb4. It is executed once per iteration, just like bb5, but does less work.\n  - bb4 is the loop header and is executed once per loop iteration, but it primarily handles control flow and is less computationally intensive than bb5 or bb14.\n  - bb17 is executed only once, after the loop exits, to compute the final result.\n  - bb is the entry block and is executed only once at the start of the function.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 5."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "telecom_CRC32",
       "funcName": "main1",
       "numBB": 7,
-      "originalSet": "bb, bb6, bb9, bb9.bb20_crit_edge, bb15, bb20, bb21",
-      "predictedSet": "bb9, bb6, bb9.bb20_crit_edge, bb20, bb15, bb, bb21",
-      "tokenCount": 1732,
+      "originalSet": "bb, bb15, bb20, bb21, bb6, bb9, bb9.bb20_crit_edge",
+      "predictedSet": "bb, bb15, bb20, bb21, bb6, bb9, bb9.bb20_crit_edge",
+      "tokenCount": 1734,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -138,17 +150,20 @@
         "name": "bb21"
       }
     ],
-    "additionalNotes": "- `bb9` is the hottest block because it is part of the main loop and contains the core computation (`crc32file` call) and branching logic. It is executed repeatedly as long as the loop condition holds.\n  - `bb6` is the loop header and is executed once per iteration, making it the second hottest block.\n  - `bb9.bb20_crit_edge` is a critical edge block that connects `bb9` to `bb20`. It is executed once per iteration when the loop continues.\n  - `bb20` is executed at the end of each iteration, making it less hot than the loop body but still part of the loop.\n  - `bb15` is executed conditionally within the loop, depending on the value of `%arg4`, so it is less frequently executed than the loop body.\n  - `bb` is the entry block and is executed only once at the start of the function.\n  - `bb21` is the exit block and is executed only once after the loop terminates.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 7."
+    "additionalNotes": "- bb9 is the hottest block because it is part of the main loop and contains the core computation (crc32file call) and branching logic. It is executed repeatedly as long as the loop condition holds.\n  - bb6 is the loop header and is executed at least once per loop iteration, making it the second hottest block.\n  - bb9.bb20_crit_edge is a critical edge block that connects bb9 to bb20. It is executed once per loop iteration when the condition in bb9 is false.\n  - bb20 is executed once per loop iteration after bb9.bb20_crit_edge.\n  - bb15 is executed conditionally within the loop, depending on the value of %arg4, making it less hot than the above blocks.\n  - bb is the entry block and is executed only once at the start of the function.\n  - bb21 is the exit block and is executed only once after the loop terminates.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 7."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "telecom_CRC32",
       "funcName": "main",
       "numBB": 8,
-      "originalSet": "bb, bb5, bb8, bb11, bb14, bb20, bb22, bb23",
-      "predictedSet": "`bb11`, `bb14`, `bb20`, `bb22`, `bb8`, `bb`, `bb5`, `bb23`",
-      "tokenCount": 1703,
+      "originalSet": "bb, bb11, bb14, bb20, bb22, bb23, bb5, bb8",
+      "predictedSet": "bb, bb11, bb14, bb20, bb22, bb23, bb5, bb8",
+      "tokenCount": 1671,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -156,30 +171,30 @@
     },
     "bbOrderByHotness": [
       {
-        "name": "`bb11`"
+        "name": "bb11"
       },
       {
-        "name": "`bb14`"
+        "name": "bb14"
       },
       {
-        "name": "`bb20`"
+        "name": "bb20"
       },
       {
-        "name": "`bb22`"
+        "name": "bb8"
       },
       {
-        "name": "`bb8`"
+        "name": "bb22"
       },
       {
-        "name": "`bb`"
+        "name": "bb23"
       },
       {
-        "name": "`bb5`"
+        "name": "bb"
       },
       {
-        "name": "`bb23`"
+        "name": "bb5"
       }
     ],
-    "additionalNotes": "- `bb11` is the hottest block because it contains a loop structure (`br label %bb11`) and is revisited multiple times during the iteration.  \n  - `bb14` and `bb20` are part of the loop body, so they are also frequently executed but slightly less than `bb11` due to loop control.  \n  - `bb22` is executed after the loop exits, making it less hot than the loop blocks.  \n  - `bb8` is executed once before entering the loop, making it cooler than the loop-related blocks.  \n  - `bb` is the entry block, executed once, so it is cooler than `bb8`.  \n  - `bb5` is executed only if the file opening fails, making it less likely to execute.  \n  - `bb23` is the final block, executed once, making it the least hot.  \n\n- **Summary**: The total number of blocks in the sorted list is exactly 8."
+    "additionalNotes": "- bb11 is the hottest block because it contains a loop structure (br label %bb11) and is revisited multiple times during the iteration.  \n  - bb14 and bb20 are part of the loop body, so they are also executed frequently but less than bb11 due to loop control.  \n  - bb8 is executed once before entering the loop, making it less hot than the loop blocks.  \n  - bb22 and bb23 are executed after the loop, with bb23 being the final return block.  \n  - bb is the entry block, executed only once.  \n  - bb5 is a rare error-handling block, executed only if the file opening fails.  \n\n- **Summary**: The total number of blocks in the sorted list is exactly 8."
   }
 ]

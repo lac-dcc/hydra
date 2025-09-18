@@ -4,10 +4,13 @@
       "benchmarkName": "telecom_adpcm_d",
       "funcName": "adpcm_coder",
       "numBB": 38,
-      "originalSet": "bb, bb32, bb34, bb34.bb45_crit_edge, bb43, bb45, bb45.bb51_crit_edge, bb48, bb51, bb51.bb58_crit_edge, bb54, bb58, bb58.bb64_crit_edge, bb61, bb64, bb66, bb68, bb70, bb72, bb73, bb73.bb76_crit_edge, bb75, bb76, bb77, bb77.bb85_crit_edge, bb84, bb85, bb85.bb88_crit_edge, bb87, bb88, bb93, bb96, bb101, bb105, bb107, bb107.bb112_crit_edge, bb109, bb112",
-      "predictedSet": "bb32, bb34, bb45, bb51, bb58, bb64, bb70, bb77, bb85, bb88, bb105, bb43, bb54, bb61, bb66, bb68, bb73, bb76, bb96, bb101, bb107, bb112, bb34.bb45_crit_edge, bb45.bb51_crit_edge, bb51.bb58_crit_edge, bb58.bb64_crit_edge, bb73.bb76_crit_edge, bb77.bb85_crit_edge, bb85.bb88_crit_edge, bb93, bb72, bb75, bb87, bb84, bb109, bb107.bb112_crit_edge, bb48, bb",
-      "tokenCount": 4530,
+      "originalSet": "bb, bb101, bb105, bb107, bb107.bb112_crit_edge, bb109, bb112, bb32, bb34, bb34.bb45_crit_edge, bb43, bb45, bb45.bb51_crit_edge, bb48, bb51, bb51.bb58_crit_edge, bb54, bb58, bb58.bb64_crit_edge, bb61, bb64, bb66, bb68, bb70, bb72, bb73, bb73.bb76_crit_edge, bb75, bb76, bb77, bb77.bb85_crit_edge, bb84, bb85, bb85.bb88_crit_edge, bb87, bb88, bb93, bb96",
+      "predictedSet": "bb, bb101, bb105, bb107, bb107.bb112_crit_edge, bb109, bb112, bb32, bb34, bb34.bb45_crit_edge, bb43, bb45, bb45.bb51_crit_edge, bb48, bb51, bb51.bb58_crit_edge, bb54, bb58, bb58.bb64_crit_edge, bb61, bb64, bb66, bb68, bb70, bb72, bb73, bb73.bb76_crit_edge, bb75, bb76, bb77, bb77.bb85_crit_edge, bb84, bb85, bb85.bb88_crit_edge, bb87, bb88, bb93, bb96",
+      "tokenCount": 4515,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -45,6 +48,9 @@
         "name": "bb88"
       },
       {
+        "name": "bb101"
+      },
+      {
         "name": "bb105"
       },
       {
@@ -72,10 +78,7 @@
         "name": "bb96"
       },
       {
-        "name": "bb101"
-      },
-      {
-        "name": "bb107"
+        "name": "bb109"
       },
       {
         "name": "bb112"
@@ -105,22 +108,22 @@
         "name": "bb93"
       },
       {
+        "name": "bb107"
+      },
+      {
+        "name": "bb107.bb112_crit_edge"
+      },
+      {
         "name": "bb72"
       },
       {
         "name": "bb75"
       },
       {
-        "name": "bb87"
-      },
-      {
         "name": "bb84"
       },
       {
-        "name": "bb109"
-      },
-      {
-        "name": "bb107.bb112_crit_edge"
+        "name": "bb87"
       },
       {
         "name": "bb48"
@@ -129,7 +132,7 @@
         "name": "bb"
       }
     ],
-    "additionalNotes": "- The hottest block is `bb32` because it serves as the main loop header and is revisited repeatedly due to the loop structure.\n  - Blocks like `bb34`, `bb45`, `bb51`, and `bb58` are part of the loop body and are executed frequently, making them relatively hot.\n  - Blocks such as `bb93`, `bb72`, and `bb75` are less likely to be executed often due to their placement in conditional branches or rare paths.\n  - The list includes all 38 basic blocks without omission or duplication.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 38."
+    "additionalNotes": "- The hottest block, bb32, is the main loop header and is revisited repeatedly due to the loop structure.\n  - Blocks like bb34, bb45, bb51, and bb58 are part of the loop body and are executed frequently.\n  - Blocks such as bb107, bb112, and bb96 are less hot as they are part of the function's exit or less frequently executed paths.\n  - The total number of blocks in the sorted list is **38**, matching the original count. No blocks are missing or duplicated."
   },
   {
     "benchmarkInfo": {
@@ -137,9 +140,12 @@
       "funcName": "adpcm_decoder",
       "numBB": 32,
       "originalSet": "bb, bb27, bb29, bb31, bb33, bb39, bb39.bb49_crit_edge, bb48, bb49, bb49.bb52_crit_edge, bb51, bb52, bb52.bb60_crit_edge, bb58, bb60, bb60.bb66_crit_edge, bb63, bb66, bb66.bb72_crit_edge, bb69, bb72, bb74, bb76, bb78, bb80, bb81, bb81.bb84_crit_edge, bb83, bb84, bb85, bb91, bb93",
-      "predictedSet": "bb27, bb29, bb39, bb52, bb60, bb66, bb72, bb78, bb85, bb91, bb93, bb33, bb31, bb49, bb48, bb51, bb58, bb63, bb69, bb74, bb76, bb80, bb81, bb84, bb39.bb49_crit_edge, bb49.bb52_crit_edge, bb52.bb60_crit_edge, bb60.bb66_crit_edge, bb66.bb72_crit_edge, bb81.bb84_crit_edge, bb83, bb39.bb49_crit_edge",
-      "tokenCount": 3828,
-      "discrepancy": true,
+      "predictedSet": "bb, bb27, bb29, bb31, bb33, bb39, bb39.bb49_crit_edge, bb48, bb49, bb49.bb52_crit_edge, bb51, bb52, bb52.bb60_crit_edge, bb58, bb60, bb60.bb66_crit_edge, bb63, bb66, bb66.bb72_crit_edge, bb69, bb72, bb74, bb76, bb78, bb80, bb81, bb81.bb84_crit_edge, bb83, bb84, bb85, bb91, bb93",
+      "tokenCount": 3903,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -180,25 +186,37 @@
         "name": "bb93"
       },
       {
+        "name": "bb31"
+      },
+      {
         "name": "bb33"
       },
       {
-        "name": "bb31"
+        "name": "bb39.bb49_crit_edge"
       },
       {
         "name": "bb49"
       },
       {
-        "name": "bb48"
+        "name": "bb49.bb52_crit_edge"
       },
       {
         "name": "bb51"
       },
       {
+        "name": "bb52.bb60_crit_edge"
+      },
+      {
         "name": "bb58"
       },
       {
+        "name": "bb60.bb66_crit_edge"
+      },
+      {
         "name": "bb63"
+      },
+      {
+        "name": "bb66.bb72_crit_edge"
       },
       {
         "name": "bb69"
@@ -216,44 +234,35 @@
         "name": "bb81"
       },
       {
-        "name": "bb84"
-      },
-      {
-        "name": "bb39.bb49_crit_edge"
-      },
-      {
-        "name": "bb49.bb52_crit_edge"
-      },
-      {
-        "name": "bb52.bb60_crit_edge"
-      },
-      {
-        "name": "bb60.bb66_crit_edge"
-      },
-      {
-        "name": "bb66.bb72_crit_edge"
-      },
-      {
         "name": "bb81.bb84_crit_edge"
       },
       {
         "name": "bb83"
       },
       {
-        "name": "bb39.bb49_crit_edge"
+        "name": "bb84"
+      },
+      {
+        "name": "bb48"
+      },
+      {
+        "name": "bb"
       }
     ],
-    "additionalNotes": "- The hottest block is `bb27` because it is the main loop header and is revisited repeatedly during the loop execution.\n  - The blocks are sorted based on their likelihood of being executed, with loop-related blocks ranked higher due to their repeated execution.\n  - The total number of blocks in the sorted list is exactly 32."
+    "additionalNotes": "- bb27 is the loop header and is revisited repeatedly due to the loop structure, making it the hottest block.\n  - Blocks like bb29, bb39, bb52, and bb60 are part of the main loop body and are executed frequently, though less often than bb27.\n  - Blocks such as bb93 and bb91 are executed once at the end of the function, making them cooler.\n  - Blocks like bb, bb48, and bb84 are less likely to be executed often due to their placement outside the main loop or conditional nature.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 32."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "telecom_adpcm_d",
       "funcName": "main",
       "numBB": 13,
-      "originalSet": "bb, bb4, bb7, bb10, bb14, bb15, bb17, bb18, bb19, bb22, bb24, bb26, bb30",
-      "predictedSet": "bb19, bb22, bb24, bb26, bb10, bb18, bb15, bb7, bb17, bb14, bb4, bb, bb30",
-      "tokenCount": 2063,
+      "originalSet": "bb, bb10, bb14, bb15, bb17, bb18, bb19, bb22, bb24, bb26, bb30, bb4, bb7",
+      "predictedSet": "bb, bb10, bb14, bb15, bb17, bb18, bb19, bb22, bb24, bb26, bb30, bb4, bb7",
+      "tokenCount": 2066,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -285,6 +294,9 @@
         "name": "bb7"
       },
       {
+        "name": "bb30"
+      },
+      {
         "name": "bb17"
       },
       {
@@ -295,11 +307,8 @@
       },
       {
         "name": "bb"
-      },
-      {
-        "name": "bb30"
       }
     ],
-    "additionalNotes": "- The hottest block is `bb19` because it contains a loop structure (`phi` node and back edge to itself), making it likely to execute multiple iterations.\n  - Blocks `bb22` and `bb24` are part of the loop and are executed within each iteration, making them hot as well.\n  - `bb26` is executed after the loop, but it is still part of the main processing path, so it is relatively hot.\n  - Blocks like `bb10`, `bb18`, and `bb15` are executed less frequently as they are part of conditional checks or setup.\n  - Blocks like `bb4`, `bb14`, and `bb` are less hot because they handle error cases or initialization.\n  - `bb30` is the least hot as it is the function's exit point.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 13. No blocks are missing or duplicated."
+    "additionalNotes": "- The hottest block is bb19 because it contains a loop structure (phi node and back edge to itself), which is likely to execute multiple iterations depending on the value of %i20.\n  - Blocks bb22, bb24, and bb26 are part of the loop and are executed in each iteration, making them relatively hot.\n  - Block bb10 is revisited after each loop iteration, making it moderately hot.\n  - Blocks bb7, bb15, and bb18 are executed in the setup and conditional checks, so they are less hot than the loop blocks.\n  - Blocks bb4 and bb14 handle error cases and are less likely to execute.\n  - Block bb is the entry point and executes only once, making it the least hot.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 13. No blocks are missing or duplicated."
   }
 ]

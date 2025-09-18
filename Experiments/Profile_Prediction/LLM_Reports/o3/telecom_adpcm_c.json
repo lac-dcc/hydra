@@ -4,21 +4,27 @@
       "benchmarkName": "telecom_adpcm_c",
       "funcName": "adpcm_coder",
       "numBB": 12,
-      "originalSet": "bb, bb.bb84_crit_edge, bb7, bb13, bb65, bb68, bb72, bb72.bb13_crit_edge, bb78, bb78.bb84_crit_edge, bb82, bb84",
-      "predictedSet": "bb72, bb13, bb7, bb78, bb82, bb65, bb68, bb84, bb72.bb13_crit_edge, bb78.bb84_crit_edge, bb, bb.bb84_crit_edge",
-      "tokenCount": 3349,
+      "originalSet": "bb, bb.bb84_crit_edge, bb13, bb65, bb68, bb7, bb72, bb72.bb13_crit_edge, bb78, bb78.bb84_crit_edge, bb82, bb84",
+      "predictedSet": "bb, bb.bb84_crit_edge, bb13, bb65, bb68, bb7, bb72, bb72.bb13_crit_edge, bb78, bb78.bb84_crit_edge, bb82, bb84",
+      "tokenCount": 3350,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
-      "bbName": "bb72"
+      "bbName": "bb13"
     },
     "bbOrderByHotness": [
+      {
+        "name": "bb13"
+      },
       {
         "name": "bb72"
       },
       {
-        "name": "bb13"
+        "name": "bb72.bb13_crit_edge"
       },
       {
         "name": "bb7"
@@ -30,38 +36,38 @@
         "name": "bb82"
       },
       {
-        "name": "bb65"
+        "name": "bb84"
       },
       {
         "name": "bb68"
       },
       {
-        "name": "bb84"
-      },
-      {
-        "name": "bb72.bb13_crit_edge"
+        "name": "bb65"
       },
       {
         "name": "bb78.bb84_crit_edge"
       },
       {
-        "name": "bb"
+        "name": "bb.bb84_crit_edge"
       },
       {
-        "name": "bb.bb84_crit_edge"
+        "name": "bb"
       }
     ],
-    "additionalNotes": "- The hottest block is `bb72` because it contains a loop structure (`br i1 %i77, label %bb72.bb13_crit_edge, label %bb78`) and is revisited multiple times during the loop iteration.\n  - `bb13` is the next hottest because it is the main body of the loop and is executed for each iteration.\n  - Blocks like `bb7` and `bb78` are executed conditionally but are part of the loop structure, making them relatively hot.\n  - Blocks like `bb65`, `bb68`, and `bb82` are executed less frequently as they are part of specific branches within the loop.\n  - Blocks like `bb`, `bb.bb84_crit_edge`, and `bb78.bb84_crit_edge` are less frequently executed as they are either entry points or exit points of the function or loop.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 12."
+    "additionalNotes": "- The hottest block is bb13 because it contains a loop structure (br i1 %i77, label %bb72.bb13_crit_edge, label %bb78) and is revisited multiple times during the loop iterations.\n  - Blocks bb72 and bb72.bb13_crit_edge are also hot due to their involvement in the loop.\n  - Blocks like bb78, bb82, and bb84 are executed after the loop but are less frequent than the loop-related blocks.\n  - Blocks bb68 and bb65 are conditionally executed within the loop but are less likely to dominate execution.\n  - Blocks bb78.bb84_crit_edge, bb.bb84_crit_edge, and bb are less frequently executed as they are primarily used for control flow transitions or initialization.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 12. No blocks are missing or duplicated."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "telecom_adpcm_c",
       "funcName": "adpcm_decoder",
       "numBB": 10,
-      "originalSet": "bb, bb.bb71_crit_edge, bb7, bb13, bb13.bb28_crit_edge, bb23, bb28, bb28.bb13_crit_edge, bb69, bb71",
-      "predictedSet": "bb28, bb13, bb28.bb13_crit_edge, bb23, bb7, bb69, bb71, bb, bb13.bb28_crit_edge, bb.bb71_crit_edge",
-      "tokenCount": 3055,
+      "originalSet": "bb, bb.bb71_crit_edge, bb13, bb13.bb28_crit_edge, bb23, bb28, bb28.bb13_crit_edge, bb69, bb7, bb71",
+      "predictedSet": "bb, bb.bb71_crit_edge, bb13, bb13.bb28_crit_edge, bb23, bb28, bb28.bb13_crit_edge, bb69, bb7, bb71",
+      "tokenCount": 2992,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -99,17 +105,20 @@
         "name": "bb.bb71_crit_edge"
       }
     ],
-    "additionalNotes": "- The hottest block is `bb28` because it is part of the main loop and contains the core computation logic. It is repeatedly executed as long as the loop condition holds.\n  - `bb13` is the entry point to the loop and is executed every time the loop iterates, making it the second hottest block.\n  - `bb28.bb13_crit_edge` is a critical edge connecting `bb28` back to `bb13`, so it is also frequently executed.\n  - `bb23` is executed within the loop but only when a specific condition is met, making it less hot than the main loop blocks.\n  - `bb7` is executed once before entering the loop, so it is less hot than the loop blocks.\n  - `bb69` and `bb71` are executed at the end of the loop, with `bb71` being the final block.\n  - `bb` and `bb.bb71_crit_edge` are executed only once at the start and during the loop exit, respectively, making them the least hot.\n  - The total number of blocks in the sorted list is exactly 10."
+    "additionalNotes": "- The hottest block is bb28 because it is part of the main loop and contains the majority of the computation, including updates to key variables and the loop condition.\n  - bb13 is also hot as it serves as the entry point to the loop and contains critical control flow logic.\n  - Blocks like bb28.bb13_crit_edge and bb23 are executed within the loop but are less frequent than bb28 and bb13.\n  - Blocks like bb69 and bb71 are executed at the loop's exit, making them less hot.\n  - Blocks bb and bb.bb71_crit_edge are executed only once during initialization, making them the least hot.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 10."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "telecom_adpcm_c",
       "funcName": "main",
       "numBB": 14,
-      "originalSet": "bb, bb3, bb6, bb9, bb14, bb15, bb17, bb17.bb27_crit_edge, bb20, bb22, bb22.bb22_crit_edge, bb27.loopexit, bb27, bb31",
-      "predictedSet": "bb22, bb22.bb22_crit_edge, bb27, bb9, bb17, bb17.bb27_crit_edge, bb20, bb27.loopexit, bb15, bb6, bb31, bb, bb3, bb14",
-      "tokenCount": 2270,
+      "originalSet": "bb, bb14, bb15, bb17, bb17.bb27_crit_edge, bb20, bb22, bb22.bb22_crit_edge, bb27, bb27.loopexit, bb3, bb31, bb6, bb9",
+      "predictedSet": "bb, bb14, bb15, bb17, bb17.bb27_crit_edge, bb20, bb22, bb22.bb22_crit_edge, bb27, bb27.loopexit, bb3, bb31, bb6, bb9",
+      "tokenCount": 2280,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -159,6 +168,6 @@
         "name": "bb14"
       }
     ],
-    "additionalNotes": "- The hottest block is `bb22` because it is part of the main loop that iterates based on the value of `%i18` and `%i24`. This loop is likely to execute many times, making `bb22` and its critical edge (`bb22.bb22_crit_edge`) the most frequently executed blocks.\n  - Blocks like `bb27` and `bb9` are also part of the loop structure but are executed less frequently than `bb22` due to their positions in the control flow.\n  - Blocks like `bb3` and `bb14` are error-handling blocks and are less likely to be executed under normal conditions.\n  - The total number of blocks in the sorted list is exactly 14, as required."
+    "additionalNotes": "- The hottest block is bb22 because it is part of a loop that iterates based on the value of %i25, which is loaded from %i and compared against %i24. This loop is likely to execute multiple times, making bb22 and its critical edge (bb22.bb22_crit_edge) the most frequently executed blocks.\n  - Blocks like bb27 and bb9 are also part of the loop structure, but they are executed less frequently than bb22 due to their positions in the control flow.\n  - Blocks like bb3 and bb14 are error-handling blocks and are less likely to be executed under normal circumstances.\n  - The total number of blocks in the sorted list is exactly 14, as required."
   }
 ]

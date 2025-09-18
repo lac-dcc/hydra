@@ -4,10 +4,13 @@
       "benchmarkName": "automotive_qsort1",
       "funcName": "main",
       "numBB": 8,
-      "originalSet": "bb, bb5, bb8, bb11, bb14, bb20, bb22, bb23",
-      "predictedSet": "`bb11`, `bb14`, `bb20`, `bb8`, `bb22`, `bb23`, `bb`, `bb5`",
-      "tokenCount": 1683,
+      "originalSet": "bb, bb11, bb14, bb20, bb22, bb23, bb5, bb8",
+      "predictedSet": "bb, bb11, bb14, bb20, bb22, bb23, bb5, bb8",
+      "tokenCount": 1668,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -15,47 +18,53 @@
     },
     "bbOrderByHotness": [
       {
-        "name": "`bb11`"
+        "name": "bb11"
       },
       {
-        "name": "`bb14`"
+        "name": "bb14"
       },
       {
-        "name": "`bb20`"
+        "name": "bb20"
       },
       {
-        "name": "`bb8`"
+        "name": "bb8"
       },
       {
-        "name": "`bb22`"
+        "name": "bb22"
       },
       {
-        "name": "`bb23`"
+        "name": "bb23"
       },
       {
-        "name": "`bb`"
+        "name": "bb"
       },
       {
-        "name": "`bb5`"
+        "name": "bb5"
       }
     ],
-    "additionalNotes": "- `bb11` is the hottest block because it contains a loop structure (`br label %bb11, !llvm.loop !8`) and is revisited multiple times during the loop execution.  \n  - `bb14` and `bb20` are part of the loop body, so they are also executed frequently but less often than `bb11` due to loop control.  \n  - `bb8` is executed once before entering the loop, making it less hot than the loop blocks.  \n  - `bb22` and `bb23` are executed after the loop, with `bb23` being the final block.  \n  - `bb` is the entry block, executed once.  \n  - `bb5` is a rare block, executed only if the file opening fails (`%i4` is true).  \n\n- **Summary**: The total number of blocks in the sorted list is exactly 8."
+    "additionalNotes": "- The hottest block is bb11 because it contains a loop structure (br label %bb11) and is likely to be executed multiple times depending on the loop condition.\n  - bb14 and bb20 are part of the loop body, so they are also executed frequently but less often than bb11 due to loop control flow.\n  - bb8 is executed once before entering the loop, making it less hot than the loop blocks.\n  - bb22 and bb23 are executed after the loop, with bb23 being the final return block.\n  - bb is the entry block, executed once.\n  - bb5 is a rare block executed only if the file opening fails.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 8."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "automotive_qsort1",
       "funcName": "compare",
       "numBB": 4,
-      "originalSet": "bb, bb6, bb7, bb11",
-      "predictedSet": "bb7, bb11, bb, bb6",
-      "tokenCount": 1303,
+      "originalSet": "bb, bb11, bb6, bb7",
+      "predictedSet": "bb, bb11, bb6, bb7",
+      "tokenCount": 1276,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
-      "bbName": "bb7"
+      "bbName": "bb"
     },
     "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
       {
         "name": "bb7"
       },
@@ -63,37 +72,31 @@
         "name": "bb11"
       },
       {
-        "name": "bb"
-      },
-      {
         "name": "bb6"
       }
     ],
-    "additionalNotes": "- The \"hotness\" of a block depends on the likelihood of its execution. In this function:\n    - `bb` is the entry block and is executed once.\n    - `bb6` is executed only if `%i2 > %i4` (less likely due to the floating-point comparison).\n    - `bb7` is executed if `%i2 <= %i4` (more likely, as it includes equality and less-than cases).\n    - `bb11` is the merge block and is executed after either `bb6` or `bb7`, making it the second hottest block.\n  - The total number of blocks in the sorted list is exactly 4."
+    "additionalNotes": "- The entry block bb is always executed, making it the hottest block.\n  - bb7 is likely executed more often than bb6 because the equality comparison (fcmp oeq) is more common than the greater-than comparison (fcmp ogt) in many scenarios.\n  - bb11 is executed after either bb6 or bb7, so its frequency is slightly less than bb7 but greater than bb6.\n  - The total number of blocks in the sorted list is exactly 4."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "automotive_qsort1",
       "funcName": "main1",
       "numBB": 26,
-      "originalSet": "bb, bb8, bb11, bb15, bb15.bb26_crit_edge, bb18, bb18.bb26_crit_edge, bb21, bb21.bb26_crit_edge, bb24, bb26, bb28, bb57, bb59, bb59.bb63_crit_edge, bb61, bb63, bb63.bb94_crit_edge, bb66, bb69, bb72, bb73, bb75, bb89, bb92, bb94",
-      "predictedSet": "bb28, bb15, bb26, bb18, bb21, bb24, bb73, bb75, bb89, bb92, bb11, bb57, bb63, bb66, bb72, bb59, bb61, bb94, bb15.bb26_crit_edge, bb18.bb26_crit_edge, bb21.bb26_crit_edge, bb63.bb94_crit_edge, bb59.bb63_crit_edge, bb69, bb8, bb",
-      "tokenCount": 4073,
+      "originalSet": "bb, bb11, bb15, bb15.bb26_crit_edge, bb18, bb18.bb26_crit_edge, bb21, bb21.bb26_crit_edge, bb24, bb26, bb28, bb57, bb59, bb59.bb63_crit_edge, bb61, bb63, bb63.bb94_crit_edge, bb66, bb69, bb72, bb73, bb75, bb8, bb89, bb92, bb94",
+      "predictedSet": "bb, bb11, bb15, bb15.bb26_crit_edge, bb18, bb18.bb26_crit_edge, bb21, bb21.bb26_crit_edge, bb24, bb26, bb28, bb57, bb59, bb59.bb63_crit_edge, bb61, bb63, bb63.bb94_crit_edge, bb66, bb69, bb72, bb73, bb75, bb8, bb89, bb92, bb94",
+      "tokenCount": 4174,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
-      "bbName": "bb28"
+      "bbName": "bb15"
     },
     "bbOrderByHotness": [
       {
-        "name": "bb28"
-      },
-      {
         "name": "bb15"
-      },
-      {
-        "name": "bb26"
       },
       {
         "name": "bb18"
@@ -103,6 +106,12 @@
       },
       {
         "name": "bb24"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb28"
       },
       {
         "name": "bb73"
@@ -141,6 +150,15 @@
         "name": "bb94"
       },
       {
+        "name": "bb"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb69"
+      },
+      {
         "name": "bb15.bb26_crit_edge"
       },
       {
@@ -150,32 +168,26 @@
         "name": "bb21.bb26_crit_edge"
       },
       {
-        "name": "bb63.bb94_crit_edge"
-      },
-      {
         "name": "bb59.bb63_crit_edge"
       },
       {
-        "name": "bb69"
-      },
-      {
-        "name": "bb8"
-      },
-      {
-        "name": "bb"
+        "name": "bb63.bb94_crit_edge"
       }
     ],
-    "additionalNotes": "- The hottest block, `bb28`, is part of the main loop that processes up to 60,000 iterations, making it the most frequently executed block.\n  - Blocks like `bb15`, `bb26`, `bb18`, and `bb21` are also part of the loop structure and are executed frequently, though less often than `bb28`.\n  - Blocks such as `bb8` and `bb69` are less likely to be executed because they handle error conditions or exceptional cases.\n  - The total number of blocks in the sorted list is **26**, matching the original count. No blocks are missing or duplicated."
+    "additionalNotes": "- The hottest block is bb15 because it is the entry point of a loop that processes up to 60,000 iterations, making it the most frequently executed block.\n  - Blocks bb18, bb21, bb24, bb26, and bb28 are part of the same loop and are executed in sequence, making them the next hottest blocks.\n  - Blocks bb73, bb75, bb89, and bb92 are part of another loop that iterates over the processed data, making them relatively hot but less so than the first loop.\n  - Blocks like bb11, bb57, and bb63 are executed once per function call, making them cooler than the loop blocks.\n  - Blocks like bb8 and bb69 are error-handling blocks and are unlikely to be executed often.\n  - Critical edge blocks (e.g., bb15.bb26_crit_edge) are cooler as they are only used for control flow transitions.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 26."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "automotive_qsort1",
       "funcName": "qsortx",
       "numBB": 46,
-      "originalSet": "bb, bb.bb14_crit_edge, bb12, bb12.bb14_crit_edge, bb14, bb15, bb20.outer, bb20, bb29, bb30, bb37, bb38, bb41, bb41.bb46_crit_edge, bb43, bb46, bb46.bb38_crit_edge, bb48, bb49, bb53, bb53.bb58_crit_edge, bb55, bb58, bb58.bb49_crit_edge, bb60, bb62, bb63, bb64, bb73, bb73.bb86_crit_edge, bb77, bb86, bb88, bb89, bb90, bb90.bb98_crit_edge, bb92, bb98, bb102, bb106, bb107, bb108, bb111, bb20.outer.backedge, bb118, bb119",
-      "predictedSet": "bb20, bb20.outer, bb20.outer.backedge, bb38, bb46, bb49, bb58, bb37, bb41, bb43, bb53, bb60, bb64, bb30, bb15, bb29, bb108, bb111, bb86, bb88, bb89, bb90, bb92, bb98, bb102, bb106, bb107, bb14, bb12, bb12.bb14_crit_edge, bb.bb14_crit_edge, bb73, bb73.bb86_crit_edge, bb77, bb118, bb119, bb46.bb38_crit_edge, bb58.bb49_crit_edge, bb53.bb58_crit_edge, bb41.bb46_crit_edge, bb90.bb98_crit_edge, bb48, bb55, bb62, bb63, bb",
-      "tokenCount": 5071,
+      "originalSet": "bb, bb.bb14_crit_edge, bb102, bb106, bb107, bb108, bb111, bb118, bb119, bb12, bb12.bb14_crit_edge, bb14, bb15, bb20, bb20.outer, bb20.outer.backedge, bb29, bb30, bb37, bb38, bb41, bb41.bb46_crit_edge, bb43, bb46, bb46.bb38_crit_edge, bb48, bb49, bb53, bb53.bb58_crit_edge, bb55, bb58, bb58.bb49_crit_edge, bb60, bb62, bb63, bb64, bb73, bb73.bb86_crit_edge, bb77, bb86, bb88, bb89, bb90, bb90.bb98_crit_edge, bb92, bb98",
+      "predictedSet": "bb, bb.bb14_crit_edge, bb102, bb106, bb107, bb108, bb111, bb118, bb119, bb12, bb12.bb14_crit_edge, bb14, bb15, bb20, bb20.outer, bb20.outer.backedge, bb29, bb30, bb37, bb38, bb41, bb41.bb46_crit_edge, bb43, bb46, bb46.bb38_crit_edge, bb48, bb49, bb53, bb53.bb58_crit_edge, bb55, bb58, bb58.bb49_crit_edge, bb60, bb62, bb63, bb64, bb73, bb73.bb86_crit_edge, bb77, bb86, bb88, bb89, bb90, bb90.bb98_crit_edge, bb92, bb98",
+      "tokenCount": 5010,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -198,10 +210,16 @@
         "name": "bb46"
       },
       {
+        "name": "bb58"
+      },
+      {
         "name": "bb49"
       },
       {
-        "name": "bb58"
+        "name": "bb53"
+      },
+      {
+        "name": "bb64"
       },
       {
         "name": "bb37"
@@ -213,28 +231,28 @@
         "name": "bb43"
       },
       {
-        "name": "bb53"
-      },
-      {
         "name": "bb60"
       },
       {
-        "name": "bb64"
+        "name": "bb62"
+      },
+      {
+        "name": "bb63"
       },
       {
         "name": "bb30"
       },
       {
-        "name": "bb15"
-      },
-      {
         "name": "bb29"
       },
       {
-        "name": "bb108"
+        "name": "bb15"
       },
       {
-        "name": "bb111"
+        "name": "bb73"
+      },
+      {
+        "name": "bb77"
       },
       {
         "name": "bb86"
@@ -264,6 +282,12 @@
         "name": "bb107"
       },
       {
+        "name": "bb108"
+      },
+      {
+        "name": "bb111"
+      },
+      {
         "name": "bb14"
       },
       {
@@ -276,34 +300,28 @@
         "name": "bb.bb14_crit_edge"
       },
       {
-        "name": "bb73"
-      },
-      {
-        "name": "bb73.bb86_crit_edge"
-      },
-      {
-        "name": "bb77"
-      },
-      {
         "name": "bb118"
       },
       {
         "name": "bb119"
       },
       {
-        "name": "bb46.bb38_crit_edge"
+        "name": "bb73.bb86_crit_edge"
       },
       {
-        "name": "bb58.bb49_crit_edge"
+        "name": "bb90.bb98_crit_edge"
       },
       {
         "name": "bb53.bb58_crit_edge"
       },
       {
-        "name": "bb41.bb46_crit_edge"
+        "name": "bb58.bb49_crit_edge"
       },
       {
-        "name": "bb90.bb98_crit_edge"
+        "name": "bb46.bb38_crit_edge"
+      },
+      {
+        "name": "bb41.bb46_crit_edge"
       },
       {
         "name": "bb48"
@@ -312,26 +330,23 @@
         "name": "bb55"
       },
       {
-        "name": "bb62"
-      },
-      {
-        "name": "bb63"
-      },
-      {
         "name": "bb"
       }
     ],
-    "additionalNotes": "- The hottest block, `bb20`, is part of the main loop structure and contains critical operations such as comparisons, branching, and calls to other functions like `@shortsort` and `@swap`. It is the central hub for the iterative process, making it the most frequently executed block.\n  - Blocks like `bb20.outer` and `bb20.outer.backedge` are also part of the loop structure, contributing to their high hotness ranking.\n  - Blocks such as `bb29` and `bb30` are less hot because they are executed conditionally based on the size of the partition.\n  - Blocks like `bb118` and `bb119` are at the end of the function and are executed only once, making them among the least hot.\n  - All 46 basic blocks are included in the sorted list without omission or duplication.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 46."
+    "additionalNotes": "- The hottest block is bb20 because it is the core of the loop structure and contains the main logic for partitioning and recursive calls, making it the most frequently executed block.\n  - Blocks like bb20.outer, bb20.outer.backedge, and bb38 are also hot due to their involvement in the loop structure.\n  - Blocks such as bb118 and bb119 are less hot as they are part of the function's exit path.\n  - The list includes all 46 basic blocks without omission or duplication.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 46."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "automotive_qsort1",
       "funcName": "shortsort",
       "numBB": 11,
-      "originalSet": "bb, bb6, bb7, bb10, bb12, bb12.bb16_crit_edge, bb15, bb16, bb17, bb20, bb24",
-      "predictedSet": "bb10, bb12, bb16, bb17, bb12.bb16_crit_edge, bb15, bb6, bb7, bb20, bb, bb24",
-      "tokenCount": 1832,
+      "originalSet": "bb, bb10, bb12, bb12.bb16_crit_edge, bb15, bb16, bb17, bb20, bb24, bb6, bb7",
+      "predictedSet": "bb, bb10, bb12, bb12.bb16_crit_edge, bb15, bb16, bb17, bb20, bb24, bb6, bb7",
+      "tokenCount": 1856,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -354,13 +369,13 @@
         "name": "bb12.bb16_crit_edge"
       },
       {
-        "name": "bb15"
-      },
-      {
         "name": "bb6"
       },
       {
         "name": "bb7"
+      },
+      {
+        "name": "bb15"
       },
       {
         "name": "bb20"
@@ -372,17 +387,20 @@
         "name": "bb24"
       }
     ],
-    "additionalNotes": "- The hottest block is `bb10` because it is part of the main loop structure and contains a conditional branch that determines further iterations. It is likely to be executed repeatedly during the sorting process.\n  - Blocks `bb12`, `bb16`, and `bb17` are also part of the loop and are executed frequently, but their execution depends on the conditions evaluated in `bb10`.\n  - `bb12.bb16_crit_edge` and `bb15` are less hot than the main loop blocks but are still part of the loop's execution path.\n  - Blocks `bb6` and `bb7` are executed during the setup phase of the loop and are less frequent than the loop body.\n  - `bb20` is executed when a swap operation occurs, which is less frequent than the main loop iterations.\n  - `bb` is the entry block and is executed only once.\n  - `bb24` is the exit block and is executed only once at the end of the function.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 11."
+    "additionalNotes": "- The hottest block is bb10 because it is part of the main loop structure and contains a conditional branch that determines further iterations. It is likely to be executed repeatedly during the sorting process.\n  - Blocks bb12, bb16, and bb17 are also part of the loop and are executed frequently, though slightly less often than bb10.\n  - bb12.bb16_crit_edge is a critical edge block, executed when the condition in bb12 fails, making it less hot than the main loop blocks.\n  - bb6 and bb7 are part of the outer loop setup and are executed less frequently than the inner loop blocks.\n  - bb15 is executed only when the comparison in bb12 succeeds, making it less hot than bb12.\n  - bb20 is executed when the inner loop completes, and swapping occurs, making it less frequent than the loop blocks.\n  - bb is the entry block and is executed only once.\n  - bb24 is the exit block and is executed only once.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 11."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "automotive_qsort1",
       "funcName": "swap",
       "numBB": 7,
-      "originalSet": "bb, bb.bb15_crit_edge, bb5, bb6, bb9, bb14, bb15",
-      "predictedSet": "bb9, bb6, bb5, bb, bb14, bb15, bb.bb15_crit_edge",
-      "tokenCount": 1564,
+      "originalSet": "bb, bb.bb15_crit_edge, bb14, bb15, bb5, bb6, bb9",
+      "predictedSet": "bb, bb.bb15_crit_edge, bb14, bb15, bb5, bb6, bb9",
+      "tokenCount": 1479,
       "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -405,12 +423,12 @@
         "name": "bb14"
       },
       {
-        "name": "bb15"
+        "name": "bb.bb15_crit_edge"
       },
       {
-        "name": "bb.bb15_crit_edge"
+        "name": "bb15"
       }
     ],
-    "additionalNotes": "- The hottest block is `bb9` because it contains the core loop body where the swapping operations occur. This block is repeatedly executed as long as the loop condition (`%.02 != 0`) holds true.\n  - `bb6` is the loop header and is executed once per iteration, making it the second hottest block.\n  - `bb5` is executed once to branch into the loop, so it is less hot than the loop blocks but hotter than the entry block.\n  - `bb` is the entry block and is executed only once, making it cooler than the loop-related blocks.\n  - `bb14` is executed once after the loop exits, so it is cooler than the entry block.\n  - `bb15` is the function's exit block and is executed once, making it cooler than `bb14`.\n  - `bb.bb15_crit_edge` is a critical edge block that simply branches to `bb15` and is executed only once, making it the least hot.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 7."
+    "additionalNotes": ""
   }
 ]
