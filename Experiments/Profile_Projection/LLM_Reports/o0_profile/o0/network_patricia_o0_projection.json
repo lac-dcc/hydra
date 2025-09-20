@@ -1,0 +1,670 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_patricia",
+      "funcName": "main",
+      "numBB": 8,
+      "originalSet": "bb, bb5, bb8, bb11, bb14, bb20, bb22, bb23",
+      "predictedSet": "bb11, bb14, bb20, bb8, bb22, bb23, bb, bb5",
+      "tokenCount": 2683,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb11"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb5"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The structure of the optimized function is nearly identical to the original function, so the mapping of basic blocks is straightforward:\n      - 0 maps to bb\n      - 5 maps to bb5\n      - 8 maps to bb8\n      - 11 maps to bb11\n      - 14 maps to bb14\n      - 20 maps to bb20\n      - 22 maps to bb22\n      - 23 maps to bb23\n  - **Computed O0 freq(bb) Table**:\n    - bb: 1\n    - bb5: 0\n    - bb8: 1\n    - bb11: 50001\n    - bb14: 50000\n    - bb20: 50000\n    - bb22: 1\n    - bb23: 1\n  - **Block Splitting, Merging, or Removal**:\n    - No blocks were split, merged, or removed in the optimized version. The structure remains consistent with the original.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 8."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_patricia",
+      "funcName": "pat_insert",
+      "numBB": 44,
+      "originalSet": "bb, bb.bb13_crit_edge, bb7, bb7.bb13_crit_edge, bb9, bb9.bb13_crit_edge, bb13, bb14, bb22, bb33, bb36, bb39, bb41, bb41.bb22_crit_edge, bb46, bb52, bb53, bb58, bb70, bb82, bb83, bb85, bb93, bb98, bb110, bb116, bb122, bb123, bb125, bb125.bb130_crit_edge, bb127, bb130, bb139, bb140, bb140.bb150_crit_edge, bb142, bb150, bb152, bb153, bb155, bb163, bb168, bb173, bb174",
+      "predictedSet": "bb140, bb142, bb150, bb152, bb153, bb22, bb39, bb41, bb41.bb22_crit_edge, bb36, bb33, bb155, bb168, bb173, bb139, bb14, bb174, bb7, bb9, bb46, bb70, bb52, bb53, bb85, bb93, bb125, bb127, bb130, bb58, bb0, bb9.bb13_crit_edge, bb7.bb13_crit_edge, bb13, bb.bb13_crit_edge, bb82, bb83, bb98, bb110, bb116, bb122, bb123, bb125.bb130_crit_edge, bb140.bb150_crit_edge, bb163",
+      "tokenCount": 12851,
+      "discrepancy": true,
+      "duplicates": [],
+      "missing": [
+        "bb"
+      ],
+      "extra": [
+        "bb0"
+      ],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb140"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb140"
+      },
+      {
+        "name": "bb142"
+      },
+      {
+        "name": "bb150"
+      },
+      {
+        "name": "bb152"
+      },
+      {
+        "name": "bb153"
+      },
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb39"
+      },
+      {
+        "name": "bb41"
+      },
+      {
+        "name": "bb41.bb22_crit_edge"
+      },
+      {
+        "name": "bb36"
+      },
+      {
+        "name": "bb33"
+      },
+      {
+        "name": "bb155"
+      },
+      {
+        "name": "bb168"
+      },
+      {
+        "name": "bb173"
+      },
+      {
+        "name": "bb139"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb174"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb46"
+      },
+      {
+        "name": "bb70"
+      },
+      {
+        "name": "bb52"
+      },
+      {
+        "name": "bb53"
+      },
+      {
+        "name": "bb85"
+      },
+      {
+        "name": "bb93"
+      },
+      {
+        "name": "bb125"
+      },
+      {
+        "name": "bb127"
+      },
+      {
+        "name": "bb130"
+      },
+      {
+        "name": "bb58"
+      },
+      {
+        "name": "bb0"
+      },
+      {
+        "name": "bb9.bb13_crit_edge"
+      },
+      {
+        "name": "bb7.bb13_crit_edge"
+      },
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb.bb13_crit_edge"
+      },
+      {
+        "name": "bb82"
+      },
+      {
+        "name": "bb83"
+      },
+      {
+        "name": "bb98"
+      },
+      {
+        "name": "bb110"
+      },
+      {
+        "name": "bb116"
+      },
+      {
+        "name": "bb122"
+      },
+      {
+        "name": "bb123"
+      },
+      {
+        "name": "bb125.bb130_crit_edge"
+      },
+      {
+        "name": "bb140.bb150_crit_edge"
+      },
+      {
+        "name": "bb163"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The mapping between the original and optimized blocks is straightforward for most blocks, as the structure of the function remains largely unchanged. For example, bb140 in the original corresponds directly to bb140 in the optimized version.\n    - Some blocks like bb.bb13_crit_edge, bb7.bb13_crit_edge, and bb9.bb13_crit_edge are retained in the optimized version but are rarely executed (profile count = 0).\n  \n  - **Computed O0 freq(bb) Table**:\n    - The frequency of each block in the optimized function is derived from the O0 profile data. For example, bb140 has the highest frequency (121,000,000), making it the hottest block.\n\n  - **Block Splitting/Merging**:\n    - No significant block splitting or merging was observed between the original and optimized versions. The structure of the function remains largely intact.\n\n  - **Summary**:\n    - The total number of blocks in the sorted list is **44**, matching the number of blocks in the optimized function. No blocks are missing or duplicated."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_patricia",
+      "funcName": "insertR",
+      "numBB": 16,
+      "originalSet": "bb, bb.bb15_crit_edge, bb7, bb7.bb15_crit_edge, bb15, bb22, bb23, bb24, bb31, bb32, bb33, bb36, bb44, bb49, bb54, bb55",
+      "predictedSet": "bb55, bb, bb7, bb36, bb54, bb44, bb49, bb33, bb24, bb23, bb22, bb15, bb7.bb15_crit_edge, bb.bb15_crit_edge, bb32, bb31",
+      "tokenCount": 8576,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb55"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb55"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb36"
+      },
+      {
+        "name": "bb54"
+      },
+      {
+        "name": "bb44"
+      },
+      {
+        "name": "bb49"
+      },
+      {
+        "name": "bb33"
+      },
+      {
+        "name": "bb24"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb7.bb15_crit_edge"
+      },
+      {
+        "name": "bb.bb15_crit_edge"
+      },
+      {
+        "name": "bb32"
+      },
+      {
+        "name": "bb31"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - bb in the optimized function corresponds to the entry block in the original function (0).\n    - bb55 in the optimized function corresponds to the loop back to the entry block (55 in the original function).\n    - bb7 corresponds to the block 7 in the original function.\n    - bb36 corresponds to the block 36 in the original function.\n    - bb54 corresponds to the block 54 in the original function.\n    - bb44 corresponds to the block 44 in the original function.\n    - bb49 corresponds to the block 49 in the original function.\n    - bb33 corresponds to the block 33 in the original function.\n    - bb24 corresponds to the block 24 in the original function.\n    - bb23 corresponds to the block 23 in the original function.\n    - bb22 corresponds to the block 22 in the original function.\n    - bb15 corresponds to the block 15 in the original function.\n    - bb7.bb15_crit_edge corresponds to the edge 7 -> 15 in the original function.\n    - bb.bb15_crit_edge corresponds to the edge 0 -> 15 in the original function.\n    - bb32 corresponds to the block 32 in the original function.\n    - bb31 corresponds to the block 31 in the original function.\n\n  - **Computed O0 freq(bb) Table**:\n    - bb: 22,650,000\n    - bb.bb15_crit_edge: 750,000\n    - bb7: 21,900,000\n    - bb7.bb15_crit_edge: 3,450,000\n    - bb15: 4,200,000\n    - bb22: 1,900,000\n    - bb23: 2,300,000\n    - bb24: 4,200,000\n    - bb31: 1,900,000\n    - bb32: 2,300,000\n    - bb33: 4,200,000\n    - bb36: 18,450,000\n    - bb44: 9,100,000\n    - bb49: 9,350,000\n    - bb54: 18,450,000\n    - bb55: 22,650,000\n\n  - **Block Splitting/Merging**:\n    - No blocks were removed, but some edges (e.g., 0 -> 15, 7 -> 15) were explicitly represented as critical edges in the optimized function.\n\n  - **Summary**:\n    - The total number of blocks in the sorted list is exactly 16."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_patricia",
+      "funcName": "pat_remove",
+      "numBB": 65,
+      "originalSet": "bb, bb.bb14_crit_edge, bb8, bb8.bb14_crit_edge, bb12, bb12.bb14_crit_edge, bb14, bb15, bb16, bb27, bb30, bb33, bb35, bb35.bb16_crit_edge, bb40, bb46, bb47, bb52, bb57, bb58, bb68, bb69, bb70, bb81, bb84, bb87, bb89, bb89.bb70_crit_edge, bb94, bb102, bb104, bb106, bb114, bb122, bb125, bb128, bb131, bb139, bb142, bb145, bb148, bb148.bb159_crit_edge, bb154, bb159, bb159.bb173_crit_edge, bb163, bb173, bb174, bb175, bb180, bb192, bb193, bb194, bb196.loopexit, bb196, bb201, bb202, bb210, bb215, bb215.bb233_crit_edge, bb227, bb233, bb234, bb236, bb243",
+      "predictedSet": "bb243, bb, bb.bb14_crit_edge, bb8, bb8.bb14_crit_edge, bb12, bb12.bb14_crit_edge, bb14, bb15, bb16, bb27, bb30, bb33, bb35, bb35.bb16_crit_edge, bb40, bb46, bb47, bb52, bb57, bb58, bb68, bb69, bb70, bb81, bb84, bb87, bb89, bb89.bb70_crit_edge, bb94, bb102, bb104, bb106, bb114, bb122, bb125, bb128, bb131, bb139, bb142, bb145, bb148, bb148.bb159_crit_edge, bb154, bb159, bb159.bb173_crit_edge, bb163, bb173, bb174, bb175, bb180, bb192, bb193, bb194, bb196.loopexit, bb196, bb201, bb202, bb210, bb215, bb215.bb233_crit_edge, bb227, bb233, bb234, bb236",
+      "tokenCount": 16705,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb243"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb243"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb.bb14_crit_edge"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb8.bb14_crit_edge"
+      },
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb12.bb14_crit_edge"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb27"
+      },
+      {
+        "name": "bb30"
+      },
+      {
+        "name": "bb33"
+      },
+      {
+        "name": "bb35"
+      },
+      {
+        "name": "bb35.bb16_crit_edge"
+      },
+      {
+        "name": "bb40"
+      },
+      {
+        "name": "bb46"
+      },
+      {
+        "name": "bb47"
+      },
+      {
+        "name": "bb52"
+      },
+      {
+        "name": "bb57"
+      },
+      {
+        "name": "bb58"
+      },
+      {
+        "name": "bb68"
+      },
+      {
+        "name": "bb69"
+      },
+      {
+        "name": "bb70"
+      },
+      {
+        "name": "bb81"
+      },
+      {
+        "name": "bb84"
+      },
+      {
+        "name": "bb87"
+      },
+      {
+        "name": "bb89"
+      },
+      {
+        "name": "bb89.bb70_crit_edge"
+      },
+      {
+        "name": "bb94"
+      },
+      {
+        "name": "bb102"
+      },
+      {
+        "name": "bb104"
+      },
+      {
+        "name": "bb106"
+      },
+      {
+        "name": "bb114"
+      },
+      {
+        "name": "bb122"
+      },
+      {
+        "name": "bb125"
+      },
+      {
+        "name": "bb128"
+      },
+      {
+        "name": "bb131"
+      },
+      {
+        "name": "bb139"
+      },
+      {
+        "name": "bb142"
+      },
+      {
+        "name": "bb145"
+      },
+      {
+        "name": "bb148"
+      },
+      {
+        "name": "bb148.bb159_crit_edge"
+      },
+      {
+        "name": "bb154"
+      },
+      {
+        "name": "bb159"
+      },
+      {
+        "name": "bb159.bb173_crit_edge"
+      },
+      {
+        "name": "bb163"
+      },
+      {
+        "name": "bb173"
+      },
+      {
+        "name": "bb174"
+      },
+      {
+        "name": "bb175"
+      },
+      {
+        "name": "bb180"
+      },
+      {
+        "name": "bb192"
+      },
+      {
+        "name": "bb193"
+      },
+      {
+        "name": "bb194"
+      },
+      {
+        "name": "bb196.loopexit"
+      },
+      {
+        "name": "bb196"
+      },
+      {
+        "name": "bb201"
+      },
+      {
+        "name": "bb202"
+      },
+      {
+        "name": "bb210"
+      },
+      {
+        "name": "bb215"
+      },
+      {
+        "name": "bb215.bb233_crit_edge"
+      },
+      {
+        "name": "bb227"
+      },
+      {
+        "name": "bb233"
+      },
+      {
+        "name": "bb234"
+      },
+      {
+        "name": "bb236"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**: The mapping between the original and optimized blocks is straightforward as the structure of the function remains largely unchanged. The block names in the optimized function correspond directly to those in the original function.\n  - **Computed O0 freq(bb) Table**: All basic blocks in the original function have a frequency of 0 based on the provided profile data. This means no block was executed during profiling.\n  - **Block Splitting/Merging**: No blocks were split, merged, or removed in the optimized function. The structure of the function remains consistent between the original and optimized versions.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 65."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_patricia",
+      "funcName": "pat_search",
+      "numBB": 17,
+      "originalSet": "bb, bb4, bb5, bb6, bb6.bb16_crit_edge, bb15, bb16, bb25, bb28, bb31, bb33, bb33.bb6_crit_edge, bb38, bb47, bb48, bb49, bb51",
+      "predictedSet": "bb6, bb16, bb31, bb33, bb33.bb6_crit_edge, bb6.bb16_crit_edge, bb28, bb25, bb15, bb38, bb49, bb5, bb51, bb47, bb48, bb4, bb",
+      "tokenCount": 4869,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb6"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb33"
+      },
+      {
+        "name": "bb33.bb6_crit_edge"
+      },
+      {
+        "name": "bb6.bb16_crit_edge"
+      },
+      {
+        "name": "bb28"
+      },
+      {
+        "name": "bb25"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb38"
+      },
+      {
+        "name": "bb49"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb51"
+      },
+      {
+        "name": "bb47"
+      },
+      {
+        "name": "bb48"
+      },
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The structure of the optimized function closely mirrors the original function, so the mapping is straightforward. For example, bb6 in the optimized function corresponds to 6 in the original profile, and so on.\n    - Blocks like bb6.bb16_crit_edge and bb33.bb6_crit_edge are directly mapped to 6_16.ce and 33_6.ce respectively.\n  - **Computed O0 freq(bb) Table**:\n    - bb6: 28,850,000\n    - bb16: 28,850,000\n    - bb31: 28,850,000\n    - bb33: 28,850,000\n    - bb33.bb6_crit_edge: 23,850,000\n    - bb6.bb16_crit_edge: 23,050,000\n    - bb28: 17,300,000\n    - bb25: 11,550,000\n    - bb15: 5,800,000\n    - bb38: 5,000,000\n    - bb49: 5,000,000\n    - bb5: 5,000,000\n    - bb51: 5,000,000\n    - bb47: 1,000,000\n    - bb48: 4,000,000\n    - bb4: 0\n    - bb: 0\n  - **Block Splitting/Merging**:\n    - No blocks were split or merged in the optimized function. The structure remains consistent with the original.\n  - **Summary**:\n    - The total number of blocks in the sorted list is exactly 17. No blocks are missing or duplicated."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_patricia",
+      "funcName": "main1",
+      "numBB": 28,
+      "originalSet": "bb, bb6, bb10, bb15, bb19, bb22, bb23, bb29, bb30, bb40, bb41, bb47, bb51, bb56, bb57, bb63, bb64, bb74, bb75, bb75.bb115_crit_edge, bb106, bb106.bb115_crit_edge, bb108, bb115, bb117, bb119, bb122, bb123",
+      "predictedSet": "bb47, bb51, bb57, bb64, bb75, bb75.bb115_crit_edge, bb115, bb117, bb122, bb106, bb106.bb115_crit_edge, bb30, bb41, bb23, bb19, bb10, bb123, bb0, bb6, bb15, bb22, bb29, bb40, bb56, bb63, bb74, bb108, bb119",
+      "tokenCount": 6634,
+      "discrepancy": true,
+      "duplicates": [],
+      "missing": [
+        "bb"
+      ],
+      "extra": [
+        "bb0"
+      ],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb47"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb47"
+      },
+      {
+        "name": "bb51"
+      },
+      {
+        "name": "bb57"
+      },
+      {
+        "name": "bb64"
+      },
+      {
+        "name": "bb75"
+      },
+      {
+        "name": "bb75.bb115_crit_edge"
+      },
+      {
+        "name": "bb115"
+      },
+      {
+        "name": "bb117"
+      },
+      {
+        "name": "bb122"
+      },
+      {
+        "name": "bb106"
+      },
+      {
+        "name": "bb106.bb115_crit_edge"
+      },
+      {
+        "name": "bb30"
+      },
+      {
+        "name": "bb41"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb123"
+      },
+      {
+        "name": "bb0"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb29"
+      },
+      {
+        "name": "bb40"
+      },
+      {
+        "name": "bb56"
+      },
+      {
+        "name": "bb63"
+      },
+      {
+        "name": "bb74"
+      },
+      {
+        "name": "bb108"
+      },
+      {
+        "name": "bb119"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The mapping was based on the control flow structure and the edge profile. For example, bb47 in the optimized function corresponds to the loop header in the original function, which had the highest execution count (5050000).\n    - Blocks like bb51, bb57, bb64, and bb75 correspond to the inner loop iterations and their associated computations, which also had high counts in the original profile.\n    - Blocks like bb106 and bb115 correspond to specific branches and conditions within the loop, with counts derived from their respective edge profiles.\n  - **Computed O0 freq(bb) Table**:\n    - The frequency of each block in the original function was directly used to estimate the hotness of corresponding blocks in the optimized function.\n  - **Block Splitting/Merging**:\n    - Some blocks in the optimized function (e.g., bb75.bb115_crit_edge) represent split edges or critical paths that were not explicitly separate in the original function. Their hotness was inferred from the edge profile.\n    - Blocks like bb119 were effectively dead in the original profile (freq = 0) and remain cold in the optimized function.\n\n- **Summary**:\n  - The total number of blocks in the sorted list is exactly 28. No blocks are missing or duplicated."
+  }
+]

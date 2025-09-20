@@ -1,0 +1,161 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_d",
+      "funcName": "adpcm_coder",
+      "numBB": 12,
+      "originalSet": "bb, bb.bb84_crit_edge, bb7, bb13, bb65, bb68, bb72, bb72.bb13_crit_edge, bb78, bb78.bb84_crit_edge, bb82, bb84",
+      "predictedSet": "bb, bb7, bb13, bb65, bb68, bb72, bb72.bb13_crit_edge, bb78, bb78.bb84_crit_edge, bb82, bb84, bb.bb84_crit_edge",
+      "tokenCount": 7716,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb65"
+      },
+      {
+        "name": "bb68"
+      },
+      {
+        "name": "bb72"
+      },
+      {
+        "name": "bb72.bb13_crit_edge"
+      },
+      {
+        "name": "bb78"
+      },
+      {
+        "name": "bb78.bb84_crit_edge"
+      },
+      {
+        "name": "bb82"
+      },
+      {
+        "name": "bb84"
+      },
+      {
+        "name": "bb.bb84_crit_edge"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The bb block in the optimized function corresponds to the entry point of the original function.\n    - Blocks like bb7, bb13, and bb72 in the optimized function align with key decision-making and loop structures in the original function.\n    - Blocks such as bb78 and bb84 correspond to the final stages of the function, including storing results and returning.\n  - **Computed O0 freq(bb) Table**:\n    - All basic blocks in the O0 profile have a frequency of 0. This suggests that the profiling data is either incomplete or the function was not executed during profiling.\n  - **Block Transformations**:\n    - Some blocks in the original function were merged or optimized away in the O3 version. For example, critical edges in the original function were split into separate blocks in the optimized version (e.g., bb72.bb13_crit_edge).\n    - The optimized function has fewer redundant computations and uses more compact control flow.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 12. No blocks are missing or duplicated."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_d",
+      "funcName": "adpcm_decoder",
+      "numBB": 10,
+      "originalSet": "bb, bb.bb71_crit_edge, bb7, bb13, bb13.bb28_crit_edge, bb23, bb28, bb28.bb13_crit_edge, bb69, bb71",
+      "predictedSet": "bb13, bb28, bb28.bb13_crit_edge, bb7, bb69, bb23, bb71, bb, bb.bb71_crit_edge, bb13.bb28_crit_edge",
+      "tokenCount": 7103,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb13"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb28"
+      },
+      {
+        "name": "bb28.bb13_crit_edge"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb69"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb71"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb.bb71_crit_edge"
+      },
+      {
+        "name": "bb13.bb28_crit_edge"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The bb in the optimized function corresponds to the entry block in the original function.\n    - bb13 in the optimized function corresponds to the loop body in the original function, which includes blocks like 27, 29, 39, and their successors.\n    - bb28 and bb28.bb13_crit_edge represent parts of the loop body and its continuation.\n    - bb7 corresponds to the initialization phase of the loop.\n    - bb69 corresponds to the loop exit and final updates.\n    - bb23 corresponds to the handling of specific conditions within the loop.\n    - bb71 and bb.bb71_crit_edge represent the final cleanup and return phase.\n    - bb13.bb28_crit_edge is a connector block between bb13 and bb28.\n\n  - **Computed O0 freq(bb) Table**:\n    - Using the edge profile, the hottest blocks in the original function are 27, 29, 39, and their successors, which map to bb13 and bb28 in the optimized function.\n    - The loop body (bb13 and bb28) dominates execution, with counts exceeding 1 billion iterations.\n\n  - **Block Splitting/Merging**:\n    - The loop body in the original function (27, 29, 39, etc.) has been split into bb13, bb28, and bb28.bb13_crit_edge in the optimized function.\n    - Some blocks like bb23 and bb69 represent specific conditions or loop exits.\n\n- **Summary**:\n  - The total number of blocks in the sorted list is exactly 10. No blocks are missing or duplicated."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_d",
+      "funcName": "main",
+      "numBB": 14,
+      "originalSet": "bb, bb3, bb6, bb9, bb14, bb15, bb17, bb17.bb27_crit_edge, bb20, bb22, bb22.bb22_crit_edge, bb27.loopexit, bb27, bb31",
+      "predictedSet": "bb22, bb24 (merged into bb22 in the optimized version), bb19 (partially merged into bb22), bb27, bb17",
+      "tokenCount": 3446,
+      "discrepancy": true,
+      "duplicates": [],
+      "missing": [
+        "bb",
+        "bb3",
+        "bb6",
+        "bb9",
+        "bb14",
+        "bb15",
+        "bb17.bb27_crit_edge",
+        "bb20",
+        "bb22.bb22_crit_edge",
+        "bb27.loopexit",
+        "bb31"
+      ],
+      "extra": [
+        "bb24 (merged into bb22 in the optimized version)",
+        "bb19 (partially merged into bb22)"
+      ],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb22"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb24 (merged into bb22 in the optimized version)"
+      },
+      {
+        "name": "bb19 (partially merged into bb22)"
+      },
+      {
+        "name": "bb27"
+      },
+      {
+        "name": "bb17"
+      }
+    ],
+    "additionalNotes": ""
+  }
+]
