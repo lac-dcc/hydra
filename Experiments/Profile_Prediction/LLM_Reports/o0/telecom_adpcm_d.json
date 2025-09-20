@@ -4,9 +4,9 @@
       "benchmarkName": "telecom_adpcm_d",
       "funcName": "adpcm_coder",
       "numBB": 38,
-      "originalSet": "bb, bb101, bb105, bb107, bb107.bb112_crit_edge, bb109, bb112, bb32, bb34, bb34.bb45_crit_edge, bb43, bb45, bb45.bb51_crit_edge, bb48, bb51, bb51.bb58_crit_edge, bb54, bb58, bb58.bb64_crit_edge, bb61, bb64, bb66, bb68, bb70, bb72, bb73, bb73.bb76_crit_edge, bb75, bb76, bb77, bb77.bb85_crit_edge, bb84, bb85, bb85.bb88_crit_edge, bb87, bb88, bb93, bb96",
-      "predictedSet": "bb, bb101, bb105, bb107, bb107.bb112_crit_edge, bb109, bb112, bb32, bb34, bb34.bb45_crit_edge, bb43, bb45, bb45.bb51_crit_edge, bb48, bb51, bb51.bb58_crit_edge, bb54, bb58, bb58.bb64_crit_edge, bb61, bb64, bb66, bb68, bb70, bb72, bb73, bb73.bb76_crit_edge, bb75, bb76, bb77, bb77.bb85_crit_edge, bb84, bb85, bb85.bb88_crit_edge, bb87, bb88, bb93, bb96",
-      "tokenCount": 4515,
+      "originalSet": "bb, bb32, bb34, bb34.bb45_crit_edge, bb43, bb45, bb45.bb51_crit_edge, bb48, bb51, bb51.bb58_crit_edge, bb54, bb58, bb58.bb64_crit_edge, bb61, bb64, bb66, bb68, bb70, bb72, bb73, bb73.bb76_crit_edge, bb75, bb76, bb77, bb77.bb85_crit_edge, bb84, bb85, bb85.bb88_crit_edge, bb87, bb88, bb93, bb96, bb101, bb105, bb107, bb107.bb112_crit_edge, bb109, bb112",
+      "predictedSet": "bb32, bb34, bb45, bb51, bb58, bb64, bb70, bb77, bb85, bb88, bb101, bb105, bb43, bb54, bb61, bb66, bb68, bb73, bb76, bb96, bb109, bb112, bb34.bb45_crit_edge, bb45.bb51_crit_edge, bb51.bb58_crit_edge, bb58.bb64_crit_edge, bb73.bb76_crit_edge, bb77.bb85_crit_edge, bb85.bb88_crit_edge, bb93, bb107, bb107.bb112_crit_edge, bb72, bb75, bb84, bb87, bb48, bb",
+      "tokenCount": 4538,
       "discrepancy": false,
       "duplicates": [],
       "missing": [],
@@ -132,7 +132,7 @@
         "name": "bb"
       }
     ],
-    "additionalNotes": "- The hottest block, bb32, is the main loop header and is revisited repeatedly due to the loop structure.\n  - Blocks like bb34, bb45, bb51, and bb58 are part of the loop body and are executed frequently.\n  - Blocks such as bb107, bb112, and bb96 are less hot as they are part of the function's exit or less frequently executed paths.\n  - The total number of blocks in the sorted list is **38**, matching the original count. No blocks are missing or duplicated."
+    "additionalNotes": "- The hottest block, bb32, is the main loop header and is revisited repeatedly due to the loop structure.\n  - Blocks like bb34, bb45, bb51, and bb58 are part of the main loop body and are executed frequently.\n  - Blocks such as bb107, bb112, and bb101 are executed less often as they are part of the function's exit or cleanup paths.\n  - Critical edge blocks (e.g., bb34.bb45_crit_edge) are less likely to be executed as frequently as their parent blocks.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 38."
   },
   {
     "benchmarkInfo": {
@@ -140,8 +140,8 @@
       "funcName": "adpcm_decoder",
       "numBB": 32,
       "originalSet": "bb, bb27, bb29, bb31, bb33, bb39, bb39.bb49_crit_edge, bb48, bb49, bb49.bb52_crit_edge, bb51, bb52, bb52.bb60_crit_edge, bb58, bb60, bb60.bb66_crit_edge, bb63, bb66, bb66.bb72_crit_edge, bb69, bb72, bb74, bb76, bb78, bb80, bb81, bb81.bb84_crit_edge, bb83, bb84, bb85, bb91, bb93",
-      "predictedSet": "bb, bb27, bb29, bb31, bb33, bb39, bb39.bb49_crit_edge, bb48, bb49, bb49.bb52_crit_edge, bb51, bb52, bb52.bb60_crit_edge, bb58, bb60, bb60.bb66_crit_edge, bb63, bb66, bb66.bb72_crit_edge, bb69, bb72, bb74, bb76, bb78, bb80, bb81, bb81.bb84_crit_edge, bb83, bb84, bb85, bb91, bb93",
-      "tokenCount": 3903,
+      "predictedSet": "bb27, bb29, bb33, bb39, bb39.bb49_crit_edge, bb49, bb49.bb52_crit_edge, bb52, bb52.bb60_crit_edge, bb60, bb60.bb66_crit_edge, bb66, bb66.bb72_crit_edge, bb72, bb74, bb76, bb78, bb85, bb91, bb31, bb58, bb63, bb69, bb80, bb81, bb81.bb84_crit_edge, bb84, bb83, bb48, bb51, bb93, bb",
+      "tokenCount": 3860,
       "discrepancy": false,
       "duplicates": [],
       "missing": [],
@@ -159,37 +159,10 @@
         "name": "bb29"
       },
       {
-        "name": "bb39"
-      },
-      {
-        "name": "bb52"
-      },
-      {
-        "name": "bb60"
-      },
-      {
-        "name": "bb66"
-      },
-      {
-        "name": "bb72"
-      },
-      {
-        "name": "bb78"
-      },
-      {
-        "name": "bb85"
-      },
-      {
-        "name": "bb91"
-      },
-      {
-        "name": "bb93"
-      },
-      {
-        "name": "bb31"
-      },
-      {
         "name": "bb33"
+      },
+      {
+        "name": "bb39"
       },
       {
         "name": "bb39.bb49_crit_edge"
@@ -201,31 +174,52 @@
         "name": "bb49.bb52_crit_edge"
       },
       {
-        "name": "bb51"
+        "name": "bb52"
       },
       {
         "name": "bb52.bb60_crit_edge"
       },
       {
-        "name": "bb58"
+        "name": "bb60"
       },
       {
         "name": "bb60.bb66_crit_edge"
       },
       {
-        "name": "bb63"
+        "name": "bb66"
       },
       {
         "name": "bb66.bb72_crit_edge"
       },
       {
-        "name": "bb69"
+        "name": "bb72"
       },
       {
         "name": "bb74"
       },
       {
         "name": "bb76"
+      },
+      {
+        "name": "bb78"
+      },
+      {
+        "name": "bb85"
+      },
+      {
+        "name": "bb91"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb58"
+      },
+      {
+        "name": "bb63"
+      },
+      {
+        "name": "bb69"
       },
       {
         "name": "bb80"
@@ -237,28 +231,34 @@
         "name": "bb81.bb84_crit_edge"
       },
       {
-        "name": "bb83"
+        "name": "bb84"
       },
       {
-        "name": "bb84"
+        "name": "bb83"
       },
       {
         "name": "bb48"
       },
       {
+        "name": "bb51"
+      },
+      {
+        "name": "bb93"
+      },
+      {
         "name": "bb"
       }
     ],
-    "additionalNotes": "- bb27 is the loop header and is revisited repeatedly due to the loop structure, making it the hottest block.\n  - Blocks like bb29, bb39, bb52, and bb60 are part of the main loop body and are executed frequently, though less often than bb27.\n  - Blocks such as bb93 and bb91 are executed once at the end of the function, making them cooler.\n  - Blocks like bb, bb48, and bb84 are less likely to be executed often due to their placement outside the main loop or conditional nature.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 32."
+    "additionalNotes": "- The hottest block is bb27 because it is the main loop header and is revisited repeatedly during the loop execution.\n  - Blocks like bb29, bb33, and bb39 are part of the loop body and are executed frequently, making them relatively hot.\n  - Blocks such as bb93 and bb are executed only once (function entry/exit), making them the least hot.\n  - The total number of blocks in the sorted list is **32**, as required."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "telecom_adpcm_d",
       "funcName": "main",
       "numBB": 13,
-      "originalSet": "bb, bb10, bb14, bb15, bb17, bb18, bb19, bb22, bb24, bb26, bb30, bb4, bb7",
-      "predictedSet": "bb, bb10, bb14, bb15, bb17, bb18, bb19, bb22, bb24, bb26, bb30, bb4, bb7",
-      "tokenCount": 2066,
+      "originalSet": "bb, bb4, bb7, bb10, bb14, bb15, bb17, bb18, bb19, bb22, bb24, bb26, bb30",
+      "predictedSet": "bb19, bb22, bb24, bb26, bb10, bb18, bb15, bb7, bb30, bb17, bb, bb4, bb14",
+      "tokenCount": 2025,
       "discrepancy": false,
       "duplicates": [],
       "missing": [],
@@ -300,15 +300,15 @@
         "name": "bb17"
       },
       {
-        "name": "bb14"
+        "name": "bb"
       },
       {
         "name": "bb4"
       },
       {
-        "name": "bb"
+        "name": "bb14"
       }
     ],
-    "additionalNotes": "- The hottest block is bb19 because it contains a loop structure (phi node and back edge to itself), which is likely to execute multiple iterations depending on the value of %i20.\n  - Blocks bb22, bb24, and bb26 are part of the loop and are executed in each iteration, making them relatively hot.\n  - Block bb10 is revisited after each loop iteration, making it moderately hot.\n  - Blocks bb7, bb15, and bb18 are executed in the setup and conditional checks, so they are less hot than the loop blocks.\n  - Blocks bb4 and bb14 handle error cases and are less likely to execute.\n  - Block bb is the entry point and executes only once, making it the least hot.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 13. No blocks are missing or duplicated."
+    "additionalNotes": "- The hottest block is bb19 because it contains a loop structure (phi node and back edge to itself), which is likely to execute multiple iterations depending on the value of %i20.\n  - Blocks bb22 and bb24 are part of the loop body, so they are also executed frequently.\n  - bb26 is executed after the loop, but it depends on the loop's completion, making it less hot than the loop blocks.\n  - bb10 acts as a central hub for control flow, so it is moderately hot.\n  - Blocks like bb4 and bb14 handle error cases and are less likely to execute.\n  - The total number of blocks in the sorted list is exactly 13."
   }
 ]

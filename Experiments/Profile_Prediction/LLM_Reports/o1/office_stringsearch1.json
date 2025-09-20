@@ -4,9 +4,9 @@
       "benchmarkName": "office_stringsearch1",
       "funcName": "bmha_init",
       "numBB": 22,
-      "originalSet": "bb, bb12, bb12.bb8_crit_edge, bb21, bb24, bb26, bb26.bb30_crit_edge, bb29, bb30, bb30.bb4_crit_edge, bb33, bb33.bb59_crit_edge, bb35, bb4, bb44, bb44.bb56_crit_edge, bb52, bb56, bb56.bb44_crit_edge, bb59, bb59.loopexit, bb8",
-      "predictedSet": "bb, bb12, bb12.bb8_crit_edge, bb21, bb24, bb26, bb26.bb30_crit_edge, bb29, bb30, bb30.bb4_crit_edge, bb33, bb33.bb59_crit_edge, bb35, bb4, bb44, bb44.bb56_crit_edge, bb52, bb56, bb56.bb44_crit_edge, bb59, bb59.loopexit, bb8",
-      "tokenCount": 3138,
+      "originalSet": "bb, bb4, bb8, bb12, bb12.bb8_crit_edge, bb21, bb24, bb26, bb26.bb30_crit_edge, bb29, bb30, bb30.bb4_crit_edge, bb33, bb33.bb59_crit_edge, bb35, bb44, bb44.bb56_crit_edge, bb52, bb56, bb56.bb44_crit_edge, bb59.loopexit, bb59",
+      "predictedSet": "bb12, bb8, bb4, bb30, bb26, bb44, bb56, bb52, bb21, bb35, bb59, bb33, bb24, bb29, bb59.loopexit, bb30.bb4_crit_edge, bb26.bb30_crit_edge, bb44.bb56_crit_edge, bb56.bb44_crit_edge, bb12.bb8_crit_edge, bb33.bb59_crit_edge, bb",
+      "tokenCount": 3149,
       "discrepancy": false,
       "duplicates": [],
       "missing": [],
@@ -54,13 +54,19 @@
         "name": "bb33"
       },
       {
+        "name": "bb24"
+      },
+      {
+        "name": "bb29"
+      },
+      {
         "name": "bb59.loopexit"
       },
       {
-        "name": "bb26.bb30_crit_edge"
+        "name": "bb30.bb4_crit_edge"
       },
       {
-        "name": "bb30.bb4_crit_edge"
+        "name": "bb26.bb30_crit_edge"
       },
       {
         "name": "bb44.bb56_crit_edge"
@@ -75,25 +81,19 @@
         "name": "bb33.bb59_crit_edge"
       },
       {
-        "name": "bb24"
-      },
-      {
-        "name": "bb29"
-      },
-      {
         "name": "bb"
       }
     ],
-    "additionalNotes": "- The hottest block, bb12, is part of a loop that iterates over the input string and performs character comparisons, making it the most frequently executed block.\n  - Blocks like bb8, bb4, and bb30 are also part of loops or loop-related control flow, contributing to their high execution frequency.\n  - Blocks such as bb, bb29, and bb24 are less likely to be executed frequently as they are primarily setup or exit blocks.\n  - The total number of blocks in the sorted list is **22**, matching the original count. No blocks are missing or duplicated."
+    "additionalNotes": "- The hottest block, bb12, is part of a loop that processes the input string and performs character comparisons. This block is likely executed for each character in the string, making it the most frequently executed.\n  - Blocks like bb8, bb4, and bb30 are also part of loops or loop-related control flow, contributing to their high hotness.\n  - Blocks such as bb59.loopexit and bb33.bb59_crit_edge are less frequently executed as they are primarily exit or edge blocks.\n  - The total number of blocks in the sorted list is **22**, matching the original count. No blocks are missing or duplicated."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "office_stringsearch1",
       "funcName": "bmha_search",
       "numBB": 22,
-      "originalSet": "bb, bb.bb59_crit_edge, bb14, bb14.bb24_crit_edge, bb24, bb26, bb26.bb59.loopexit_crit_edge, bb28, bb33, bb37, bb37.bb33_crit_edge, bb5, bb51, bb53, bb53.bb59.loopexitsplit_crit_edge, bb53.loopexit, bb56, bb56.bb24_crit_edge, bb59, bb59.loopexit, bb59.loopexitsplit, bb59.loopexitsplitsplit",
-      "predictedSet": "bb, bb.bb59_crit_edge, bb14, bb14.bb24_crit_edge, bb24, bb26, bb26.bb59.loopexit_crit_edge, bb28, bb33, bb37, bb37.bb33_crit_edge, bb5, bb51, bb53, bb53.bb59.loopexitsplit_crit_edge, bb53.loopexit, bb56, bb56.bb24_crit_edge, bb59, bb59.loopexit, bb59.loopexitsplit, bb59.loopexitsplitsplit",
-      "tokenCount": 3252,
+      "originalSet": "bb, bb.bb59_crit_edge, bb5, bb14, bb14.bb24_crit_edge, bb24, bb26, bb26.bb59.loopexit_crit_edge, bb28, bb33, bb37, bb37.bb33_crit_edge, bb51, bb53.loopexit, bb53, bb53.bb59.loopexitsplit_crit_edge, bb56, bb56.bb24_crit_edge, bb59.loopexitsplitsplit, bb59.loopexitsplit, bb59.loopexit, bb59",
+      "predictedSet": "bb14, bb24, bb37, bb33, bb26, bb5, bb53, bb56, bb.bb59_crit_edge, bb14.bb24_crit_edge, bb37.bb33_crit_edge, bb26.bb59.loopexit_crit_edge, bb53.bb59.loopexitsplit_crit_edge, bb56.bb24_crit_edge, bb28, bb51, bb53.loopexit, bb59.loopexitsplitsplit, bb59.loopexitsplit, bb59.loopexit, bb59, bb",
+      "tokenCount": 3253,
       "discrepancy": false,
       "duplicates": [],
       "missing": [],
@@ -138,22 +138,13 @@
         "name": "bb37.bb33_crit_edge"
       },
       {
-        "name": "bb53.loopexit"
+        "name": "bb26.bb59.loopexit_crit_edge"
       },
       {
         "name": "bb53.bb59.loopexitsplit_crit_edge"
       },
       {
-        "name": "bb26.bb59.loopexit_crit_edge"
-      },
-      {
-        "name": "bb59.loopexitsplit"
-      },
-      {
-        "name": "bb59.loopexitsplitsplit"
-      },
-      {
-        "name": "bb59.loopexit"
+        "name": "bb56.bb24_crit_edge"
       },
       {
         "name": "bb28"
@@ -162,7 +153,16 @@
         "name": "bb51"
       },
       {
-        "name": "bb56.bb24_crit_edge"
+        "name": "bb53.loopexit"
+      },
+      {
+        "name": "bb59.loopexitsplitsplit"
+      },
+      {
+        "name": "bb59.loopexitsplit"
+      },
+      {
+        "name": "bb59.loopexit"
       },
       {
         "name": "bb59"
@@ -171,16 +171,16 @@
         "name": "bb"
       }
     ],
-    "additionalNotes": "- The hottest block, bb14, is part of a loop structure and contains a phi node, making it likely to be executed repeatedly.\n  - Blocks like bb24 and bb37 are also part of nested loops, contributing to their high execution frequency.\n  - Blocks such as bb59 and bb are less likely to be executed frequently as they are primarily exit or entry points.\n  - The total number of blocks in the sorted list is **22**, matching the original count."
+    "additionalNotes": "- The hottest block is bb14 because it contains a loop structure with a back edge to itself, indicating repeated execution.\n  - Blocks like bb24 and bb37 are also part of nested loops or loop-related structures, making them relatively hot.\n  - Blocks such as bb59 and bb are less likely to be executed frequently as they are part of the function's entry or exit paths.\n  - The total number of blocks in the sorted list is **22**, matching the original count."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "office_stringsearch1",
       "funcName": "bmhi_init",
       "numBB": 27,
-      "originalSet": "bb, bb12, bb12.loopexit, bb13, bb17, bb17.bb17_crit_edge, bb29, bb29.bb57_crit_edge, bb32, bb37, bb37.bb37_crit_edge, bb42, bb42.bb42_crit_edge, bb57, bb57.bb86_crit_edge, bb57.loopexit, bb7, bb72, bb74, bb74.bb83_crit_edge, bb79, bb8, bb8.bb12_crit_edge, bb83, bb83.bb74_crit_edge, bb86, bb86.loopexit",
-      "predictedSet": "bb, bb12, bb12.loopexit, bb13, bb17, bb17.bb17_crit_edge, bb29, bb29.bb57_crit_edge, bb32, bb37, bb37.bb37_crit_edge, bb42, bb42.bb42_crit_edge, bb57, bb57.bb86_crit_edge, bb57.loopexit, bb7, bb72, bb74, bb74.bb83_crit_edge, bb79, bb8, bb8.bb12_crit_edge, bb83, bb83.bb74_crit_edge, bb86, bb86.loopexit",
-      "tokenCount": 4079,
+      "originalSet": "bb, bb7, bb8, bb8.bb12_crit_edge, bb12.loopexit, bb12, bb13, bb17, bb17.bb17_crit_edge, bb29, bb29.bb57_crit_edge, bb32, bb37, bb37.bb37_crit_edge, bb42, bb42.bb42_crit_edge, bb57.loopexit, bb57, bb57.bb86_crit_edge, bb72, bb74, bb74.bb83_crit_edge, bb79, bb83, bb83.bb74_crit_edge, bb86.loopexit, bb86",
+      "predictedSet": "bb17, bb17.bb17_crit_edge, bb42, bb42.bb42_crit_edge, bb37, bb37.bb37_crit_edge, bb83, bb83.bb74_crit_edge, bb74, bb74.bb83_crit_edge, bb79, bb57, bb57.bb86_crit_edge, bb57.loopexit, bb86, bb86.loopexit, bb29, bb29.bb57_crit_edge, bb72, bb32, bb13, bb12, bb12.loopexit, bb8, bb8.bb12_crit_edge, bb7, bb",
+      "tokenCount": 4082,
       "discrepancy": false,
       "duplicates": [],
       "missing": [],
@@ -231,22 +231,22 @@
         "name": "bb57.bb86_crit_edge"
       },
       {
+        "name": "bb57.loopexit"
+      },
+      {
         "name": "bb86"
       },
       {
         "name": "bb86.loopexit"
       },
       {
-        "name": "bb57.loopexit"
-      },
-      {
-        "name": "bb72"
-      },
-      {
         "name": "bb29"
       },
       {
         "name": "bb29.bb57_crit_edge"
+      },
+      {
+        "name": "bb72"
       },
       {
         "name": "bb32"
@@ -273,7 +273,7 @@
         "name": "bb"
       }
     ],
-    "additionalNotes": "- The hottest block is bb17 because it contains a loop that iterates over the input string, making it the most frequently executed block.\n  - Blocks like bb42, bb37, and bb83 are also part of loops or critical paths, contributing to their high hotness ranking.\n  - Blocks such as bb7 and bb are less likely to be executed frequently as they handle initialization or error conditions.\n  - The total number of blocks in the sorted list is **27**, as required."
+    "additionalNotes": "- The hottest block is bb17 because it contains a loop that iterates over the input string, making it the most frequently executed block.\n  - Blocks like bb42, bb37, and bb83 are also part of loops or critical paths, contributing to their high hotness ranking.\n  - Blocks such as bb7 and bb are less likely to be executed frequently as they are part of initialization or error handling paths.\n  - The total number of blocks in the sorted list is **27**, as required."
   },
   {
     "benchmarkInfo": {
@@ -282,7 +282,7 @@
       "numBB": 1,
       "originalSet": "bb",
       "predictedSet": "bb",
-      "tokenCount": 931,
+      "tokenCount": 944,
       "discrepancy": false,
       "duplicates": [],
       "missing": [],
@@ -297,16 +297,16 @@
         "name": "bb"
       }
     ],
-    "additionalNotes": "The function contains only one basic block (bb), which performs a memory load, a call to free, and then returns. Since there is only one block, it is trivially the hottest block.\n\n- **Summary**: The total number of blocks in the list is exactly 1."
+    "additionalNotes": "The function has only one basic block (bb), so it is trivially the hottest block. The block performs a memory load, a call to free, and then returns. There are no conditional branches or loops, so no other blocks exist to compare hotness.\n\n- **Summary**: The total number of blocks in the list is exactly 1."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "office_stringsearch1",
       "funcName": "bmhi_search",
       "numBB": 22,
-      "originalSet": "bb, bb.bb59_crit_edge, bb14, bb14.bb24_crit_edge, bb24, bb26, bb26.bb59.loopexit_crit_edge, bb28, bb33, bb37, bb37.bb33_crit_edge, bb5, bb51, bb53, bb53.bb59.loopexitsplit_crit_edge, bb53.loopexit, bb56, bb56.bb24_crit_edge, bb59, bb59.loopexit, bb59.loopexitsplit, bb59.loopexitsplitsplit",
-      "predictedSet": "bb, bb.bb59_crit_edge, bb14, bb14.bb24_crit_edge, bb24, bb26, bb26.bb59.loopexit_crit_edge, bb28, bb33, bb37, bb37.bb33_crit_edge, bb5, bb51, bb53, bb53.bb59.loopexitsplit_crit_edge, bb53.loopexit, bb56, bb56.bb24_crit_edge, bb59, bb59.loopexit, bb59.loopexitsplit, bb59.loopexitsplitsplit",
-      "tokenCount": 3246,
+      "originalSet": "bb, bb.bb59_crit_edge, bb5, bb14, bb14.bb24_crit_edge, bb24, bb26, bb26.bb59.loopexit_crit_edge, bb28, bb33, bb37, bb37.bb33_crit_edge, bb51, bb53.loopexit, bb53, bb53.bb59.loopexitsplit_crit_edge, bb56, bb56.bb24_crit_edge, bb59.loopexitsplitsplit, bb59.loopexitsplit, bb59.loopexit, bb59",
+      "predictedSet": "bb14, bb24, bb37, bb33, bb26, bb53, bb56, bb5, bb28, bb59, bb.bb59_crit_edge, bb14.bb24_crit_edge, bb37.bb33_crit_edge, bb26.bb59.loopexit_crit_edge, bb53.loopexit, bb53.bb59.loopexitsplit_crit_edge, bb56.bb24_crit_edge, bb59.loopexitsplit, bb59.loopexitsplitsplit, bb59.loopexit, bb51, bb",
+      "tokenCount": 3241,
       "discrepancy": false,
       "duplicates": [],
       "missing": [],
@@ -357,13 +357,13 @@
         "name": "bb37.bb33_crit_edge"
       },
       {
+        "name": "bb26.bb59.loopexit_crit_edge"
+      },
+      {
         "name": "bb53.loopexit"
       },
       {
         "name": "bb53.bb59.loopexitsplit_crit_edge"
-      },
-      {
-        "name": "bb26.bb59.loopexit_crit_edge"
       },
       {
         "name": "bb56.bb24_crit_edge"
@@ -384,16 +384,16 @@
         "name": "bb"
       }
     ],
-    "additionalNotes": "- The hottest block is bb14 because it contains a loop structure with a back edge to itself, indicating repeated execution.\n  - Blocks like bb24 and bb37 are also part of the loop structure and are likely to be executed frequently.\n  - Blocks such as bb59 and its variants are exit points and are less likely to be executed as often as the loop body.\n  - The list includes all 22 basic blocks without omission or duplication.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 22."
+    "additionalNotes": "- The hottest block, bb14, is part of a loop structure and contains a phi node, indicating repeated execution.\n  - Blocks like bb24 and bb37 are also part of nested loops, making them likely to be executed frequently.\n  - Blocks such as bb59 and its variants are exit or critical edge blocks, executed less often.\n  - The list includes all 22 basic blocks without omission or duplication.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 22."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "office_stringsearch1",
       "funcName": "bmh_init",
       "numBB": 19,
-      "originalSet": "bb, bb11, bb11.bb11_crit_edge, bb2, bb2.bb22_crit_edge, bb22, bb22.bb46_crit_edge, bb22.loopexit, bb31, bb34, bb34.bb43_crit_edge, bb39, bb4, bb43, bb43.bb34_crit_edge, bb46, bb46.loopexit, bb6, bb6.bb6_crit_edge",
-      "predictedSet": "bb, bb11, bb11.bb11_crit_edge, bb2, bb2.bb22_crit_edge, bb22, bb22.bb46_crit_edge, bb22.loopexit, bb31, bb34, bb34.bb43_crit_edge, bb39, bb4, bb43, bb43.bb34_crit_edge, bb46, bb46.loopexit, bb6, bb6.bb6_crit_edge",
-      "tokenCount": 2836,
+      "originalSet": "bb, bb2, bb2.bb22_crit_edge, bb4, bb6, bb6.bb6_crit_edge, bb11, bb11.bb11_crit_edge, bb22.loopexit, bb22, bb22.bb46_crit_edge, bb31, bb34, bb34.bb43_crit_edge, bb39, bb43, bb43.bb34_crit_edge, bb46.loopexit, bb46",
+      "predictedSet": "bb6, bb6.bb6_crit_edge, bb11, bb11.bb11_crit_edge, bb34, bb34.bb43_crit_edge, bb43, bb43.bb34_crit_edge, bb22, bb22.bb46_crit_edge, bb31, bb39, bb46, bb46.loopexit, bb22.loopexit, bb2, bb2.bb22_crit_edge, bb4, bb",
+      "tokenCount": 2873,
       "discrepancy": false,
       "duplicates": [],
       "missing": [],
@@ -429,12 +429,6 @@
         "name": "bb43.bb34_crit_edge"
       },
       {
-        "name": "bb2"
-      },
-      {
-        "name": "bb4"
-      },
-      {
         "name": "bb22"
       },
       {
@@ -450,28 +444,34 @@
         "name": "bb46"
       },
       {
+        "name": "bb46.loopexit"
+      },
+      {
         "name": "bb22.loopexit"
       },
       {
-        "name": "bb46.loopexit"
+        "name": "bb2"
       },
       {
         "name": "bb2.bb22_crit_edge"
       },
       {
+        "name": "bb4"
+      },
+      {
         "name": "bb"
       }
     ],
-    "additionalNotes": "- The hottest block is bb6 because it initializes and iterates over a loop that sets up the skip table, which is likely executed 256 times (the size of the table).\n  - Blocks like bb11 and bb34 are also part of loops, making them relatively hot.\n  - Blocks such as bb22.bb46_crit_edge and bb46.loopexit are less frequently executed as they are part of loop exits or less critical paths.\n  - The list includes all 19 basic blocks without omission or duplication."
+    "additionalNotes": "- The hottest block is bb6 because it initializes a loop that iterates 256 times, making it the most frequently executed block.\n  - Blocks like bb11 and bb34 are also part of loops, but their iterations depend on the input size, making them slightly less hot than bb6.\n  - Blocks like bb22, bb46, and their critical edges are executed less frequently as they are part of loop exits or conditional branches.\n  - Blocks like bb, bb2, and bb4 are executed only once during initialization or setup, making them the least hot.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 19. No blocks are missing or duplicated."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "office_stringsearch1",
       "funcName": "bmh_search",
       "numBB": 22,
-      "originalSet": "bb, bb.bb55_crit_edge, bb14, bb14.bb24_crit_edge, bb24, bb26, bb26.bb55.loopexit_crit_edge, bb28, bb33, bb37, bb37.bb33_crit_edge, bb47, bb49, bb49.bb55.loopexitsplit_crit_edge, bb49.loopexit, bb5, bb52, bb52.bb24_crit_edge, bb55, bb55.loopexit, bb55.loopexitsplit, bb55.loopexitsplitsplit",
-      "predictedSet": "bb, bb.bb55_crit_edge, bb14, bb14.bb24_crit_edge, bb24, bb26, bb26.bb55.loopexit_crit_edge, bb28, bb33, bb37, bb37.bb33_crit_edge, bb47, bb49, bb49.bb55.loopexitsplit_crit_edge, bb49.loopexit, bb5, bb52, bb52.bb24_crit_edge, bb55, bb55.loopexit, bb55.loopexitsplit, bb55.loopexitsplitsplit",
-      "tokenCount": 3181,
+      "originalSet": "bb, bb.bb55_crit_edge, bb5, bb14, bb14.bb24_crit_edge, bb24, bb26, bb26.bb55.loopexit_crit_edge, bb28, bb33, bb37, bb37.bb33_crit_edge, bb47, bb49.loopexit, bb49, bb49.bb55.loopexitsplit_crit_edge, bb52, bb52.bb24_crit_edge, bb55.loopexitsplitsplit, bb55.loopexitsplit, bb55.loopexit, bb55",
+      "predictedSet": "bb14, bb24, bb37, bb33, bb52, bb49, bb5, bb26, bb28, bb55, bb.bb55_crit_edge, bb14.bb24_crit_edge, bb37.bb33_crit_edge, bb52.bb24_crit_edge, bb49.loopexit, bb49.bb55.loopexitsplit_crit_edge, bb26.bb55.loopexit_crit_edge, bb55.loopexitsplit, bb55.loopexitsplitsplit, bb55.loopexit, bb47, bb",
+      "tokenCount": 3192,
       "discrepancy": false,
       "duplicates": [],
       "missing": [],
@@ -495,19 +495,25 @@
         "name": "bb33"
       },
       {
-        "name": "bb26"
-      },
-      {
-        "name": "bb5"
-      },
-      {
-        "name": "bb"
+        "name": "bb52"
       },
       {
         "name": "bb49"
       },
       {
-        "name": "bb52"
+        "name": "bb5"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb28"
+      },
+      {
+        "name": "bb55"
+      },
+      {
+        "name": "bb.bb55_crit_edge"
       },
       {
         "name": "bb14.bb24_crit_edge"
@@ -516,7 +522,7 @@
         "name": "bb37.bb33_crit_edge"
       },
       {
-        "name": "bb26.bb55.loopexit_crit_edge"
+        "name": "bb52.bb24_crit_edge"
       },
       {
         "name": "bb49.loopexit"
@@ -525,13 +531,7 @@
         "name": "bb49.bb55.loopexitsplit_crit_edge"
       },
       {
-        "name": "bb52.bb24_crit_edge"
-      },
-      {
-        "name": "bb28"
-      },
-      {
-        "name": "bb47"
+        "name": "bb26.bb55.loopexit_crit_edge"
       },
       {
         "name": "bb55.loopexitsplit"
@@ -543,22 +543,22 @@
         "name": "bb55.loopexit"
       },
       {
-        "name": "bb.bb55_crit_edge"
+        "name": "bb47"
       },
       {
-        "name": "bb55"
+        "name": "bb"
       }
     ],
-    "additionalNotes": "- The hottest block is bb14 because it contains a loop structure with a back edge, indicating repeated execution. The loop iterates over conditions involving i15 and i22, making it a central point of execution.\n  - Blocks like bb24 and bb37 are also part of the loop and are likely executed frequently due to their role in the loop's control flow.\n  - Blocks such as bb55 and bb.bb55_crit_edge are less likely to be executed often as they are primarily involved in loop exits or function termination.\n  - The total number of blocks in the sorted list is **22**, matching the original count."
+    "additionalNotes": "- The hottest block, bb14, is part of a loop structure and contains a phi node that feeds back into itself, indicating repeated execution.\n  - Blocks like bb24 and bb37 are also part of the loop and are likely to be executed frequently.\n  - Blocks such as bb55 and its associated exit blocks (bb55.loopexit, bb55.loopexitsplit, etc.) are less likely to be executed as often, as they represent loop exit conditions.\n  - Entry block bb and terminal blocks like bb47 are executed only once, making them the least hot.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 22."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "office_stringsearch1",
       "funcName": "init_search",
       "numBB": 10,
-      "originalSet": "bb, bb1, bb1.bb18_crit_edge, bb18, bb18.loopexit, bb3, bb3.bb3_crit_edge, bb8, bb8.bb8_crit_edge, bb8.preheader",
-      "predictedSet": "bb, bb1, bb1.bb18_crit_edge, bb18, bb18.loopexit, bb3, bb3.bb3_crit_edge, bb8, bb8.bb8_crit_edge, bb8.preheader",
-      "tokenCount": 1994,
+      "originalSet": "bb, bb1, bb1.bb18_crit_edge, bb8.preheader, bb3, bb3.bb3_crit_edge, bb8, bb8.bb8_crit_edge, bb18.loopexit, bb18",
+      "predictedSet": "bb8, bb8.bb8_crit_edge, bb3, bb3.bb3_crit_edge, bb8.preheader, bb1, bb1.bb18_crit_edge, bb18.loopexit, bb18, bb",
+      "tokenCount": 2021,
       "discrepancy": false,
       "duplicates": [],
       "missing": [],
@@ -600,16 +600,16 @@
         "name": "bb"
       }
     ],
-    "additionalNotes": "- The hottest block is bb8 because it contains the main loop that processes the input string character by character, making it the most frequently executed block.\n  - bb8.bb8_crit_edge is the next hottest as it facilitates the continuation of the loop in bb8.\n  - bb3 and bb3.bb3_crit_edge are part of another loop that initializes the table array, but this loop is less likely to be executed as often as the string-processing loop in bb8.\n  - bb8.preheader is executed once before entering the bb8 loop, making it less hot than the loop itself.\n  - bb1 and bb1.bb18_crit_edge are part of the control flow that handles the termination of the bb3 loop, making them less hot.\n  - bb18.loopexit and bb18 are executed after the loops complete, making them colder.\n  - bb is the entry block and is executed only once, making it the coldest.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 10."
+    "additionalNotes": "- The hottest block is bb8 because it contains the main loop that iterates over the input string (%arg) and performs operations for each character. This loop is likely to execute as many times as the length of the string, making it the most frequently executed block.\n  - bb8.bb8_crit_edge is the next hottest because it serves as the continuation of the loop in bb8.\n  - bb3 and bb3.bb3_crit_edge are part of another loop that initializes the @table array, which iterates 256 times. This loop is less frequent than the string-processing loop in bb8 for typical input sizes.\n  - bb8.preheader is executed once before entering the bb8 loop.\n  - bb1 and bb1.bb18_crit_edge are part of the control flow that handles the termination of the bb3 loop.\n  - bb18.loopexit and bb18 are executed after the loops complete, making them less frequent.\n  - bb is the entry block and is executed only once, making it the least hot.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 10. No blocks are missing or duplicated."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "office_stringsearch1",
       "funcName": "strsearch",
       "numBB": 19,
-      "originalSet": "bb, bb.bb32_crit_edge, bb10, bb12, bb12.bb20_crit_edge, bb20, bb20.bb29_crit_edge, bb22, bb22.bb32.loopexit_crit_edge, bb27, bb29, bb29.bb10_crit_edge, bb32, bb32.loopexit, bb32.loopexitsplit, bb5, bb7, bb7.bb10_crit_edge, bb7.bb20_crit_edge",
-      "predictedSet": "bb, bb.bb32_crit_edge, bb10, bb12, bb12.bb20_crit_edge, bb20, bb20.bb29_crit_edge, bb22, bb22.bb32.loopexit_crit_edge, bb27, bb29, bb29.bb10_crit_edge, bb32, bb32.loopexit, bb32.loopexitsplit, bb5, bb7, bb7.bb10_crit_edge, bb7.bb20_crit_edge",
-      "tokenCount": 2600,
+      "originalSet": "bb, bb.bb32_crit_edge, bb5, bb7, bb7.bb20_crit_edge, bb7.bb10_crit_edge, bb10, bb12, bb12.bb20_crit_edge, bb20, bb20.bb29_crit_edge, bb22, bb22.bb32.loopexit_crit_edge, bb27, bb29, bb29.bb10_crit_edge, bb32.loopexitsplit, bb32.loopexit, bb32",
+      "predictedSet": "bb12, bb7, bb10, bb29, bb20, bb22, bb27, bb7.bb10_crit_edge, bb29.bb10_crit_edge, bb7.bb20_crit_edge, bb20.bb29_crit_edge, bb12.bb20_crit_edge, bb22.bb32.loopexit_crit_edge, bb32.loopexitsplit, bb32.loopexit, bb5, bb, bb.bb32_crit_edge, bb32",
+      "tokenCount": 2596,
       "discrepancy": false,
       "duplicates": [],
       "missing": [],
@@ -678,29 +678,32 @@
         "name": "bb32"
       }
     ],
-    "additionalNotes": "- The hottest block, bb12, is part of the main loop and contains the core logic for processing the input string, including table lookups and comparisons. It is likely executed repeatedly during the loop.\n  - Blocks like bb7, bb10, and bb29 are also part of the loop structure and are executed frequently, though less often than bb12.\n  - Blocks such as bb, bb.bb32_crit_edge, and bb32 are less likely to be executed frequently as they are part of the function's setup or termination.\n  - The total number of blocks in the sorted list is **19**, as required. No blocks are missing or duplicated."
+    "additionalNotes": "- The hottest block, bb12, is part of the main loop and contains the core logic for processing the input string, making it the most frequently executed block.\n  - Blocks like bb7, bb10, and bb29 are also part of the loop structure and are executed frequently due to their role in iteration and condition checks.\n  - Blocks such as bb, bb.bb32_crit_edge, and bb32 are less likely to be executed often as they are primarily entry/exit points or handle edge cases.\n  - The total number of blocks in the sorted list is **19**, matching the original count. No blocks are missing or duplicated."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "office_stringsearch1",
       "funcName": "main",
       "numBB": 87,
-      "originalSet": "bb, bb103, bb106, bb106.bb112_crit_edge, bb109, bb112, bb120, bb120split, bb128, bb128.bb212_crit_edge, bb13, bb131, bb134, bb134.preheader, bb139, bb139.bb156_crit_edge, bb141, bb141.bb141_crit_edge, bb146, bb146.bb146_crit_edge, bb146.preheader, bb156, bb156.bb197_crit_edge, bb156.loopexit, bb159, bb16, bb166, bb166.bb193_crit_edge, bb168, bb168.bb171_crit_edge, bb168.bb181_crit_edge, bb171, bb173, bb173.bb181_crit_edge, bb173.preheader, bb181, bb181.bb190_crit_edge, bb183, bb183.bb193.loopexit_crit_edge, bb188, bb190, bb190.bb171_crit_edge, bb193, bb193.bb166_crit_edge, bb193.loopexit, bb193.loopexitsplit, bb197, bb197.bb206_crit_edge, bb197.loopexit, bb204, bb206, bb206.bb134_crit_edge, bb21, bb212, bb212.loopexit, bb24, bb29, bb32, bb32.bb39_crit_edge, bb32.preheader, bb36, bb39, bb39split, bb40, bb44, bb44.bb55_crit_edge, bb48, bb51, bb55, bb55split, bb6, bb64, bb67, bb71, bb74, bb74.bb96_crit_edge, bb74.preheader, bb79, bb82, bb82.bb88_crit_edge, bb85, bb88, bb9, bb96, bb96split, bb98, bb98.bb120_crit_edge",
-      "predictedSet": "bb103, bb106, bb106.bb112_crit_edge, bb109, bb112, bb120, bb120split, bb128, bb128.bb212_crit_edge, bb13, bb131, bb134, bb134.preheader, bb139, bb139.bb156_crit_edge, bb141, bb141.bb141_crit_edge, bb146, bb146.bb146_crit_edge, bb146.preheader, bb156, bb156.bb197_crit_edge, bb156.loopexit, bb159, bb16, bb166, bb166.bb193_crit_edge, bb168, bb168.bb171_crit_edge, bb168.bb181_crit_edge, bb171, bb173, bb173.bb181_crit_edge, bb173.preheader, bb181, bb181.bb190_crit_edge, bb183, bb183.bb193.loopexit_crit_edge, bb188, bb190, bb190.bb171_crit_edge, bb193, bb193.bb166_crit_edge, bb193.loopexit, bb193.loopexitsplit, bb197, bb197.bb206_crit_edge, bb197.loopexit, bb204, bb206, bb206.bb134_crit_edge, bb21, bb212, bb212.loopexit, bb24, bb29, bb29, bb32, bb32.preheader, bb36, bb39, bb39split, bb40, bb44, bb44.bb55_crit_edge, bb44.bb55_crit_edge, bb48, bb51, bb55, bb6, bb6.bb39_crit_edge, bb64, bb67, bb71, bb74, bb74.bb96_crit_edge, bb74.preheader, bb79, bb82, bb82.bb88_crit_edge, bb85, bb88, bb9, bb96, bb96split, bb98, bb98.bb120_crit_edge",
-      "tokenCount": 9672,
+      "originalSet": "bb, bb6, bb9, bb13, bb16, bb21, bb24, bb32.preheader, bb29, bb32, bb32.bb39_crit_edge, bb36, bb39split, bb39, bb40, bb44, bb44.bb55_crit_edge, bb48, bb51, bb55split, bb55, bb64, bb67, bb74.preheader, bb71, bb74, bb74.bb96_crit_edge, bb79, bb82, bb82.bb88_crit_edge, bb85, bb88, bb96split, bb96, bb98, bb98.bb120_crit_edge, bb103, bb106, bb106.bb112_crit_edge, bb109, bb112, bb120split, bb120, bb128, bb128.bb212_crit_edge, bb134.preheader, bb131, bb134, bb139, bb139.bb156_crit_edge, bb146.preheader, bb141, bb141.bb141_crit_edge, bb146, bb146.bb146_crit_edge, bb156.loopexit, bb156, bb156.bb197_crit_edge, bb159, bb166, bb166.bb193_crit_edge, bb173.preheader, bb168, bb168.bb181_crit_edge, bb168.bb171_crit_edge, bb171, bb173, bb173.bb181_crit_edge, bb181, bb181.bb190_crit_edge, bb183, bb183.bb193.loopexit_crit_edge, bb188, bb190, bb190.bb171_crit_edge, bb193.loopexitsplit, bb193.loopexit, bb193, bb193.bb166_crit_edge, bb197.loopexit, bb197, bb197.bb206_crit_edge, bb204, bb206, bb206.bb134_crit_edge, bb212.loopexit, bb212",
+      "predictedSet": "bb32, bb44, bb98, bb74, bb173, bb193, bb166, bb181, bb134, bb141, bb146, bb159, bb36, bb79, bb103, bb106, bb112, bb88, bb55, bb9, bb16, bb24, bb48, bb51, bb120, bb128, bb206, bb197, bb183, bb190, bb40, bb39, bb39split, bb29, bb6, bb13, bb21, bb71, bb64, bb131, bb204, bb212, bb32.preheader, bb44.bb55_crit_edge, bb55split, bb74.preheader, bb74.bb96_crit_edge, bb82, bb82.bb88_crit_edge, bb85, bb96split, bb96, bb98.bb120_crit_edge, bb120split, bb128.bb212_crit_edge, bb134.preheader, bb139, bb139.bb156_crit_edge, bb146.preheader, bb141.bb141_crit_edge, bb146.bb146_crit_edge, bb156.loopexit, bb156, bb156.bb197_crit_edge, bb168, bb168.bb181_crit_edge, bb168.bb171_crit_edge, bb171, bb173.bb181_crit_edge, bb181.bb190_crit_edge, bb183.bb193.loopexit_crit_edge, bb188, bb190.bb171_crit_edge, bb193.loopexitsplit, bb193.loopexit, bb193.bb166_crit_edge, bb197.loopexit, bb197.bb206_crit_edge, bb206.bb134_crit_edge, bb212.loopexit, bb32.bb39_crit_edge, bb44.bb55_crit_edge, bb106.bb112_crit_edge, bb168.bb171_crit_edge, bb193.bb166_crit_edge, bb206.bb134_crit_edge, bb212.loopexit",
+      "tokenCount": 9677,
       "discrepancy": true,
       "duplicates": [
-        "bb29",
-        "bb44.bb55_crit_edge"
+        "bb44.bb55_crit_edge",
+        "bb168.bb171_crit_edge",
+        "bb193.bb166_crit_edge",
+        "bb206.bb134_crit_edge",
+        "bb212.loopexit"
       ],
       "missing": [
         "bb",
-        "bb32.bb39_crit_edge",
-        "bb55split"
+        "bb67",
+        "bb109",
+        "bb166.bb193_crit_edge",
+        "bb173.preheader"
       ],
-      "extra": [
-        "bb6.bb39_crit_edge"
-      ],
+      "extra": [],
       "exceed": false
     },
     "hottestBB": {
@@ -714,10 +717,10 @@
         "name": "bb44"
       },
       {
-        "name": "bb74"
+        "name": "bb98"
       },
       {
-        "name": "bb98"
+        "name": "bb74"
       },
       {
         "name": "bb173"
@@ -732,9 +735,6 @@
         "name": "bb181"
       },
       {
-        "name": "bb159"
-      },
-      {
         "name": "bb134"
       },
       {
@@ -744,37 +744,13 @@
         "name": "bb146"
       },
       {
-        "name": "bb197"
-      },
-      {
-        "name": "bb212"
-      },
-      {
-        "name": "bb9"
-      },
-      {
-        "name": "bb16"
-      },
-      {
-        "name": "bb24"
-      },
-      {
-        "name": "bb55"
+        "name": "bb159"
       },
       {
         "name": "bb36"
       },
       {
         "name": "bb79"
-      },
-      {
-        "name": "bb82"
-      },
-      {
-        "name": "bb88"
-      },
-      {
-        "name": "bb96"
       },
       {
         "name": "bb103"
@@ -786,16 +762,55 @@
         "name": "bb112"
       },
       {
+        "name": "bb88"
+      },
+      {
+        "name": "bb55"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb24"
+      },
+      {
+        "name": "bb48"
+      },
+      {
+        "name": "bb51"
+      },
+      {
         "name": "bb120"
       },
       {
         "name": "bb128"
       },
       {
-        "name": "bb204"
+        "name": "bb206"
       },
       {
-        "name": "bb206"
+        "name": "bb197"
+      },
+      {
+        "name": "bb183"
+      },
+      {
+        "name": "bb190"
+      },
+      {
+        "name": "bb40"
+      },
+      {
+        "name": "bb39"
+      },
+      {
+        "name": "bb39split"
+      },
+      {
+        "name": "bb29"
       },
       {
         "name": "bb6"
@@ -807,70 +822,52 @@
         "name": "bb21"
       },
       {
-        "name": "bb29"
-      },
-      {
-        "name": "bb40"
-      },
-      {
-        "name": "bb48"
-      },
-      {
-        "name": "bb51"
+        "name": "bb71"
       },
       {
         "name": "bb64"
       },
       {
-        "name": "bb67"
-      },
-      {
-        "name": "bb71"
-      },
-      {
-        "name": "bb85"
-      },
-      {
-        "name": "bb109"
-      },
-      {
         "name": "bb131"
       },
       {
-        "name": "bb139"
+        "name": "bb204"
       },
       {
-        "name": "bb156"
+        "name": "bb212"
       },
       {
-        "name": "bb183"
-      },
-      {
-        "name": "bb188"
-      },
-      {
-        "name": "bb190"
-      },
-      {
-        "name": "bb6.bb39_crit_edge"
+        "name": "bb32.preheader"
       },
       {
         "name": "bb44.bb55_crit_edge"
       },
       {
+        "name": "bb55split"
+      },
+      {
+        "name": "bb74.preheader"
+      },
+      {
         "name": "bb74.bb96_crit_edge"
+      },
+      {
+        "name": "bb82"
       },
       {
         "name": "bb82.bb88_crit_edge"
       },
       {
+        "name": "bb85"
+      },
+      {
         "name": "bb96split"
       },
       {
-        "name": "bb98.bb120_crit_edge"
+        "name": "bb96"
       },
       {
-        "name": "bb106.bb112_crit_edge"
+        "name": "bb98.bb120_crit_edge"
       },
       {
         "name": "bb120split"
@@ -880,6 +877,9 @@
       },
       {
         "name": "bb134.preheader"
+      },
+      {
+        "name": "bb139"
       },
       {
         "name": "bb139.bb156_crit_edge"
@@ -897,13 +897,10 @@
         "name": "bb156.loopexit"
       },
       {
+        "name": "bb156"
+      },
+      {
         "name": "bb156.bb197_crit_edge"
-      },
-      {
-        "name": "bb166.bb193_crit_edge"
-      },
-      {
-        "name": "bb173.preheader"
       },
       {
         "name": "bb168"
@@ -925,6 +922,9 @@
       },
       {
         "name": "bb183.bb193.loopexit_crit_edge"
+      },
+      {
+        "name": "bb188"
       },
       {
         "name": "bb190.bb171_crit_edge"
@@ -951,24 +951,27 @@
         "name": "bb212.loopexit"
       },
       {
-        "name": "bb32.preheader"
-      },
-      {
-        "name": "bb39split"
-      },
-      {
-        "name": "bb39"
+        "name": "bb32.bb39_crit_edge"
       },
       {
         "name": "bb44.bb55_crit_edge"
       },
       {
-        "name": "bb74.preheader"
+        "name": "bb106.bb112_crit_edge"
       },
       {
-        "name": "bb29"
+        "name": "bb168.bb171_crit_edge"
+      },
+      {
+        "name": "bb193.bb166_crit_edge"
+      },
+      {
+        "name": "bb206.bb134_crit_edge"
+      },
+      {
+        "name": "bb212.loopexit"
       }
     ],
-    "additionalNotes": "- The hottest block bb32 is part of a loop that processes input data, making it the most frequently executed.\n  - The ranking considers loop structures, conditional branches, and function calls.\n  - The total number of blocks in the sorted list is **87**, matching the original count."
+    "additionalNotes": "The total number of blocks in the sorted list is exactly 87. The hottest block, bb32, is part of a loop that processes input data, making it the most frequently executed. Blocks related to file handling and error handling are less likely to be executed frequently."
   }
 ]

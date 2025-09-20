@@ -4,9 +4,9 @@
       "benchmarkName": "security_sha",
       "funcName": "main",
       "numBB": 8,
-      "originalSet": "bb, bb11, bb14, bb20, bb22, bb23, bb5, bb8",
-      "predictedSet": "bb, bb11, bb14, bb20, bb22, bb23, bb5, bb8",
-      "tokenCount": 1669,
+      "originalSet": "bb, bb5, bb8, bb11, bb14, bb20, bb22, bb23",
+      "predictedSet": "bb11, bb14, bb20, bb22, bb8, bb, bb23, bb5",
+      "tokenCount": 1698,
       "discrepancy": false,
       "duplicates": [],
       "missing": [],
@@ -27,31 +27,31 @@
         "name": "bb20"
       },
       {
-        "name": "bb8"
-      },
-      {
         "name": "bb22"
       },
       {
-        "name": "bb23"
+        "name": "bb8"
       },
       {
         "name": "bb"
       },
       {
+        "name": "bb23"
+      },
+      {
         "name": "bb5"
       }
     ],
-    "additionalNotes": "- The hottest block is bb11 because it contains a loop structure (br label %bb11) and is the central point for iteration. Loops typically dominate execution frequency.\n  - bb14 and bb20 are part of the loop body, so they are also executed frequently but slightly less than bb11 due to loop control.\n  - bb8 is executed once before entering the loop, making it less hot than the loop blocks.\n  - bb22 and bb23 are executed after the loop, with bb23 being the final return block.\n  - bb is the entry block, executed once.\n  - bb5 is a rare error-handling block, executed only if the file opening fails.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 8."
+    "additionalNotes": "- bb11 is the hottest block because it contains a loop structure (br label %bb11) that iterates based on the comparison of %.01 and %i12. Loops are typically the hottest regions in a function.\n  - bb14 and bb20 are part of the loop body, so they are also hot but slightly less frequent than bb11 due to loop control flow.\n  - bb22 is the exit block of the loop, executed once after the loop finishes.\n  - bb8 is executed once for file reading and initialization, making it less hot than the loop-related blocks.\n  - bb is the entry block, executed once at the start.\n  - bb23 is the final block, executed once at the end.\n  - bb5 is a rare block, executed only if the file opening fails.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 8."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "security_sha",
       "funcName": "main1",
       "numBB": 16,
-      "originalSet": "bb, bb10, bb11, bb14, bb19, bb23, bb23.bb26_crit_edge, bb25, bb26, bb28, bb29, bb30, bb5, bb5.bb9_crit_edge, bb8, bb9",
-      "predictedSet": "bb, bb10, bb11, bb14, bb19, bb23, bb23.bb26_crit_edge, bb25, bb26, bb28, bb29, bb30, bb5, bb5.bb9_crit_edge, bb8, bb9",
-      "tokenCount": 2041,
+      "originalSet": "bb, bb5, bb5.bb9_crit_edge, bb8, bb9, bb10, bb11, bb14, bb19, bb23, bb23.bb26_crit_edge, bb25, bb26, bb28, bb29, bb30",
+      "predictedSet": "bb11, bb14, bb23, bb26, bb28, bb10, bb29, bb30, bb, bb5, bb5.bb9_crit_edge, bb9, bb23.bb26_crit_edge, bb25, bb8, bb19",
+      "tokenCount": 2035,
       "discrepancy": false,
       "duplicates": [],
       "missing": [],
@@ -70,9 +70,6 @@
       },
       {
         "name": "bb23"
-      },
-      {
-        "name": "bb25"
       },
       {
         "name": "bb26"
@@ -99,19 +96,22 @@
         "name": "bb5.bb9_crit_edge"
       },
       {
-        "name": "bb8"
-      },
-      {
         "name": "bb9"
       },
       {
         "name": "bb23.bb26_crit_edge"
       },
       {
+        "name": "bb25"
+      },
+      {
+        "name": "bb8"
+      },
+      {
         "name": "bb19"
       }
     ],
-    "additionalNotes": "- bb11 is the hottest block because it is part of the main loop that iterates based on the value of %arg, which is likely to be a significant driver of execution frequency.\n  - Blocks like bb14, bb23, and bb25 are also hot because they are part of the loop body and are executed conditionally within the loop.\n  - Blocks like bb19 are less hot because they are only executed in error conditions (e.g., when fopen fails).\n  - The total number of blocks in the sorted list is exactly 16, as required."
+    "additionalNotes": "- The hottest block is bb11 because it contains a loop structure (!llvm.loop) that iterates based on the value of %arg, making it likely to execute multiple times.\n  - Blocks like bb14, bb23, and bb26 are part of the loop body and are executed during each iteration, making them relatively hot.\n  - Blocks like bb19 and bb8 are less likely to execute frequently due to conditional branches leading to them.\n  - The total number of blocks in the sorted list is exactly 16, as required."
   },
   {
     "benchmarkInfo": {
@@ -120,7 +120,7 @@
       "numBB": 1,
       "originalSet": "bb",
       "predictedSet": "bb",
-      "tokenCount": 1410,
+      "tokenCount": 1384,
       "discrepancy": false,
       "duplicates": [],
       "missing": [],
@@ -135,7 +135,7 @@
         "name": "bb"
       }
     ],
-    "additionalNotes": "This function contains only one basic block (bb), which initializes the fields of a SHA_INFO structure. Since there are no conditional branches or loops, the block bb is executed exactly once when the function is called. Therefore, it is trivially the hottest block.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 1."
+    "additionalNotes": "The function has only one basic block (bb), which contains all the instructions and is executed unconditionally. Therefore, it is the hottest block by default.\n\n- **Summary**: The total number of blocks in the list is exactly 1."
   },
   {
     "benchmarkInfo": {
@@ -143,8 +143,8 @@
       "funcName": "sha_update",
       "numBB": 7,
       "originalSet": "bb, bb.bb15_crit_edge, bb11, bb15, bb26, bb28, bb35",
-      "predictedSet": "bb, bb.bb15_crit_edge, bb11, bb15, bb26, bb28, bb35",
-      "tokenCount": 2242,
+      "predictedSet": "bb26, bb28, bb15, bb, bb11, bb.bb15_crit_edge, bb35",
+      "tokenCount": 2228,
       "discrepancy": false,
       "duplicates": [],
       "missing": [],
@@ -177,16 +177,16 @@
         "name": "bb35"
       }
     ],
-    "additionalNotes": "- The hottest block is bb26 because it contains a loop structure (br label %bb26, !llvm.loop !11) that iterates as long as the condition %i27 = icmp sge i32 %.0, 64 holds true. Loops are typically the hottest regions in a function due to repeated execution.\n  - bb28 is the second hottest because it is part of the loop body and performs significant operations like memory copying, byte reversal, and SHA transformation.\n  - bb15 is executed once before entering the loop and performs updates to the SHA_INFO structure, making it moderately hot.\n  - bb is the entry block and is executed once, making it less hot than the loop-related blocks.\n  - bb11 is conditionally executed based on %i10 and is less likely to be executed compared to the loop.\n  - bb.bb15_crit_edge is a simple transition block and is rarely executed.\n  - bb35 is the exit block of the loop and is executed only once after the loop terminates, making it the least hot.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 7."
+    "additionalNotes": "- bb26 is the hottest block because it contains a loop structure (br label %bb26) that iterates until the condition icmp sge i32 %.0, 64 becomes false. Loops are typically the hottest regions in a function.\n  - bb28 is the second hottest because it is part of the loop body and executes on each iteration.\n  - bb15 is executed once before entering the loop, making it less hot than the loop blocks but hotter than the entry block bb.\n  - bb is the entry block and is executed once, making it less hot than bb15.\n  - bb11 and bb.bb15_crit_edge are conditional blocks, with bb11 being executed only if the condition in bb evaluates true, and bb.bb15_crit_edge being executed otherwise. They are less hot than the main blocks.\n  - bb35 is the least hot because it is executed only after the loop exits, which happens once per function call.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 7."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "security_sha",
       "funcName": "byte_reverse",
       "numBB": 5,
-      "originalSet": "bb, bb34, bb36, bb6, bb8",
-      "predictedSet": "bb, bb34, bb36, bb6, bb8",
-      "tokenCount": 2032,
+      "originalSet": "bb, bb6, bb8, bb34, bb36",
+      "predictedSet": "bb8, bb6, bb34, bb, bb36",
+      "tokenCount": 2025,
       "discrepancy": false,
       "duplicates": [],
       "missing": [],
@@ -213,16 +213,16 @@
         "name": "bb36"
       }
     ],
-    "additionalNotes": "- The hottest block is bb8 because it contains the core loop body where most of the operations (loads, stores, and reversals) are performed. This block is executed repeatedly for each iteration of the loop.\n  - bb6 is the loop header and is executed once per iteration, making it the second hottest block.\n  - bb34 is the loop latch, responsible for incrementing the loop counter and branching back to bb6. It is executed once per iteration, similar to bb6, but does less work.\n  - bb is the entry block, executed only once at the start of the function.\n  - bb36 is the exit block, executed only once when the loop terminates.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 5."
+    "additionalNotes": "- The hottest block is bb8 because it contains the core loop body where most of the computation and memory operations occur. This block is executed repeatedly for each iteration of the loop.\n  - bb6 is the loop header and is executed once per iteration, making it the second hottest block.\n  - bb34 is the loop latch, responsible for incrementing the loop counter and branching back to bb6. It is executed once per iteration, similar to bb6, but does less work.\n  - bb is the entry block, executed only once at the start of the function.\n  - bb36 is the exit block, executed only once when the loop terminates.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 5."
   },
   {
     "benchmarkInfo": {
       "benchmarkName": "security_sha",
       "funcName": "sha_transform",
       "numBB": 25,
-      "originalSet": "bb, bb100, bb116, bb118, bb119, bb121, bb140, bb142, bb143, bb145, bb161, bb163, bb21, bb23, bb30, bb32, bb33, bb35, bb57, bb59, bb75, bb77, bb95, bb97, bb98",
-      "predictedSet": "bb, bb100, bb116, bb118, bb119, bb121, bb140, bb142, bb143, bb145, bb161, bb163, bb21, bb23, bb30, bb32, bb33, bb35, bb57, bb59, bb75, bb77, bb95, bb97, bb98",
-      "tokenCount": 5292,
+      "originalSet": "bb, bb21, bb23, bb30, bb32, bb33, bb35, bb57, bb59, bb75, bb77, bb95, bb97, bb98, bb100, bb116, bb118, bb119, bb121, bb140, bb142, bb143, bb145, bb161, bb163",
+      "predictedSet": "bb75, bb77, bb95, bb33, bb35, bb57, bb98, bb100, bb116, bb119, bb121, bb140, bb143, bb145, bb161, bb21, bb23, bb30, bb32, bb59, bb97, bb118, bb142, bb163, bb",
+      "tokenCount": 5302,
       "discrepancy": false,
       "duplicates": [],
       "missing": [],
@@ -309,7 +309,7 @@
         "name": "bb"
       }
     ],
-    "additionalNotes": "- The hottest block is bb75 because it contains the main loop iterating over 20 iterations, and it is the entry point for subsequent loops (bb77, bb95, etc.).\n  - The blocks are sorted based on their nesting within loops and the likelihood of being executed multiple times. Blocks like bb, bb163, and bb142 are less likely to be executed frequently as they are outside the main loop or are terminal blocks.\n  - The total number of blocks in the sorted list is exactly 25, with no omissions or duplications."
+    "additionalNotes": "- The hottest block is bb75 because it is the entry point for a loop that iterates over a range of 20 iterations, and it contains multiple dependent computations.\n  - Blocks like bb77, bb95, bb33, and bb35 are also hot due to their involvement in nested loops or frequent branching.\n  - Blocks such as bb, bb163, and bb142 are less hot as they are executed only once or are terminal blocks.\n  - The total number of blocks in the sorted list is **25**, matching the original count. No blocks are missing or duplicated."
   },
   {
     "benchmarkInfo": {
@@ -317,8 +317,8 @@
       "funcName": "sha_final",
       "numBB": 4,
       "originalSet": "bb, bb13, bb22, bb28",
-      "predictedSet": "bb, bb13, bb22, bb28",
-      "tokenCount": 2095,
+      "predictedSet": "bb28, bb, bb22, bb13",
+      "tokenCount": 2065,
       "discrepancy": false,
       "duplicates": [],
       "missing": [],
@@ -342,7 +342,7 @@
         "name": "bb13"
       }
     ],
-    "additionalNotes": "- bb28 is the hottest block because it is the final block that consolidates the function's operations and is reached regardless of the branch taken (bb13 or bb22).\n  - bb is the entry block and is executed once, making it the second hottest.\n  - Between bb13 and bb22, the hotness depends on the condition %i12. Since %i12 is a comparison of %i9 with 56, the likelihood of each branch depends on the input data. However, both are mutually exclusive, and bb22 is slightly more likely to execute because %i9 being less than or equal to 56 is a more common scenario in padding logic.\n  - The total number of blocks in the sorted list is exactly 4."
+    "additionalNotes": "- bb28 is the hottest block because it is the final block that consolidates the function's operations and is reached regardless of the branch taken (bb13 or bb22).\n  - bb is the entry block and is executed once, making it the second hottest.\n  - Between bb13 and bb22, their execution depends on the condition %i12. However, bb22 is likely hotter because the condition %i12 (%i9 > 56) suggests that bb22 is taken more often in typical SHA padding scenarios.\n  - The total number of blocks in the sorted list is exactly 4."
   },
   {
     "benchmarkInfo": {
@@ -350,8 +350,8 @@
       "funcName": "sha_stream",
       "numBB": 4,
       "originalSet": "bb, bb2, bb7, bb9",
-      "predictedSet": "bb, bb2, bb7, bb9",
-      "tokenCount": 1316,
+      "predictedSet": "bb7, bb2, bb, bb9",
+      "tokenCount": 1312,
       "discrepancy": false,
       "duplicates": [],
       "missing": [],
@@ -375,7 +375,7 @@
         "name": "bb9"
       }
     ],
-    "additionalNotes": "- bb7 is the hottest block because it is part of the loop and performs the sha_update operation, which is repeatedly executed as long as data is read from the input stream.\n  - bb2 is the loop header and is executed each time the loop iterates, but it does not perform as much work as bb7.\n  - bb is executed only once at the start of the function to initialize the SHA context.\n  - bb9 is the exit block and is executed only once after the loop terminates.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 4."
+    "additionalNotes": "- bb7 is the hottest block because it is part of the loop body and is executed for every iteration of the loop as long as the condition %i6 evaluates to true.\n  - bb2 is the loop header and is executed once per loop iteration, making it the second hottest block.\n  - bb is executed only once at the start of the function, making it less hot than the loop-related blocks.\n  - bb9 is the coldest block as it is executed only once when the loop exits.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 4."
   },
   {
     "benchmarkInfo": {
@@ -384,7 +384,7 @@
       "numBB": 1,
       "originalSet": "bb",
       "predictedSet": "bb",
-      "tokenCount": 1381,
+      "tokenCount": 1386,
       "discrepancy": false,
       "duplicates": [],
       "missing": [],
@@ -399,6 +399,6 @@
         "name": "bb"
       }
     ],
-    "additionalNotes": "The function contains only one basic block (bb), which performs all the operations, including pointer arithmetic, memory loads, and a call to printf. Since there are no conditional branches or loops, bb is the only block and is executed exactly once per function invocation.\n\n- **Summary**: The total number of blocks in the list is exactly 1."
+    "additionalNotes": "The function contains only one basic block (bb), which performs all the operations, including pointer arithmetic, memory loads, and a call to printf. Since there are no conditional branches or loops, the block bb is executed exactly once per function invocation, making it the hottest (and only) block.\n\n- **Summary**: The total number of blocks in the list is exactly 1."
   }
 ]
