@@ -1,0 +1,1930 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_c",
+      "funcName": "main",
+      "numBB": 8,
+      "originalSet": "bb, bb5, bb8, bb11, bb14, bb15, bb17, bb18",
+      "predictedSet": "bb11, bb14, bb15, bb8, bb, bb17, bb18, bb5",
+      "tokenCount": 3051,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb11"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb18"
+      },
+      {
+        "name": "bb5"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - bb in the optimized function corresponds to bb in the original function.\n    - bb5 corresponds to bb4 in the original function.\n    - bb8 corresponds to bb7 in the original function.\n    - bb11 corresponds to the loop header bb12 in the original function.\n    - bb14 corresponds to the loop body of bb12 in the original function.\n    - bb15 corresponds to the loop increment and continuation of bb12 in the original function.\n    - bb17 corresponds to bb17 in the original function.\n    - bb18 corresponds to the final return block in the original function.\n  - **Computed O1 freq(bb) Table**:\n    - bb: 1\n    - bb4: 0\n    - bb7: 1\n    - bb12: 782\n    - bb12.ph: 1\n    - bb12_12.ce: 781\n    - bb17: 1\n    - bb17.le: 1\n  - **Block Splitting/Merging**:\n    - The loop structure (bb12, bb12_12.ce, bb12.ph) in the original function is represented as bb11, bb14, and bb15 in the optimized function.\n    - bb17 and bb18 remain largely unchanged.\n  - **Reasoning**:\n    - bb11 (loop header) is the hottest block because it corresponds to the loop in bb12 with a frequency of 782.\n    - bb14 and bb15 are part of the loop body and increment, so they follow in hotness.\n    - bb8 (file reading) is executed once, as indicated by the profile.\n    - bb (entry block) is executed once.\n    - bb17 and bb18 are executed once at the end.\n    - bb5 (error handling) is never executed, as indicated by the profile.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 8."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_c",
+      "funcName": "getint",
+      "numBB": 23,
+      "originalSet": "bb, bb4, bb4.bb9_crit_edge, bb6, bb9, bb11, bb14, bb14.bb19_crit_edge, bb16, bb16.bb19_crit_edge, bb18, bb19, bb21, bb22, bb28, bb29, bb29.bb33_crit_edge, bb31, bb33split, bb33, bb34, bb35, bb36",
+      "predictedSet": "bb11, bb22, bb4, bb19, bb14, bb16, bb9, bb18, bb21, bb28, bb29, bb34, bb35, bb36, bb4.bb9_crit_edge, bb14.bb19_crit_edge, bb16.bb19_crit_edge, bb29.bb33_crit_edge, bb31, bb33split, bb33, bb6, bb",
+      "tokenCount": 3894,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb11"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb18"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb28"
+      },
+      {
+        "name": "bb29"
+      },
+      {
+        "name": "bb34"
+      },
+      {
+        "name": "bb35"
+      },
+      {
+        "name": "bb36"
+      },
+      {
+        "name": "bb4.bb9_crit_edge"
+      },
+      {
+        "name": "bb14.bb19_crit_edge"
+      },
+      {
+        "name": "bb16.bb19_crit_edge"
+      },
+      {
+        "name": "bb29.bb33_crit_edge"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb33split"
+      },
+      {
+        "name": "bb33"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The hottest block in the original function (bb11) corresponds to bb11 in the optimized function. This block has the highest execution count (7038) in the original profile.\n    - Blocks like bb1, bb8, and bb20 in the original function map to sequences of blocks in the optimized function, such as bb4, bb19, and bb22.\n    - Blocks bb3 and bb5 in the original function are dead (execution count = 0) and do not appear in the optimized function.\n\n  - **Computed O1 freq(bb) Table**:\n    - bb0: 2346\n    - bb1: 3128\n    - bb11: 7038\n    - bb11.ph: 2346\n    - bb11_11.ce: 4692\n    - bb1_8.ce: 3128\n    - bb20: 2346\n    - bb3: 0\n    - bb5: 0\n    - bb8: 3128\n    - bb8_1.ce: 782\n\n  - **Block Splitting and Merging**:\n    - The optimized function splits some blocks (e.g., bb11 is split into bb22 and others) and merges others (e.g., bb1 and bb8 contribute to bb4 and bb19).\n    - Dead blocks (bb3 and bb5) are removed.\n\n  - **Summary**:\n    - The total number of blocks in the sorted list is exactly 23. No blocks are missing or duplicated."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_c",
+      "funcName": "int_to_uchar",
+      "numBB": 15,
+      "originalSet": "bb, bb10, bb12, bb12.bb21_crit_edge, bb17, bb21, bb21.bb30_crit_edge, bb26, bb30, bb31, bb33, bb35, bb37, bb47, bb49",
+      "predictedSet": "bb, bb10, bb12, bb12.bb21_crit_edge, bb17, bb21, bb21.bb30_crit_edge, bb26, bb30, bb31, bb33, bb35, bb37, bb47, bb49",
+      "tokenCount": 4083,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb12.bb21_crit_edge"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb21.bb30_crit_edge"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb30"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb33"
+      },
+      {
+        "name": "bb35"
+      },
+      {
+        "name": "bb37"
+      },
+      {
+        "name": "bb47"
+      },
+      {
+        "name": "bb49"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**: The original function's blocks (e.g., bb, bb4, bb6, etc.) were optimized and reorganized into the new function's blocks. The entry block bb in the optimized function corresponds to the entry block in the original function. Loops and conditions were restructured, but the overall control flow remains similar.\n  - **Computed O1 freq(bb) Table**: All basic block counts in the O1 profile are 0, meaning no execution data is available. This makes it impossible to determine hotness based on actual execution frequency. Thus, the hotness ranking is based on structural analysis and the assumption that the entry block (bb) is the most likely to execute.\n  - **Block Splitting/Merging**: Some blocks in the original function were split or merged during optimization. For example, loop-related blocks (bb6, bb23) were restructured into bb10, bb12, bb21, etc., in the optimized function.\n  - **Summary**: The total number of blocks in the sorted list is exactly 15. No blocks are missing or duplicated."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_c",
+      "funcName": "setup_brightness_lut",
+      "numBB": 8,
+      "originalSet": "bb, bb6, bb8, bb8.bb18_crit_edge, bb15, bb18, bb26, bb28",
+      "predictedSet": "bb6, bb8, bb18, bb15, bb8.bb18_crit_edge, bb26, bb, bb28",
+      "tokenCount": 2857,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb6"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb18"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb8.bb18_crit_edge"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb28"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - bb in the optimized function corresponds to the entry block in the original function.\n    - bb6 in the optimized function corresponds to the loop header in the original function.\n    - bb8 corresponds to the body of the loop in the original function.\n    - bb8.bb18_crit_edge corresponds to the critical edge in the loop body.\n    - bb15 corresponds to the branch where %arg3 == 6 in the original function.\n    - bb18 corresponds to the computation of the exponential and subsequent operations.\n    - bb26 corresponds to the loop increment and back edge.\n    - bb28 corresponds to the loop exit block.\n  - **Computed O1 freq(bb) Table**:\n    - All basic blocks in the original function have a frequency of 0 based on the provided profile data. This suggests that the function was not executed during profiling, or the profiling data is incomplete.\n  - **Block Splitting/Merging**:\n    - The optimized function has more blocks due to additional control flow introduced during optimization (e.g., bb8.bb18_crit_edge).\n    - The loop structure remains intact, but some blocks have been split for better control flow management.\n  - **Reasoning for Hotness**:\n    - Despite the lack of execution data, the loop header (bb6) is typically the hottest block in a function with a loop, as it controls the iteration.\n    - The loop body (bb8, bb18, bb15, bb8.bb18_crit_edge) follows in hotness, with bb8 being the main computation block.\n    - The loop increment (bb26) is executed once per iteration, making it less hot than the loop body.\n    - The entry block (bb) and the loop exit block (bb28) are executed only once, making them the least hot.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 8."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_c",
+      "funcName": "susan_principle",
+      "numBB": 12,
+      "originalSet": "bb, bb9, bb12, bb13, bb16, bb16.bb374_crit_edge, bb368, bb374, bb375, bb377, bb378, bb380",
+      "predictedSet": "bb, bb9, bb12, bb13, bb16, bb16.bb374_crit_edge, bb368, bb374, bb375, bb377, bb378, bb380",
+      "tokenCount": 16079,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb16.bb374_crit_edge"
+      },
+      {
+        "name": "bb368"
+      },
+      {
+        "name": "bb374"
+      },
+      {
+        "name": "bb375"
+      },
+      {
+        "name": "bb377"
+      },
+      {
+        "name": "bb378"
+      },
+      {
+        "name": "bb380"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**: The basic blocks in the optimized function (bb, bb9, etc.) correspond to the original function's blocks based on their structure and control flow. For example, bb in the optimized function corresponds to the entry block in the original function.\n  - **Computed O1 freq(bb) Table**: All basic blocks in the original function have a frequency of 0 based on the provided profile data. This means no execution data is available to differentiate the hotness of blocks.\n  - **Block Splitting/Merging**: No evidence of block splitting or merging is apparent from the given IR. The optimized function retains a similar structure to the original.\n  - **Hotness Assumption**: Since all blocks have a frequency of 0, the hotness ranking is based on the control flow structure, assuming the entry block (bb) is the most likely to execute first, followed by subsequent blocks in the control flow.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 12."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_c",
+      "funcName": "susan_principle_small",
+      "numBB": 12,
+      "originalSet": "bb, bb9, bb12, bb13, bb16, bb16.bb114_crit_edge, bb108, bb114, bb115, bb117, bb118, bb120",
+      "predictedSet": "bb, bb9, bb12, bb13, bb16, bb108, bb114, bb115, bb117, bb118, bb16.bb114_crit_edge, bb120",
+      "tokenCount": 6721,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb108"
+      },
+      {
+        "name": "bb114"
+      },
+      {
+        "name": "bb115"
+      },
+      {
+        "name": "bb117"
+      },
+      {
+        "name": "bb118"
+      },
+      {
+        "name": "bb16.bb114_crit_edge"
+      },
+      {
+        "name": "bb120"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**: The mapping between the original and optimized blocks is straightforward for most blocks, as the structure of the control flow is preserved. However, some blocks in the optimized version correspond to merged or simplified versions of multiple blocks in the original function.\n  - **Computed O1 freq(bb) Table**: All basic blocks in the O1 profile have a frequency of 0, indicating that no execution counts were recorded. This makes it impossible to determine hotness based on the profile data alone. Therefore, the hotness ranking is based on the control flow structure and the likelihood of execution paths.\n  - **Block Splitting/Merging**: Some blocks in the optimized function (e.g., bb16.bb114_crit_edge) represent critical edges or intermediate steps that were not explicitly present in the original function. These are treated as separate blocks in the optimized version.\n  - **Summary**: The total number of blocks in the sorted list is exactly 12."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_c",
+      "funcName": "median",
+      "numBB": 12,
+      "originalSet": "bb, bb73, bb75, bb76, bb79, bb79.bb101_crit_edge, bb88, bb101, bb102, bb104, bb105, bb107",
+      "predictedSet": "bb, bb73, bb75, bb76, bb79, bb79.bb101_crit_edge, bb88, bb101, bb102, bb104, bb105, bb107",
+      "tokenCount": 6298,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb73"
+      },
+      {
+        "name": "bb75"
+      },
+      {
+        "name": "bb76"
+      },
+      {
+        "name": "bb79"
+      },
+      {
+        "name": "bb79.bb101_crit_edge"
+      },
+      {
+        "name": "bb88"
+      },
+      {
+        "name": "bb101"
+      },
+      {
+        "name": "bb102"
+      },
+      {
+        "name": "bb104"
+      },
+      {
+        "name": "bb105"
+      },
+      {
+        "name": "bb107"
+      }
+    ],
+    "additionalNotes": "- The basic block profile and edge profile for the -O1 version indicate that all blocks have a count of 0. This suggests that the function was not executed during profiling, or the profiling data is incomplete.\n  - Without specific execution counts, all blocks in the optimized function are assumed to have equal likelihood of execution. However, the entry block bb is the starting point of the function and is guaranteed to execute at least once, making it the \"hottest\" block.\n  - The mapping of blocks from the -O1 version to the optimized version is straightforward, as the structure of the function remains largely intact. No blocks were split, merged, or removed.\n  - The computed freq(bb) table for the -O1 version is uniform with all blocks having a frequency of 0.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 12."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_c",
+      "funcName": "enlarge",
+      "numBB": 17,
+      "originalSet": "bb, bb6, bb8, bb25, bb27, bb28, bb30, bb69, bb71, bb72, bb74, bb75, bb80, bb121, bb123, bb124, bb126",
+      "predictedSet": "bb, bb6, bb8, bb25, bb27, bb28, bb30, bb69, bb71, bb72, bb74, bb75, bb80, bb121, bb123, bb124, bb126",
+      "tokenCount": 7935,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb25"
+      },
+      {
+        "name": "bb27"
+      },
+      {
+        "name": "bb28"
+      },
+      {
+        "name": "bb30"
+      },
+      {
+        "name": "bb69"
+      },
+      {
+        "name": "bb71"
+      },
+      {
+        "name": "bb72"
+      },
+      {
+        "name": "bb74"
+      },
+      {
+        "name": "bb75"
+      },
+      {
+        "name": "bb80"
+      },
+      {
+        "name": "bb121"
+      },
+      {
+        "name": "bb123"
+      },
+      {
+        "name": "bb124"
+      },
+      {
+        "name": "bb126"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**: The mapping between the original and optimized blocks is straightforward, as the structure of the control flow graph (CFG) is largely preserved. However, due to the lack of profile data (all counts are zero), no specific block stands out as \"hot.\"\n  - **Computed O1 freq(bb) Table**: All blocks in the original function have a frequency of 0, as per the provided profile data.\n  - **Block Splitting/Merging**: No significant block splitting or merging is evident between the original and optimized versions. The optimized function retains the same logical structure as the original.\n  - **Summary**: The total number of blocks in the sorted list is exactly 17, matching the provided list of blocks. No blocks are missing or duplicated."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_c",
+      "funcName": "susan_smoothing",
+      "numBB": 55,
+      "originalSet": "bb, bb29, bb34, bb35, bb35.bb44_crit_edge, bb37, bb37.bb44_crit_edge, bb39, bb44, bb44.bb54_crit_edge, bb49, bb49.bb54_crit_edge, bb54, bb58, bb69, bb80, bb82, bb84, bb86, bb98, bb100, bb101, bb103, bb104, bb108, bb109, bb113, bb136, bb138, bb140, bb142, bb158, bb160, bb163, bb165, bb168, bb173, bb179, bb180, bb182, bb183, bb185, bb186, bb187, bb191, bb192, bb196, bb322, bb327, bb333, bb334, bb336, bb337, bb339, bb340",
+      "predictedSet": "bb, bb29, bb34, bb35, bb35.bb44_crit_edge, bb37, bb37.bb44_crit_edge, bb39, bb44, bb44.bb54_crit_edge, bb49, bb49.bb54_crit_edge, bb54, bb58, bb69, bb80, bb82, bb84, bb86, bb98, bb100, bb101, bb103, bb104, bb108, bb109, bb113, bb136, bb138, bb140, bb142, bb158, bb160, bb163, bb165, bb168, bb173, bb179, bb180, bb182, bb183, bb185, bb186, bb187, bb191, bb192, bb196, bb322, bb327, bb333, bb334, bb336, bb337, bb339, bb340",
+      "tokenCount": 23161,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": ""
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb29"
+      },
+      {
+        "name": "bb34"
+      },
+      {
+        "name": "bb35"
+      },
+      {
+        "name": "bb35.bb44_crit_edge"
+      },
+      {
+        "name": "bb37"
+      },
+      {
+        "name": "bb37.bb44_crit_edge"
+      },
+      {
+        "name": "bb39"
+      },
+      {
+        "name": "bb44"
+      },
+      {
+        "name": "bb44.bb54_crit_edge"
+      },
+      {
+        "name": "bb49"
+      },
+      {
+        "name": "bb49.bb54_crit_edge"
+      },
+      {
+        "name": "bb54"
+      },
+      {
+        "name": "bb58"
+      },
+      {
+        "name": "bb69"
+      },
+      {
+        "name": "bb80"
+      },
+      {
+        "name": "bb82"
+      },
+      {
+        "name": "bb84"
+      },
+      {
+        "name": "bb86"
+      },
+      {
+        "name": "bb98"
+      },
+      {
+        "name": "bb100"
+      },
+      {
+        "name": "bb101"
+      },
+      {
+        "name": "bb103"
+      },
+      {
+        "name": "bb104"
+      },
+      {
+        "name": "bb108"
+      },
+      {
+        "name": "bb109"
+      },
+      {
+        "name": "bb113"
+      },
+      {
+        "name": "bb136"
+      },
+      {
+        "name": "bb138"
+      },
+      {
+        "name": "bb140"
+      },
+      {
+        "name": "bb142"
+      },
+      {
+        "name": "bb158"
+      },
+      {
+        "name": "bb160"
+      },
+      {
+        "name": "bb163"
+      },
+      {
+        "name": "bb165"
+      },
+      {
+        "name": "bb168"
+      },
+      {
+        "name": "bb173"
+      },
+      {
+        "name": "bb179"
+      },
+      {
+        "name": "bb180"
+      },
+      {
+        "name": "bb182"
+      },
+      {
+        "name": "bb183"
+      },
+      {
+        "name": "bb185"
+      },
+      {
+        "name": "bb186"
+      },
+      {
+        "name": "bb187"
+      },
+      {
+        "name": "bb191"
+      },
+      {
+        "name": "bb192"
+      },
+      {
+        "name": "bb196"
+      },
+      {
+        "name": "bb322"
+      },
+      {
+        "name": "bb327"
+      },
+      {
+        "name": "bb333"
+      },
+      {
+        "name": "bb334"
+      },
+      {
+        "name": "bb336"
+      },
+      {
+        "name": "bb337"
+      },
+      {
+        "name": "bb339"
+      },
+      {
+        "name": "bb340"
+      }
+    ],
+    "additionalNotes": "- The mapping of blocks from the original function to the optimized function was straightforward as the structure of the function was preserved.\n  - The basic block counts and edge counts in the O1 profile were all zero, so the hotness ranking is based on the structural flow of the function and the assumption that the entry block (bb) is the most frequently executed.\n  - No blocks were split, merged, or removed in the optimized function.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 55."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_c",
+      "funcName": "edge_draw",
+      "numBB": 18,
+      "originalSet": "bb, bb.bb41_crit_edge, bb7, bb8, bb11, bb11.bb36_crit_edge, bb15, bb36, bb38, bb40, bb41, bb42, bb45, bb45.bb54_crit_edge, bb49, bb54, bb56, bb58",
+      "predictedSet": "bb8, bb15, bb36, bb38, bb40, bb42, bb45, bb49, bb54, bb56, bb7, bb, bb41, bb11, bb11.bb36_crit_edge, bb45.bb54_crit_edge, bb.bb41_crit_edge, bb58",
+      "tokenCount": 5390,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb8"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb36"
+      },
+      {
+        "name": "bb38"
+      },
+      {
+        "name": "bb40"
+      },
+      {
+        "name": "bb42"
+      },
+      {
+        "name": "bb45"
+      },
+      {
+        "name": "bb49"
+      },
+      {
+        "name": "bb54"
+      },
+      {
+        "name": "bb56"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb41"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb11.bb36_crit_edge"
+      },
+      {
+        "name": "bb45.bb54_crit_edge"
+      },
+      {
+        "name": "bb.bb41_crit_edge"
+      },
+      {
+        "name": "bb58"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**: \n    - The original function's structure was analyzed, and blocks were mapped based on their logical roles and control flow. For example, bb8 in the optimized function corresponds to the initialization and loop entry in the original function.\n    - Blocks like bb15 and bb36 correspond to the inner loop and its continuation, which are likely to be executed frequently.\n  - **Computed O1 freq(bb) Table**:\n    - All basic blocks in the O1 profile have a frequency of 0. This suggests that the profiling data is either incomplete or represents a scenario where the function was not executed.\n  - **Block Splitting/Merging**:\n    - Some blocks in the optimized function (e.g., bb11, bb15) correspond to multiple blocks in the original function due to loop unrolling or other transformations.\n    - Blocks like bb.bb41_crit_edge and bb45.bb54_crit_edge are critical edges introduced during optimization.\n  - **Summary**:\n    - The total number of blocks in the sorted list is exactly 18, matching the optimized function's block count. No blocks are missing or duplicated."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_c",
+      "funcName": "susan_thin",
+      "numBB": 138,
+      "originalSet": "bb, bb46, bb49, bb50, bb53, bb53.bb954_crit_edge, bb61, bb61.bb140_crit_edge, bb135, bb140, bb140.bb526_crit_edge, bb142, bb142.bb526_crit_edge, bb150, bb221, bb240, bb249, bb268, bb278, bb297, bb306, bb325, bb334, bb353, bb363, bb382, bb391, bb410, bb410.bb439_crit_edge, bb420, bb439, bb440, bb441, bb442, bb443, bb444, bb445, bb446, bb447, bb449, bb450, bb452, bb452.bb467_crit_edge, bb460, bb467, bb468, bb470, bb471, bb473, bb473.bb525_crit_edge, bb475, bb483, bb492, bb509, bb509.bb524_crit_edge, bb513, bb513.bb520_crit_edge, bb519, bb520, bb520.bb523_crit_edge, bb522, bb523, bb524, bb525, bb526, bb526.bb838_crit_edge, bb528, bb528.bb684_crit_edge, bb573, bb573.bb684_crit_edge, bb578, bb580, bb582, bb583, bb584, bb585, bb587, bb588, bb589, bb590, bb590.bb683_crit_edge, bb603, bb603.bb637_crit_edge, bb605, bb605.bb637_crit_edge, bb615, bb615.bb637_crit_edge, bb626, bb626.bb637_crit_edge, bb626.bb671_crit_edge, bb637, bb637.bb682_crit_edge, bb639, bb639.bb682_crit_edge, bb649, bb649.bb682_crit_edge, bb660, bb660.bb682_crit_edge, bb660.bb671_crit_edge, bb671, bb682, bb683, bb684, bb684.bb836_crit_edge, bb725, bb725.bb836_crit_edge, bb730, bb730.bb836_crit_edge, bb823, bb823.bb832_crit_edge, bb831, bb832, bb832.bb835_crit_edge, bb834, bb835, bb836, bb837, bb838, bb838.bb953_crit_edge, bb840, bb840.bb952_crit_edge, bb881, bb881.bb951_crit_edge, bb938, bb938.bb947_crit_edge, bb946, bb947, bb947.bb950_crit_edge, bb949, bb950, bb951, bb952, bb953, bb954, bb955, bb957, bb958, bb960",
+      "predictedSet": "",
+      "tokenCount": 43919,
+      "discrepancy": true,
+      "duplicates": [],
+      "missing": [
+        "bb",
+        "bb46",
+        "bb49",
+        "bb50",
+        "bb53",
+        "bb53.bb954_crit_edge",
+        "bb61",
+        "bb61.bb140_crit_edge",
+        "bb135",
+        "bb140",
+        "bb140.bb526_crit_edge",
+        "bb142",
+        "bb142.bb526_crit_edge",
+        "bb150",
+        "bb221",
+        "bb240",
+        "bb249",
+        "bb268",
+        "bb278",
+        "bb297",
+        "bb306",
+        "bb325",
+        "bb334",
+        "bb353",
+        "bb363",
+        "bb382",
+        "bb391",
+        "bb410",
+        "bb410.bb439_crit_edge",
+        "bb420",
+        "bb439",
+        "bb440",
+        "bb441",
+        "bb442",
+        "bb443",
+        "bb444",
+        "bb445",
+        "bb446",
+        "bb447",
+        "bb449",
+        "bb450",
+        "bb452",
+        "bb452.bb467_crit_edge",
+        "bb460",
+        "bb467",
+        "bb468",
+        "bb470",
+        "bb471",
+        "bb473",
+        "bb473.bb525_crit_edge",
+        "bb475",
+        "bb483",
+        "bb492",
+        "bb509",
+        "bb509.bb524_crit_edge",
+        "bb513",
+        "bb513.bb520_crit_edge",
+        "bb519",
+        "bb520",
+        "bb520.bb523_crit_edge",
+        "bb522",
+        "bb523",
+        "bb524",
+        "bb525",
+        "bb526",
+        "bb526.bb838_crit_edge",
+        "bb528",
+        "bb528.bb684_crit_edge",
+        "bb573",
+        "bb573.bb684_crit_edge",
+        "bb578",
+        "bb580",
+        "bb582",
+        "bb583",
+        "bb584",
+        "bb585",
+        "bb587",
+        "bb588",
+        "bb589",
+        "bb590",
+        "bb590.bb683_crit_edge",
+        "bb603",
+        "bb603.bb637_crit_edge",
+        "bb605",
+        "bb605.bb637_crit_edge",
+        "bb615",
+        "bb615.bb637_crit_edge",
+        "bb626",
+        "bb626.bb637_crit_edge",
+        "bb626.bb671_crit_edge",
+        "bb637",
+        "bb637.bb682_crit_edge",
+        "bb639",
+        "bb639.bb682_crit_edge",
+        "bb649",
+        "bb649.bb682_crit_edge",
+        "bb660",
+        "bb660.bb682_crit_edge",
+        "bb660.bb671_crit_edge",
+        "bb671",
+        "bb682",
+        "bb683",
+        "bb684",
+        "bb684.bb836_crit_edge",
+        "bb725",
+        "bb725.bb836_crit_edge",
+        "bb730",
+        "bb730.bb836_crit_edge",
+        "bb823",
+        "bb823.bb832_crit_edge",
+        "bb831",
+        "bb832",
+        "bb832.bb835_crit_edge",
+        "bb834",
+        "bb835",
+        "bb836",
+        "bb837",
+        "bb838",
+        "bb838.bb953_crit_edge",
+        "bb840",
+        "bb840.bb952_crit_edge",
+        "bb881",
+        "bb881.bb951_crit_edge",
+        "bb938",
+        "bb938.bb947_crit_edge",
+        "bb946",
+        "bb947",
+        "bb947.bb950_crit_edge",
+        "bb949",
+        "bb950",
+        "bb951",
+        "bb952",
+        "bb953",
+        "bb954",
+        "bb955",
+        "bb957",
+        "bb958",
+        "bb960"
+      ],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [],
+    "additionalNotes": ""
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_c",
+      "funcName": "susan_edges",
+      "numBB": 77,
+      "originalSet": "bb, bb25, bb28, bb29, bb32, bb32.bb390_crit_edge, bb384, bb390, bb391, bb393, bb394, bb396, bb397, bb400, bb401, bb404, bb404.bb1497_crit_edge, bb411, bb427, bb862, bb864, bb865, bb869, bb871, bb873, bb874, bb877, bb878, bb881, bb882, bb884, bb885, bb886, bb887, bb888, bb888.bb933_crit_edge, bb897, bb897.bb933_crit_edge, bb906, bb906.bb933_crit_edge, bb917, bb917.bb933_crit_edge, bb928, bb933, bb934, bb935, bb936, bb937, bb937.bb1496_crit_edge, bb939, bb1431, bb1432, bb1436, bb1439, bb1440, bb1443, bb1444, bb1446, bb1447, bb1448, bb1449, bb1450, bb1450.bb1495_crit_edge, bb1459, bb1459.bb1495_crit_edge, bb1468, bb1468.bb1495_crit_edge, bb1479, bb1479.bb1495_crit_edge, bb1490, bb1495, bb1496, bb1497, bb1498, bb1500, bb1501, bb1503",
+      "predictedSet": "",
+      "tokenCount": 60255,
+      "discrepancy": true,
+      "duplicates": [],
+      "missing": [
+        "bb",
+        "bb25",
+        "bb28",
+        "bb29",
+        "bb32",
+        "bb32.bb390_crit_edge",
+        "bb384",
+        "bb390",
+        "bb391",
+        "bb393",
+        "bb394",
+        "bb396",
+        "bb397",
+        "bb400",
+        "bb401",
+        "bb404",
+        "bb404.bb1497_crit_edge",
+        "bb411",
+        "bb427",
+        "bb862",
+        "bb864",
+        "bb865",
+        "bb869",
+        "bb871",
+        "bb873",
+        "bb874",
+        "bb877",
+        "bb878",
+        "bb881",
+        "bb882",
+        "bb884",
+        "bb885",
+        "bb886",
+        "bb887",
+        "bb888",
+        "bb888.bb933_crit_edge",
+        "bb897",
+        "bb897.bb933_crit_edge",
+        "bb906",
+        "bb906.bb933_crit_edge",
+        "bb917",
+        "bb917.bb933_crit_edge",
+        "bb928",
+        "bb933",
+        "bb934",
+        "bb935",
+        "bb936",
+        "bb937",
+        "bb937.bb1496_crit_edge",
+        "bb939",
+        "bb1431",
+        "bb1432",
+        "bb1436",
+        "bb1439",
+        "bb1440",
+        "bb1443",
+        "bb1444",
+        "bb1446",
+        "bb1447",
+        "bb1448",
+        "bb1449",
+        "bb1450",
+        "bb1450.bb1495_crit_edge",
+        "bb1459",
+        "bb1459.bb1495_crit_edge",
+        "bb1468",
+        "bb1468.bb1495_crit_edge",
+        "bb1479",
+        "bb1479.bb1495_crit_edge",
+        "bb1490",
+        "bb1495",
+        "bb1496",
+        "bb1497",
+        "bb1498",
+        "bb1500",
+        "bb1501",
+        "bb1503"
+      ],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": ""
+    },
+    "bbOrderByHotness": [],
+    "additionalNotes": ""
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_c",
+      "funcName": "susan_edges_small",
+      "numBB": 69,
+      "originalSet": "bb, bb25, bb28, bb29, bb32, bb32.bb130_crit_edge, bb124, bb130, bb131, bb133, bb134, bb136, bb137, bb140, bb141, bb144, bb144.bb469_crit_edge, bb151, bb167, bb270, bb272, bb273, bb277, bb279, bb281, bb282, bb285, bb286, bb289, bb290, bb292, bb293, bb294, bb295, bb296, bb296.bb319_crit_edge, bb305, bb305.bb319_crit_edge, bb314, bb319, bb320, bb321, bb322, bb323, bb323.bb468_crit_edge, bb325, bb425, bb426, bb430, bb433, bb434, bb437, bb438, bb440, bb441, bb442, bb443, bb444, bb444.bb467_crit_edge, bb453, bb453.bb467_crit_edge, bb462, bb467, bb468, bb469, bb470, bb472, bb473, bb475",
+      "predictedSet": "bb, bb25, bb28, bb29, bb32, bb32.bb130_crit_edge, bb124, bb130, bb131, bb133, bb134, bb136, bb137, bb140, bb141, bb144, bb144.bb469_crit_edge, bb151, bb167, bb270, bb272, bb273, bb277, bb279, bb281, bb282, bb285, bb286, bb289, bb290, bb292, bb293, bb294, bb295, bb296, bb296.bb319_crit_edge, bb305, bb305.bb319_crit_edge, bb314, bb319, bb320, bb321, bb322, bb323, bb323.bb468_crit_edge, bb325, bb425, bb426, bb430, bb433, bb434, bb437, bb438, bb440, bb441, bb442, bb443, bb444, bb444.bb467_crit_edge, bb453, bb453.bb467_crit_edge, bb462, bb467, bb468, bb469, bb470, bb472, bb473, bb475",
+      "tokenCount": 22545,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": ""
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb25"
+      },
+      {
+        "name": "bb28"
+      },
+      {
+        "name": "bb29"
+      },
+      {
+        "name": "bb32"
+      },
+      {
+        "name": "bb32.bb130_crit_edge"
+      },
+      {
+        "name": "bb124"
+      },
+      {
+        "name": "bb130"
+      },
+      {
+        "name": "bb131"
+      },
+      {
+        "name": "bb133"
+      },
+      {
+        "name": "bb134"
+      },
+      {
+        "name": "bb136"
+      },
+      {
+        "name": "bb137"
+      },
+      {
+        "name": "bb140"
+      },
+      {
+        "name": "bb141"
+      },
+      {
+        "name": "bb144"
+      },
+      {
+        "name": "bb144.bb469_crit_edge"
+      },
+      {
+        "name": "bb151"
+      },
+      {
+        "name": "bb167"
+      },
+      {
+        "name": "bb270"
+      },
+      {
+        "name": "bb272"
+      },
+      {
+        "name": "bb273"
+      },
+      {
+        "name": "bb277"
+      },
+      {
+        "name": "bb279"
+      },
+      {
+        "name": "bb281"
+      },
+      {
+        "name": "bb282"
+      },
+      {
+        "name": "bb285"
+      },
+      {
+        "name": "bb286"
+      },
+      {
+        "name": "bb289"
+      },
+      {
+        "name": "bb290"
+      },
+      {
+        "name": "bb292"
+      },
+      {
+        "name": "bb293"
+      },
+      {
+        "name": "bb294"
+      },
+      {
+        "name": "bb295"
+      },
+      {
+        "name": "bb296"
+      },
+      {
+        "name": "bb296.bb319_crit_edge"
+      },
+      {
+        "name": "bb305"
+      },
+      {
+        "name": "bb305.bb319_crit_edge"
+      },
+      {
+        "name": "bb314"
+      },
+      {
+        "name": "bb319"
+      },
+      {
+        "name": "bb320"
+      },
+      {
+        "name": "bb321"
+      },
+      {
+        "name": "bb322"
+      },
+      {
+        "name": "bb323"
+      },
+      {
+        "name": "bb323.bb468_crit_edge"
+      },
+      {
+        "name": "bb325"
+      },
+      {
+        "name": "bb425"
+      },
+      {
+        "name": "bb426"
+      },
+      {
+        "name": "bb430"
+      },
+      {
+        "name": "bb433"
+      },
+      {
+        "name": "bb434"
+      },
+      {
+        "name": "bb437"
+      },
+      {
+        "name": "bb438"
+      },
+      {
+        "name": "bb440"
+      },
+      {
+        "name": "bb441"
+      },
+      {
+        "name": "bb442"
+      },
+      {
+        "name": "bb443"
+      },
+      {
+        "name": "bb444"
+      },
+      {
+        "name": "bb444.bb467_crit_edge"
+      },
+      {
+        "name": "bb453"
+      },
+      {
+        "name": "bb453.bb467_crit_edge"
+      },
+      {
+        "name": "bb462"
+      },
+      {
+        "name": "bb467"
+      },
+      {
+        "name": "bb468"
+      },
+      {
+        "name": "bb469"
+      },
+      {
+        "name": "bb470"
+      },
+      {
+        "name": "bb472"
+      },
+      {
+        "name": "bb473"
+      },
+      {
+        "name": "bb475"
+      }
+    ],
+    "additionalNotes": "- **Mapping**: The mapping between the original and optimized blocks is straightforward as the structure of the function remains largely unchanged. However, all blocks in the profile have a frequency of 0, so no block is hotter than another.\n  - **Computed O1 freq(bb) Table**: All blocks have a frequency of 0.\n  - **Block Changes**: No blocks were split, merged, or removed in the optimized version.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 69."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_c",
+      "funcName": "corner_draw",
+      "numBB": 7,
+      "originalSet": "bb, bb4, bb9, bb11, bb40, bb55, bb56",
+      "predictedSet": "bb4, bb9, bb11, bb40, bb55, bb, bb56",
+      "tokenCount": 4423,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb4"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb40"
+      },
+      {
+        "name": "bb55"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb56"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The original function's basic blocks (e.g., bb, bb6, bb10, etc.) were transformed into the optimized function's blocks (bb, bb4, bb9, etc.).\n    - The loop structure in the original function (bb10, bb15, bb31, bb38) corresponds to the loop in the optimized function (bb4, bb9, bb11, bb40, bb55).\n    - The exit block bb44 in the original function maps to bb56 in the optimized function.\n  - **Computed O1 freq(bb) Table**:\n    - All basic block counts and edge counts in the O1 profile are 0. This indicates that the function was not executed during profiling, so we must rely on static analysis of the control flow.\n  - **Block Splitting/Merging**:\n    - The optimized function merges some blocks and simplifies the control flow. For example, the loop structure is more compact, and redundant blocks are removed.\n  - **Reasoning for Hotness**:\n    - bb4 is the loop header and is likely the hottest block because it controls the loop iterations.\n    - bb9, bb11, and bb40 are part of the loop body and are executed within the loop.\n    - bb55 is the loop latch, executed at the end of each iteration.\n    - bb is the entry block, executed once.\n    - bb56 is the exit block, executed once after the loop terminates.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 7."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_c",
+      "funcName": "susan_corners",
+      "numBB": 203,
+      "originalSet": "bb, bb22, bb25, bb26, bb29, bb29.bb1066_crit_edge, bb213, bb213.bb1065_crit_edge, bb225, bb225.bb1064_crit_edge, bb236, bb236.bb1063_crit_edge, bb246, bb246.bb1062_crit_edge, bb260, bb260.bb1061_crit_edge, bb271, bb271.bb1060_crit_edge, bb282, bb282.bb1059_crit_edge, bb293, bb293.bb1058_crit_edge, bb304, bb304.bb1057_crit_edge, bb315, bb315.bb1056_crit_edge, bb325, bb325.bb1055_crit_edge, bb339, bb339.bb1054_crit_edge, bb350, bb350.bb1053_crit_edge, bb361, bb361.bb1052_crit_edge, bb372, bb372.bb1051_crit_edge, bb382, bb382.bb1050_crit_edge, bb396, bb396.bb1049_crit_edge, bb407, bb407.bb1048_crit_edge, bb417, bb417.bb1047_crit_edge, bb846, bb848, bb856, bb860, bb864, bb881, bb886, bb891, bb910, bb915, bb920, bb937, bb948, bb952, bb956, bb974, bb979, bb984, bb1003, bb1008, bb1013, bb1026, bb1026.bb1046_crit_edge, bb1028, bb1046, bb1047, bb1048, bb1049, bb1050, bb1051, bb1052, bb1053, bb1054, bb1055, bb1056, bb1057, bb1058, bb1059, bb1060, bb1061, bb1062, bb1063, bb1064, bb1065, bb1066, bb1067, bb1069, bb1070, bb1072, bb1073, bb1076, bb1077, bb1080, bb1080.bb1549_crit_edge, bb1087, bb1087.bb1548_crit_edge, bb1096, bb1096.bb1548_crit_edge, bb1105, bb1105.bb1548_crit_edge, bb1114, bb1114.bb1548_crit_edge, bb1122, bb1122.bb1548_crit_edge, bb1131, bb1131.bb1548_crit_edge, bb1140, bb1140.bb1548_crit_edge, bb1149, bb1149.bb1548_crit_edge, bb1158, bb1158.bb1548_crit_edge, bb1167, bb1167.bb1548_crit_edge, bb1176, bb1176.bb1548_crit_edge, bb1184, bb1184.bb1548_crit_edge, bb1193, bb1193.bb1548_crit_edge, bb1202, bb1202.bb1548_crit_edge, bb1211, bb1211.bb1548_crit_edge, bb1220, bb1220.bb1548_crit_edge, bb1229, bb1229.bb1548_crit_edge, bb1238, bb1238.bb1548_crit_edge, bb1246, bb1246.bb1548_crit_edge, bb1255, bb1255.bb1548_crit_edge, bb1264, bb1264.bb1548_crit_edge, bb1273, bb1273.bb1548_crit_edge, bb1281, bb1281.bb1548_crit_edge, bb1289, bb1289.bb1548_crit_edge, bb1297, bb1297.bb1548_crit_edge, bb1305, bb1305.bb1548_crit_edge, bb1313, bb1313.bb1548_crit_edge, bb1321, bb1321.bb1548_crit_edge, bb1330, bb1330.bb1548_crit_edge, bb1339, bb1339.bb1548_crit_edge, bb1348, bb1348.bb1548_crit_edge, bb1356, bb1356.bb1548_crit_edge, bb1365, bb1365.bb1548_crit_edge, bb1374, bb1374.bb1548_crit_edge, bb1383, bb1383.bb1548_crit_edge, bb1392, bb1392.bb1548_crit_edge, bb1401, bb1401.bb1548_crit_edge, bb1410, bb1410.bb1548_crit_edge, bb1418, bb1418.bb1548_crit_edge, bb1427, bb1427.bb1548_crit_edge, bb1436, bb1436.bb1548_crit_edge, bb1445, bb1445.bb1548_crit_edge, bb1454, bb1454.bb1548_crit_edge, bb1463, bb1463.bb1548_crit_edge, bb1472, bb1472.bb1548_crit_edge, bb1480, bb1480.bb1548_crit_edge, bb1489, bb1489.bb1548_crit_edge, bb1498, bb1498.bb1548_crit_edge, bb1507, bb1544, bb1547, bb1548, bb1549, bb1550, bb1552, bb1553, bb1555",
+      "predictedSet": "",
+      "tokenCount": 70557,
+      "discrepancy": true,
+      "duplicates": [],
+      "missing": [
+        "bb",
+        "bb22",
+        "bb25",
+        "bb26",
+        "bb29",
+        "bb29.bb1066_crit_edge",
+        "bb213",
+        "bb213.bb1065_crit_edge",
+        "bb225",
+        "bb225.bb1064_crit_edge",
+        "bb236",
+        "bb236.bb1063_crit_edge",
+        "bb246",
+        "bb246.bb1062_crit_edge",
+        "bb260",
+        "bb260.bb1061_crit_edge",
+        "bb271",
+        "bb271.bb1060_crit_edge",
+        "bb282",
+        "bb282.bb1059_crit_edge",
+        "bb293",
+        "bb293.bb1058_crit_edge",
+        "bb304",
+        "bb304.bb1057_crit_edge",
+        "bb315",
+        "bb315.bb1056_crit_edge",
+        "bb325",
+        "bb325.bb1055_crit_edge",
+        "bb339",
+        "bb339.bb1054_crit_edge",
+        "bb350",
+        "bb350.bb1053_crit_edge",
+        "bb361",
+        "bb361.bb1052_crit_edge",
+        "bb372",
+        "bb372.bb1051_crit_edge",
+        "bb382",
+        "bb382.bb1050_crit_edge",
+        "bb396",
+        "bb396.bb1049_crit_edge",
+        "bb407",
+        "bb407.bb1048_crit_edge",
+        "bb417",
+        "bb417.bb1047_crit_edge",
+        "bb846",
+        "bb848",
+        "bb856",
+        "bb860",
+        "bb864",
+        "bb881",
+        "bb886",
+        "bb891",
+        "bb910",
+        "bb915",
+        "bb920",
+        "bb937",
+        "bb948",
+        "bb952",
+        "bb956",
+        "bb974",
+        "bb979",
+        "bb984",
+        "bb1003",
+        "bb1008",
+        "bb1013",
+        "bb1026",
+        "bb1026.bb1046_crit_edge",
+        "bb1028",
+        "bb1046",
+        "bb1047",
+        "bb1048",
+        "bb1049",
+        "bb1050",
+        "bb1051",
+        "bb1052",
+        "bb1053",
+        "bb1054",
+        "bb1055",
+        "bb1056",
+        "bb1057",
+        "bb1058",
+        "bb1059",
+        "bb1060",
+        "bb1061",
+        "bb1062",
+        "bb1063",
+        "bb1064",
+        "bb1065",
+        "bb1066",
+        "bb1067",
+        "bb1069",
+        "bb1070",
+        "bb1072",
+        "bb1073",
+        "bb1076",
+        "bb1077",
+        "bb1080",
+        "bb1080.bb1549_crit_edge",
+        "bb1087",
+        "bb1087.bb1548_crit_edge",
+        "bb1096",
+        "bb1096.bb1548_crit_edge",
+        "bb1105",
+        "bb1105.bb1548_crit_edge",
+        "bb1114",
+        "bb1114.bb1548_crit_edge",
+        "bb1122",
+        "bb1122.bb1548_crit_edge",
+        "bb1131",
+        "bb1131.bb1548_crit_edge",
+        "bb1140",
+        "bb1140.bb1548_crit_edge",
+        "bb1149",
+        "bb1149.bb1548_crit_edge",
+        "bb1158",
+        "bb1158.bb1548_crit_edge",
+        "bb1167",
+        "bb1167.bb1548_crit_edge",
+        "bb1176",
+        "bb1176.bb1548_crit_edge",
+        "bb1184",
+        "bb1184.bb1548_crit_edge",
+        "bb1193",
+        "bb1193.bb1548_crit_edge",
+        "bb1202",
+        "bb1202.bb1548_crit_edge",
+        "bb1211",
+        "bb1211.bb1548_crit_edge",
+        "bb1220",
+        "bb1220.bb1548_crit_edge",
+        "bb1229",
+        "bb1229.bb1548_crit_edge",
+        "bb1238",
+        "bb1238.bb1548_crit_edge",
+        "bb1246",
+        "bb1246.bb1548_crit_edge",
+        "bb1255",
+        "bb1255.bb1548_crit_edge",
+        "bb1264",
+        "bb1264.bb1548_crit_edge",
+        "bb1273",
+        "bb1273.bb1548_crit_edge",
+        "bb1281",
+        "bb1281.bb1548_crit_edge",
+        "bb1289",
+        "bb1289.bb1548_crit_edge",
+        "bb1297",
+        "bb1297.bb1548_crit_edge",
+        "bb1305",
+        "bb1305.bb1548_crit_edge",
+        "bb1313",
+        "bb1313.bb1548_crit_edge",
+        "bb1321",
+        "bb1321.bb1548_crit_edge",
+        "bb1330",
+        "bb1330.bb1548_crit_edge",
+        "bb1339",
+        "bb1339.bb1548_crit_edge",
+        "bb1348",
+        "bb1348.bb1548_crit_edge",
+        "bb1356",
+        "bb1356.bb1548_crit_edge",
+        "bb1365",
+        "bb1365.bb1548_crit_edge",
+        "bb1374",
+        "bb1374.bb1548_crit_edge",
+        "bb1383",
+        "bb1383.bb1548_crit_edge",
+        "bb1392",
+        "bb1392.bb1548_crit_edge",
+        "bb1401",
+        "bb1401.bb1548_crit_edge",
+        "bb1410",
+        "bb1410.bb1548_crit_edge",
+        "bb1418",
+        "bb1418.bb1548_crit_edge",
+        "bb1427",
+        "bb1427.bb1548_crit_edge",
+        "bb1436",
+        "bb1436.bb1548_crit_edge",
+        "bb1445",
+        "bb1445.bb1548_crit_edge",
+        "bb1454",
+        "bb1454.bb1548_crit_edge",
+        "bb1463",
+        "bb1463.bb1548_crit_edge",
+        "bb1472",
+        "bb1472.bb1548_crit_edge",
+        "bb1480",
+        "bb1480.bb1548_crit_edge",
+        "bb1489",
+        "bb1489.bb1548_crit_edge",
+        "bb1498",
+        "bb1498.bb1548_crit_edge",
+        "bb1507",
+        "bb1544",
+        "bb1547",
+        "bb1548",
+        "bb1549",
+        "bb1550",
+        "bb1552",
+        "bb1553",
+        "bb1555"
+      ],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb623"
+    },
+    "bbOrderByHotness": [],
+    "additionalNotes": ""
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_c",
+      "funcName": "susan_corners_quick",
+      "numBB": 176,
+      "originalSet": "bb, bb13, bb16, bb17, bb20, bb20.bb432_crit_edge, bb204, bb204.bb431_crit_edge, bb216, bb216.bb430_crit_edge, bb227, bb227.bb429_crit_edge, bb237, bb237.bb428_crit_edge, bb251, bb251.bb427_crit_edge, bb262, bb262.bb426_crit_edge, bb273, bb273.bb425_crit_edge, bb284, bb284.bb424_crit_edge, bb295, bb295.bb423_crit_edge, bb306, bb306.bb422_crit_edge, bb316, bb316.bb421_crit_edge, bb330, bb330.bb420_crit_edge, bb341, bb341.bb419_crit_edge, bb352, bb352.bb418_crit_edge, bb363, bb363.bb417_crit_edge, bb373, bb373.bb416_crit_edge, bb387, bb387.bb415_crit_edge, bb398, bb398.bb414_crit_edge, bb408, bb414, bb415, bb416, bb417, bb418, bb419, bb420, bb421, bb422, bb423, bb424, bb425, bb426, bb427, bb428, bb429, bb430, bb431, bb432, bb433, bb435, bb436, bb438, bb439, bb442, bb443, bb446, bb446.bb1468_crit_edge, bb453, bb453.bb1467_crit_edge, bb462, bb462.bb1467_crit_edge, bb471, bb471.bb1467_crit_edge, bb480, bb480.bb1467_crit_edge, bb488, bb488.bb1467_crit_edge, bb497, bb497.bb1467_crit_edge, bb506, bb506.bb1467_crit_edge, bb515, bb515.bb1467_crit_edge, bb524, bb524.bb1467_crit_edge, bb533, bb533.bb1467_crit_edge, bb542, bb542.bb1467_crit_edge, bb550, bb550.bb1467_crit_edge, bb559, bb559.bb1467_crit_edge, bb568, bb568.bb1467_crit_edge, bb577, bb577.bb1467_crit_edge, bb586, bb586.bb1467_crit_edge, bb595, bb595.bb1467_crit_edge, bb604, bb604.bb1467_crit_edge, bb612, bb612.bb1467_crit_edge, bb621, bb621.bb1467_crit_edge, bb630, bb630.bb1467_crit_edge, bb639, bb639.bb1467_crit_edge, bb647, bb647.bb1467_crit_edge, bb655, bb655.bb1467_crit_edge, bb663, bb663.bb1467_crit_edge, bb671, bb671.bb1467_crit_edge, bb679, bb679.bb1467_crit_edge, bb687, bb687.bb1467_crit_edge, bb696, bb696.bb1467_crit_edge, bb705, bb705.bb1467_crit_edge, bb714, bb714.bb1467_crit_edge, bb722, bb722.bb1467_crit_edge, bb731, bb731.bb1467_crit_edge, bb740, bb740.bb1467_crit_edge, bb749, bb749.bb1467_crit_edge, bb758, bb758.bb1467_crit_edge, bb767, bb767.bb1467_crit_edge, bb776, bb776.bb1467_crit_edge, bb784, bb784.bb1467_crit_edge, bb793, bb793.bb1467_crit_edge, bb802, bb802.bb1467_crit_edge, bb811, bb811.bb1467_crit_edge, bb820, bb820.bb1467_crit_edge, bb829, bb829.bb1467_crit_edge, bb838, bb838.bb1467_crit_edge, bb846, bb846.bb1467_crit_edge, bb855, bb855.bb1467_crit_edge, bb864, bb864.bb1467_crit_edge, bb873, bb1463, bb1466, bb1467, bb1468, bb1469, bb1471, bb1472, bb1474",
+      "predictedSet": "",
+      "tokenCount": 65910,
+      "discrepancy": true,
+      "duplicates": [],
+      "missing": [
+        "bb",
+        "bb13",
+        "bb16",
+        "bb17",
+        "bb20",
+        "bb20.bb432_crit_edge",
+        "bb204",
+        "bb204.bb431_crit_edge",
+        "bb216",
+        "bb216.bb430_crit_edge",
+        "bb227",
+        "bb227.bb429_crit_edge",
+        "bb237",
+        "bb237.bb428_crit_edge",
+        "bb251",
+        "bb251.bb427_crit_edge",
+        "bb262",
+        "bb262.bb426_crit_edge",
+        "bb273",
+        "bb273.bb425_crit_edge",
+        "bb284",
+        "bb284.bb424_crit_edge",
+        "bb295",
+        "bb295.bb423_crit_edge",
+        "bb306",
+        "bb306.bb422_crit_edge",
+        "bb316",
+        "bb316.bb421_crit_edge",
+        "bb330",
+        "bb330.bb420_crit_edge",
+        "bb341",
+        "bb341.bb419_crit_edge",
+        "bb352",
+        "bb352.bb418_crit_edge",
+        "bb363",
+        "bb363.bb417_crit_edge",
+        "bb373",
+        "bb373.bb416_crit_edge",
+        "bb387",
+        "bb387.bb415_crit_edge",
+        "bb398",
+        "bb398.bb414_crit_edge",
+        "bb408",
+        "bb414",
+        "bb415",
+        "bb416",
+        "bb417",
+        "bb418",
+        "bb419",
+        "bb420",
+        "bb421",
+        "bb422",
+        "bb423",
+        "bb424",
+        "bb425",
+        "bb426",
+        "bb427",
+        "bb428",
+        "bb429",
+        "bb430",
+        "bb431",
+        "bb432",
+        "bb433",
+        "bb435",
+        "bb436",
+        "bb438",
+        "bb439",
+        "bb442",
+        "bb443",
+        "bb446",
+        "bb446.bb1468_crit_edge",
+        "bb453",
+        "bb453.bb1467_crit_edge",
+        "bb462",
+        "bb462.bb1467_crit_edge",
+        "bb471",
+        "bb471.bb1467_crit_edge",
+        "bb480",
+        "bb480.bb1467_crit_edge",
+        "bb488",
+        "bb488.bb1467_crit_edge",
+        "bb497",
+        "bb497.bb1467_crit_edge",
+        "bb506",
+        "bb506.bb1467_crit_edge",
+        "bb515",
+        "bb515.bb1467_crit_edge",
+        "bb524",
+        "bb524.bb1467_crit_edge",
+        "bb533",
+        "bb533.bb1467_crit_edge",
+        "bb542",
+        "bb542.bb1467_crit_edge",
+        "bb550",
+        "bb550.bb1467_crit_edge",
+        "bb559",
+        "bb559.bb1467_crit_edge",
+        "bb568",
+        "bb568.bb1467_crit_edge",
+        "bb577",
+        "bb577.bb1467_crit_edge",
+        "bb586",
+        "bb586.bb1467_crit_edge",
+        "bb595",
+        "bb595.bb1467_crit_edge",
+        "bb604",
+        "bb604.bb1467_crit_edge",
+        "bb612",
+        "bb612.bb1467_crit_edge",
+        "bb621",
+        "bb621.bb1467_crit_edge",
+        "bb630",
+        "bb630.bb1467_crit_edge",
+        "bb639",
+        "bb639.bb1467_crit_edge",
+        "bb647",
+        "bb647.bb1467_crit_edge",
+        "bb655",
+        "bb655.bb1467_crit_edge",
+        "bb663",
+        "bb663.bb1467_crit_edge",
+        "bb671",
+        "bb671.bb1467_crit_edge",
+        "bb679",
+        "bb679.bb1467_crit_edge",
+        "bb687",
+        "bb687.bb1467_crit_edge",
+        "bb696",
+        "bb696.bb1467_crit_edge",
+        "bb705",
+        "bb705.bb1467_crit_edge",
+        "bb714",
+        "bb714.bb1467_crit_edge",
+        "bb722",
+        "bb722.bb1467_crit_edge",
+        "bb731",
+        "bb731.bb1467_crit_edge",
+        "bb740",
+        "bb740.bb1467_crit_edge",
+        "bb749",
+        "bb749.bb1467_crit_edge",
+        "bb758",
+        "bb758.bb1467_crit_edge",
+        "bb767",
+        "bb767.bb1467_crit_edge",
+        "bb776",
+        "bb776.bb1467_crit_edge",
+        "bb784",
+        "bb784.bb1467_crit_edge",
+        "bb793",
+        "bb793.bb1467_crit_edge",
+        "bb802",
+        "bb802.bb1467_crit_edge",
+        "bb811",
+        "bb811.bb1467_crit_edge",
+        "bb820",
+        "bb820.bb1467_crit_edge",
+        "bb829",
+        "bb829.bb1467_crit_edge",
+        "bb838",
+        "bb838.bb1467_crit_edge",
+        "bb846",
+        "bb846.bb1467_crit_edge",
+        "bb855",
+        "bb855.bb1467_crit_edge",
+        "bb864",
+        "bb864.bb1467_crit_edge",
+        "bb873",
+        "bb1463",
+        "bb1466",
+        "bb1467",
+        "bb1468",
+        "bb1469",
+        "bb1471",
+        "bb1472",
+        "bb1474"
+      ],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": ""
+    },
+    "bbOrderByHotness": [],
+    "additionalNotes": ""
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_susan_c",
+      "funcName": "main1",
+      "numBB": 57,
+      "originalSet": "bb, bb.bb33_crit_edge, bb32, bb33, bb36, bb38, bb45, bb45.bb81_crit_edge, bb49, bb50, bb51, bb52, bb53, bb54, bb55, bb56, bb57, bb60, bb62, bb62.bb70_crit_edge, bb69, bb70, bb71, bb74, bb76, bb81, bb82, bb83, bb85, bb85.bb90_crit_edge, bb87, bb87.bb90_crit_edge, bb89, bb90, bb90.bb191_crit_edge, bb91, bb97, bb105, bb107, bb112, bb117, bb122, bb133, bb138, bb143, bb143.bb148_crit_edge, bb145, bb148, bb152, bb154, bb162, bb171, bb173, bb179, bb185, bb189, bb191",
+      "predictedSet": "bb245, bb245_245.ce, bb310, bb315, bb338, bb338_310.ce, bb7, bb11, bb11.ph, bb26, bb31, bb62, bb74, bb344, bb346, bb296, bb300, bb301, bb306, bb0, bb36, bb83, bb191, bb85, bb85.bb90_crit_edge, bb90, bb90.bb191_crit_edge, bb87, bb87.bb90_crit_edge, bb89, bb97, bb105, bb107, bb112, bb117, bb122, bb133, bb138, bb143, bb143.bb148_crit_edge, bb145, bb148, bb152, bb154, bb162, bb171, bb173, bb179, bb185, bb189, bb32, bb33, bb38, bb45, bb45.bb81_crit_edge, bb82, bb49",
+      "tokenCount": 13070,
+      "discrepancy": true,
+      "duplicates": [],
+      "missing": [
+        "bb",
+        "bb.bb33_crit_edge",
+        "bb50",
+        "bb51",
+        "bb52",
+        "bb53",
+        "bb54",
+        "bb55",
+        "bb56",
+        "bb57",
+        "bb60",
+        "bb62.bb70_crit_edge",
+        "bb69",
+        "bb70",
+        "bb71",
+        "bb76",
+        "bb81",
+        "bb91"
+      ],
+      "extra": [
+        "bb245",
+        "bb245_245.ce",
+        "bb310",
+        "bb315",
+        "bb338",
+        "bb338_310.ce",
+        "bb7",
+        "bb11",
+        "bb11.ph",
+        "bb26",
+        "bb31",
+        "bb344",
+        "bb346",
+        "bb296",
+        "bb300",
+        "bb301",
+        "bb306",
+        "bb0"
+      ],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb245"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb245"
+      },
+      {
+        "name": "bb245_245.ce"
+      },
+      {
+        "name": "bb310"
+      },
+      {
+        "name": "bb315"
+      },
+      {
+        "name": "bb338"
+      },
+      {
+        "name": "bb338_310.ce"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb11.ph"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb62"
+      },
+      {
+        "name": "bb74"
+      },
+      {
+        "name": "bb344"
+      },
+      {
+        "name": "bb346"
+      },
+      {
+        "name": "bb296"
+      },
+      {
+        "name": "bb300"
+      },
+      {
+        "name": "bb301"
+      },
+      {
+        "name": "bb306"
+      },
+      {
+        "name": "bb0"
+      },
+      {
+        "name": "bb36"
+      },
+      {
+        "name": "bb83"
+      },
+      {
+        "name": "bb191"
+      },
+      {
+        "name": "bb85"
+      },
+      {
+        "name": "bb85.bb90_crit_edge"
+      },
+      {
+        "name": "bb90"
+      },
+      {
+        "name": "bb90.bb191_crit_edge"
+      },
+      {
+        "name": "bb87"
+      },
+      {
+        "name": "bb87.bb90_crit_edge"
+      },
+      {
+        "name": "bb89"
+      },
+      {
+        "name": "bb97"
+      },
+      {
+        "name": "bb105"
+      },
+      {
+        "name": "bb107"
+      },
+      {
+        "name": "bb112"
+      },
+      {
+        "name": "bb117"
+      },
+      {
+        "name": "bb122"
+      },
+      {
+        "name": "bb133"
+      },
+      {
+        "name": "bb138"
+      },
+      {
+        "name": "bb143"
+      },
+      {
+        "name": "bb143.bb148_crit_edge"
+      },
+      {
+        "name": "bb145"
+      },
+      {
+        "name": "bb148"
+      },
+      {
+        "name": "bb152"
+      },
+      {
+        "name": "bb154"
+      },
+      {
+        "name": "bb162"
+      },
+      {
+        "name": "bb171"
+      },
+      {
+        "name": "bb173"
+      },
+      {
+        "name": "bb179"
+      },
+      {
+        "name": "bb185"
+      },
+      {
+        "name": "bb189"
+      },
+      {
+        "name": "bb32"
+      },
+      {
+        "name": "bb33"
+      },
+      {
+        "name": "bb38"
+      },
+      {
+        "name": "bb45"
+      },
+      {
+        "name": "bb45.bb81_crit_edge"
+      },
+      {
+        "name": "bb82"
+      },
+      {
+        "name": "bb49"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**: The mapping was based on the structure of the control flow graph and the semantics of the blocks. For example, bb245 in the optimized function corresponds to the hottest block in the -O1 profile (block 245), which had the highest execution count (401,166).\n  - **Computed O1 freq(bb) Table**: The frequency of each block in the -O1 profile was used to estimate the hotness of the corresponding blocks in the optimized function. Blocks with zero execution counts in the -O1 profile were ranked lower.\n  - **Block Splitting/Merging**: Some blocks in the optimized function were split or merged compared to the -O1 version. For example, bb245 and bb245_245.ce represent the same hot region in the -O1 profile but are split in the optimized function.\n  - **Total Blocks in Sorted List**: The sorted list contains exactly 57 blocks, matching the number of blocks in the optimized function. No blocks are missing or duplicated."
+  }
+]
