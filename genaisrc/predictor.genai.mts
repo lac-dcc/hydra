@@ -149,8 +149,8 @@ export const parseMarkdownToJson = (
   // -----------------------------
   // Build output object + schema
   // -----------------------------
-  const originalSet = [...bbSet].sort().join(", ");
-  const predictedSet = [...bbLines].sort().join(", ");
+  const originalSet = bbSet.join(", ");// [...bbSet].sort().join(", ");
+  const predictedSet = bbLines.join(", "); // [...bbLines].sort().join(", ");
 
   const jsonObj = {
     benchmarkInfo: {
