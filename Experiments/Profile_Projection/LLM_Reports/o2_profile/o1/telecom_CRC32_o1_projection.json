@@ -1,0 +1,194 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "crc32file",
+      "numBB": 10,
+      "originalSet": "bb, bb5.preheader, bb4, bb5, bb9, bb19, bb19.bb23_crit_edge, bb22, bb23, bb26",
+      "predictedSet": "bb9, bb5, bb, bb5.preheader, bb19, bb19.bb23_crit_edge, bb23, bb26, bb4, bb22",
+      "tokenCount": 3374,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb9"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb5.preheader"
+      },
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb19.bb23_crit_edge"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb22"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**: The structure of the optimized function closely mirrors the original function. The basic blocks in the optimized function correspond directly to those in the original function, with no significant splitting, merging, or removal.\n  - **Computed O1 freq(bb) Table**:\n    - bb: 3431\n    - bb5.preheader: 3431\n    - bb4: 0\n    - bb5: 529825313\n    - bb9: 529821882\n    - bb19: 3431\n    - bb19.bb23_crit_edge: 3431\n    - bb22: 0\n    - bb23: 3431\n    - bb26: 3431\n  - **Reasoning**:\n    - bb9 is the hottest block because it has the highest execution count (529,821,882), followed by bb5 (529,825,313).\n    - Blocks like bb, bb5.preheader, bb19, bb19.bb23_crit_edge, bb23, and bb26 all have the same execution count (3431) and are ranked based on their logical flow.\n    - bb4 and bb22 are cold blocks with zero execution counts.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 10."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "crc32buf",
+      "numBB": 7,
+      "originalSet": "bb, bb.bb19_crit_edge, bb2.preheader, bb2, bb2.bb2_crit_edge, bb17, bb19",
+      "predictedSet": "bb2, bb2.bb2_crit_edge, bb2.preheader, bb17, bb, bb19, bb.bb19_crit_edge",
+      "tokenCount": 3801,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb2"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb2"
+      },
+      {
+        "name": "bb2.bb2_crit_edge"
+      },
+      {
+        "name": "bb2.preheader"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb.bb19_crit_edge"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The original function's loop structure (blocks bb7, bb31, etc.) corresponds to the optimized loop in bb2 and its associated blocks (bb2.bb2_crit_edge, bb2.preheader).\n    - The exit blocks (bb31.loopexit, bb45, etc.) map to bb17 and bb19 in the optimized function.\n    - The entry block bb and its critical edge bb.bb19_crit_edge remain as initialization and termination points.\n  - **Computed O1 freq(bb) Table**:\n    - bb: 0 (entry block, executed once if the function is called).\n    - bb.bb19_crit_edge: 0 (critical edge, executed once if the function exits early).\n    - bb2.preheader: 0 (loop preheader, executed once before entering the loop).\n    - bb2: 0 (main loop body, executed for each iteration of the loop).\n    - bb2.bb2_crit_edge: 0 (critical edge within the loop, executed for each iteration).\n    - bb17: 0 (loop exit block, executed once after the loop finishes).\n    - bb19: 0 (final return block, executed once).\n  - **Block Splitting/Merging**:\n    - The original loop structure (bb7, bb31, etc.) was merged into a single loop (bb2) with fewer blocks in the optimized version.\n    - Exit conditions and final computations were simplified into bb17 and bb19.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 7."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "main1",
+      "numBB": 10,
+      "originalSet": "bb, bb.bb26_crit_edge, bb5, bb7, bb7.bb21_crit_edge, bb16, bb21, bb21.bb7_crit_edge, bb23, bb26",
+      "predictedSet": "bb7, bb5, bb21, bb23, bb26, bb7.bb21_crit_edge, bb, bb16, bb21.bb7_crit_edge, bb.bb26_crit_edge",
+      "tokenCount": 3504,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb7"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb7.bb21_crit_edge"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb21.bb7_crit_edge"
+      },
+      {
+        "name": "bb.bb26_crit_edge"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**: The structure of the optimized function closely mirrors the original function, so the mapping of blocks is straightforward. The block names in the optimized function correspond directly to those in the original function.\n  - **Computed O1 freq(bb) Table**:\n    - bb: 3431\n    - bb.bb26_crit_edge: 0\n    - bb5: 3431\n    - bb7: 3431\n    - bb7.bb21_crit_edge: 3430\n    - bb16: 1\n    - bb21: 3431\n    - bb21.bb7_crit_edge: 0\n    - bb23: 3431\n    - bb26: 3431\n  - **Block Splitting/Merging**: No blocks were split, merged, or removed in the optimized function. The structure remains consistent with the original function.\n  - **Summary**: The total number of blocks in the sorted list is exactly 10. No blocks are missing or duplicated."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "main",
+      "numBB": 9,
+      "originalSet": "bb, bb4, bb7, bb7.bb21_crit_edge, bb12.preheader, bb12, bb12.bb12_crit_edge, bb21.loopexit, bb21",
+      "predictedSet": "bb12, bb12.bb12_crit_edge, bb12.preheader, bb, bb7, bb21, bb21.loopexit, bb7.bb21_crit_edge, bb4",
+      "tokenCount": 3353,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb12"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb12.bb12_crit_edge"
+      },
+      {
+        "name": "bb12.preheader"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb21.loopexit"
+      },
+      {
+        "name": "bb7.bb21_crit_edge"
+      },
+      {
+        "name": "bb4"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**: The structure of the optimized function closely mirrors the original function, so the mapping of basic blocks is straightforward. The profiling data from the -O2 version can be directly applied to the optimized version.\n  - **Computed O1 freq(bb) Table**:\n    - bb: 1 (entry block, executed once)\n    - bb4: 0 (not executed, as the file pointer is not null)\n    - bb7: 1 (executed once, leading to the loop)\n    - bb7.bb21_crit_edge: 0 (not executed, as the condition does not branch here)\n    - bb12.preheader: 1 (executed once before entering the loop)\n    - bb12: 3431 (main loop body, executed 3431 times)\n    - bb12.bb12_crit_edge: 3430 (loop back edge, executed 3430 times)\n    - bb21.loopexit: 1 (executed once when exiting the loop)\n    - bb21: 1 (final block, executed once)\n  - **Block Splitting/Merging**: No blocks were split, merged, or removed in the optimized version.\n  - **Summary**: The total number of blocks in the sorted list is exactly 9."
+  }
+]
