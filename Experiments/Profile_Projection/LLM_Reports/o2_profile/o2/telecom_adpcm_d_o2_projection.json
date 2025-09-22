@@ -1,0 +1,173 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_d",
+      "funcName": "adpcm_coder",
+      "numBB": 12,
+      "originalSet": "bb, bb.bb84_crit_edge, bb7, bb13, bb65, bb68, bb72, bb72.bb13_crit_edge, bb78, bb78.bb84_crit_edge, bb82, bb84",
+      "predictedSet": "bb, bb.bb84_crit_edge, bb7, bb13, bb65, bb68, bb72, bb72.bb13_crit_edge, bb78, bb78.bb84_crit_edge, bb82, bb84",
+      "tokenCount": 6024,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb.bb84_crit_edge"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb65"
+      },
+      {
+        "name": "bb68"
+      },
+      {
+        "name": "bb72"
+      },
+      {
+        "name": "bb72.bb13_crit_edge"
+      },
+      {
+        "name": "bb78"
+      },
+      {
+        "name": "bb78.bb84_crit_edge"
+      },
+      {
+        "name": "bb82"
+      },
+      {
+        "name": "bb84"
+      }
+    ],
+    "additionalNotes": "- The profile data indicates that all basic blocks and edges have a count of 0. This means there is no runtime information to differentiate the hotness of the blocks. As a result, all blocks are equally likely to be executed, and the order is arbitrary.\n  - The mapping of blocks from the original function to the optimized function is straightforward, as the structure of the control flow graph remains largely unchanged. No blocks were split, merged, or removed.\n  - The computed freq(bb) table for the original function is:\n    text\n    bb: 0\n    bb.bb84_crit_edge: 0\n    bb7: 0\n    bb13: 0\n    bb65: 0\n    bb68: 0\n    bb72: 0\n    bb72.bb13_crit_edge: 0\n    bb78: 0\n    bb78.bb84_crit_edge: 0\n    bb82: 0\n    bb84: 0\n    \n  - Total number of blocks in the sorted list: 12."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_d",
+      "funcName": "adpcm_decoder",
+      "numBB": 10,
+      "originalSet": "bb, bb.bb71_crit_edge, bb7, bb13, bb13.bb28_crit_edge, bb23, bb28, bb28.bb13_crit_edge, bb69, bb71",
+      "predictedSet": "bb28, bb13, bb28.bb13_crit_edge, bb23, bb7, bb69, bb, bb71, bb.bb71_crit_edge, bb13.bb28_crit_edge",
+      "tokenCount": 5506,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb28"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb28"
+      },
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb28.bb13_crit_edge"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb69"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb71"
+      },
+      {
+        "name": "bb.bb71_crit_edge"
+      },
+      {
+        "name": "bb13.bb28_crit_edge"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The structure of the optimized function closely mirrors the original function, so the mapping of basic blocks is straightforward. For example, bb28 in the original corresponds to bb28 in the optimized version, and so on.\n    - Blocks like bb.bb71_crit_edge and bb13.bb28_crit_edge are edge blocks that handle transitions between other blocks.\n  \n  - **Computed O1 freq(bb) Table**:\n    - bb: 1,114,386\n    - bb.bb71_crit_edge: 0\n    - bb7: 1,114,386\n    - bb13: 1,103,099,270\n    - bb13.bb28_crit_edge: 551,549,635\n    - bb23: 551,549,635\n    - bb28: 1,103,099,270\n    - bb28.bb13_crit_edge: 1,101,984,884\n    - bb69: 1,114,386\n    - bb71: 1,114,386\n\n  - **Block Splitting/Merging**:\n    - No blocks were split or merged in the optimized version. The structure remains consistent with the original.\n\n  - **Summary**:\n    - The total number of blocks in the sorted list is exactly 10. No blocks are missing or duplicated."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_d",
+      "funcName": "main",
+      "numBB": 14,
+      "originalSet": "bb, bb3, bb6, bb9, bb14, bb15, bb17, bb17.bb27_crit_edge, bb20, bb22, bb22.bb22_crit_edge, bb27.loopexit, bb27, bb31",
+      "predictedSet": "bb22, bb22.bb22_crit_edge, bb27, bb27.loopexit, bb20, bb17, bb15, bb9, bb6, bb31, bb, bb3, bb14, bb17.bb27_crit_edge",
+      "tokenCount": 4066,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb22"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb22.bb22_crit_edge"
+      },
+      {
+        "name": "bb27"
+      },
+      {
+        "name": "bb27.loopexit"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb3"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb17.bb27_crit_edge"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The structure of the optimized function closely mirrors the original function, so the mapping is straightforward. For example, 22 in the original corresponds to bb22 in the optimized, and so on.\n    - Blocks like 17_27.ce in the original are directly mapped to bb17.bb27_crit_edge in the optimized.\n  - **Computed O1 freq(bb) Table**:\n    - Using the basic block profile:\n      - bb22: 1,114,386\n      - bb22.bb22_crit_edge: 1,114,308\n      - bb27: 78\n      - bb27.loopexit: 78\n      - bb20: 78\n      - bb17: 78\n      - bb15: 79\n      - bb9: 79\n      - bb6: 1\n      - bb31: 1\n      - bb: 1\n      - bb3: 0\n      - bb14: 0\n      - bb17.bb27_crit_edge: 0\n  - **Block Splitting/Merging**:\n    - No significant splitting or merging occurred between the original and optimized versions. The structure is preserved.\n  - **Summary**:\n    - The total number of blocks in the sorted list is exactly 14. No blocks are missing or duplicated."
+  }
+]
