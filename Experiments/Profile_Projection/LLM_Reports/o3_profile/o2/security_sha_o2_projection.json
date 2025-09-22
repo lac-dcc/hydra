@@ -1,0 +1,296 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_sha",
+      "funcName": "main",
+      "numBB": 9,
+      "originalSet": "bb, bb4, bb7, bb7.bb21_crit_edge, bb12.preheader, bb12, bb12.bb12_crit_edge, bb21.loopexit, bb21",
+      "predictedSet": "bb12, bb12.bb12_crit_edge, bb12.preheader, bb, bb7, bb21, bb21.loopexit, bb7.bb21_crit_edge, bb4",
+      "tokenCount": 3463,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb12"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb12.bb12_crit_edge"
+      },
+      {
+        "name": "bb12.preheader"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb21.loopexit"
+      },
+      {
+        "name": "bb7.bb21_crit_edge"
+      },
+      {
+        "name": "bb4"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - bb in the optimized function corresponds to the entry block in the original function.\n    - bb4 corresponds to the block handling the fopen failure case.\n    - bb7 corresponds to the block handling the fopen success case.\n    - bb12.preheader, bb12, and bb12.bb12_crit_edge correspond to the loop in the original function (12.ph, 12, and 12_12.ce respectively).\n    - bb21.loopexit and bb21 correspond to the loop exit and function return blocks.\n    - bb7.bb21_crit_edge corresponds to the edge from bb7 to bb21 in the original function.\n  - **Computed O1 freq(bb) Table**:\n    - bb: 1 (entry block, executed once).\n    - bb4: 0 (fopen failure case, never executed).\n    - bb7: 1 (fopen success case, executed once).\n    - bb12.preheader: 1 (loop preheader, executed once).\n    - bb12: 321506 (main loop body, executed 321506 times).\n    - bb12.bb12_crit_edge: 321505 (loop backedge, executed 321505 times).\n    - bb21.loopexit: 1 (loop exit, executed once).\n    - bb21: 1 (return block, executed once).\n    - bb7.bb21_crit_edge: 0 (edge from bb7 to bb21, never executed).\n  - **Block Splitting/Merging**:\n    - No blocks were split or merged in the optimized function.\n  - **Summary**:\n    - The total number of blocks in the sorted list is exactly 9. No blocks are missing or duplicated."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_sha",
+      "funcName": "main1",
+      "numBB": 14,
+      "originalSet": "bb, bb4, bb7, bb7.bb28_crit_edge, bb10, bb11, bb18, bb22, bb22.bb24_crit_edge, bb23, bb24, bb24.bb11_crit_edge, bb28.loopexit, bb28",
+      "predictedSet": "bb, bb4, bb7, bb10, bb28, bb28.loopexit, bb11, bb24, bb24.bb11_crit_edge, bb22, bb22.bb24_crit_edge, bb7.bb28_crit_edge, bb23, bb18",
+      "tokenCount": 4075,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb28"
+      },
+      {
+        "name": "bb28.loopexit"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb24"
+      },
+      {
+        "name": "bb24.bb11_crit_edge"
+      },
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb22.bb24_crit_edge"
+      },
+      {
+        "name": "bb7.bb28_crit_edge"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb18"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The hottest block in the original profile (0) corresponds to bb in the optimized function, as it represents the entry point and is executed 321506 times.\n    - Blocks 14 and 38 in the original profile correspond to the loop-related blocks in the optimized function (bb7, bb28, etc.), as they dominate the loop execution.\n    - Blocks with zero execution counts in the original profile (e.g., 18, 29) map to blocks like bb18 and bb22.bb24_crit_edge in the optimized function, which are rarely or never executed.\n  - **Computed O1 freq(bb) Table**:\n    - bb: 321506\n    - bb4: 321506\n    - bb7: 321505\n    - bb10: 321505\n    - bb28: 321506\n    - bb28.loopexit: 321505\n    - Other blocks have lower or zero frequencies based on the profile data.\n  - **Block Splitting/Merging**:\n    - Some blocks in the original function were split into smaller blocks in the optimized function (e.g., 14 split into bb7, bb28, etc.).\n    - Some blocks were removed or optimized out due to dead code elimination (e.g., 18).\n\n- **Summary**: The total number of blocks in the sorted list is exactly 14."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_sha",
+      "funcName": "sha_update",
+      "numBB": 7,
+      "originalSet": "bb, bb.bb90_crit_edge, bb17, bb50, bb50.bb50_crit_edge, bb88, bb90",
+      "predictedSet": "bb50, bb50.bb50_crit_edge, bb17, bb, bb88, bb90, bb.bb90_crit_edge",
+      "tokenCount": 8070,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb50"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb50"
+      },
+      {
+        "name": "bb50.bb50_crit_edge"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb88"
+      },
+      {
+        "name": "bb90"
+      },
+      {
+        "name": "bb.bb90_crit_edge"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The original block 0 maps to bb in the optimized function.\n    - The original block 0_90.ce maps to bb.bb90_crit_edge.\n    - The original block 17 maps to bb17.\n    - The original block 50 maps to bb50.\n    - The original block 50_50.ce maps to bb50.bb50_crit_edge.\n    - The original block 88 maps to bb88.\n    - The original block 90 maps to bb90.\n\n  - **Computed O1 freq(bb) Table**:\n    - bb: 321506 (from 0)\n    - bb.bb90_crit_edge: 0 (from 0_90.ce)\n    - bb17: 321506 (from 17)\n    - bb50: 19611866 (from 50)\n    - bb50.bb50_crit_edge: 19290360 (from 50_50.ce)\n    - bb88: 321506 (from 88)\n    - bb90: 321506 (from 90)\n\n  - **Block Splitting/Merging**:\n    - No blocks were split, merged, or removed during optimization. The mapping is straightforward.\n\n- **Summary**:\n  The total number of blocks in the sorted list is exactly 7."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_sha",
+      "funcName": "sha_transform",
+      "numBB": 16,
+      "originalSet": "bb, bb2, bb2.bb2_crit_edge, bb22, bb32, bb32.bb32_crit_edge, bb57.preheader, bb57, bb57.bb57_crit_edge, bb80.preheader, bb80, bb80.bb80_crit_edge, bb105.preheader, bb105, bb105.bb105_crit_edge, bb128",
+      "predictedSet": "bb2, bb2.bb2_crit_edge, bb32, bb32.bb32_crit_edge, bb338, bb338_338.ce, bb22, bb57, bb57.bb57_crit_edge, bb80, bb80.bb80_crit_edge, bb105, bb105.bb105_crit_edge, bb57.preheader, bb80.preheader, bb128",
+      "tokenCount": 8917,
+      "discrepancy": true,
+      "duplicates": [],
+      "missing": [
+        "bb",
+        "bb105.preheader"
+      ],
+      "extra": [
+        "bb338",
+        "bb338_338.ce"
+      ],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb2"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb2"
+      },
+      {
+        "name": "bb2.bb2_crit_edge"
+      },
+      {
+        "name": "bb32"
+      },
+      {
+        "name": "bb32.bb32_crit_edge"
+      },
+      {
+        "name": "bb338"
+      },
+      {
+        "name": "bb338_338.ce"
+      },
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb57"
+      },
+      {
+        "name": "bb57.bb57_crit_edge"
+      },
+      {
+        "name": "bb80"
+      },
+      {
+        "name": "bb80.bb80_crit_edge"
+      },
+      {
+        "name": "bb105"
+      },
+      {
+        "name": "bb105.bb105_crit_edge"
+      },
+      {
+        "name": "bb57.preheader"
+      },
+      {
+        "name": "bb80.preheader"
+      },
+      {
+        "name": "bb128"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - bb2 corresponds to the loop in the original function with the highest execution count (2 -> 2_2.ce and 2_2.ce -> 2 with 1.25 billion iterations).\n    - bb32 and bb338 correspond to the next most frequently executed loops in the original function, with counts of ~378 million.\n    - Blocks like bb22, bb57, and bb128 correspond to less frequently executed paths based on the profile data.\n  - **Computed O1 freq(bb) Table**:\n    - bb2: 1,275,735,808\n    - bb2.bb2_crit_edge: 1,255,802,436\n    - bb32: 398,667,440\n    - bb32.bb32_crit_edge: 378,734,068\n    - bb338: 398,667,440\n    - bb338_338.ce: 378,734,068\n    - bb22: 19,933,372\n    - bb57: 19,933,372\n    - bb57.bb57_crit_edge: 19,933,372\n    - bb80: 19,933,372\n    - bb80.bb80_crit_edge: 19,933,372\n    - bb105: 19,933,372\n    - bb105.bb105_crit_edge: 19,933,372\n    - bb57.preheader: 19,933,372\n    - bb80.preheader: 19,933,372\n    - bb128: 19,933,372\n  - **Block Splitting/Merging**:\n    - Some blocks in the optimized function (e.g., bb2, bb32, bb338) represent merged or unrolled loops from the original function.\n    - Blocks like bb128 represent the final return path and are executed only once.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 16. No blocks are missing or duplicated."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_sha",
+      "funcName": "sha_final",
+      "numBB": 4,
+      "originalSet": "bb, bb17, bb80, bb135",
+      "predictedSet": "bb, bb80, bb135, bb17",
+      "tokenCount": 14560,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb80"
+      },
+      {
+        "name": "bb135"
+      },
+      {
+        "name": "bb17"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The bb block in the optimized function corresponds to the entry block in the original function.\n    - The bb17 block in the optimized function corresponds to the bb17 block in the original function.\n    - The bb80 block in the optimized function corresponds to the bb80 block in the original function.\n    - The bb135 block in the optimized function corresponds to the bb135 block in the original function.\n  - **Computed O1 freq(bb) Table**:\n    - bb: 321506\n    - bb17: 0\n    - bb80: 321506\n    - bb135: 321506\n  - **Block Splitting/Merging**:\n    - No blocks were split, merged, or removed during optimization. The structure of the basic blocks in the optimized function matches the original function.\n\n- **Summary**:\n  The total number of blocks in the sorted list is exactly 4."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_sha",
+      "funcName": "sha_stream",
+      "numBB": 4,
+      "originalSet": "bb, bb7, bb11, bb12",
+      "predictedSet": "bb7, bb11, bb12, bb",
+      "tokenCount": 3431,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb7"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The original function's bb7 corresponds to the optimized function's bb7, as it contains the loop responsible for reading and processing data.\n    - The original function's bb14 (loop body) maps to bb11 in the optimized function, where sha_update is called.\n    - The original function's bb18 (finalization) maps to bb12, where sha_final is called.\n    - The original function's bb (entry block) maps to bb in the optimized function.\n\n  - **Computed O1 freq(bb) Table**:\n    - bb: 321506 (entry block executed once per function call).\n    - bb7: 643012 (loop header executed twice per iteration: one entry and one back-edge).\n    - bb11: 321506 (loop body executed once per iteration).\n    - bb12: 321506 (finalization block executed once after the loop).\n\n  - **Block Splitting/Merging**:\n    - No blocks were split or merged in the optimized function. The structure of the loop and finalization remains consistent with the original function.\n\n  - **Summary**:\n    - The total number of blocks in the sorted list is exactly 4."
+  }
+]
