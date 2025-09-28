@@ -1,8 +1,10 @@
 import csv
 import os
 
+exp_setup = os.environ.get('EXP_SETUP', 'Hydra')
+
 csv_data = [
-    ['Optimization', 'Hydra Hit Sum', 'Hydra Precision', 'Staleness']
+    ['Optimization', exp_setup + ' Hit Sum', exp_setup + ' Precision', 'Staleness']
     # ['Optimization', 'Upper Bound Hit Sum', 'Upper Bound Precision', 'Hydra Hit Sum', 'Hydra Precision', 'Staleness']
 ]
 

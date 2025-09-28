@@ -32,41 +32,41 @@ fi
 
 # # Part 3: Run the profile projection algorithms (just hydra for now)
 
-# for OLD in o0 o1 o2 o3
-# do
-#     for NEW in o0 o1 o2 o3
-#     do
-#         OLD_OPT=$OLD
-#         NEW_OPT=$NEW
-#         if [ $OLD_OPT = "o0" ]
-#         then
-#             OLD_OPT="disable-O0-optnone"
-#         elif [ $OLD_OPT = "o1" ]
-#         then
-#             OLD_OPT="O1"
-#         elif [ $OLD_OPT = "o2" ]
-#         then
-#             OLD_OPT="O2"
-#         elif [ $OLD_OPT = "o3" ]
-#         then
-#             OLD_OPT="O3"
-#         fi
-#         if [ $NEW_OPT = "o0" ]
-#         then
-#             NEW_OPT="disable-O0-optnone"
-#         elif [ $NEW_OPT = "o1" ]
-#         then
-#             NEW_OPT="O1"
-#         elif [ $NEW_OPT = "o2" ]
-#         then
-#             NEW_OPT="O2"
-#         elif [ $NEW_OPT = "o3" ]
-#         then
-#             NEW_OPT="O3"
-#         fi
-#         "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="$OLD/$NEW" --old-opt="$OLD_OPT" --new-opt="$NEW_OPT" --matching-threshold="25"
-#     done
-# done
+for OLD in o0 o1 o2 o3
+do
+    for NEW in o0 o1 o2 o3
+    do
+        OLD_OPT=$OLD
+        NEW_OPT=$NEW
+        if [ $OLD_OPT = "o0" ]
+        then
+            OLD_OPT="disable-O0-optnone"
+        elif [ $OLD_OPT = "o1" ]
+        then
+            OLD_OPT="O1"
+        elif [ $OLD_OPT = "o2" ]
+        then
+            OLD_OPT="O2"
+        elif [ $OLD_OPT = "o3" ]
+        then
+            OLD_OPT="O3"
+        fi
+        if [ $NEW_OPT = "o0" ]
+        then
+            NEW_OPT="disable-O0-optnone"
+        elif [ $NEW_OPT = "o1" ]
+        then
+            NEW_OPT="O1"
+        elif [ $NEW_OPT = "o2" ]
+        then
+            NEW_OPT="O2"
+        elif [ $NEW_OPT = "o3" ]
+        then
+            NEW_OPT="O3"
+        fi
+        "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="$OLD/$NEW" --old-opt="$OLD_OPT" --new-opt="$NEW_OPT" --matching-threshold="25"
+    done
+done
 
 # "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="o0/o0" --old-opt="disable-O0-optnone" --new-opt="disable-O0-optnone" --matching-threshold="25"
 
@@ -150,8 +150,8 @@ fi
 # # aggressive-instcombine
 # "$BASE_DIR/Experiments/Ground_Truth/Scripts/run.sh" --exp-name="Opts/aggressive-instcombine" --opt-flag="disable-O0-optnone" --passes="aggressive-instcombine" --inputs=1
 
-# # loop-unswitch
-# "$BASE_DIR/Experiments/Ground_Truth/Scripts/run.sh" --exp-name="Opts/loop-unswitch" --opt-flag="disable-O0-optnone" --passes="simplifycfg lcssa loop-rotate loop-unswitch" --inputs=1
+# # simple-loop-unswitch
+# "$BASE_DIR/Experiments/Ground_Truth/Scripts/run.sh" --exp-name="Opts/simple-loop-unswitch" --opt-flag="disable-O0-optnone" --passes="simplifycfg lcssa loop-rotate simple-loop-unswitch" --inputs=1
 
 # # globalopt
 # "$BASE_DIR/Experiments/Ground_Truth/Scripts/run.sh" --exp-name="Opts/globalopt" --opt-flag="disable-O0-optnone" --passes="globalopt" --inputs=1
@@ -195,8 +195,8 @@ fi
 # # inline
 # "$BASE_DIR/Experiments/Ground_Truth/Scripts/run.sh" --exp-name="Opts/inline" --opt-flag="disable-O0-optnone" --passes="simplifycfg lcssa loop-rotate globalopt, adce, inline" --inputs=1
 
-# # functionattrs
-# "$BASE_DIR/Experiments/Ground_Truth/Scripts/run.sh" --exp-name="Opts/functionattrs" --opt-flag="disable-O0-optnone" --passes="functionattrs" --inputs=1
+# # function-attrs
+# "$BASE_DIR/Experiments/Ground_Truth/Scripts/run.sh" --exp-name="Opts/function-attrs" --opt-flag="disable-O0-optnone" --passes="function-attrs" --inputs=1
 
 # # forceattrs
 # "$BASE_DIR/Experiments/Ground_Truth/Scripts/run.sh" --exp-name="Opts/forceattrs" --opt-flag="disable-O0-optnone" --passes="forceattrs" --inputs=1
@@ -283,8 +283,8 @@ fi
 # # aggressive-instcombine
 # "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/Upper_Bound/aggressive-instcombine" --pre-passes="aggressive-instcombine" --matching-threshold="25"
 
-# # loop-unswitch
-# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/Upper_Bound/loop-unswitch" --pre-passes="simplifycfg lcssa loop-rotate loop-unswitch" --matching-threshold="25"
+# # simple-loop-unswitch
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/Upper_Bound/simple-loop-unswitch" --pre-passes="simplifycfg lcssa loop-rotate simple-loop-unswitch" --matching-threshold="25"
 
 # # globalopt
 # "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/Upper_Bound/globalopt" --pre-passes="globalopt" --matching-threshold="25"
@@ -328,8 +328,8 @@ fi
 # # inline
 # "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/Upper_Bound/inline" --pre-passes="simplifycfg lcssa loop-rotate globalopt adce inline" --matching-threshold="25"
 
-# # functionattrs
-# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/Upper_Bound/functionattrs" --pre-passes="functionattrs" --matching-threshold="25"
+# # function-attrs
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/Upper_Bound/function-attrs" --pre-passes="function-attrs" --matching-threshold="25"
 
 # # forceattrs
 # "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/Upper_Bound/forceattrs" --pre-passes="forceattrs" --matching-threshold="25"
@@ -416,8 +416,8 @@ fi
 # aggressive-instcombine
 "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/aggressive-instcombine" --new-passes="aggressive-instcombine" --matching-threshold="25"
 
-# loop-unswitch
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/loop-unswitch" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="loop-unswitch" --matching-threshold="25"
+# simple-loop-unswitch
+"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/simple-loop-unswitch" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="simple-loop-unswitch" --matching-threshold="25"
 
 # globalopt
 "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/globalopt" --new-passes="globalopt" --matching-threshold="25"
@@ -461,13 +461,144 @@ fi
 # inline
 "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/inline" --pre-passes="simplifycfg lcssa loop-rotate globalopt adce" --new-passes="inline" --matching-threshold="25"
 
-# functionattrs
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/functionattrs" --new-passes="functionattrs" --matching-threshold="25"
+# function-attrs
+"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/function-attrs" --new-passes="function-attrs" --matching-threshold="25"
 
 # forceattrs
 "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/forceattrs" --new-passes="forceattrs" --matching-threshold="25"
 
 # callsite-splitting
 "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/callsite-splitting" --new-passes="callsite-splitting" --matching-threshold="25"
+
+# # Part 4: run static prediction algorithms on optimization flags
+
+# # simplifycfg
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/simplifycfg" --passes="simplifycfg"
+
+# # instcombine
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/instcombine" --passes="instcombine"
+
+# # early-cse-memssa
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/early-cse-memssa" --passes="early-cse-memssa"
+
+# # gvn
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/gvn" --passes="gvn"
+
+# # sroa
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/sroa" --passes="sroa"
+
+# # jump-threading
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/jump-threading" --passes="jump-threading"
+
+# # mem2reg
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/mem2reg" --passes="mem2reg"
+
+# # licm
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/licm" --passes="simplifycfg lcssa loop-rotate licm"
+
+# # # loop-rotate
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/loop-rotate" --passes="simplifycfg lcssa loop-rotate"
+
+# # indvars
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/indvars" --passes="simplifycfg lcssa loop-rotate indvars"
+
+# # correlated-propagation
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/correlated-propagation" --passes="correlated-propagation"
+
+# # mldst-motion
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/mldst-motion" --passes="mldst-motion"
+
+# # reassociate
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/reassociate" --passes="reassociate"
+
+# # slp-vectorizer
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/slp-vectorizer" --passes="slp-vectorizer"
+
+# # tailcallelim
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/tailcallelim" --passes="tailcallelim"
+
+# # dse
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/dse" --passes="dse"
+
+# # inferattrs
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/inferattrs" --passes="inferattrs"
+
+# # speculative-execution
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/speculative-execution" --passes="speculative-execution"
+
+# # memcpyopt
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/memcpyopt" --passes="memcpyopt"
+
+# # instsimplify
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/instsimplify" --passes="instsimplify"
+
+# # ipsccp
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/ipsccp" --passes="ipsccp"
+
+# # adce
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/adce" --passes="adce"
+
+# # bdce
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/bdce" --passes="bdce"
+
+# # loop-unroll
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/loop-unroll" --passes="simplifycfg lcssa loop-rotate loop-unroll"
+
+# # aggressive-instcombine
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/aggressive-instcombine" --passes="aggressive-instcombine"
+
+# # simple-loop-unswitch
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/simple-loop-unswitch" --passes="simplifycfg lcssa loop-rotate simple-loop-unswitch"
+
+# # globalopt
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/globalopt" --passes="globalopt"
+
+# # sccp
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/sccp" --passes="sccp"
+
+# # loop-deletion
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/loop-deletion" --passes="simplifycfg lcssa loop-rotate loop-deletion"
+
+# # loop-idiom
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/loop-idiom" --passes="simplifycfg lcssa loop-rotate loop-idiom"
+
+# # loop-sink
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/loop-sink" --passes="simplifycfg lcssa loop-rotate loop-sink"
+
+# # loop-vectorize
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/loop-vectorize" --passes="simplifycfg lcssa loop-rotate loop-vectorize"
+
+# # loop-load-elim
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/loop-load-elim" --passes="simplifycfg lcssa loop-rotate loop-load-elim"
+
+# # div-rem-pairs
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/div-rem-pairs" --passes="div-rem-pairs"
+
+# # loop-simplify
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/loop-simplify" --passes="simplifycfg lcssa loop-rotate loop-simplify"
+
+# # globals-aa
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/globals-aa" --passes="globals-aa"
+
+# # strip-dead-prototypes
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/strip-dead-prototypes" --passes="strip-dead-prototypes"
+
+# # lower-constant-intrinsics
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/lower-constant-intrinsics" --passes="lower-constant-intrinsics"
+
+# # lcssa
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/lcssa" --passes="simplifycfg loop-rotate lcssa"
+
+# # inline
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/inline" --passes="simplifycfg lcssa loop-rotate globalopt adce inline"
+
+# # function-attrs
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/function-attrs" --passes="function-attrs"
+
+# # forceattrs
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/forceattrs" --passes="forceattrs"
+
+# # callsite-splitting
+# "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/callsite-splitting" --passes="callsite-splitting"
 
 "$BASE_DIR/Experiments/Scripts/gen_csvs.sh"

@@ -15,7 +15,7 @@ PROFILE_PROJECTION_SCRIPT="$SCRIPTS_FOLDER/profile_projection.sh"
 
 BENCH_DIR=$BASE_DIR/Benchmark/cBench
 export RESULTS_FOLDER_PROFILE=$BASE_DIR/Results/cBench/Profile
-export PROJECTION_JSON_FILE="$BASE_DIR/Experiments/Profile_Projection/JSON_Files/Hydra/$EXP.json"
+export PROJECTION_JSON_FILE="$BASE_DIR/Experiments/Profile_Projection/JSON_Files/Ayupov/$EXP.json"
 
 rm -rf $RESULTS_FOLDER_PROFILE
 

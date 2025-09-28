@@ -12,7 +12,7 @@ then
 fi
 
 # export LLVM_INSTALL_DIR="/usr/local"
-# export BASE_DIR="/home/jvf/Codes/hydra"
+# export BASE_DIR="/home/jvf/Codes/Ayupov"
 
 OLD_FOLDER="o0"
 if [ $OLD_OPT = "O1" ]
@@ -46,7 +46,7 @@ LLVM_DIS=$LLVM_INSTALL_DIR/bin/llvm-dis
 
 NISSE_SCRIPT="$SCRIPTS_FOLDER/nisse.sh"
 
-PASS_FILE_PROFILE=$BASE_DIR/build/lib/libBlockOrderingHydra.so
+PASS_FILE_PROFILE=$BASE_DIR/build/lib/libBlockOrderingAyupov.so
 # CFLAGS="-Xclang -disable-O0-optnone -Wno-everything -std=c99 -c -S -emit-llvm"
 
 RESULTS_FOLDER=$BASE_DIR/Results/Profile
@@ -124,7 +124,7 @@ fi
 
 START_TIME=`date +%s.%N`
 $LLVM_OPT -disable-output -load-pass-plugin $PASS_FILE_PROFILE \
-    -passes="block-ordering-hydra" "$NEW_LL_FILE" -prog "$OLD_LL_FILE" \
+    -passes="block-ordering-ayupov" "$NEW_LL_FILE" -prog "$OLD_LL_FILE" \
     -prof "$OLD_PROFILES" -matching-threshold $THRESHOLD -max-iterations $MAX_ITER
 ret_code=$?
 if [[ $ret_code -ne 0 ]]; then

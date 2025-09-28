@@ -189,6 +189,9 @@ std::string hashBlock(const BasicBlock &BB) {
 
   for (const Instruction &Inst : BB) {
     HashString.append(hashInst(Inst));
+    for (int I = 0; I < Inst.getNumOperands(); I++) {
+      HashString.append(Inst.getOperand(I)->getName().str());
+    }
   }
   return HashString;
 }
@@ -226,6 +229,7 @@ void AyupovPass::computeBlockHashes(Function &F, bool old) {
     std::string OpcodeHashStr = hashBlockLoose(BB);
     OpcodeHashes[I] = std::hash<std::string>{}(OpcodeHashStr);
     BlendedHashes[I].OpcodeHash = (uint16_t)hash_value(OpcodeHashes[I]);
+    // outs() << BB.getName() << " " << OpcodeHashes[I] << "\n";
     BasicBlockIdx[&BB] = I++;
   }
 
@@ -237,7 +241,9 @@ void AyupovPass::computeBlockHashes(Function &F, bool old) {
       uint64_t SuccHash = OpcodeHashes[BasicBlockIdx[SuccBB]];
       Hash = hashing::detail::hash_16_bytes(Hash, SuccHash);
     }
-    BlendedHashes[I].SuccHash = (uint8_t)hash_value(Hash);
+    uint16_t Hash16 = (uint16_t)hash_value(std::to_string(Hash));
+    // outs() << "Succ: " << std::to_string(Hash) << "\n";
+    BlendedHashes[I].SuccHash = Hash16;
     ++I;
   }
 
@@ -249,7 +255,9 @@ void AyupovPass::computeBlockHashes(Function &F, bool old) {
       uint64_t SuccHash = OpcodeHashes[BasicBlockIdx[SuccBB]];
       Hash = hashing::detail::hash_16_bytes(Hash, SuccHash);
     }
-    BlendedHashes[I].SuccHash = (uint8_t)hash_value(Hash);
+    uint16_t Hash16 = (uint16_t)hash_value(std::to_string(Hash));
+    // outs() << "Succ: " << Hash16 << "\n";
+    BlendedHashes[I].SuccHash = Hash16;
 
     // Append hashes of predecessors.
     Hash = 0;
@@ -257,17 +265,22 @@ void AyupovPass::computeBlockHashes(Function &F, bool old) {
       uint64_t PredHash = OpcodeHashes[BasicBlockIdx[PredBB]];
       Hash = hashing::detail::hash_16_bytes(Hash, PredHash);
     }
-    BlendedHashes[I].PredHash = (uint8_t)hash_value(Hash);
+    Hash16 = (uint16_t)hash_value(std::to_string(Hash));
+    // outs() << "Pred: " << Hash16  << "\n";
+    BlendedHashes[I].PredHash = Hash16;
     ++I;
   }
 
   //  Assign hashes.
   I = 0;
   for (BasicBlock &BB : F) {
-    if (old)
+    if (old) {
       old_blocks_hash[&BB] = BlendedHashes[I].combine();
-    else
+      outs() << BB.getName() << " " << BlendedHashes[I].OpcodeHash << " " << BlendedHashes[I].InstrHash << " " << old_blocks_hash[&BB] << "\n";
+    } else {
       new_blocks_hash[&BB] = BlendedHashes[I].combine();
+      outs() << BB.getName() << " " << BlendedHashes[I].OpcodeHash << " " << BlendedHashes[I].InstrHash << " " << new_blocks_hash[&BB] << "\n";
+    }
     ++I;
   }
 }
@@ -350,12 +363,14 @@ void AyupovPass::projectProfile(Function &oldFunction, Function &newFunction, Br
     OldBlockOrder.emplace_back(&BB);
     OldBlockIdx[extractAndFormatDigits(BB.getName().str())] = I++;
   }
+  outs() << "Old Hashes\n";
   computeBlockHashes(oldFunction, 1);
 
   std::vector<BasicBlock *> NewBlockOrder;
   for (BasicBlock &BB : newFunction) {
     NewBlockOrder.emplace_back(&BB);
   }
+  outs() << "\nNew Hashes\n";
   computeBlockHashes(newFunction, 0);
 
   FlowFunction Func = createFlowFunction(NewBlockOrder, bpi);
@@ -390,9 +405,9 @@ void AyupovPass::projectProfile(Function &oldFunction, Function &newFunction, Br
       // Update matching stats accounting for the matched block.
       if (Debug) {
         if (Matcher.isHighConfidenceMatch(BinHash, YamlHash)) {
-          errs() << "  exact match\n";
+          errs() << "exact match between " << BB->getName() << " and " << NewBlockOrder[MatchedBlock->Index-1]->getName() << "\n";
         } else {
-          errs() << "  loose match\n";
+          errs() << "loose match between " << BB->getName() << " and " << NewBlockOrder[MatchedBlock->Index-1]->getName() << "\n";
         }
       }
     }
@@ -685,9 +700,9 @@ PreservedAnalyses AyupovPass::run(Function &F,
         outs() << "Running projection for function " << functionName << "\n\n";
       }
       blocks_profile.clear();
-      // outs() << "Starting " << F.getName() << "\n";
+      outs() << "Starting " << F.getName() << "\n";
       this->projectProfile(fun, F, bpi);
-      // outs() << "Finishing " << F.getName() << "\n";
+      outs() << "Finishing " << F.getName() << "\n";
 
       // foundFunction = true;
       break;

@@ -65,6 +65,7 @@ do
             
             $LLVM_OPT -S -passes="loop-simplify,break-crit-edges" $d.ll -o $d.ll
 
+            mkdir -p $LL_FOLDER/$EXP
             cp $d.ll $LL_FOLDER/$EXP/$d.ll
 
             START_TIME=`date +%s.%N`

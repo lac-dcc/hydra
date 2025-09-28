@@ -30,7 +30,9 @@ for i in block_names_file.readlines():
     block_names_data[s[1]] = s[0]
 block_names_file.close()
 
-print('Generating CSV File for ' + h_json)
+# print('Generating CSV File for ' + h_json)
+hit_sum = 0
+bench_sum = 0
 
 for app_name in gt_data:
     for function_name in gt_data[app_name]:
@@ -105,18 +107,30 @@ for app_name in gt_data:
                 if block not in ordering.split(';'):
                     missing_blocks.append(block_names_data[block])
             if len(missing_blocks) > 0 or len(made_up_blocks) > 0:
-                if worked:
-                    print('Error at: ' + app_name + '/' + function_name + '(' + str(nodes) + ' basic blocks)')
-                    if len(missing_blocks) > 0:
-                        print('Missing blocks: ' + ','.join(missing_blocks))
-                    if len(made_up_blocks) > 0:
-                        print('Made up blocks ' + ','.join(made_up_blocks))
-                    print('\n\n',end='')
+                # if worked:
+                #     print('Error at: ' + app_name + '/' + function_name + '(' + str(nodes) + ' basic blocks)')
+                #     if len(missing_blocks) > 0:
+                #         print('Missing blocks: ' + ','.join(missing_blocks))
+                #     if len(made_up_blocks) > 0:
+                #         print('Made up blocks ' + ','.join(made_up_blocks))
+                #     print('\n\n',end='')
                 worked = False
                 continue
             if max_count <= 0 or min_count < 0:
                 continue
+            hit_sum = round(hit_sum + hit,4)
+            bench_sum += 1
             csv_data.append([app_name, function_name, execution_number, nodes, edges, min_count, max_count, str(block_ordering), str(ordering), distance, f"{hit:.4f}".replace('.',',')])
+
+avg_precision = hit_sum/(bench_sum+0.0)
+exp_name = h_json.split('/')[-3]
+old_opt = h_json.split('/')[-2]
+new_opt = h_json.split('/')[-1].replace('.json','')
+if (exp_name != "JSON_Files"):
+    print(f"{exp_name}: {old_opt} -> {new_opt} = {avg_precision:.4f}")
+else:
+    exp_name = old_opt
+    print(f"{exp_name}: {new_opt} = {avg_precision:.4f}")
 
 with open(csv_file, mode='w', newline='') as file:
     writer = csv.writer(file, delimiter=';', quoting=csv.QUOTE_MINIMAL)

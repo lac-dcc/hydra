@@ -22,8 +22,8 @@ struct BlendedBlockHash {
 private:
   using ValueOpcode = Bitfield::Element<uint16_t, 0, 16>;
   using ValueInstr = Bitfield::Element<uint16_t, 16, 16>;
-  using ValuePred = Bitfield::Element<uint8_t, 32, 8>;
-  using ValueSucc = Bitfield::Element<uint8_t, 40, 8>;
+  using ValuePred = Bitfield::Element<uint16_t, 32, 16>;
+  using ValueSucc = Bitfield::Element<uint16_t, 48, 16>;
 
 public:
   explicit BlendedBlockHash() {}
@@ -68,9 +68,9 @@ public:
   /// operands.
   uint16_t InstrHash{0};
   /// (Loose) Hashes of the predecessors of the basic block.
-  uint8_t PredHash{0};
+  uint16_t PredHash{0};
   /// (Loose) Hashes of the successors of the basic block.
-  uint8_t SuccHash{0};
+  uint16_t SuccHash{0};
 };
 
 class AyupovPass : public PassInfoMixin<AyupovPass> {
