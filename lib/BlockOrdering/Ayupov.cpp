@@ -276,10 +276,10 @@ void AyupovPass::computeBlockHashes(Function &F, bool old) {
   for (BasicBlock &BB : F) {
     if (old) {
       old_blocks_hash[&BB] = BlendedHashes[I].combine();
-      outs() << BB.getName() << " " << BlendedHashes[I].OpcodeHash << " " << BlendedHashes[I].InstrHash << " " << old_blocks_hash[&BB] << "\n";
+      // outs() << BB.getName() << " " << BlendedHashes[I].OpcodeHash << " " << BlendedHashes[I].InstrHash << " " << old_blocks_hash[&BB] << "\n";
     } else {
       new_blocks_hash[&BB] = BlendedHashes[I].combine();
-      outs() << BB.getName() << " " << BlendedHashes[I].OpcodeHash << " " << BlendedHashes[I].InstrHash << " " << new_blocks_hash[&BB] << "\n";
+      // outs() << BB.getName() << " " << BlendedHashes[I].OpcodeHash << " " << BlendedHashes[I].InstrHash << " " << new_blocks_hash[&BB] << "\n";
     }
     ++I;
   }
@@ -363,14 +363,14 @@ void AyupovPass::projectProfile(Function &oldFunction, Function &newFunction, Br
     OldBlockOrder.emplace_back(&BB);
     OldBlockIdx[extractAndFormatDigits(BB.getName().str())] = I++;
   }
-  outs() << "Old Hashes\n";
+  // outs() << "Old Hashes\n";
   computeBlockHashes(oldFunction, 1);
 
   std::vector<BasicBlock *> NewBlockOrder;
   for (BasicBlock &BB : newFunction) {
     NewBlockOrder.emplace_back(&BB);
   }
-  outs() << "\nNew Hashes\n";
+  // outs() << "\nNew Hashes\n";
   computeBlockHashes(newFunction, 0);
 
   FlowFunction Func = createFlowFunction(NewBlockOrder, bpi);
@@ -700,9 +700,9 @@ PreservedAnalyses AyupovPass::run(Function &F,
         outs() << "Running projection for function " << functionName << "\n\n";
       }
       blocks_profile.clear();
-      outs() << "Starting " << F.getName() << "\n";
+      // outs() << "Starting " << F.getName() << "\n";
       this->projectProfile(fun, F, bpi);
-      outs() << "Finishing " << F.getName() << "\n";
+      // outs() << "Finishing " << F.getName() << "\n";
 
       // foundFunction = true;
       break;

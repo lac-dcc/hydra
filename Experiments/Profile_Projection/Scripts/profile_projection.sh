@@ -12,7 +12,7 @@ then
 fi
 
 # export LLVM_INSTALL_DIR="/usr/local"
-# export BASE_DIR="/home/jvf/Codes/Ayupov"
+# export BASE_DIR="/home/jvf/Codes/Hydra"
 
 OLD_FOLDER="o0"
 if [ $OLD_OPT = "O1" ]

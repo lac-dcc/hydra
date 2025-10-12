@@ -77,7 +77,7 @@ done
 $LLVM_OPT -S -passes="loop-simplify,break-crit-edges" $LL_NAME -o $LL_NAME
 
 $LLVM_OPT -S -load-pass-plugin $MY_LLVM_LIB -passes="nisse" -stats \
-    $LL_NAME -o $PF_NAME
+    $LL_NAME -o $PF_NAME > /dev/null 2>&1
 ret_code=$?
 if [[ $ret_code -ne 0 ]]
 then
@@ -90,7 +90,7 @@ fi
 # Print the instrumented CFG
 #
 $LLVM_OPT -S -passes="dot-cfg" -stats \
-    $LL_NAME -o $LL_NAME
+    $LL_NAME -o $LL_NAME > /dev/null 2>&1
 
 # Compile the newly instrumented program, and link it against the profiler
 #

@@ -22,14 +22,23 @@ def extract_and_format_digits(s):
     else:
         return bb1+'_'+bb2+'.'+args
 
-base_dir = os.environ.get('BASE_DIR', '/home/jvf/Codes/hydra/')
-exps = ['o1', 'o2', 'o3']
+base_dir = os.environ.get('BASE_DIR', '/home/elisa/Codes/hydra/')
+exps = ['o0', 'o1', 'o2', 'o3']
 
 for exp_folder in exps:
     try:
-        os.chdir(base_dir+'/Experiments/Profile_Projection/LLM_Reports/'+src_opt+'_profile/'+dst_opt)
+        os.chdir(base_dir+'/Experiments/Profile_Prediction/LLM_Reports/'+exp_folder)
+        # HB = {}
         BO = {}
         for i in os.listdir('.'):
+            # aux = open(i,'r')
+            # aux_dt = aux.readlines()[0]
+            # aux.close()
+            # if aux_dt[0] != '[':
+            #     aux_dt = '['+aux_dt.replace('}{', '},{')+']'
+            # aux = open(i,'w')
+            # print(aux_dt, end='', file=aux);
+            # aux.close()
             try:
                 blocks_file = open(base_dir+'/block_names.txt', 'r')
                 block_names = {}
@@ -40,24 +49,34 @@ for exp_folder in exps:
                 blocks_file = open(base_dir+'/block_names.txt', 'a')
                 dt = json.load(open(i,'r'))
                 # HB[i[:-5]] = {}
-                BO[i[:-19]] = {}
+                BO[i[:-5]] = {}
                 for f in dt:
                     f_name = f['benchmarkInfo']['funcName']
+                    # hb_name = format_llm_bb_name(f['hottestBB']['bbName'])
+                    # hb = extract_and_format_digits(hb_name)
+                    # if hb_name not in block_names:
+                    #     print('HottestBB')
+                    #     print(f['hottestBB']['bbName'], hb_name, hb)
+                    #     block_names[hb_name] = hb
+                    #     print(hb_name, hb, file=blocks_file)
                     bo = []
                     for block in f['bbOrderByHotness']:
                         bo_full_name = block['name']
                         bo_name = extract_and_format_digits(bo_full_name)
                         bo.append(bo_name)
                         if bo_full_name not in block_names:
+                            # print('Block Ordering')
+                            # print(block['name'], bo_full_name, bo_name)
                             block_names[bo_full_name] = bo_name
                             print(bo_full_name + ';' + bo_name, file=blocks_file)
                         
                     # HB[i[:-5]][f_name] = hb
-                    BO[i[:-19]][f_name] = bo
+                    BO[i[:-5]][f_name] = bo
                 blocks_file.close()
             except:
                 # continue
                 print(i)
-        json.dump(BO, open(base_dir+'/Experiments/Profile_Projection/JSON_Files/Beetle/'+dst_opt+'/'+src_opt+'.json','w'))
+        # json.dump(HB, open(base_dir+'/Experiments/Profile_Prediction/JSON_Files/Vespa/'+exp_folder+'.json','w'))
+        json.dump(BO, open(base_dir+'/Experiments/Profile_Prediction/JSON_Files/Vespa/'+exp_folder.replace('empty','o0')+'.json','w'))
     except:
-        print('No Beetle results in this experiment')
+        print('No Vespa results in this experiment')

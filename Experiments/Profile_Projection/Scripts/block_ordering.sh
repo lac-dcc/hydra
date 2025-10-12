@@ -55,7 +55,7 @@ do
             rm -rf $BASE_DIR/Results/Profile/   
             
             START_TIME_PROFILE=`date +%s.%N`
-            bash "$PROFILE_PROJECTION_SCRIPT" $BENCH_DIR/$d > /dev/null 2>&1
+            bash "$PROFILE_PROJECTION_SCRIPT" $BENCH_DIR/$d # > /dev/null 2>&1
             ret_code=$?
             if [[ $ret_code -ne 0 ]]
             then

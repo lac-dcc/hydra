@@ -14,7 +14,7 @@ csv_data = [
     ['Benchmark Name', 'Function Name', 'Execution', 'Number of vertices', 'Number of edges', 'Min count', 'Max count', 'Block Ordering', 'Guess', 'Distance', 'Hit']
 ]
 
-base_dir = os.environ.get('BASE_DIR', '/home/jvf/Codes/hydra/')
+base_dir = os.environ.get('BASE_DIR', '/home/elisa/Codes/hydra/')
 gt_json = os.environ.get('GT_JSON_FILE', '')
 h_json = os.environ.get('H_JSON_FILE', '')
 csv_file = os.environ.get('CSV_FILE', '')
@@ -107,13 +107,13 @@ for app_name in gt_data:
                 if block not in ordering.split(';'):
                     missing_blocks.append(block_names_data[block])
             if len(missing_blocks) > 0 or len(made_up_blocks) > 0:
-                # if worked:
-                #     print('Error at: ' + app_name + '/' + function_name + '(' + str(nodes) + ' basic blocks)')
-                #     if len(missing_blocks) > 0:
-                #         print('Missing blocks: ' + ','.join(missing_blocks))
-                #     if len(made_up_blocks) > 0:
-                #         print('Made up blocks ' + ','.join(made_up_blocks))
-                #     print('\n\n',end='')
+                if worked:
+                    print('Error at: ' + app_name + '/' + function_name + '(' + str(nodes) + ' basic blocks)')
+                    if len(missing_blocks) > 0:
+                        print('Missing blocks: ' + ','.join(missing_blocks))
+                    if len(made_up_blocks) > 0:
+                        print('Made up blocks ' + ','.join(made_up_blocks))
+                    print('\n\n',end='')
                 worked = False
                 continue
             if max_count <= 0 or min_count < 0:

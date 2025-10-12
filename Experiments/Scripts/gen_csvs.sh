@@ -16,7 +16,7 @@ do
     # Profile projection heuristics
     for j in o0 o1 o2 o3
     do
-        for k in Ayupov # Beetle # Hydra
+        for k in Ayupov Beetle Hydra
         do
             export H_JSON_FILE="$BASE_DIR/Experiments/Profile_Projection/JSON_Files/$k/$j/$i.json"
             export CSV_FILE="$BASE_DIR/Experiments/Profile_Projection/CSV_Files/$k/$j/$i.csv"
@@ -52,26 +52,26 @@ done
 # done
 
 
-for i in Ayupov # Hydra
-do
-    GT_FOLDER="$BASE_DIR/Experiments/Ground_Truth/JSON_Files/Opts"
-    H_FOLDER="$BASE_DIR/Experiments/Profile_Projection/JSON_Files/$i/Opts/o0"
-    UB_FOLDER="$BASE_DIR/Experiments/Profile_Projection/JSON_Files/Hydra/Opts/Upper_Bound"
+# for i in Ayupov # Hydra
+# do
+#     GT_FOLDER="$BASE_DIR/Experiments/Ground_Truth/JSON_Files/Opts"
+#     H_FOLDER="$BASE_DIR/Experiments/Profile_Projection/JSON_Files/$i/Opts/o0"
+#     UB_FOLDER="$BASE_DIR/Experiments/Profile_Projection/JSON_Files/Hydra/Opts/Upper_Bound"
 
-    export CSV_FILES_DIR="$BASE_DIR/Experiments/Profile_Projection/CSV_Files/$i/Opts"
+#     export CSV_FILES_DIR="$BASE_DIR/Experiments/Profile_Projection/CSV_Files/$i/Opts"
 
-    for j in $(ls $H_FOLDER)
-    do
-        export EXP_SETUP="$i"
-        export GT_JSON_FILE="$GT_FOLDER/$j"
-        export UB_JSON_FILE="$UB_FOLDER/$j"
-        export H_JSON_FILE="$H_FOLDER/$j"
-        export CSV_FILE="$CSV_FILES_DIR/${j%.json}.csv"
+#     for j in $(ls $H_FOLDER)
+#     do
+#         export EXP_SETUP="$i"
+#         export GT_JSON_FILE="$GT_FOLDER/$j"
+#         export UB_JSON_FILE="$UB_FOLDER/$j"
+#         export H_JSON_FILE="$H_FOLDER/$j"
+#         export CSV_FILE="$CSV_FILES_DIR/${j%.json}.csv"
 
-        mkdir -p /tmp/$EXP
-        python3 "$SCRIPTS_FOLDER/gen_opt_csv_report.py" > /tmp/$EXP/log.txt
-    done
+#         mkdir -p /tmp/$EXP
+#         python3 "$SCRIPTS_FOLDER/gen_opt_csv_report.py" > /tmp/$EXP/log.txt
+#     done
 
-    export CSV_FILE="$CSV_FILES_DIR/final_results.csv"
-    python3 "$SCRIPTS_FOLDER/gen_summarized_opt_csv_report.py"
-done
+#     export CSV_FILE="$CSV_FILES_DIR/final_results.csv"
+#     python3 "$SCRIPTS_FOLDER/gen_summarized_opt_csv_report.py"
+# done

@@ -23,15 +23,16 @@ do
     do 
         if [ -d $BENCH_DIR/$d ]
         then
-            # Runtime error with Nisse
-            if [[ $d =~ ^"consumer" ]]; then continue; fi
-            if [ "$d" = "security_rijndael_e" ]; then continue; fi
+            # # Runtime error with Nisse
+            # if [[ $d =~ ^"consumer" ]]; then continue; fi
+            # if [ "$d" = "security_rijndael_e" ]; then continue; fi
 
-            # Runtime error
-            if [ "$d" = "office_ispell" ]; then continue; fi
-            if [ "$d" = "security_rijndael_e" ]; then continue; fi
+            # # Runtime error
+            # if [ "$d" = "office_ispell" ]; then continue; fi
+            # if [ "$d" = "security_rijndael_e" ]; then continue; fi
             
             # Compilation error
+            if [ "$d" = "consumer_lame" ]; then continue; fi
             if [ "$d" = "consumer_mad" ]; then continue; fi
             if [ "$d" = "office_ghostscript" ]; then continue; fi
             if [ "$d" = "office_rsynth" ]; then continue; fi
@@ -47,7 +48,7 @@ do
                 if [[ $ret_code -ne 0 ]]
                 then
                     echo "Benchmark $d failed"
-                    exit 1
+                    # exit 1
                 fi
             fi
         fi

@@ -2,7 +2,7 @@
 
 if [ -z $BASE_DIR ]
 then
-    export BASE_DIR="/home/jvf/Codes/hydra"
+    export BASE_DIR="/home/elisa/Codes/hydra"
 fi
 
 # Experiment 1:
@@ -339,136 +339,136 @@ done
 
 
 
-# # Part 3: Run Hydra on optimization flags
+# # # Part 3: Run Hydra on optimization flags
 
-# simplifycfg
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/simplifycfg" --new-passes="simplifycfg" --matching-threshold="25"
+# # simplifycfg
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/simplifycfg" --new-passes="simplifycfg" --matching-threshold="25"
 
-# instcombine
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/instcombine" --new-passes="instcombine" --matching-threshold="25"
+# # instcombine
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/instcombine" --new-passes="instcombine" --matching-threshold="25"
 
-# early-cse-memssa
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/early-cse-memssa" --new-passes="early-cse-memssa" --matching-threshold="25"
+# # early-cse-memssa
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/early-cse-memssa" --new-passes="early-cse-memssa" --matching-threshold="25"
 
-# gvn
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/gvn" --new-passes="gvn" --matching-threshold="25"
+# # gvn
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/gvn" --new-passes="gvn" --matching-threshold="25"
 
-# sroa
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/sroa" --new-passes="sroa" --matching-threshold="25"
+# # sroa
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/sroa" --new-passes="sroa" --matching-threshold="25"
 
-# jump-threading
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/jump-threading" --new-passes="jump-threading" --matching-threshold="25"
+# # jump-threading
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/jump-threading" --new-passes="jump-threading" --matching-threshold="25"
 
-# mem2reg
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/mem2reg" --new-passes="mem2reg" --matching-threshold="25"
+# # mem2reg
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/mem2reg" --new-passes="mem2reg" --matching-threshold="25"
 
-# licm
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/licm" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="licm" --matching-threshold="25"
+# # licm
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/licm" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="licm" --matching-threshold="25"
 
-# # loop-rotate
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/loop-rotate" --pre-passes="simplifycfg lcssa" --new-passes="loop-rotate" --matching-threshold="25"
+# # # loop-rotate
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/loop-rotate" --pre-passes="simplifycfg lcssa" --new-passes="loop-rotate" --matching-threshold="25"
 
-# indvars
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/indvars" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="indvars" --matching-threshold="25"
+# # indvars
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/indvars" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="indvars" --matching-threshold="25"
 
-# correlated-propagation
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/correlated-propagation" --new-passes="correlated-propagation" --matching-threshold="25"
+# # correlated-propagation
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/correlated-propagation" --new-passes="correlated-propagation" --matching-threshold="25"
 
-# mldst-motion
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/mldst-motion" --new-passes="mldst-motion" --matching-threshold="25"
+# # mldst-motion
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/mldst-motion" --new-passes="mldst-motion" --matching-threshold="25"
 
-# reassociate
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/reassociate" --new-passes="reassociate" --matching-threshold="25"
+# # reassociate
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/reassociate" --new-passes="reassociate" --matching-threshold="25"
 
-# slp-vectorizer
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/slp-vectorizer" --new-passes="slp-vectorizer" --matching-threshold="25"
+# # slp-vectorizer
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/slp-vectorizer" --new-passes="slp-vectorizer" --matching-threshold="25"
 
-# tailcallelim
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/tailcallelim" --new-passes="tailcallelim" --matching-threshold="25"
+# # tailcallelim
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/tailcallelim" --new-passes="tailcallelim" --matching-threshold="25"
 
-# dse
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/dse" --new-passes="dse" --matching-threshold="25"
+# # dse
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/dse" --new-passes="dse" --matching-threshold="25"
 
-# inferattrs
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/inferattrs" --new-passes="inferattrs" --matching-threshold="25"
+# # inferattrs
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/inferattrs" --new-passes="inferattrs" --matching-threshold="25"
 
-# speculative-execution
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/speculative-execution" --new-passes="speculative-execution" --matching-threshold="25"
+# # speculative-execution
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/speculative-execution" --new-passes="speculative-execution" --matching-threshold="25"
 
-# memcpyopt
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/memcpyopt" --new-passes="memcpyopt" --matching-threshold="25"
+# # memcpyopt
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/memcpyopt" --new-passes="memcpyopt" --matching-threshold="25"
 
-# instsimplify
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/instsimplify" --new-passes="instsimplify" --matching-threshold="25"
+# # instsimplify
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/instsimplify" --new-passes="instsimplify" --matching-threshold="25"
 
-# ipsccp
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/ipsccp" --new-passes="ipsccp" --matching-threshold="25"
+# # ipsccp
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/ipsccp" --new-passes="ipsccp" --matching-threshold="25"
 
-# adce
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/adce" --new-passes="adce" --matching-threshold="25"
+# # adce
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/adce" --new-passes="adce" --matching-threshold="25"
 
-# bdce
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/bdce" --new-passes="bdce" --matching-threshold="25"
+# # bdce
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/bdce" --new-passes="bdce" --matching-threshold="25"
 
-# loop-unroll
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/loop-unroll" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="loop-unroll" --matching-threshold="25"
+# # loop-unroll
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/loop-unroll" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="loop-unroll" --matching-threshold="25"
 
-# aggressive-instcombine
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/aggressive-instcombine" --new-passes="aggressive-instcombine" --matching-threshold="25"
+# # aggressive-instcombine
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/aggressive-instcombine" --new-passes="aggressive-instcombine" --matching-threshold="25"
 
-# simple-loop-unswitch
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/simple-loop-unswitch" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="simple-loop-unswitch" --matching-threshold="25"
+# # simple-loop-unswitch
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/simple-loop-unswitch" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="simple-loop-unswitch" --matching-threshold="25"
 
-# globalopt
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/globalopt" --new-passes="globalopt" --matching-threshold="25"
+# # globalopt
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/globalopt" --new-passes="globalopt" --matching-threshold="25"
 
-# sccp
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/sccp" --new-passes="sccp" --matching-threshold="25"
+# # sccp
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/sccp" --new-passes="sccp" --matching-threshold="25"
 
-# loop-deletion
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/loop-deletion" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="loop-deletion" --matching-threshold="25"
+# # loop-deletion
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/loop-deletion" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="loop-deletion" --matching-threshold="25"
 
-# loop-idiom
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/loop-idiom" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="loop-idiom" --matching-threshold="25"
+# # loop-idiom
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/loop-idiom" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="loop-idiom" --matching-threshold="25"
 
-# loop-sink
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/loop-sink" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="loop-sink" --matching-threshold="25"
+# # loop-sink
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/loop-sink" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="loop-sink" --matching-threshold="25"
 
-# loop-vectorize
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/loop-vectorize" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="loop-vectorize" --matching-threshold="25"
+# # loop-vectorize
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/loop-vectorize" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="loop-vectorize" --matching-threshold="25"
 
-# loop-load-elim
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/loop-load-elim" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="loop-load-elim" --matching-threshold="25"
+# # loop-load-elim
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/loop-load-elim" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="loop-load-elim" --matching-threshold="25"
 
-# div-rem-pairs
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/div-rem-pairs" --new-passes="div-rem-pairs" --matching-threshold="25"
+# # div-rem-pairs
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/div-rem-pairs" --new-passes="div-rem-pairs" --matching-threshold="25"
 
-# loop-simplify
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/loop-simplify" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="loop-simplify" --matching-threshold="25"
+# # loop-simplify
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/loop-simplify" --pre-passes="simplifycfg lcssa loop-rotate" --new-passes="loop-simplify" --matching-threshold="25"
 
-# globals-aa
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/globals-aa" --new-passes="globals-aa" --matching-threshold="25"
+# # globals-aa
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/globals-aa" --new-passes="globals-aa" --matching-threshold="25"
 
-# strip-dead-prototypes
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/strip-dead-prototypes" --new-passes="strip-dead-prototypes" --matching-threshold="25"
+# # strip-dead-prototypes
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/strip-dead-prototypes" --new-passes="strip-dead-prototypes" --matching-threshold="25"
 
-# lower-constant-intrinsics
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/lower-constant-intrinsics" --new-passes="lower-constant-intrinsics" --matching-threshold="25"
+# # lower-constant-intrinsics
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/lower-constant-intrinsics" --new-passes="lower-constant-intrinsics" --matching-threshold="25"
 
-# lcssa
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/lcssa" --pre-passes="simplifycfg loop-rotate" --new-passes="lcssa" --matching-threshold="25"
+# # lcssa
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/lcssa" --pre-passes="simplifycfg loop-rotate" --new-passes="lcssa" --matching-threshold="25"
 
-# inline
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/inline" --pre-passes="simplifycfg lcssa loop-rotate globalopt adce" --new-passes="inline" --matching-threshold="25"
+# # inline
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/inline" --pre-passes="simplifycfg lcssa loop-rotate globalopt adce" --new-passes="inline" --matching-threshold="25"
 
-# function-attrs
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/function-attrs" --new-passes="function-attrs" --matching-threshold="25"
+# # function-attrs
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/function-attrs" --new-passes="function-attrs" --matching-threshold="25"
 
-# forceattrs
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/forceattrs" --new-passes="forceattrs" --matching-threshold="25"
+# # forceattrs
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/forceattrs" --new-passes="forceattrs" --matching-threshold="25"
 
-# callsite-splitting
-"$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/callsite-splitting" --new-passes="callsite-splitting" --matching-threshold="25"
+# # callsite-splitting
+# "$BASE_DIR/Experiments/Profile_Projection/Scripts/run.sh" --exp-name="Opts/o0/callsite-splitting" --new-passes="callsite-splitting" --matching-threshold="25"
 
 # # Part 4: run static prediction algorithms on optimization flags
 
@@ -601,4 +601,4 @@ done
 # # callsite-splitting
 # "$BASE_DIR/Experiments/Profile_Prediction/Scripts/run.sh" --exp-name="Opts/o0/callsite-splitting" --passes="callsite-splitting"
 
-"$BASE_DIR/Experiments/Scripts/gen_csvs.sh"
+# "$BASE_DIR/Experiments/Scripts/gen_csvs.sh"
