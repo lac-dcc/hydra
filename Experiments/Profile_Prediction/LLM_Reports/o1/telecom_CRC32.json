@@ -1,0 +1,218 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "updateCRC32",
+      "numBB": 1,
+      "originalSet": "bb",
+      "predictedSet": "bb",
+      "tokenCount": 1066,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "The function consists of only one basic block (bb), which performs all the operations, including truncation, XOR, table lookup, and bitwise operations. Since there are no other blocks, bb is inherently the hottest block.\n\n- **Summary**: The total number of blocks in the list is exactly 1."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "crc32file",
+      "numBB": 10,
+      "originalSet": "bb, bb5.preheader, bb4, bb5, bb9, bb19, bb19.bb23_crit_edge, bb22, bb23, bb26",
+      "predictedSet": "bb9, bb5, bb5.preheader, bb19, bb19.bb23_crit_edge, bb23, bb26, bb4, bb22, bb",
+      "tokenCount": 2027,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb9"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb5.preheader"
+      },
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb19.bb23_crit_edge"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- The hottest block is bb9 because it is part of the main loop that processes each character of the file, making it the most frequently executed block.\n  - bb5 is the loop header and is executed once per iteration, making it the second hottest.\n  - bb5.preheader is executed once before entering the loop, so it is less hot than the loop body.\n  - bb19 handles the loop exit condition and is executed once when the loop terminates.\n  - bb19.bb23_crit_edge and bb23 are part of the cleanup after the loop, executed once after the loop ends.\n  - bb26 is the final block, executed once at the end of the function.\n  - bb4 handles the error case for file opening and is executed only if the file cannot be opened.\n  - bb22 handles the error case for file reading and is executed only if an error occurs during reading.\n  - bb is the entry block and is executed only once at the start of the function.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 10."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "crc32buf",
+      "numBB": 7,
+      "originalSet": "bb, bb.bb19_crit_edge, bb2.preheader, bb2, bb2.bb2_crit_edge, bb17, bb19",
+      "predictedSet": "bb2, bb2.bb2_crit_edge, bb2.preheader, bb17, bb19, bb, bb.bb19_crit_edge",
+      "tokenCount": 1721,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb2"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb2"
+      },
+      {
+        "name": "bb2.bb2_crit_edge"
+      },
+      {
+        "name": "bb2.preheader"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb.bb19_crit_edge"
+      }
+    ],
+    "additionalNotes": "- The block bb2 is the hottest because it contains the main loop body, which is executed repeatedly based on the loop condition.  \n  - bb2.bb2_crit_edge is the next hottest as it serves as the critical edge for the loop back to bb2.  \n  - bb2.preheader is executed once before entering the loop, making it less hot than the loop body.  \n  - bb17 is executed once after the loop exits, followed by bb19, which finalizes the function.  \n  - bb and bb.bb19_crit_edge are executed only once at the start and during the transition to bb19, respectively, making them the least hot.  \n\n- **Summary**: The total number of blocks in the sorted list is exactly 7."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "main1",
+      "numBB": 10,
+      "originalSet": "bb, bb.bb26_crit_edge, bb5, bb7, bb7.bb21_crit_edge, bb16, bb21, bb21.bb7_crit_edge, bb23, bb26",
+      "predictedSet": "bb7, bb21, bb21.bb7_crit_edge, bb7.bb21_crit_edge, bb5, bb16, bb23, bb, bb26, bb.bb26_crit_edge",
+      "tokenCount": 2114,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb7"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb21.bb7_crit_edge"
+      },
+      {
+        "name": "bb7.bb21_crit_edge"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb.bb26_crit_edge"
+      }
+    ],
+    "additionalNotes": "- bb7 is the hottest block because it contains a loop structure with a phi node and is revisited multiple times during the loop iterations.\n  - bb21 is the second hottest block as it is part of the loop and determines whether the loop continues.\n  - bb21.bb7_crit_edge and bb7.bb21_crit_edge are loop-related edges, making them relatively hot.\n  - bb5 is executed once before entering the loop, making it less hot than the loop blocks.\n  - bb16 is executed conditionally within the loop, making it less frequent than the loop's main path.\n  - bb23 is executed after the loop exits, making it cooler than the loop blocks.\n  - bb is the entry block, executed once.\n  - bb26 is the exit block, executed once.\n  - bb.bb26_crit_edge is a cold edge leading to the exit.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 10."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "main",
+      "numBB": 9,
+      "originalSet": "bb, bb4, bb7, bb7.bb21_crit_edge, bb12.preheader, bb12, bb12.bb12_crit_edge, bb21.loopexit, bb21",
+      "predictedSet": "bb12, bb12.bb12_crit_edge, bb12.preheader, bb7, bb7.bb21_crit_edge, bb21.loopexit, bb21, bb, bb4",
+      "tokenCount": 2015,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb12"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb12.bb12_crit_edge"
+      },
+      {
+        "name": "bb12.preheader"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb7.bb21_crit_edge"
+      },
+      {
+        "name": "bb21.loopexit"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb4"
+      }
+    ],
+    "additionalNotes": "- The hottest block is bb12 because it is part of the loop body, which is likely to execute multiple times depending on the loop condition.\n  - bb12.bb12_crit_edge and bb12.preheader are also hot due to their involvement in the loop structure.\n  - bb7 is executed before the loop and is relatively hot, but less so than the loop blocks.\n  - bb7.bb21_crit_edge and bb21.loopexit are less hot as they are part of loop exit handling.\n  - bb21 is executed at the end of the function and is cooler than the loop-related blocks.\n  - bb is the entry block and executes only once.\n  - bb4 is the coldest block as it handles the error path, which is less likely to occur.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 9. No blocks are missing or duplicated."
+  }
+]

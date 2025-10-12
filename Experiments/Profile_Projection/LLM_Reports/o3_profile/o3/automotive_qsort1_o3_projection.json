@@ -1,0 +1,271 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_qsort1",
+      "funcName": "main",
+      "numBB": 9,
+      "originalSet": "bb, bb4, bb7, bb7.bb21_crit_edge, bb12.preheader, bb12, bb12.bb12_crit_edge, bb21.loopexit, bb21",
+      "predictedSet": "bb12, bb12.bb12_crit_edge, bb12.preheader, bb, bb7, bb21, bb21.loopexit, bb7.bb21_crit_edge, bb4",
+      "tokenCount": 3385,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb12"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb12.bb12_crit_edge"
+      },
+      {
+        "name": "bb12.preheader"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb21.loopexit"
+      },
+      {
+        "name": "bb7.bb21_crit_edge"
+      },
+      {
+        "name": "bb4"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The basic blocks in the optimized function largely correspond to those in the original function, with no significant structural changes. The loop structure (bb12, bb12.bb12_crit_edge, bb12.preheader) remains intact, and the entry/exit blocks (bb, bb21) are preserved.\n    - bb4 corresponds to the error-handling path, which is rarely executed (freq = 0).\n    - bb7 corresponds to the block after the file is successfully opened, leading to the loop.\n    - bb7.bb21_crit_edge and bb21.loopexit are intermediate blocks with minimal execution counts.\n\n  - **Computed O1 freq(bb) Table**:\n    - bb (entry): 1\n    - bb4 (error path): 0\n    - bb7 (file opened): 1\n    - bb7.bb21_crit_edge: 0\n    - bb12.preheader: 1\n    - bb12 (loop body): 226\n    - bb12.bb12_crit_edge: 225\n    - bb21.loopexit: 1\n    - bb21 (exit): 1\n\n  - **Block Splitting/Merging**:\n    - No blocks were split or merged in the optimized function. The structure remains consistent with the original.\n\n  - **Summary**:\n    The total number of blocks in the sorted list is exactly 9. No blocks are missing or duplicated."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_qsort1",
+      "funcName": "main1",
+      "numBB": 23,
+      "originalSet": "bb, bb7, bb10, bb14, bb14.bb44_crit_edge, bb18, bb18.bb44split_crit_edge, bb21, bb26, bb44splitsplit, bb44split, bb44, bb48, bb52, bb52.bb71_crit_edge, bb54, bb57, bb60, bb60.bb60_crit_edge, bb71.loopexit, bb71, bb73, bb74",
+      "predictedSet": "bb26, bb21, bb18, bb14, bb60, bb60.bb60_crit_edge, bb74, bb10, bb0, bb14.bb44_crit_edge, bb44, bb73, bb48, bb52, bb54, bb71, bb71.loopexit, bb7, bb57, bb44split, bb44splitsplit, bb18.bb44split_crit_edge, bb52.bb71_crit_edge",
+      "tokenCount": 6028,
+      "discrepancy": true,
+      "duplicates": [],
+      "missing": [
+        "bb"
+      ],
+      "extra": [
+        "bb0"
+      ],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb26"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb18"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb60"
+      },
+      {
+        "name": "bb60.bb60_crit_edge"
+      },
+      {
+        "name": "bb74"
+      },
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb0"
+      },
+      {
+        "name": "bb14.bb44_crit_edge"
+      },
+      {
+        "name": "bb44"
+      },
+      {
+        "name": "bb73"
+      },
+      {
+        "name": "bb48"
+      },
+      {
+        "name": "bb52"
+      },
+      {
+        "name": "bb54"
+      },
+      {
+        "name": "bb71"
+      },
+      {
+        "name": "bb71.loopexit"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb57"
+      },
+      {
+        "name": "bb44split"
+      },
+      {
+        "name": "bb44splitsplit"
+      },
+      {
+        "name": "bb18.bb44split_crit_edge"
+      },
+      {
+        "name": "bb52.bb71_crit_edge"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**: \n    - The hottest block in the original profile (bb26) corresponds directly to the hottest block in the optimized function. This is evident from the high execution count of 8170352 in the original profile.\n    - Blocks like bb14, bb18, and bb21 also retain their high execution counts in the optimized function.\n    - Blocks such as bb44splitsplit, bb44split, and bb18.bb44split_crit_edge have zero execution counts in the original profile and are ranked lowest.\n  - **Computed O1 freq(bb) Table**:\n    - bb26: 8170352\n    - bb21: 8170352\n    - bb18: 8170352\n    - bb14: 8170578\n    - bb60: 101\n    - bb60.bb60_crit_edge: 100\n    - bb74: 226\n    - bb10: 226\n    - bb0: 226\n    - bb14.bb44_crit_edge: 226\n    - bb44: 226\n    - bb73: 225\n    - bb48: 1\n    - bb52: 1\n    - bb54: 1\n    - bb71: 1\n    - bb71.loopexit: 1\n    - bb7: 0\n    - bb57: 0\n    - bb44split: 0\n    - bb44splitsplit: 0\n    - bb18.bb44split_crit_edge: 0\n    - bb52.bb71_crit_edge: 0\n  - **Block Splitting/Merging**:\n    - Some blocks like bb44splitsplit and bb44split appear to be split versions of bb44 but are not executed in the profile.\n    - No blocks were removed entirely, but some have zero execution counts.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 23."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_qsort1",
+      "funcName": "qsortx",
+      "numBB": 106,
+      "originalSet": "bb, bb.bb298_crit_edge, bb8, bb28, bb34, bb43, bb43.bb284_crit_edge, bb45, bb47, bb47.bb58_crit_edge, bb50.preheader, bb50, bb50.bb50_crit_edge, bb58.loopexit, bb58, bb58.bb100_crit_edge, bb61, bb61.bb74_crit_edge, bb62.preheader, bb62, bb62.bb62_crit_edge, bb74.loopexit, bb74, bb74.bb100_crit_edge, bb78.preheader, bb78, bb78.bb78_crit_edge, bb100.loopexit, bb100, bb100.bb47_crit_edge, bb103, bb103.bb148_crit_edge, bb107, bb107.bb122_crit_edge, bb110.preheader, bb110, bb110.bb110_crit_edge, bb122.loopexit, bb122, bb122.bb148_crit_edge, bb126.preheader, bb126, bb126.bb126_crit_edge, bb148.loopexit, bb148, bb149, bb152, bb152.bb159_crit_edge, bb156, bb156.bb152_crit_edge, bb159split, bb159, bb160, bb160.bb167_crit_edge, bb164, bb164.bb160_crit_edge, bb167split, bb167, bb169, bb169.bb171_crit_edge, bb171.loopexit, bb171, bb172, bb172.bb185_crit_edge, bb173.preheader, bb173, bb173.bb173_crit_edge, bb185.loopexit, bb185, bb185.bb171_crit_edge, bb189.preheader, bb189, bb189.bb189_crit_edge, bb211, bb211.bb252_crit_edge, bb213, bb213.bb226_crit_edge, bb214.preheader, bb214, bb214.bb214_crit_edge, bb226.loopexit, bb226, bb226.bb252_crit_edge, bb230.preheader, bb230, bb230.bb230_crit_edge, bb252.loopexit, bb252, bb259, bb259.bb268_crit_edge, bb262, bb268, bb268.bb34_crit_edge, bb271, bb271.bb278_crit_edge, bb273, bb278, bb278.bb284_crit_edge, bb282, bb284.loopexit, bb284.loopexit1, bb284, bb287, bb294, bb298.loopexit, bb298",
+      "predictedSet": "",
+      "tokenCount": 20837,
+      "discrepancy": true,
+      "duplicates": [],
+      "missing": [
+        "bb",
+        "bb.bb298_crit_edge",
+        "bb8",
+        "bb28",
+        "bb34",
+        "bb43",
+        "bb43.bb284_crit_edge",
+        "bb45",
+        "bb47",
+        "bb47.bb58_crit_edge",
+        "bb50.preheader",
+        "bb50",
+        "bb50.bb50_crit_edge",
+        "bb58.loopexit",
+        "bb58",
+        "bb58.bb100_crit_edge",
+        "bb61",
+        "bb61.bb74_crit_edge",
+        "bb62.preheader",
+        "bb62",
+        "bb62.bb62_crit_edge",
+        "bb74.loopexit",
+        "bb74",
+        "bb74.bb100_crit_edge",
+        "bb78.preheader",
+        "bb78",
+        "bb78.bb78_crit_edge",
+        "bb100.loopexit",
+        "bb100",
+        "bb100.bb47_crit_edge",
+        "bb103",
+        "bb103.bb148_crit_edge",
+        "bb107",
+        "bb107.bb122_crit_edge",
+        "bb110.preheader",
+        "bb110",
+        "bb110.bb110_crit_edge",
+        "bb122.loopexit",
+        "bb122",
+        "bb122.bb148_crit_edge",
+        "bb126.preheader",
+        "bb126",
+        "bb126.bb126_crit_edge",
+        "bb148.loopexit",
+        "bb148",
+        "bb149",
+        "bb152",
+        "bb152.bb159_crit_edge",
+        "bb156",
+        "bb156.bb152_crit_edge",
+        "bb159split",
+        "bb159",
+        "bb160",
+        "bb160.bb167_crit_edge",
+        "bb164",
+        "bb164.bb160_crit_edge",
+        "bb167split",
+        "bb167",
+        "bb169",
+        "bb169.bb171_crit_edge",
+        "bb171.loopexit",
+        "bb171",
+        "bb172",
+        "bb172.bb185_crit_edge",
+        "bb173.preheader",
+        "bb173",
+        "bb173.bb173_crit_edge",
+        "bb185.loopexit",
+        "bb185",
+        "bb185.bb171_crit_edge",
+        "bb189.preheader",
+        "bb189",
+        "bb189.bb189_crit_edge",
+        "bb211",
+        "bb211.bb252_crit_edge",
+        "bb213",
+        "bb213.bb226_crit_edge",
+        "bb214.preheader",
+        "bb214",
+        "bb214.bb214_crit_edge",
+        "bb226.loopexit",
+        "bb226",
+        "bb226.bb252_crit_edge",
+        "bb230.preheader",
+        "bb230",
+        "bb230.bb230_crit_edge",
+        "bb252.loopexit",
+        "bb252",
+        "bb259",
+        "bb259.bb268_crit_edge",
+        "bb262",
+        "bb268",
+        "bb268.bb34_crit_edge",
+        "bb271",
+        "bb271.bb278_crit_edge",
+        "bb273",
+        "bb278",
+        "bb278.bb284_crit_edge",
+        "bb282",
+        "bb284.loopexit",
+        "bb284.loopexit1",
+        "bb284",
+        "bb287",
+        "bb294",
+        "bb298.loopexit",
+        "bb298"
+      ],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb160"
+    },
+    "bbOrderByHotness": [],
+    "additionalNotes": ""
+  }
+]

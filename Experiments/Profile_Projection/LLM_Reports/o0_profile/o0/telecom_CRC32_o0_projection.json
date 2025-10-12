@@ -1,0 +1,176 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "crc32file",
+      "numBB": 10,
+      "originalSet": "bb, bb5, bb6, bb7, bb10, bb21, bb21.bb25_crit_edge, bb24, bb25, bb28",
+      "predictedSet": "bb10, bb7, bb21, bb21.bb25_crit_edge, bb25, bb6, bb28, bb, bb5, bb24",
+      "tokenCount": 3162,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb10"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb21.bb25_crit_edge"
+      },
+      {
+        "name": "bb25"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb28"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb24"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The structure of the optimized function closely mirrors the original function, so the mapping is straightforward. Each basic block in the optimized function corresponds directly to its counterpart in the original function.\n    - For example, bb10 in the optimized function corresponds to 10 in the original profile, and so on.\n  \n  - **Computed O0 freq(bb) Table**:\n    - bb: 3431\n    - bb5: 0\n    - bb6: 3431\n    - bb7: 529825313\n    - bb10: 529821882\n    - bb21: 3431\n    - bb21.bb25_crit_edge: 3431\n    - bb24: 0\n    - bb25: 3431\n    - bb28: 3431\n\n  - **Block Splitting, Merging, or Removal**:\n    - No blocks were split, merged, or removed in the optimized function. The structure remains consistent with the original.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 10."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "crc32buf",
+      "numBB": 5,
+      "originalSet": "bb, bb4, bb5, bb14, bb17",
+      "predictedSet": "bb4, bb5, bb14, bb17, bb",
+      "tokenCount": 2224,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb4"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**: The structure of the optimized function is identical to the original function at -O0. Each basic block in the optimized function corresponds directly to its counterpart in the original function.\n  - **Computed O0 freq(bb) Table**:\n    text\n    bb: 0\n    bb4: 0\n    bb5: 0\n    bb14: 0\n    bb17: 0\n    \n    Since all basic block counts are 0 in the profile, we assume that the function was not executed during profiling. However, based on the control flow structure, bb4 is the entry point of the loop and is likely to be the hottest block if the function were executed.\n  - **Block Analysis**:\n    - bb4 is the loop header and is expected to execute most frequently.\n    - bb5 and bb14 are part of the loop body and will execute less frequently than bb4.\n    - bb17 is the exit block and will execute once after the loop terminates.\n    - bb is the entry block and will execute only once at the start of the function.\n  - **Summary**: The total number of blocks in the sorted list is exactly 5."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "main1",
+      "numBB": 7,
+      "originalSet": "bb, bb6, bb9, bb9.bb20_crit_edge, bb15, bb20, bb21",
+      "predictedSet": "bb6, bb9, bb9.bb20_crit_edge, bb20, bb, bb21, bb15",
+      "tokenCount": 2737,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb6"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb9.bb20_crit_edge"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb15"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - bb in the optimized function corresponds to 0 in the original profile.\n    - bb6 in the optimized function corresponds to 6 in the original profile.\n    - bb9 in the optimized function corresponds to 9 in the original profile.\n    - bb9.bb20_crit_edge in the optimized function corresponds to 9_20.ce in the original profile.\n    - bb15 in the optimized function corresponds to 15 in the original profile.\n    - bb20 in the optimized function corresponds to 20 in the original profile.\n    - bb21 in the optimized function corresponds to 21 in the original profile.\n  - **Computed O0 freq(bb) Table**:\n    - bb: 3431\n    - bb6: 6862\n    - bb9: 3431\n    - bb9.bb20_crit_edge: 3430\n    - bb15: 1\n    - bb20: 3431\n    - bb21: 3431\n  - **Block Splitting/Merging**:\n    - No blocks were split or merged in the optimized function. The structure of the basic blocks remains consistent between the original and optimized versions.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 7."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_CRC32",
+      "funcName": "main",
+      "numBB": 8,
+      "originalSet": "bb, bb5, bb8, bb11, bb14, bb20, bb22, bb23",
+      "predictedSet": "bb11, bb14, bb20, bb22, bb8, bb23, bb, bb5",
+      "tokenCount": 2701,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb11"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb5"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**: The structure of the optimized function is nearly identical to the original function at -O0. Each basic block in the optimized function corresponds directly to a block in the original function. No blocks were split, merged, or removed.\n  - **Computed O0 freq(bb) Table**:\n    - bb: 1\n    - bb5: 0\n    - bb8: 1\n    - bb11: 3432\n    - bb14: 3431\n    - bb20: 3431\n    - bb22: 1\n    - bb23: 1\n  - **Reasoning**:\n    - bb11 is the hottest block because it has the highest execution count (3432) in the profile.\n    - bb14 and bb20 follow closely with 3431 executions each, as they are part of the loop.\n    - bb22, bb8, and bb23 are executed only once, but bb22 is ranked higher because it is part of the loop exit path.\n    - bb is executed once at the start, and bb5 is never executed.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 8."
+  }
+]

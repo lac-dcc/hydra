@@ -1,0 +1,318 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_d",
+      "funcName": "adpcm_coder",
+      "numBB": 38,
+      "originalSet": "bb, bb32, bb34, bb34.bb45_crit_edge, bb43, bb45, bb45.bb51_crit_edge, bb48, bb51, bb51.bb58_crit_edge, bb54, bb58, bb58.bb64_crit_edge, bb61, bb64, bb66, bb68, bb70, bb72, bb73, bb73.bb76_crit_edge, bb75, bb76, bb77, bb77.bb85_crit_edge, bb84, bb85, bb85.bb88_crit_edge, bb87, bb88, bb93, bb96, bb101, bb105, bb107, bb107.bb112_crit_edge, bb109, bb112",
+      "predictedSet": "bb, bb32, bb34, bb34.bb45_crit_edge, bb43, bb45, bb45.bb51_crit_edge, bb48, bb51, bb51.bb58_crit_edge, bb54, bb58, bb58.bb64_crit_edge, bb61, bb64, bb66, bb68, bb70, bb72, bb73, bb73.bb76_crit_edge, bb75, bb76, bb77, bb77.bb85_crit_edge, bb84, bb85, bb85.bb88_crit_edge, bb87, bb88, bb93, bb96, bb101, bb105, bb107, bb107.bb112_crit_edge, bb109, bb112",
+      "tokenCount": 7664,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb32"
+      },
+      {
+        "name": "bb34"
+      },
+      {
+        "name": "bb34.bb45_crit_edge"
+      },
+      {
+        "name": "bb43"
+      },
+      {
+        "name": "bb45"
+      },
+      {
+        "name": "bb45.bb51_crit_edge"
+      },
+      {
+        "name": "bb48"
+      },
+      {
+        "name": "bb51"
+      },
+      {
+        "name": "bb51.bb58_crit_edge"
+      },
+      {
+        "name": "bb54"
+      },
+      {
+        "name": "bb58"
+      },
+      {
+        "name": "bb58.bb64_crit_edge"
+      },
+      {
+        "name": "bb61"
+      },
+      {
+        "name": "bb64"
+      },
+      {
+        "name": "bb66"
+      },
+      {
+        "name": "bb68"
+      },
+      {
+        "name": "bb70"
+      },
+      {
+        "name": "bb72"
+      },
+      {
+        "name": "bb73"
+      },
+      {
+        "name": "bb73.bb76_crit_edge"
+      },
+      {
+        "name": "bb75"
+      },
+      {
+        "name": "bb76"
+      },
+      {
+        "name": "bb77"
+      },
+      {
+        "name": "bb77.bb85_crit_edge"
+      },
+      {
+        "name": "bb84"
+      },
+      {
+        "name": "bb85"
+      },
+      {
+        "name": "bb85.bb88_crit_edge"
+      },
+      {
+        "name": "bb87"
+      },
+      {
+        "name": "bb88"
+      },
+      {
+        "name": "bb93"
+      },
+      {
+        "name": "bb96"
+      },
+      {
+        "name": "bb101"
+      },
+      {
+        "name": "bb105"
+      },
+      {
+        "name": "bb107"
+      },
+      {
+        "name": "bb107.bb112_crit_edge"
+      },
+      {
+        "name": "bb109"
+      },
+      {
+        "name": "bb112"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**: The mapping between the original function and the optimized function is straightforward, as the structure of the control flow graph (CFG) is preserved. However, the profiling data indicates that all blocks in the original function have a frequency of 0. This means that no block in the original function was executed during the profiling run, and thus, all blocks in the optimized function inherit the same frequency of 0.\n  - **Computed O1 freq(bb) Table**:\n    text\n    bb: 0\n    bb32: 0\n    bb34: 0\n    bb34.bb45_crit_edge: 0\n    bb43: 0\n    bb45: 0\n    bb45.bb51_crit_edge: 0\n    bb48: 0\n    bb51: 0\n    bb51.bb58_crit_edge: 0\n    bb54: 0\n    bb58: 0\n    bb58.bb64_crit_edge: 0\n    bb61: 0\n    bb64: 0\n    bb66: 0\n    bb68: 0\n    bb70: 0\n    bb72: 0\n    bb73: 0\n    bb73.bb76_crit_edge: 0\n    bb75: 0\n    bb76: 0\n    bb77: 0\n    bb77.bb85_crit_edge: 0\n    bb84: 0\n    bb85: 0\n    bb85.bb88_crit_edge: 0\n    bb87: 0\n    bb88: 0\n    bb93: 0\n    bb96: 0\n    bb101: 0\n    bb105: 0\n    bb107: 0\n    bb107.bb112_crit_edge: 0\n    bb109: 0\n    bb112: 0\n    \n  - **Block Splitting/Merging**: No blocks were split, merged, or removed during optimization. The optimized function retains the same logical structure as the original function.\n  - **Summary**: The total number of blocks in the sorted list is exactly 38."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_d",
+      "funcName": "adpcm_decoder",
+      "numBB": 32,
+      "originalSet": "bb, bb27, bb29, bb31, bb33, bb39, bb39.bb49_crit_edge, bb48, bb49, bb49.bb52_crit_edge, bb51, bb52, bb52.bb60_crit_edge, bb58, bb60, bb60.bb66_crit_edge, bb63, bb66, bb66.bb72_crit_edge, bb69, bb72, bb74, bb76, bb78, bb80, bb81, bb81.bb84_crit_edge, bb83, bb84, bb85, bb91, bb93",
+      "predictedSet": "bb39, bb49, bb52, bb60, bb66, bb72, bb27, bb29, bb33, bb31, bb58, bb63, bb69, bb74, bb76, bb78, bb85, bb91, bb93, bb48, bb51, bb80, bb81, bb84, bb83, bb39.bb49_crit_edge, bb49.bb52_crit_edge, bb52.bb60_crit_edge, bb60.bb66_crit_edge, bb66.bb72_crit_edge, bb81.bb84_crit_edge, bb85",
+      "tokenCount": 6399,
+      "discrepancy": true,
+      "duplicates": [
+        "bb85"
+      ],
+      "missing": [
+        "bb"
+      ],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb39"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb39"
+      },
+      {
+        "name": "bb49"
+      },
+      {
+        "name": "bb52"
+      },
+      {
+        "name": "bb60"
+      },
+      {
+        "name": "bb66"
+      },
+      {
+        "name": "bb72"
+      },
+      {
+        "name": "bb27"
+      },
+      {
+        "name": "bb29"
+      },
+      {
+        "name": "bb33"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb58"
+      },
+      {
+        "name": "bb63"
+      },
+      {
+        "name": "bb69"
+      },
+      {
+        "name": "bb74"
+      },
+      {
+        "name": "bb76"
+      },
+      {
+        "name": "bb78"
+      },
+      {
+        "name": "bb85"
+      },
+      {
+        "name": "bb91"
+      },
+      {
+        "name": "bb93"
+      },
+      {
+        "name": "bb48"
+      },
+      {
+        "name": "bb51"
+      },
+      {
+        "name": "bb80"
+      },
+      {
+        "name": "bb81"
+      },
+      {
+        "name": "bb84"
+      },
+      {
+        "name": "bb83"
+      },
+      {
+        "name": "bb39.bb49_crit_edge"
+      },
+      {
+        "name": "bb49.bb52_crit_edge"
+      },
+      {
+        "name": "bb52.bb60_crit_edge"
+      },
+      {
+        "name": "bb60.bb66_crit_edge"
+      },
+      {
+        "name": "bb66.bb72_crit_edge"
+      },
+      {
+        "name": "bb81.bb84_crit_edge"
+      },
+      {
+        "name": "bb85"
+      }
+    ],
+    "additionalNotes": "- **Mapping Explanation**: The mapping of blocks from the original function to the optimized function was based on structural similarity and control flow. For example, bb13 in the original function corresponds to bb39 in the optimized function, as both are central to the loop and have the highest execution counts.\n  - **Computed O1 freq(bb) Table**:\n    - bb0: 1,114,386\n    - bb7: 1,114,386\n    - bb13: 1,103,099,270\n    - bb23: 551,549,635\n    - bb28: 1,103,099,270\n    - bb69: 1,114,386\n    - bb72: 1,114,386\n  - **Block Splitting/Merging**: Some blocks in the optimized function (e.g., bb39, bb49) represent merged or split versions of blocks in the original function. For instance, bb39 includes the functionality of bb13 and parts of bb28.\n  - **Summary**: The total number of blocks in the sorted list is exactly 32."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_d",
+      "funcName": "main",
+      "numBB": 13,
+      "originalSet": "bb, bb4, bb7, bb10, bb14, bb15, bb17, bb18, bb19, bb22, bb24, bb26, bb30",
+      "predictedSet": "bb22, bb19, bb24, bb26, bb18, bb17, bb15, bb10, bb7, bb4, bb30, bb14, bb",
+      "tokenCount": 4111,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb22"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb24"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb18"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb30"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The hottest block in the original function (bb22) corresponds to bb22 in the optimized function. This block executes the loop body and is the most frequently executed block.\n    - The loop structure (bb22, bb24, bb19) is preserved in the optimized function, with bb19 acting as the loop header.\n    - Blocks like bb14 and bb30 are less frequently executed as they handle error cases or termination.\n    - bb is the entry block and is executed only once.\n  - **Computed O1 freq(bb) Table**:\n    - bb22: 1,114,386\n    - bb19: 78 (loop header)\n    - bb24: 78 (loop increment)\n    - bb26: 78 (post-loop write)\n    - bb18: 78 (loop entry)\n    - bb17: 78 (loop condition)\n    - bb15: 79 (read handling)\n    - bb10: 79 (state handling)\n    - bb7: 1 (file handling)\n    - bb4: 0 (error handling)\n    - bb30: 1 (termination)\n    - bb14: 0 (error handling)\n    - bb: 1 (entry)\n  - **Block Splitting/Merging**:\n    - The loop structure (bb22, bb24, bb19) is optimized but retains the same execution pattern.\n    - Error-handling blocks (bb14, bb4) are preserved but rarely executed.\n  - **Summary**: The total number of blocks in the sorted list is exactly 13."
+  }
+]

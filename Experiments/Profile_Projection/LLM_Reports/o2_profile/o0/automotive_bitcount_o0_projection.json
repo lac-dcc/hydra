@@ -1,0 +1,443 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "bit_count",
+      "numBB": 8,
+      "originalSet": "bb, bb.bb10_crit_edge, bb2, bb3, bb5, bb5.bb3_crit_edge, bb9, bb10",
+      "predictedSet": "bb3, bb5, bb5.bb3_crit_edge, bb2, bb, bb9, bb10, bb.bb10_crit_edge",
+      "tokenCount": 2646,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb3"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb3"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb5.bb3_crit_edge"
+      },
+      {
+        "name": "bb2"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb.bb10_crit_edge"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - bb in the optimized function corresponds to the entry block in the original function.\n    - bb3 in the optimized function corresponds to the loop body in the original function (bb1 in the original).\n    - bb5 and bb5.bb3_crit_edge in the optimized function correspond to the loop continuation and backedge in the original function.\n    - bb9 corresponds to the loop exit in the original function (bb8.loopexit).\n    - bb10 corresponds to the final return block in the original function (bb8).\n    - bb.bb10_crit_edge is an auxiliary block for control flow.\n\n  - **Computed O1 freq(bb) Table**:\n    - bb: 90,000,000 (entry block frequency from 0 -> 1.ph).\n    - bb3: 1,059,527,520 (loop body frequency from 1 -> 1_1.ce and 1_1.ce -> 1).\n    - bb5: 969,527,520 (loop continuation frequency from 1_1.ce -> 1).\n    - bb5.bb3_crit_edge: 969,527,520 (same as bb5 due to backedge).\n    - bb2: 90,000,000 (loop preheader frequency from 0 -> 1.ph).\n    - bb9: 90,000,000 (loop exit frequency from 1 -> 8.le).\n    - bb10: 90,000,000 (final return block frequency from 8.le -> 8).\n    - bb.bb10_crit_edge: 0 (never executed, from 0 -> 0_8.ce).\n\n  - **Block Splitting/Merging**:\n    - The loop structure (bb1 in the original) was split into bb3, bb5, and bb5.bb3_crit_edge in the optimized function.\n    - The final return block (bb8 in the original) was split into bb9 and bb10.\n\n  - **Summary**:\n    - The total number of blocks in the sorted list is exactly 8. No blocks are missing or duplicated."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "ntbl_bitcnt",
+      "numBB": 4,
+      "originalSet": "bb, bb.bb11_crit_edge, bb8, bb11",
+      "predictedSet": "bb, bb8, bb11, bb.bb11_crit_edge",
+      "tokenCount": 2597,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb.bb11_crit_edge"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - bb in the optimized function corresponds to the entry block in the original function (bb in -O2).\n    - bb8 in the optimized function corresponds to the loop body (bb5 and bb5.bb5_crit_edge in -O2).\n    - bb11 in the optimized function corresponds to the loop exit and return block (bb16 in -O2).\n    - bb.bb11_crit_edge in the optimized function corresponds to the critical edge leading to the return block (bb.bb16_crit_edge in -O2).\n  - **Computed O1 freq(bb) Table**:\n    - bb: 90,000,000 (entry block frequency from 0 in -O2).\n    - bb8: 443,116,880 (sum of loop iterations from 5 and 5_5.ce in -O2).\n    - bb11: 89,999,840 (frequency of 16.le in -O2).\n    - bb.bb11_crit_edge: 160 (frequency of 0_16.ce in -O2).\n  - **Block Transformations**:\n    - The loop structure (bb5 and bb5.bb5_crit_edge) was merged into bb8.\n    - The critical edge (bb.bb16_crit_edge) was preserved as bb.bb11_crit_edge.\n    - The return block (bb16) was preserved as bb11.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 4."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "btbl_bitcnt",
+      "numBB": 4,
+      "originalSet": "bb, bb.bb16_crit_edge, bb12, bb16",
+      "predictedSet": "bb, bb12, bb16, bb.bb16_crit_edge",
+      "tokenCount": 2609,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb.bb16_crit_edge"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The bb block in the optimized function corresponds to the entry block in the original function.\n    - The bb.bb16_crit_edge block in the optimized function corresponds to the bb.bb16_crit_edge in the original function.\n    - The bb12 block in the optimized function corresponds to the loop body in the original function (bb5 and its successors).\n    - The bb16 block in the optimized function corresponds to the bb16 block in the original function.\n  - **Computed O1 freq(bb) Table**:\n    - Based on the provided profile data, all basic blocks in the original function have a count of 0. However, the structure of the function suggests that the entry block (bb) is executed at least once, and the recursive call in bb12 implies it is likely executed more frequently than the other blocks.\n  - **Block Transformations**:\n    - The loop structure in the original function (bb5 and its successors) is condensed into the bb12 block in the optimized function.\n    - The bb.bb16_crit_edge block remains as a critical edge block.\n    - The bb16 block serves as the exit point for the function.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 4."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "main1",
+      "numBB": 17,
+      "originalSet": "bb, bb6, bb9, bb9.bb16_crit_edge, bb14, bb16, bb17, bb19, bb20, bb23, bb30, bb33, bb33.bb40_crit_edge, bb35, bb40, bb41, bb43",
+      "predictedSet": "bb20, bb23, bb30, bb17, bb19, bb33, bb33.bb40_crit_edge, bb35, bb40, bb41, bb16, bb9, bb9.bb16_crit_edge, bb14, bb6, bb43, bb",
+      "tokenCount": 11740,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb20"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb30"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb33"
+      },
+      {
+        "name": "bb33.bb40_crit_edge"
+      },
+      {
+        "name": "bb35"
+      },
+      {
+        "name": "bb40"
+      },
+      {
+        "name": "bb41"
+      },
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb9.bb16_crit_edge"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb43"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The hottest block in the original function (bb116) corresponds to the loop in bb20 in the optimized function. This loop iterates heavily, as indicated by the high execution count in the profile.\n    - Blocks like bb132 and bb144 in the original function contribute to the same loop structure in bb20 and its successors in the optimized function.\n    - Blocks bb6, bb9, and bb14 in the optimized function correspond to the initial checks and setup in the original function.\n    - Blocks bb33, bb35, and bb40 handle the conditional branches and output logic, which are less frequently executed.\n\n  - **Computed O1 freq(bb) Table**:\n    - bb20: Derived from bb116 and bb132, with a combined frequency of ~1 billion iterations.\n    - bb23: Corresponds to the inner loop body, inheriting the same frequency as bb20.\n    - bb30: Represents the loop increment and continuation, also inheriting the loop frequency.\n    - bb17: Represents the outer loop, executed ~90 million times.\n    - Other blocks are ranked based on their relative execution counts from the profile.\n\n  - **Block Splitting/Merging**:\n    - The optimized function merges several blocks from the original function into fewer, more compact blocks. For example, the loop structure in bb20 combines logic from multiple blocks in the original function.\n\n  - **Summary**:\n    - The total number of blocks in the sorted list is exactly 17. No blocks are missing or duplicated."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "bfopen",
+      "numBB": 6,
+      "originalSet": "bb, bb3, bb4, bb10, bb11, bb14",
+      "predictedSet": "bb, bb3, bb4, bb11, bb14, bb10",
+      "tokenCount": 2458,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb3"
+      },
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb10"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - bb in the optimized function corresponds to the entry block in the original function (bb in -O2).\n    - bb3 in the optimized function corresponds to bb3 in the original function.\n    - bb4 in the optimized function corresponds to the continuation of bb3 in the original function.\n    - bb10 in the optimized function corresponds to bb6 and bb10 in the original function.\n    - bb11 in the optimized function corresponds to bb7 in the original function.\n    - bb14 in the optimized function corresponds to the final merging point in the original function (bb10).\n\n  - **Computed O1 freq(bb) Table**:\n    - All basic block counts and edge counts in the -O2 profile are 0. This means no execution data is available, so we assume uniform execution likelihood based on the control flow structure.\n\n  - **Reasoning for Hotness Ranking**:\n    - bb is the entry block and will always execute, making it the hottest.\n    - bb3 and bb4 are part of the main execution path after bb and are likely to execute next.\n    - bb11 represents the successful path of fopen and is likely to execute more often than bb10 (failure path).\n    - bb14 is the final merging block and will execute after any path completes.\n    - bb10 represents the failure path and is least likely to execute.\n\n  - **Summary**:\n    - The total number of blocks in the sorted list is exactly 6. No blocks are missing or duplicated."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "bfread",
+      "numBB": 4,
+      "originalSet": "bb, bb.bb11_crit_edge, bb4, bb11",
+      "predictedSet": "bb, bb4, bb11, bb.bb11_crit_edge",
+      "tokenCount": 2495,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb.bb11_crit_edge"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The original function's bb corresponds to the entry block bb in the optimized function.\n    - The original bb3 corresponds to bb.bb11_crit_edge and bb11 in the optimized function.\n    - The original bb7 corresponds to bb4 in the optimized function.\n    - The original bb12 corresponds to bb11 in the optimized function.\n  - **Computed O1 freq(bb) Table**:\n    - Based on the provided profile data, all basic blocks in the original function have a count of 0. This implies no execution data is available, so we assume uniform distribution of execution likelihood.\n  - **Block Transformations**:\n    - The optimized function introduces a critical edge block (bb.bb11_crit_edge) that was not explicitly present in the original function. This block is likely executed less frequently as it serves as a transition.\n    - The bb4 block corresponds to the path where fgetc is called, which may be executed depending on the input conditions.\n    - The bb11 block aggregates the final computation and is executed after either bb4 or bb.bb11_crit_edge.\n\n- **Summary**:\n  The total number of blocks in the sorted list is exactly 4."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "bfwrite",
+      "numBB": 4,
+      "originalSet": "bb, bb.bb13_crit_edge, bb5, bb13",
+      "predictedSet": "bb, bb.bb13_crit_edge, bb5, bb13",
+      "tokenCount": 2536,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb.bb13_crit_edge"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb13"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - bb in the optimized function corresponds to the entry block in the original function (bb in -O2).\n    - bb.bb13_crit_edge in the optimized function corresponds to bb.bb10_crit_edge in the original function.\n    - bb5 in the optimized function corresponds to bb4 in the original function.\n    - bb13 in the optimized function corresponds to bb10 in the original function.\n  - **Computed O1 freq(bb) Table**:\n    - From the -O2 profile, all basic block counts are 0. This implies no execution data was recorded for any block, so all blocks are equally \"cold.\"\n  - **Block Splitting/Merging**:\n    - No blocks were split or merged between the -O2 and optimized versions. The structure remains consistent.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 4."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "bitstring",
+      "numBB": 13,
+      "originalSet": "bb, bb13, bb15, bb17, bb19, bb20, bb23, bb23.bb36_crit_edge, bb32, bb32.bb36_crit_edge, bb34, bb36, bb37",
+      "predictedSet": "bb, bb13, bb15, bb17, bb19, bb20, bb23, bb23.bb36_crit_edge, bb32, bb32.bb36_crit_edge, bb34, bb36, bb37",
+      "tokenCount": 5328,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb19"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb23.bb36_crit_edge"
+      },
+      {
+        "name": "bb32"
+      },
+      {
+        "name": "bb32.bb36_crit_edge"
+      },
+      {
+        "name": "bb34"
+      },
+      {
+        "name": "bb36"
+      },
+      {
+        "name": "bb37"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**: The original function's blocks were mapped to the optimized function's blocks based on their logical structure and control flow. For example, bb in the optimized function corresponds to the entry block in the original function.\n  - **Computed O1 freq(bb) Table**: Since all basic block counts and edge counts in the profile are 0, the frequency of execution for all blocks is 0. This means no block is statistically \"hotter\" than another based on the given profile.\n  - **Block Splitting/Merging**: No blocks were explicitly split or merged in the optimized function. The structure remains logically similar, though some blocks were optimized for efficiency.\n  - **Summary**: The total number of blocks in the sorted list is exactly 13, matching the number of blocks in the optimized function. No blocks are missing or duplicated."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "bstr_i",
+      "numBB": 9,
+      "originalSet": "bb, bb2, bb2.bb12_crit_edge, bb3, bb3.bb12_crit_edge, bb7, bb12, bb14, bb22",
+      "predictedSet": "bb2, bb, bb3, bb7, bb12, bb14, bb22, bb3.bb12_crit_edge, bb2.bb12_crit_edge",
+      "tokenCount": 3487,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb2"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb2"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb3"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb3.bb12_crit_edge"
+      },
+      {
+        "name": "bb2.bb12_crit_edge"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**: \n    - The original function's structure was more complex, with critical edges and loop exit blocks. The optimized function simplifies this by merging some blocks and removing unnecessary control flow.\n    - For example, the original bb4 and bb14 correspond to the loop body in the optimized function (bb14), while bb22 in the original maps to the return block in the optimized function.\n  - **Computed O1 freq(bb) Table**:\n    - All basic block counts and edge counts in the profile are 0. This suggests that the function was not executed during profiling, or the profiling data is incomplete.\n    - Without execution data, the hotness estimation relies on structural analysis and the likelihood of execution paths.\n  - **Block Splitting/Merging**:\n    - Blocks like bb4 and bb14 in the original function are merged into bb14 in the optimized function.\n    - Critical edges (bb1.bb22_crit_edge, bb4.bb22.loopexit_crit_edge) are eliminated in the optimized version.\n  - **Reasoning for Hotness**:\n    - bb2 is the entry point of the main loop and is likely to be executed frequently.\n    - bb initializes the loop, so it is executed at least once.\n    - bb3 and bb7 are part of the loop body, with bb7 being less likely to execute due to the conditional branch.\n    - bb12 and bb14 handle loop continuation and updates, making them moderately hot.\n    - bb22 is the return block, executed once.\n    - bb3.bb12_crit_edge and bb2.bb12_crit_edge are less likely to execute due to their placement in the control flow.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 9."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "main",
+      "numBB": 8,
+      "originalSet": "bb, bb5, bb8, bb11, bb14, bb20, bb22, bb23",
+      "predictedSet": "bb14, bb20, bb11, bb8, bb23, bb5, bb, bb22",
+      "tokenCount": 3117,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb14"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb22"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - bb in the optimized function corresponds to bb in the original function.\n    - bb5 corresponds to bb4 in the original function.\n    - bb8 corresponds to bb7 in the original function.\n    - bb11 corresponds to the loop header bb12 in the original function.\n    - bb14 corresponds to the loop body in bb12 in the original function.\n    - bb20 corresponds to the loop continuation in bb12.bb12_crit_edge in the original function.\n    - bb22 corresponds to bb7.bb21_crit_edge in the original function.\n    - bb23 corresponds to bb21 in the original function.\n  - **Computed O1 freq(bb) Table**:\n    - bb: 1\n    - bb5: 0\n    - bb8: 1\n    - bb11: 1\n    - bb14: 80\n    - bb20: 79\n    - bb22: 0\n    - bb23: 1\n  - **Block Splitting/Merging**:\n    - The loop structure (bb12, bb12.bb12_crit_edge, bb21.loopexit) in the original function is split into bb11, bb14, and bb20 in the optimized function.\n    - The error handling path (bb4) is mapped to bb5.\n    - The loop exit (bb21) is mapped to bb23.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 8."
+  }
+]

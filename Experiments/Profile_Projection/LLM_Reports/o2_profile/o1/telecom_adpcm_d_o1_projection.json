@@ -1,0 +1,185 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_d",
+      "funcName": "adpcm_coder",
+      "numBB": 13,
+      "originalSet": "bb, bb.bb85_crit_edge, bb7, bb13, bb67, bb70, bb74, bb74.bb13_crit_edge, bb80, bb85, bb85.bb92_crit_edge, bb91, bb92",
+      "predictedSet": "bb, bb7, bb13, bb67, bb70, bb74, bb74.bb13_crit_edge, bb80, bb85, bb85.bb92_crit_edge, bb91, bb92, bb.bb85_crit_edge",
+      "tokenCount": 6130,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb67"
+      },
+      {
+        "name": "bb70"
+      },
+      {
+        "name": "bb74"
+      },
+      {
+        "name": "bb74.bb13_crit_edge"
+      },
+      {
+        "name": "bb80"
+      },
+      {
+        "name": "bb85"
+      },
+      {
+        "name": "bb85.bb92_crit_edge"
+      },
+      {
+        "name": "bb91"
+      },
+      {
+        "name": "bb92"
+      },
+      {
+        "name": "bb.bb85_crit_edge"
+      }
+    ],
+    "additionalNotes": "- **Mapping Explanation**: The mapping between the -O2 and -O1 versions was straightforward as the structure of the control flow graph (CFG) remained largely intact. Blocks like bb, bb7, and bb13 in the optimized version correspond directly to their counterparts in the original function. Some blocks were renamed or slightly modified, but their roles in the CFG are clear.\n  - **Computed O1 freq(bb) Table**: Since all basic block counts and edge counts in the -O2 profile are 0, the projected frequencies for the -O1 blocks are also 0. This means all blocks are equally \"cold\" in terms of execution frequency.\n  - **Block Changes**: No blocks were split, merged, or removed during optimization. The CFG structure remained consistent between the -O2 and -O1 versions.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 13."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_d",
+      "funcName": "adpcm_decoder",
+      "numBB": 10,
+      "originalSet": "bb, bb.bb72_crit_edge, bb7, bb13, bb13.bb28_crit_edge, bb23, bb28, bb28.bb13_crit_edge, bb69, bb72",
+      "predictedSet": "bb13, bb28, bb28.bb13_crit_edge, bb23, bb7, bb69, bb, bb72, bb.bb72_crit_edge, bb13.bb28_crit_edge",
+      "tokenCount": 5520,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb13"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb28"
+      },
+      {
+        "name": "bb28.bb13_crit_edge"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb69"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb72"
+      },
+      {
+        "name": "bb.bb72_crit_edge"
+      },
+      {
+        "name": "bb13.bb28_crit_edge"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The structure of the optimized function closely mirrors the original function, with some renaming and minor adjustments. For example, bb71 in the original corresponds to bb72 in the optimized version, and bb.bb71_crit_edge maps to bb.bb72_crit_edge.\n    - The loop structure and critical edges remain largely intact, so the profile data can be directly projected.\n  - **Computed O1 freq(bb) Table**:\n    - bb: 1,114,386\n    - bb.bb72_crit_edge: 0\n    - bb7: 1,114,386\n    - bb13: 1,103,099,270\n    - bb13.bb28_crit_edge: 0\n    - bb23: 551,549,635\n    - bb28: 1,103,099,270\n    - bb28.bb13_crit_edge: 1,101,984,884\n    - bb69: 1,114,386\n    - bb72: 1,114,386\n  - **Block Splitting/Merging**:\n    - No blocks were removed or merged. The structure is preserved, with only renaming and minor adjustments.\n  - **Summary**:\n    - The total number of blocks in the sorted list is exactly 10. No blocks are missing or duplicated."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "telecom_adpcm_d",
+      "funcName": "main",
+      "numBB": 17,
+      "originalSet": "bb, bb3, bb6, bb9, bb14, bb15, bb15.bb31_crit_edge, bb17, bb17.bb27_crit_edge, bb20, bb22, bb22.bb22_crit_edge, bb27.loopexit, bb27, bb27.bb9_crit_edge, bb31split, bb31",
+      "predictedSet": "bb22, bb22.bb22_crit_edge, bb15, bb17, bb20, bb27, bb27.loopexit, bb27.bb9_crit_edge, bb9, bb31, bb15.bb31_crit_edge, bb6, bb31split, bb, bb3, bb14, bb17.bb27_crit_edge",
+      "tokenCount": 4396,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb22"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb22"
+      },
+      {
+        "name": "bb22.bb22_crit_edge"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb27"
+      },
+      {
+        "name": "bb27.loopexit"
+      },
+      {
+        "name": "bb27.bb9_crit_edge"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb15.bb31_crit_edge"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb31split"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb3"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb17.bb27_crit_edge"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**: The mapping between the -O2 and -O1 versions is straightforward for most blocks, as the structure of the control flow graph (CFG) is largely preserved. However, some blocks were split or added for optimization purposes:\n    - bb22 and bb22.bb22_crit_edge correspond to the loop in the original function, which is the hottest region due to the high iteration count.\n    - bb27 and bb27.loopexit represent the loop exit and subsequent operations.\n    - bb15.bb31_crit_edge and bb31split are new blocks introduced for better control flow handling.\n  - **Computed O1 freq(bb) Table**:\n    - bb22: 1,114,386\n    - bb22.bb22_crit_edge: 1,114,308\n    - bb15: 79\n    - bb17: 78\n    - bb20: 78\n    - bb27: 78\n    - bb27.loopexit: 78\n    - bb27.bb9_crit_edge: 78\n    - bb9: 79\n    - bb31: 1\n    - bb15.bb31_crit_edge: 1\n    - bb6: 1\n    - bb31split: 1\n    - bb: 1\n    - bb3: 0\n    - bb14: 0\n    - bb17.bb27_crit_edge: 0\n  - **Block Splitting and Merging**:\n    - bb22 and bb22.bb22_crit_edge represent the loop body and back edge, respectively.\n    - bb27 and bb27.loopexit represent the loop exit and subsequent operations.\n    - bb15.bb31_crit_edge and bb31split are new blocks introduced for better control flow handling.\n  - **Summary**: The total number of blocks in the sorted list is exactly 17. No blocks are missing or duplicated."
+  }
+]

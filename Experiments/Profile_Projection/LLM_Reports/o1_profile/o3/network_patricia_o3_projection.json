@@ -1,0 +1,654 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_patricia",
+      "funcName": "main",
+      "numBB": 9,
+      "originalSet": "bb, bb4, bb7, bb7.bb21_crit_edge, bb12.preheader, bb12, bb12.bb12_crit_edge, bb21.loopexit, bb21",
+      "predictedSet": "bb12, bb12.bb12_crit_edge, bb12.preheader, bb21.loopexit, bb21, bb, bb7, bb7.bb21_crit_edge, bb4",
+      "tokenCount": 3411,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb12"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb12.bb12_crit_edge"
+      },
+      {
+        "name": "bb12.preheader"
+      },
+      {
+        "name": "bb21.loopexit"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb7.bb21_crit_edge"
+      },
+      {
+        "name": "bb4"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - 0 in O1 corresponds to bb in O3.\n    - 4 in O1 corresponds to bb4 in O3.\n    - 7 in O1 corresponds to bb7 in O3.\n    - 7_21.ce in O1 corresponds to bb7.bb21_crit_edge in O3.\n    - 12.ph in O1 corresponds to bb12.preheader in O3.\n    - 12 in O1 corresponds to bb12 in O3.\n    - 12_12.ce in O1 corresponds to bb12.bb12_crit_edge in O3.\n    - 21.le in O1 corresponds to bb21.loopexit in O3.\n    - 21 in O1 corresponds to bb21 in O3.\n\n  - **Computed O1 freq(bb) Table**:\n    - bb: 1\n    - bb4: 0\n    - bb7: 1\n    - bb7.bb21_crit_edge: 0\n    - bb12.preheader: 1\n    - bb12: 50000\n    - bb12.bb12_crit_edge: 49999\n    - bb21.loopexit: 1\n    - bb21: 1\n\n  - **Block Splitting/Merging**:\n    - No blocks were split or merged in the optimized version. The mapping is straightforward.\n\n- **Summary**:\n  The total number of blocks in the sorted list is exactly 9."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_patricia",
+      "funcName": "pat_insert",
+      "numBB": 95,
+      "originalSet": "bb, bb.bb201_crit_edge, bb4, bb4.bb201_crit_edge, bb8, bb14, bb14.bb14_crit_edge, bb29, bb32, bb32.bb186_crit_edge, bb36, bb41, bb43, bb47, bb47.bb50_crit_edge, bb50, bb55, bb59, bb59.bb86_crit_edge, bb64, bb67, bb72, bb80, bb80.bb72_crit_edge, bb83, bb83.bb67_crit_edge, bb85, bb85.bb89_crit_edge, bb85.bb86_crit_edge, bb86, bb89.loopexit, bb89, bb95, bb95.bb186_crit_edge, bb98, bb98.bb186_crit_edge, bb101, bb101.bb186_crit_edge, bb104, bb104.bb186_crit_edge, bb107, bb107.bb186_crit_edge, bb110, bb110.bb186_crit_edge, bb113, bb113.bb186_crit_edge, bb116, bb116.bb186_crit_edge, bb119, bb119.bb186_crit_edge, bb122, bb122.bb186_crit_edge, bb125, bb125.bb186_crit_edge, bb128, bb128.bb186_crit_edge, bb131, bb131.bb186_crit_edge, bb134, bb134.bb186_crit_edge, bb137, bb137.bb186_crit_edge, bb140, bb140.bb186_crit_edge, bb143, bb143.bb186_crit_edge, bb146, bb146.bb186_crit_edge, bb149, bb149.bb186_crit_edge, bb152, bb152.bb186_crit_edge, bb155, bb155.bb186_crit_edge, bb158, bb158.bb186_crit_edge, bb161, bb161.bb186_crit_edge, bb164, bb164.bb186_crit_edge, bb167, bb167.bb186_crit_edge, bb170, bb170.bb186_crit_edge, bb173, bb173.bb186_crit_edge, bb176, bb176.bb186_crit_edge, bb179, bb179.bb186_crit_edge, bb182, bb186, bb193, bb197, bb201",
+      "predictedSet": "bb100, bb94, bb100_94.ce, bb94_103.ce, bb103, bb116, bb31, bb12, bb12_12.ce, bb28, bb4, bb8, bb120, bb33, bb33_54.ce, bb54, bb54_85.ce, bb85, bb88, bb89, bb50, bb38, bb45, bb85.bb86_crit_edge, bb85.bb89_crit_edge, bb59, bb59.bb86_crit_edge, bb41, bb43, bb47, bb47.bb50_crit_edge, bb64, bb67, bb72, bb80, bb80.bb72_crit_edge, bb83, bb83.bb67_crit_edge, bb89.loopexit, bb95, bb95.bb186_crit_edge, bb98, bb98.bb186_crit_edge, bb101, bb101.bb186_crit_edge, bb104, bb104.bb186_crit_edge, bb107, bb107.bb186_crit_edge, bb110, bb110.bb186_crit_edge, bb113, bb113.bb186_crit_edge, bb116.bb186_crit_edge, bb119, bb119.bb186_crit_edge, bb122, bb122.bb186_crit_edge, bb125, bb125.bb186_crit_edge, bb128, bb128.bb186_crit_edge, bb131, bb131.bb186_crit_edge, bb134, bb134.bb186_crit_edge, bb137, bb137.bb186_crit_edge, bb140, bb140.bb186_crit_edge, bb143, bb143.bb186_crit_edge, bb146, bb146.bb186_crit_edge, bb149, bb149.bb186_crit_edge, bb152, bb152.bb186_crit_edge, bb155, bb155.bb186_crit_edge, bb158, bb158.bb186_crit_edge, bb161, bb161.bb186_crit_edge, bb164, bb164.bb186_crit_edge, bb167, bb167.bb186_crit_edge, bb170, bb170.bb186_crit_edge, bb173, bb173.bb186_crit_edge, bb176, bb176.bb186_crit_edge, bb201",
+      "tokenCount": 15648,
+      "discrepancy": true,
+      "duplicates": [],
+      "missing": [
+        "bb",
+        "bb.bb201_crit_edge",
+        "bb4.bb201_crit_edge",
+        "bb14",
+        "bb14.bb14_crit_edge",
+        "bb29",
+        "bb32",
+        "bb32.bb186_crit_edge",
+        "bb36",
+        "bb55",
+        "bb86",
+        "bb179",
+        "bb179.bb186_crit_edge",
+        "bb182",
+        "bb186",
+        "bb193",
+        "bb197"
+      ],
+      "extra": [
+        "bb100",
+        "bb94",
+        "bb100_94.ce",
+        "bb94_103.ce",
+        "bb103",
+        "bb31",
+        "bb12",
+        "bb12_12.ce",
+        "bb28",
+        "bb120",
+        "bb33",
+        "bb33_54.ce",
+        "bb54",
+        "bb54_85.ce",
+        "bb88",
+        "bb38",
+        "bb45"
+      ],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb100"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb100"
+      },
+      {
+        "name": "bb94"
+      },
+      {
+        "name": "bb100_94.ce"
+      },
+      {
+        "name": "bb94_103.ce"
+      },
+      {
+        "name": "bb103"
+      },
+      {
+        "name": "bb116"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb12_12.ce"
+      },
+      {
+        "name": "bb28"
+      },
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb120"
+      },
+      {
+        "name": "bb33"
+      },
+      {
+        "name": "bb33_54.ce"
+      },
+      {
+        "name": "bb54"
+      },
+      {
+        "name": "bb54_85.ce"
+      },
+      {
+        "name": "bb85"
+      },
+      {
+        "name": "bb88"
+      },
+      {
+        "name": "bb89"
+      },
+      {
+        "name": "bb50"
+      },
+      {
+        "name": "bb38"
+      },
+      {
+        "name": "bb45"
+      },
+      {
+        "name": "bb85.bb86_crit_edge"
+      },
+      {
+        "name": "bb85.bb89_crit_edge"
+      },
+      {
+        "name": "bb59"
+      },
+      {
+        "name": "bb59.bb86_crit_edge"
+      },
+      {
+        "name": "bb41"
+      },
+      {
+        "name": "bb43"
+      },
+      {
+        "name": "bb47"
+      },
+      {
+        "name": "bb47.bb50_crit_edge"
+      },
+      {
+        "name": "bb64"
+      },
+      {
+        "name": "bb67"
+      },
+      {
+        "name": "bb72"
+      },
+      {
+        "name": "bb80"
+      },
+      {
+        "name": "bb80.bb72_crit_edge"
+      },
+      {
+        "name": "bb83"
+      },
+      {
+        "name": "bb83.bb67_crit_edge"
+      },
+      {
+        "name": "bb89.loopexit"
+      },
+      {
+        "name": "bb95"
+      },
+      {
+        "name": "bb95.bb186_crit_edge"
+      },
+      {
+        "name": "bb98"
+      },
+      {
+        "name": "bb98.bb186_crit_edge"
+      },
+      {
+        "name": "bb101"
+      },
+      {
+        "name": "bb101.bb186_crit_edge"
+      },
+      {
+        "name": "bb104"
+      },
+      {
+        "name": "bb104.bb186_crit_edge"
+      },
+      {
+        "name": "bb107"
+      },
+      {
+        "name": "bb107.bb186_crit_edge"
+      },
+      {
+        "name": "bb110"
+      },
+      {
+        "name": "bb110.bb186_crit_edge"
+      },
+      {
+        "name": "bb113"
+      },
+      {
+        "name": "bb113.bb186_crit_edge"
+      },
+      {
+        "name": "bb116.bb186_crit_edge"
+      },
+      {
+        "name": "bb119"
+      },
+      {
+        "name": "bb119.bb186_crit_edge"
+      },
+      {
+        "name": "bb122"
+      },
+      {
+        "name": "bb122.bb186_crit_edge"
+      },
+      {
+        "name": "bb125"
+      },
+      {
+        "name": "bb125.bb186_crit_edge"
+      },
+      {
+        "name": "bb128"
+      },
+      {
+        "name": "bb128.bb186_crit_edge"
+      },
+      {
+        "name": "bb131"
+      },
+      {
+        "name": "bb131.bb186_crit_edge"
+      },
+      {
+        "name": "bb134"
+      },
+      {
+        "name": "bb134.bb186_crit_edge"
+      },
+      {
+        "name": "bb137"
+      },
+      {
+        "name": "bb137.bb186_crit_edge"
+      },
+      {
+        "name": "bb140"
+      },
+      {
+        "name": "bb140.bb186_crit_edge"
+      },
+      {
+        "name": "bb143"
+      },
+      {
+        "name": "bb143.bb186_crit_edge"
+      },
+      {
+        "name": "bb146"
+      },
+      {
+        "name": "bb146.bb186_crit_edge"
+      },
+      {
+        "name": "bb149"
+      },
+      {
+        "name": "bb149.bb186_crit_edge"
+      },
+      {
+        "name": "bb152"
+      },
+      {
+        "name": "bb152.bb186_crit_edge"
+      },
+      {
+        "name": "bb155"
+      },
+      {
+        "name": "bb155.bb186_crit_edge"
+      },
+      {
+        "name": "bb158"
+      },
+      {
+        "name": "bb158.bb186_crit_edge"
+      },
+      {
+        "name": "bb161"
+      },
+      {
+        "name": "bb161.bb186_crit_edge"
+      },
+      {
+        "name": "bb164"
+      },
+      {
+        "name": "bb164.bb186_crit_edge"
+      },
+      {
+        "name": "bb167"
+      },
+      {
+        "name": "bb167.bb186_crit_edge"
+      },
+      {
+        "name": "bb170"
+      },
+      {
+        "name": "bb170.bb186_crit_edge"
+      },
+      {
+        "name": "bb173"
+      },
+      {
+        "name": "bb173.bb186_crit_edge"
+      },
+      {
+        "name": "bb176"
+      },
+      {
+        "name": "bb176.bb186_crit_edge"
+      },
+      {
+        "name": "bb201"
+      }
+    ],
+    "additionalNotes": "- **Mapping Explanation**: \n    - The hottest block in the -O1 profile is bb94 with a frequency of 121,000,000. This corresponds to bb100 in the optimized function.\n    - Blocks like bb12, bb12_12.ce, and bb28 in -O1 map to bb14 and its successors in the optimized function.\n    - Blocks bb33, bb33_54.ce, and bb54 in -O1 map to bb36 and its successors in the optimized function.\n    - The loop structure in bb94 and its successors (bb100, bb100_94.ce, etc.) is preserved in the optimized function, making them the hottest blocks.\n  - **Computed O1 freq(bb) Table**:\n    - The frequency of each block in the -O1 profile was directly used to estimate the hotness of corresponding blocks in the optimized function.\n  - **Splits/Merges**:\n    - Some blocks in the -O1 profile were split into multiple blocks in the optimized function (e.g., bb12 into bb14 and bb14.bb14_crit_edge).\n    - Some blocks were merged or optimized away, but their frequencies were redistributed to their successors.\n  - **Total Blocks**: The sorted list contains exactly 95 blocks, as required."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_patricia",
+      "funcName": "insertR",
+      "numBB": 9,
+      "originalSet": "bb, bb.bb11_crit_edge, bb7, bb7.bb11_crit_edge, bb11, bb23, bb29, bb31, bb35",
+      "predictedSet": "bb29, bb, bb7, bb23, bb31, bb35, bb11, bb7.bb11_crit_edge, bb.bb11_crit_edge",
+      "tokenCount": 6731,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb29"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb29"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb23"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb35"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb7.bb11_crit_edge"
+      },
+      {
+        "name": "bb.bb11_crit_edge"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - bb in the optimized function corresponds to 0 in the original function.\n    - bb7 corresponds to 7 in the original function.\n    - bb7.bb11_crit_edge corresponds to 7_11.ce in the original function.\n    - bb11 corresponds to 11 in the original function.\n    - bb23 corresponds to 23 in the original function.\n    - bb29 corresponds to 29 in the original function.\n    - bb31 corresponds to 31 in the original function.\n    - bb35 corresponds to 35 in the original function.\n    - bb.bb11_crit_edge corresponds to 0_11.ce in the original function.\n  - **Computed O1 freq(bb) Table**:\n    - bb: 22,650,000\n    - bb7: 21,900,000\n    - bb7.bb11_crit_edge: 3,450,000\n    - bb11: 4,200,000\n    - bb23: 18,450,000\n    - bb29: 22,650,000\n    - bb31: 9,100,000\n    - bb35: 9,350,000\n    - bb.bb11_crit_edge: 750,000\n  - **Block Splits, Merges, or Removals**:\n    - No blocks were removed, but some blocks were renamed or slightly restructured. The mapping is straightforward based on the control flow and profiling data.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 9."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_patricia",
+      "funcName": "pat_search",
+      "numBB": 7,
+      "originalSet": "bb, bb.bb36_crit_edge, bb2, bb5, bb5.bb5_crit_edge, bb28, bb36",
+      "predictedSet": "bb5, bb5.bb5_crit_edge, bb2, bb28, bb, bb36, bb.bb36_crit_edge",
+      "tokenCount": 3655,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb5"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb5.bb5_crit_edge"
+      },
+      {
+        "name": "bb2"
+      },
+      {
+        "name": "bb28"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb36"
+      },
+      {
+        "name": "bb.bb36_crit_edge"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - bb in the optimized function corresponds to 0 in the original function.\n    - bb.bb36_crit_edge corresponds to 0_34.ce.\n    - bb2 corresponds to 2.ph and the entry into 2.\n    - bb5 corresponds to the main loop body in 2 and its iterations.\n    - bb5.bb5_crit_edge corresponds to 2_2.ce, the back edge of the loop.\n    - bb28 corresponds to 26, the block after the loop.\n    - bb36 corresponds to 34, the final return block.\n  - **Computed O1 freq(bb) Table**:\n    - bb (0): 5,000,000\n    - bb.bb36_crit_edge (0_34.ce): 0\n    - bb2 (2.ph + entry to 2): 5,000,000\n    - bb5 (2 main loop body): 28,850,000\n    - bb5.bb5_crit_edge (2_2.ce): 23,850,000\n    - bb28 (26): 5,000,000\n    - bb36 (34): 5,000,000\n  - **Block Splitting/Merging**:\n    - The loop structure (2 and 2_2.ce) in the original function maps to bb5 and bb5.bb5_crit_edge in the optimized function.\n    - bb.bb36_crit_edge is a trivial block with no execution in the original profile.\n  - **Summary**:\n    - The total number of blocks in the sorted list is exactly 7."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "network_patricia",
+      "funcName": "main1",
+      "numBB": 43,
+      "originalSet": "bb, bb6, bb9, bb14, bb17, bb20, bb21, bb25, bb26, bb30, bb31, bb57.preheader, bb36.preheader, bb36, bb39, bb43, bb47, bb51, bb51.bb36_crit_edge, bb57, bb60, bb64.loopexit, bb64.loopexit2, bb64, bb65, bb69.loopexit, bb69.loopexit3, bb69, bb70, bb74.loopexit, bb74.loopexit4, bb74, bb75, bb83, bb88, bb90, bb90.bb57_crit_edge, bb93.loopexit, bb93.loopexit5, bb93, bb96.loopexit, bb96.loopexit1, bb96",
+      "predictedSet": "bb36, bb39, bb44, bb49, bb54, bb68, bb70, bb70_36.ce, bb57, bb60, bb75, bb83, bb88, bb90, bb90.bb57_crit_edge, bb31, bb26, bb21, bb17, bb9, bb0, bb76, bb6, bb14, bb20, bb25, bb30, bb43, bb48, bb53, bb63, bb64.loopexit, bb64.loopexit2, bb64, bb65, bb69.loopexit, bb69.loopexit3, bb69, bb74.loopexit, bb74.loopexit4, bb74, bb93.loopexit, bb93.loopexit5",
+      "tokenCount": 7161,
+      "discrepancy": true,
+      "duplicates": [],
+      "missing": [
+        "bb",
+        "bb57.preheader",
+        "bb36.preheader",
+        "bb47",
+        "bb51",
+        "bb51.bb36_crit_edge",
+        "bb93",
+        "bb96.loopexit",
+        "bb96.loopexit1",
+        "bb96"
+      ],
+      "extra": [
+        "bb44",
+        "bb49",
+        "bb54",
+        "bb68",
+        "bb70_36.ce",
+        "bb0",
+        "bb76",
+        "bb48",
+        "bb53",
+        "bb63"
+      ],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb36"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb36"
+      },
+      {
+        "name": "bb39"
+      },
+      {
+        "name": "bb44"
+      },
+      {
+        "name": "bb49"
+      },
+      {
+        "name": "bb54"
+      },
+      {
+        "name": "bb68"
+      },
+      {
+        "name": "bb70"
+      },
+      {
+        "name": "bb70_36.ce"
+      },
+      {
+        "name": "bb57"
+      },
+      {
+        "name": "bb60"
+      },
+      {
+        "name": "bb75"
+      },
+      {
+        "name": "bb83"
+      },
+      {
+        "name": "bb88"
+      },
+      {
+        "name": "bb90"
+      },
+      {
+        "name": "bb90.bb57_crit_edge"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb26"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb9"
+      },
+      {
+        "name": "bb0"
+      },
+      {
+        "name": "bb76"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb25"
+      },
+      {
+        "name": "bb30"
+      },
+      {
+        "name": "bb43"
+      },
+      {
+        "name": "bb48"
+      },
+      {
+        "name": "bb53"
+      },
+      {
+        "name": "bb63"
+      },
+      {
+        "name": "bb64.loopexit"
+      },
+      {
+        "name": "bb64.loopexit2"
+      },
+      {
+        "name": "bb64"
+      },
+      {
+        "name": "bb65"
+      },
+      {
+        "name": "bb69.loopexit"
+      },
+      {
+        "name": "bb69.loopexit3"
+      },
+      {
+        "name": "bb69"
+      },
+      {
+        "name": "bb74.loopexit"
+      },
+      {
+        "name": "bb74.loopexit4"
+      },
+      {
+        "name": "bb74"
+      },
+      {
+        "name": "bb93.loopexit"
+      },
+      {
+        "name": "bb93.loopexit5"
+      }
+    ],
+    "additionalNotes": "- **Mapping Explanation**: The mapping of blocks from the -O1 version to the -O3 version was based on the control flow structure and the profile data. For example, bb36 in the optimized version corresponds to the loop header in the -O1 version, which had the highest execution count (5,050,000).\n  - **Computed O1 freq(bb) Table**: The frequency of each block in the -O1 version was directly taken from the .bb_profile data.\n  - **Block Splitting/Merging**: Some blocks in the optimized version (e.g., bb70, bb70_36.ce) represent split versions of hot blocks in the -O1 version. These were treated as part of the same execution path.\n  - **Total Blocks in Sorted List**: 43 blocks.\n\nSummary: The total number of blocks in the sorted list is exactly 43."
+  }
+]

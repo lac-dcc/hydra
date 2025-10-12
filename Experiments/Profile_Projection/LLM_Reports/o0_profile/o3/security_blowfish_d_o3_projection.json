@@ -1,0 +1,603 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_blowfish_d",
+      "funcName": "BF_cbc_encrypt",
+      "numBB": 51,
+      "originalSet": "bb, bb43, bb43.bb116_crit_edge, bb44, bb46, bb46.bb46_crit_edge, bb116.loopexit, bb116, bb123, bb138, bb138.bb176_crit_edge, bb138.bb167_crit_edge, bb138.bb161_crit_edge, bb138.bb153_crit_edge, bb138.bb145_crit_edge, bb138.bb185_crit_edge, bb138.bb194_crit_edge, bb140, bb145, bb153, bb161, bb167, bb176, bb185, bb194, bb223, bb232, bb232.bb305_crit_edge, bb233, bb235, bb235.bb235_crit_edge, bb305.loopexit, bb305, bb305.bb387_crit_edge, bb312, bb312.bb377_crit_edge, bb312.bb372_crit_edge, bb312.bb368_crit_edge, bb312.bb363_crit_edge, bb312.bb358_crit_edge, bb312.bb382_crit_edge, bb312.bb387_crit_edge, bb354, bb358, bb363, bb368, bb372, bb377, bb382, bb387, bb404",
+      "predictedSet": "bb, bb43, bb43.bb116_crit_edge, bb44, bb46, bb46.bb46_crit_edge, bb116.loopexit, bb116, bb123, bb138, bb138.bb176_crit_edge, bb138.bb167_crit_edge, bb138.bb161_crit_edge, bb138.bb153_crit_edge, bb138.bb145_crit_edge, bb138.bb185_crit_edge, bb138.bb194_crit_edge, bb140, bb145, bb153, bb161, bb167, bb176, bb185, bb194, bb223, bb232, bb232.bb305_crit_edge, bb233, bb235, bb235.bb235_crit_edge, bb305.loopexit, bb305, bb305.bb387_crit_edge, bb312, bb312.bb377_crit_edge, bb312.bb372_crit_edge, bb312.bb368_crit_edge, bb312.bb363_crit_edge, bb312.bb358_crit_edge, bb312.bb382_crit_edge, bb312.bb387_crit_edge, bb354, bb358, bb363, bb368, bb372, bb377, bb382, bb387, bb404",
+      "tokenCount": 27025,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb43"
+      },
+      {
+        "name": "bb43.bb116_crit_edge"
+      },
+      {
+        "name": "bb44"
+      },
+      {
+        "name": "bb46"
+      },
+      {
+        "name": "bb46.bb46_crit_edge"
+      },
+      {
+        "name": "bb116.loopexit"
+      },
+      {
+        "name": "bb116"
+      },
+      {
+        "name": "bb123"
+      },
+      {
+        "name": "bb138"
+      },
+      {
+        "name": "bb138.bb176_crit_edge"
+      },
+      {
+        "name": "bb138.bb167_crit_edge"
+      },
+      {
+        "name": "bb138.bb161_crit_edge"
+      },
+      {
+        "name": "bb138.bb153_crit_edge"
+      },
+      {
+        "name": "bb138.bb145_crit_edge"
+      },
+      {
+        "name": "bb138.bb185_crit_edge"
+      },
+      {
+        "name": "bb138.bb194_crit_edge"
+      },
+      {
+        "name": "bb140"
+      },
+      {
+        "name": "bb145"
+      },
+      {
+        "name": "bb153"
+      },
+      {
+        "name": "bb161"
+      },
+      {
+        "name": "bb167"
+      },
+      {
+        "name": "bb176"
+      },
+      {
+        "name": "bb185"
+      },
+      {
+        "name": "bb194"
+      },
+      {
+        "name": "bb223"
+      },
+      {
+        "name": "bb232"
+      },
+      {
+        "name": "bb232.bb305_crit_edge"
+      },
+      {
+        "name": "bb233"
+      },
+      {
+        "name": "bb235"
+      },
+      {
+        "name": "bb235.bb235_crit_edge"
+      },
+      {
+        "name": "bb305.loopexit"
+      },
+      {
+        "name": "bb305"
+      },
+      {
+        "name": "bb305.bb387_crit_edge"
+      },
+      {
+        "name": "bb312"
+      },
+      {
+        "name": "bb312.bb377_crit_edge"
+      },
+      {
+        "name": "bb312.bb372_crit_edge"
+      },
+      {
+        "name": "bb312.bb368_crit_edge"
+      },
+      {
+        "name": "bb312.bb363_crit_edge"
+      },
+      {
+        "name": "bb312.bb358_crit_edge"
+      },
+      {
+        "name": "bb312.bb382_crit_edge"
+      },
+      {
+        "name": "bb312.bb387_crit_edge"
+      },
+      {
+        "name": "bb354"
+      },
+      {
+        "name": "bb358"
+      },
+      {
+        "name": "bb363"
+      },
+      {
+        "name": "bb368"
+      },
+      {
+        "name": "bb372"
+      },
+      {
+        "name": "bb377"
+      },
+      {
+        "name": "bb382"
+      },
+      {
+        "name": "bb387"
+      },
+      {
+        "name": "bb404"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**: The mapping was straightforward as the optimized function retained the structure of the original function. However, some blocks were split or merged, and the profiling data was projected accordingly.\n  - **Computed O0 freq(bb) Table**: All basic blocks in the O0 profile have a frequency of 0, which means no execution data was recorded. This makes the hotness estimation speculative and based on structural analysis.\n  - **Block Splitting/Merging**: No significant splitting or merging was observed that would affect the mapping.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 51."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_blowfish_d",
+      "funcName": "BF_cfb64_encrypt",
+      "numBB": 20,
+      "originalSet": "bb, bb10, bb10.bb156_crit_edge, bb11, bb20, bb20.bb156_crit_edge, bb21, bb30, bb30.bb82_crit_edge, bb37, bb82, bb82.bb30_crit_edge, bb93, bb93.bb145_crit_edge, bb100, bb145, bb145.bb93_crit_edge, bb156.loopexit, bb156.loopexit1, bb156",
+      "predictedSet": "bb115, bb118, bb194, bb118_194.ce (merged into bb118 and bb194), bb120, bb93, bb100, bb145, bb145.bb93_crit_edge, bb30, bb82, bb82.bb30_crit_edge, bb37, bb11, bb21, bb156, bb156.loopexit, bb156.loopexit1, bb10, bb20",
+      "tokenCount": 11195,
+      "discrepancy": true,
+      "duplicates": [],
+      "missing": [
+        "bb",
+        "bb10.bb156_crit_edge",
+        "bb20.bb156_crit_edge",
+        "bb30.bb82_crit_edge",
+        "bb93.bb145_crit_edge"
+      ],
+      "extra": [
+        "bb115",
+        "bb118",
+        "bb194",
+        "bb118_194.ce (merged into bb118 and bb194)",
+        "bb120"
+      ],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb115"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb115"
+      },
+      {
+        "name": "bb118"
+      },
+      {
+        "name": "bb194"
+      },
+      {
+        "name": "bb118_194.ce (merged into bb118 and bb194)"
+      },
+      {
+        "name": "bb120"
+      },
+      {
+        "name": "bb93"
+      },
+      {
+        "name": "bb100"
+      },
+      {
+        "name": "bb145"
+      },
+      {
+        "name": "bb145.bb93_crit_edge"
+      },
+      {
+        "name": "bb30"
+      },
+      {
+        "name": "bb82"
+      },
+      {
+        "name": "bb82.bb30_crit_edge"
+      },
+      {
+        "name": "bb37"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb156"
+      },
+      {
+        "name": "bb156.loopexit"
+      },
+      {
+        "name": "bb156.loopexit1"
+      },
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb20"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - bb115 in the original corresponds to bb115 in the optimized version and is the hottest block with 729,924,330 executions.\n    - bb118 and bb194 are the next hottest blocks, with 712,103,736 executions each. These blocks are part of the loop body.\n    - bb118_194.ce is a critical edge split between bb118 and bb194 and contributes to their combined hotness.\n    - bb120 is executed 89,102,970 times and is part of the loop.\n    - Blocks like bb93, bb100, and bb145 are executed less frequently but still significant.\n\n  - **Computed O0 freq(bb) Table**:\n    - bb115: 729,924,330\n    - bb118: 712,103,736\n    - bb194: 712,103,736\n    - bb118_194.ce: 623,000,766 (merged into bb118 and bb194)\n    - bb120: 89,102,970\n    - Other blocks have lower frequencies as per the profile.\n\n  - **Block Splitting/Merging**:\n    - Critical edges like bb118_194.ce are split in the optimized version but contribute to the hotness of their source and destination blocks.\n    - Some blocks like bb22, bb24, and bb98 from the original are optimized out due to their zero execution counts.\n\n- **Summary**:\n  - The total number of blocks in the sorted list is exactly 20."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_blowfish_d",
+      "funcName": "BF_encrypt",
+      "numBB": 4,
+      "originalSet": "bb, bb7, bb411, bb815",
+      "predictedSet": "bb7, bb815, bb, bb411",
+      "tokenCount": 29347,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb7"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb815"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb411"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The bb in the optimized function corresponds to the entry block in the original function (bb in O0).\n    - The bb7 in the optimized function corresponds to the main loop body in the original function, which is executed repeatedly based on the profile data.\n    - The bb411 in the optimized function corresponds to the less frequently executed path in the original function (e.g., when arg2 == 0).\n    - The bb815 in the optimized function corresponds to the final block that merges the results and exits the function.\n  - **Computed O0 freq(bb) Table**:\n    - bb (O0) = 89,103,491\n    - bb12 (O0) = 89,103,491\n    - bb419 (O0) = 0\n    - bb826 (O0) = 89,103,491\n  - **Block Splitting/Merging**:\n    - The optimized function has fewer blocks due to merging and inlining. For example, the loop body and its iterations are optimized into bb7, while the exit conditions are handled in bb411 and bb815.\n  - **Reasoning**:\n    - bb7 is the hottest block because it corresponds to the loop body, which is executed 89,103,491 times based on the O0 profile.\n    - bb815 is the second hottest block as it handles the final merging and exit, executed once per loop iteration.\n    - bb is executed once at the start of the function.\n    - bb411 is the coldest block as it handles the less frequent path (arg2 == 0), which is not taken in the given profile.\n\n- **Summary**:\n  The total number of blocks in the sorted list is exactly 4."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_blowfish_d",
+      "funcName": "main",
+      "numBB": 51,
+      "originalSet": "bb, bb10, bb13, bb13.bb17_crit_edge2, bb13.bb17_crit_edge, bb13.bb21_crit_edge1, bb13.bb21_crit_edge, bb17, bb18, bb21, bb25, bb25.bb63_crit_edge, bb31, bb31.bb47_crit_edge, bb42, bb42.bb47_crit_edge, bb45, bb47, bb47.bb61_crit_edge, bb55, bb61, bb61.bb25_crit_edge, bb63split, bb63, bb67, bb69, bb72, bb75, bb82, bb85, bb93.preheader, bb90, bb93, bb96, bb97, bb104, bb110, bb110.bb114_crit_edge, bb119.preheader, bb114.loopexit, bb114, bb114.bb132_crit_edge, bb117, bb119, bb119.bb119_crit_edge, bb124, bb124.bb124_crit_edge, bb132.loopexit, bb132, bb133, bb136",
+      "predictedSet": "bb119, bb160, bb167, bb157, bb170, bb172, bb178, bb147, bb145, bb140, bb143, bb139, bb135, bb153, bb169, bb96, bb92, bb103, bb61, bb69, bb55, bb53, bb72, bb91, bb83, bb80, bb77, bb69_77.ce, bb63, bb25, bb47, bb31, bb42, bb45, bb110, bb134, bb126, bb116, bb104, bb110.bb114_crit_edge, bb93, bb93.preheader, bb124, bb124.bb124_crit_edge, bb132, bb132.loopexit, bb133, bb136, bb18, bb10, bb17",
+      "tokenCount": 13542,
+      "discrepancy": true,
+      "duplicates": [],
+      "missing": [
+        "bb",
+        "bb13",
+        "bb13.bb17_crit_edge2",
+        "bb13.bb17_crit_edge",
+        "bb13.bb21_crit_edge1",
+        "bb13.bb21_crit_edge",
+        "bb21",
+        "bb25.bb63_crit_edge",
+        "bb31.bb47_crit_edge",
+        "bb42.bb47_crit_edge",
+        "bb47.bb61_crit_edge",
+        "bb61.bb25_crit_edge",
+        "bb63split",
+        "bb67",
+        "bb75",
+        "bb82",
+        "bb85",
+        "bb90",
+        "bb97",
+        "bb119.preheader",
+        "bb114.loopexit",
+        "bb114",
+        "bb114.bb132_crit_edge",
+        "bb117",
+        "bb119.bb119_crit_edge"
+      ],
+      "extra": [
+        "bb160",
+        "bb167",
+        "bb157",
+        "bb170",
+        "bb172",
+        "bb178",
+        "bb147",
+        "bb145",
+        "bb140",
+        "bb143",
+        "bb139",
+        "bb135",
+        "bb153",
+        "bb169",
+        "bb92",
+        "bb103",
+        "bb53",
+        "bb91",
+        "bb83",
+        "bb80",
+        "bb77",
+        "bb69_77.ce",
+        "bb134",
+        "bb126",
+        "bb116"
+      ],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb119"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb119"
+      },
+      {
+        "name": "bb160"
+      },
+      {
+        "name": "bb167"
+      },
+      {
+        "name": "bb157"
+      },
+      {
+        "name": "bb170"
+      },
+      {
+        "name": "bb172"
+      },
+      {
+        "name": "bb178"
+      },
+      {
+        "name": "bb147"
+      },
+      {
+        "name": "bb145"
+      },
+      {
+        "name": "bb140"
+      },
+      {
+        "name": "bb143"
+      },
+      {
+        "name": "bb139"
+      },
+      {
+        "name": "bb135"
+      },
+      {
+        "name": "bb153"
+      },
+      {
+        "name": "bb169"
+      },
+      {
+        "name": "bb96"
+      },
+      {
+        "name": "bb92"
+      },
+      {
+        "name": "bb103"
+      },
+      {
+        "name": "bb61"
+      },
+      {
+        "name": "bb69"
+      },
+      {
+        "name": "bb55"
+      },
+      {
+        "name": "bb53"
+      },
+      {
+        "name": "bb72"
+      },
+      {
+        "name": "bb91"
+      },
+      {
+        "name": "bb83"
+      },
+      {
+        "name": "bb80"
+      },
+      {
+        "name": "bb77"
+      },
+      {
+        "name": "bb69_77.ce"
+      },
+      {
+        "name": "bb63"
+      },
+      {
+        "name": "bb25"
+      },
+      {
+        "name": "bb47"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb42"
+      },
+      {
+        "name": "bb45"
+      },
+      {
+        "name": "bb110"
+      },
+      {
+        "name": "bb134"
+      },
+      {
+        "name": "bb126"
+      },
+      {
+        "name": "bb116"
+      },
+      {
+        "name": "bb104"
+      },
+      {
+        "name": "bb110.bb114_crit_edge"
+      },
+      {
+        "name": "bb93"
+      },
+      {
+        "name": "bb93.preheader"
+      },
+      {
+        "name": "bb124"
+      },
+      {
+        "name": "bb124.bb124_crit_edge"
+      },
+      {
+        "name": "bb132"
+      },
+      {
+        "name": "bb132.loopexit"
+      },
+      {
+        "name": "bb133"
+      },
+      {
+        "name": "bb136"
+      },
+      {
+        "name": "bb18"
+      },
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb17"
+      }
+    ],
+    "additionalNotes": "- **Mapping Explanation**: The mapping of blocks from -O0 to -O3 was based on control flow and the semantics of the code. For example, loops in -O0 (e.g., bb157, bb160, bb167) correspond to the optimized loop in bb119 in -O3.\n  - **Computed O0 freq(bb) Table**: The frequency of each block in -O0 was directly taken from the basic block profile and edge profile.\n  - **Block Splitting/Merging**: Some blocks in -O0 were merged or optimized away in -O3. For example, the loop in bb157-bb167 was optimized into bb119 in -O3.\n  - **Total Blocks in Sorted List**: 51 blocks."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_blowfish_d",
+      "funcName": "BF_ofb64_encrypt",
+      "numBB": 12,
+      "originalSet": "bb, bb.bb111_crit_edge, bb52.preheader, bb52, bb52.bb80_crit_edge, bb62, bb80, bb80.bb52_crit_edge, bb94, bb94.bb111_crit_edge, bb96, bb111",
+      "predictedSet": "",
+      "tokenCount": 0,
+      "discrepancy": true,
+      "duplicates": [],
+      "missing": [
+        "bb",
+        "bb.bb111_crit_edge",
+        "bb52.preheader",
+        "bb52",
+        "bb52.bb80_crit_edge",
+        "bb62",
+        "bb80",
+        "bb80.bb52_crit_edge",
+        "bb94",
+        "bb94.bb111_crit_edge",
+        "bb96",
+        "bb111"
+      ],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": ""
+    },
+    "bbOrderByHotness": [],
+    "additionalNotes": ""
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "security_blowfish_d",
+      "funcName": "BF_set_key",
+      "numBB": 7,
+      "originalSet": "bb, bb6, bb6.bb6_crit_edge, bb40, bb78, bb78.bb78_crit_edge, bb87",
+      "predictedSet": "bb78, bb6, bb6.bb6_crit_edge, bb40, bb78.bb78_crit_edge, bb87, bb",
+      "tokenCount": 10074,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb78"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb78"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb6.bb6_crit_edge"
+      },
+      {
+        "name": "bb40"
+      },
+      {
+        "name": "bb78.bb78_crit_edge"
+      },
+      {
+        "name": "bb87"
+      },
+      {
+        "name": "bb"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - The bb in the optimized function corresponds to the initialization and setup phase in the original function.\n    - bb6 and bb6.bb6_crit_edge correspond to the loop in the original function that processes the key material (bb6 handles the main loop body, and bb6.bb6_crit_edge handles the loop continuation).\n    - bb40 corresponds to the transition after the key processing loop.\n    - bb78 and bb78.bb78_crit_edge correspond to the second loop in the original function that encrypts data.\n    - bb87 corresponds to the cleanup and return phase.\n  - **Computed O0 freq(bb) Table**:\n    - From the O0 profile, the hottest blocks are 74, 76, and 87 with frequencies of 513, 512, and 512, respectively. These correspond to the main loop in the optimized function (bb78 and its continuation).\n    - Blocks like 14, 16, and 46 (frequencies 19 and 18) correspond to the setup and first loop (bb6 and bb6.bb6_crit_edge).\n    - Blocks with lower frequencies (e.g., 0, 53, 89) correspond to initialization and error handling (bb and bb87).\n  - **Block Splitting/Merging**:\n    - The optimized function merges some blocks and eliminates redundant ones. For example, the initialization and setup are compacted into bb, and the loops are streamlined into bb6/bb78 with their critical edges.\n  - **Summary Line**:\n    - The total number of blocks in the sorted list is exactly 7. No blocks are missing or duplicated."
+  }
+]

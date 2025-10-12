@@ -1,0 +1,719 @@
+[
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "bit_count",
+      "numBB": 7,
+      "originalSet": "bb, bb.bb8_crit_edge, bb1.preheader, bb1, bb1.bb1_crit_edge, bb8.loopexit, bb8",
+      "predictedSet": "bb1, bb1.bb1_crit_edge, bb1.preheader, bb8.loopexit, bb, bb8, bb.bb8_crit_edge",
+      "tokenCount": 2551,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb1"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb1"
+      },
+      {
+        "name": "bb1.bb1_crit_edge"
+      },
+      {
+        "name": "bb1.preheader"
+      },
+      {
+        "name": "bb8.loopexit"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb8"
+      },
+      {
+        "name": "bb.bb8_crit_edge"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - 0 maps to bb\n    - 0_8.ce maps to bb.bb8_crit_edge\n    - 1.ph maps to bb1.preheader\n    - 1 maps to bb1\n    - 1_1.ce maps to bb1.bb1_crit_edge\n    - 8.le maps to bb8.loopexit\n    - 8 maps to bb8\n  - **Computed O1 freq(bb) Table**:\n    - bb: 90,000,000\n    - bb.bb8_crit_edge: 0\n    - bb1.preheader: 90,000,000\n    - bb1: 1,059,527,520\n    - bb1.bb1_crit_edge: 969,527,520\n    - bb8.loopexit: 90,000,000\n    - bb8: 90,000,000\n  - **Block Analysis**:\n    - bb1 is the hottest block due to its high execution count (1,059,527,520).\n    - bb1.bb1_crit_edge is the second hottest due to its high loop-back edge count (969,527,520).\n    - bb1.preheader, bb8.loopexit, bb, and bb8 have equal counts (90,000,000) but are ranked based on their structural role.\n    - bb.bb8_crit_edge is cold (0 executions).\n  - **Summary**:\n    - The total number of blocks in the sorted list is exactly 7. No blocks are missing or duplicated."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "ntbl_bitcnt",
+      "numBB": 7,
+      "originalSet": "bb, bb.bb16_crit_edge, bb5.preheader, bb5, bb5.bb5_crit_edge, bb16.loopexit, bb16",
+      "predictedSet": "bb5, bb5.bb5_crit_edge, bb5.preheader, bb16.loopexit, bb, bb16, bb.bb16_crit_edge",
+      "tokenCount": 2940,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb5"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb5.bb5_crit_edge"
+      },
+      {
+        "name": "bb5.preheader"
+      },
+      {
+        "name": "bb16.loopexit"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb.bb16_crit_edge"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - 0 in the -O2 profile corresponds to bb in the optimized function.\n    - 0_16.ce corresponds to bb.bb16_crit_edge.\n    - 5.ph corresponds to bb5.preheader.\n    - 5 corresponds to bb5.\n    - 5_5.ce corresponds to bb5.bb5_crit_edge.\n    - 16.le corresponds to bb16.loopexit.\n    - 16 corresponds to bb16.\n\n  - **Computed O1 freq(bb) Table**:\n    - bb: 90,000,000\n    - bb.bb16_crit_edge: 160\n    - bb5.preheader: 89,999,840\n    - bb5: 443,116,880\n    - bb5.bb5_crit_edge: 353,117,040\n    - bb16.loopexit: 89,999,840\n    - bb16: 90,000,000\n\n  - **Block Splitting/Merging**:\n    - No blocks were split or merged in the optimized function. The structure of the basic blocks remains consistent between the -O2 and -O3 versions.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 7."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "btbl_bitcnt",
+      "numBB": 7,
+      "originalSet": "bb, bb.bb16_crit_edge, bb5.preheader, bb5, bb5.bb5_crit_edge, bb16.loopexit, bb16",
+      "predictedSet": "bb, bb.bb16_crit_edge, bb16, bb5.preheader, bb5, bb5.bb5_crit_edge, bb16.loopexit",
+      "tokenCount": 2813,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb.bb16_crit_edge"
+      },
+      {
+        "name": "bb16"
+      },
+      {
+        "name": "bb5.preheader"
+      },
+      {
+        "name": "bb5"
+      },
+      {
+        "name": "bb5.bb5_crit_edge"
+      },
+      {
+        "name": "bb16.loopexit"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**: The structure of the optimized function is nearly identical to the original function at -O2. The basic blocks in the optimized function correspond directly to those in the original function, with no significant changes in structure (e.g., no blocks were split, merged, or removed).\n  - **Computed O1 freq(bb) Table**: All basic block counts and edge counts in the profile are 0. This means no execution data is available to differentiate the hotness of blocks based on actual runtime behavior. In such cases, the entry block (bb) is assumed to be the hottest, as it is always executed at least once.\n  - **Assumptions**: Since all profile counts are 0, the ranking is based on structural analysis and the assumption that the entry block (bb) is the most frequently executed. Other blocks are ranked based on their proximity to the entry block and their likelihood of being executed in a typical control flow.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 7."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "main1",
+      "numBB": 64,
+      "originalSet": "bb, bb3, bb6, bb11, bb11.bb206_crit_edge, bb20.preheader, bb15, bb62.preheader, bb20, bb20.bb20_crit_edge, bb27.preheader, bb27, bb27.bb27_crit_edge, bb34.preheader, bb34, bb34.bb34_crit_edge, bb41.preheader, bb41, bb41.bb41_crit_edge, bb48.preheader, bb48, bb48.bb48_crit_edge, bb55.preheader, bb55, bb55.bb55_crit_edge, bb62, bb62.bb62_crit_edge, bb72, bb74, bb74.bb74_crit_edge, bb84, bb86, bb86.bb86_crit_edge, bb96, bb98, bb98.bb98_crit_edge, bb108, bb110, bb110.bb110_crit_edge, bb120, bb122, bb122.bb122_crit_edge, bb132, bb132.bb183_crit_edge, bb136, bb138, bb142, bb142.bb142_crit_edge, bb154, bb158, bb158.bb158_crit_edge, bb170, bb170.bb138_crit_edge, bb176, bb183.loopexit, bb183, bb183.bb203_crit_edge, bb188.preheader, bb188, bb188.bb188_crit_edge, bb200, bb203, bb206.loopexit, bb206",
+      "predictedSet": "bb116, bb132, bb116_116.ce, bb132_132.ce, bb62, bb77, bb92, bb32, bb47, bb62_62.ce, bb77_77.ce, bb92_92.ce, bb17, bb112, bb144, bb128, bb13, bb27, bb31, bb42, bb46, bb57, bb61, bb72, bb87, bb106, bb150, bb170, bb20, bb27_31.ce, bb42_46.ce, bb57_61.ce, bb72_76.ce, bb87_91.ce, bb102, bb102_106.ce, bb170_174.ce, bb6, bb3, bb11, bb15, bb29, bb44, bb59, bb74, bb89, bb104, bb172, bb174, bb110, bb132.bb183_crit_edge, bb136, bb138, bb142, bb154, bb158, bb183, bb183.bb203_crit_edge, bb188, bb188.bb188_crit_edge, bb200, bb203, bb206, bb206.loopexit",
+      "tokenCount": 17826,
+      "discrepancy": true,
+      "duplicates": [],
+      "missing": [
+        "bb",
+        "bb11.bb206_crit_edge",
+        "bb20.preheader",
+        "bb62.preheader",
+        "bb20.bb20_crit_edge",
+        "bb27.preheader",
+        "bb27.bb27_crit_edge",
+        "bb34.preheader",
+        "bb34",
+        "bb34.bb34_crit_edge",
+        "bb41.preheader",
+        "bb41",
+        "bb41.bb41_crit_edge",
+        "bb48.preheader",
+        "bb48",
+        "bb48.bb48_crit_edge",
+        "bb55.preheader",
+        "bb55",
+        "bb55.bb55_crit_edge",
+        "bb62.bb62_crit_edge",
+        "bb74.bb74_crit_edge",
+        "bb84",
+        "bb86",
+        "bb86.bb86_crit_edge",
+        "bb96",
+        "bb98",
+        "bb98.bb98_crit_edge",
+        "bb108",
+        "bb110.bb110_crit_edge",
+        "bb120",
+        "bb122",
+        "bb122.bb122_crit_edge",
+        "bb142.bb142_crit_edge",
+        "bb158.bb158_crit_edge",
+        "bb170.bb138_crit_edge",
+        "bb176",
+        "bb183.loopexit",
+        "bb188.preheader"
+      ],
+      "extra": [
+        "bb116",
+        "bb116_116.ce",
+        "bb132_132.ce",
+        "bb77",
+        "bb92",
+        "bb32",
+        "bb47",
+        "bb62_62.ce",
+        "bb77_77.ce",
+        "bb92_92.ce",
+        "bb17",
+        "bb112",
+        "bb144",
+        "bb128",
+        "bb13",
+        "bb31",
+        "bb42",
+        "bb46",
+        "bb57",
+        "bb61",
+        "bb87",
+        "bb106",
+        "bb150",
+        "bb27_31.ce",
+        "bb42_46.ce",
+        "bb57_61.ce",
+        "bb72_76.ce",
+        "bb87_91.ce",
+        "bb102",
+        "bb102_106.ce",
+        "bb170_174.ce",
+        "bb29",
+        "bb44",
+        "bb59",
+        "bb89",
+        "bb104",
+        "bb172",
+        "bb174"
+      ],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb116"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb116"
+      },
+      {
+        "name": "bb132"
+      },
+      {
+        "name": "bb116_116.ce"
+      },
+      {
+        "name": "bb132_132.ce"
+      },
+      {
+        "name": "bb62"
+      },
+      {
+        "name": "bb77"
+      },
+      {
+        "name": "bb92"
+      },
+      {
+        "name": "bb32"
+      },
+      {
+        "name": "bb47"
+      },
+      {
+        "name": "bb62_62.ce"
+      },
+      {
+        "name": "bb77_77.ce"
+      },
+      {
+        "name": "bb92_92.ce"
+      },
+      {
+        "name": "bb17"
+      },
+      {
+        "name": "bb112"
+      },
+      {
+        "name": "bb144"
+      },
+      {
+        "name": "bb128"
+      },
+      {
+        "name": "bb13"
+      },
+      {
+        "name": "bb27"
+      },
+      {
+        "name": "bb31"
+      },
+      {
+        "name": "bb42"
+      },
+      {
+        "name": "bb46"
+      },
+      {
+        "name": "bb57"
+      },
+      {
+        "name": "bb61"
+      },
+      {
+        "name": "bb72"
+      },
+      {
+        "name": "bb87"
+      },
+      {
+        "name": "bb106"
+      },
+      {
+        "name": "bb150"
+      },
+      {
+        "name": "bb170"
+      },
+      {
+        "name": "bb20"
+      },
+      {
+        "name": "bb27_31.ce"
+      },
+      {
+        "name": "bb42_46.ce"
+      },
+      {
+        "name": "bb57_61.ce"
+      },
+      {
+        "name": "bb72_76.ce"
+      },
+      {
+        "name": "bb87_91.ce"
+      },
+      {
+        "name": "bb102"
+      },
+      {
+        "name": "bb102_106.ce"
+      },
+      {
+        "name": "bb170_174.ce"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb3"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb15"
+      },
+      {
+        "name": "bb29"
+      },
+      {
+        "name": "bb44"
+      },
+      {
+        "name": "bb59"
+      },
+      {
+        "name": "bb74"
+      },
+      {
+        "name": "bb89"
+      },
+      {
+        "name": "bb104"
+      },
+      {
+        "name": "bb172"
+      },
+      {
+        "name": "bb174"
+      },
+      {
+        "name": "bb110"
+      },
+      {
+        "name": "bb132.bb183_crit_edge"
+      },
+      {
+        "name": "bb136"
+      },
+      {
+        "name": "bb138"
+      },
+      {
+        "name": "bb142"
+      },
+      {
+        "name": "bb154"
+      },
+      {
+        "name": "bb158"
+      },
+      {
+        "name": "bb183"
+      },
+      {
+        "name": "bb183.bb203_crit_edge"
+      },
+      {
+        "name": "bb188"
+      },
+      {
+        "name": "bb188.bb188_crit_edge"
+      },
+      {
+        "name": "bb200"
+      },
+      {
+        "name": "bb203"
+      },
+      {
+        "name": "bb206"
+      },
+      {
+        "name": "bb206.loopexit"
+      }
+    ],
+    "additionalNotes": "- **Mapping Explanation**: The mapping of blocks from -O2 to -O3 was based on structural similarity and the profile data. Blocks with the same functionality in the control flow graph were matched.\n  - **Computed O1 freq(bb) Table**: The frequency of each block in the -O2 profile was directly used to estimate the hotness of corresponding blocks in the optimized -O3 version.\n  - **Block Transformations**: Some blocks were split or merged during optimization. For example, loop headers and critical edges were introduced in the optimized version, but their hotness was inferred from the original profile.\n  - **Total Blocks in Sorted List**: 64 blocks.\n\nSummary: The total number of blocks in the sorted list is exactly 64."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "bfopen",
+      "numBB": 6,
+      "originalSet": "bb, bb.bb10_crit_edge, bb3, bb6, bb7, bb10",
+      "predictedSet": "bb, bb.bb10_crit_edge, bb10, bb3, bb6, bb7",
+      "tokenCount": 2294,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb.bb10_crit_edge"
+      },
+      {
+        "name": "bb10"
+      },
+      {
+        "name": "bb3"
+      },
+      {
+        "name": "bb6"
+      },
+      {
+        "name": "bb7"
+      }
+    ],
+    "additionalNotes": "- The profile data for the -O2 version indicates that all basic blocks and edges have a count of 0. This means no execution data is available to differentiate the hotness of blocks based on runtime behavior.\n  - Mapping old blocks to new blocks is straightforward as the structure of the function remains unchanged between the -O2 and -O3 versions. No blocks were split, merged, or removed.\n  - Since all blocks have equal execution counts (0), the hotness ranking is based on the order of appearance in the control flow graph.\n  - Computed freq(bb) table for -O2:\n    text\n    bb: 0\n    bb.bb10_crit_edge: 0\n    bb3: 0\n    bb6: 0\n    bb7: 0\n    bb10: 0\n    \n  - Total number of blocks in the sorted list is exactly 6."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "bfread",
+      "numBB": 4,
+      "originalSet": "bb, bb3, bb7, bb12",
+      "predictedSet": "bb, bb3, bb7, bb12",
+      "tokenCount": 2231,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb3"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb12"
+      }
+    ],
+    "additionalNotes": "- The basic block profile and edge profile indicate that all blocks and edges have a count of 0. This suggests that the function was not executed during profiling, or the profiling data is incomplete or invalid.\n  - Mapping old blocks to new blocks is straightforward as the structure of the function remains unchanged between the -O2 and -O3 versions. The blocks bb, bb3, bb7, and bb12 in the optimized function directly correspond to their counterparts in the original function.\n  - Since all blocks have the same execution count (0), the \"hotness\" ranking is arbitrary. I have listed the blocks in the order they appear in the function.\n  - No blocks were split, merged, or removed during optimization.\n\n**Summary**: The total number of blocks in the sorted list is exactly 4."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "bfwrite",
+      "numBB": 4,
+      "originalSet": "bb, bb.bb10_crit_edge, bb4, bb10",
+      "predictedSet": "bb, bb.bb10_crit_edge, bb4, bb10",
+      "tokenCount": 2425,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb.bb10_crit_edge"
+      },
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb10"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**: The basic blocks in the -O2 and -O3 versions are structurally identical, so the mapping is direct: 0 → bb, 0_10.ce → bb.bb10_crit_edge, 4 → bb4, and 10 → bb10.\n  - **Computed O1 freq(bb) Table**:\n    - bb (0): 0\n    - bb.bb10_crit_edge (0_10.ce): 0\n    - bb4 (4): 0\n    - bb10 (10): 0\n  - **Block Splitting/Merging**: No blocks were split, merged, or removed during optimization.\n  - **Reasoning**: Since all basic block counts and edge counts are zero in the profile data, the \"hotness\" ranking is based on the structural flow of the function. The entry block (bb) is the starting point and is likely to be executed first, followed by the critical edge block (bb.bb10_crit_edge), then the conditional block (bb4), and finally the merging block (bb10).\n\n- **Summary**: The total number of blocks in the sorted list is exactly 4."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "bitstring",
+      "numBB": 23,
+      "originalSet": "bb, bb.bb18_crit_edge, bb11, bb18, bb18.bb75_crit_edge, bb21, bb21.bb38_crit_edge, bb25, bb25.bb38_crit_edge, bb36, bb38, bb38.bb75_crit_edge, bb43.preheader, bb43, bb43.bb58_crit_edge, bb56, bb58, bb58.bb72_crit_edge, bb70, bb72, bb72.bb43_crit_edge, bb75.loopexit, bb75",
+      "predictedSet": "bb, bb.bb18_crit_edge, bb11, bb18, bb18.bb75_crit_edge, bb21, bb21.bb38_crit_edge, bb25, bb25.bb38_crit_edge, bb36, bb38, bb38.bb75_crit_edge, bb43.preheader, bb43, bb43.bb58_crit_edge, bb56, bb58, bb58.bb72_crit_edge, bb70, bb72, bb72.bb43_crit_edge, bb75.loopexit, bb75",
+      "tokenCount": 6734,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb.bb18_crit_edge"
+      },
+      {
+        "name": "bb11"
+      },
+      {
+        "name": "bb18"
+      },
+      {
+        "name": "bb18.bb75_crit_edge"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb21.bb38_crit_edge"
+      },
+      {
+        "name": "bb25"
+      },
+      {
+        "name": "bb25.bb38_crit_edge"
+      },
+      {
+        "name": "bb36"
+      },
+      {
+        "name": "bb38"
+      },
+      {
+        "name": "bb38.bb75_crit_edge"
+      },
+      {
+        "name": "bb43.preheader"
+      },
+      {
+        "name": "bb43"
+      },
+      {
+        "name": "bb43.bb58_crit_edge"
+      },
+      {
+        "name": "bb56"
+      },
+      {
+        "name": "bb58"
+      },
+      {
+        "name": "bb58.bb72_crit_edge"
+      },
+      {
+        "name": "bb70"
+      },
+      {
+        "name": "bb72"
+      },
+      {
+        "name": "bb72.bb43_crit_edge"
+      },
+      {
+        "name": "bb75.loopexit"
+      },
+      {
+        "name": "bb75"
+      }
+    ],
+    "additionalNotes": "- The profile data indicates that all basic blocks and edges have a count of 0. This means no execution frequency data is available to differentiate the hotness of blocks.\n  - Mapping from the -O2 version to the -O3 version is straightforward as the structure of the function remains largely unchanged. No blocks were split, merged, or removed.\n  - Since all blocks have equal frequency (0), the order of blocks in the sorted list is based on their appearance in the optimized function.\n\n- **Summary**: The total number of blocks in the sorted list is exactly 23."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "bstr_i",
+      "numBB": 12,
+      "originalSet": "bb, bb.bb22_crit_edge, bb1, bb1.bb22_crit_edge, bb4.preheader, bb4, bb4.bb22.loopexit_crit_edge, bb14, bb14.bb4_crit_edge, bb22.loopexitsplit, bb22.loopexit, bb22",
+      "predictedSet": "bb, bb.bb22_crit_edge, bb1, bb1.bb22_crit_edge, bb4.preheader, bb4, bb4.bb22.loopexit_crit_edge, bb14, bb14.bb4_crit_edge, bb22.loopexitsplit, bb22.loopexit, bb22",
+      "tokenCount": 3595,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb.bb22_crit_edge"
+      },
+      {
+        "name": "bb1"
+      },
+      {
+        "name": "bb1.bb22_crit_edge"
+      },
+      {
+        "name": "bb4.preheader"
+      },
+      {
+        "name": "bb4"
+      },
+      {
+        "name": "bb4.bb22.loopexit_crit_edge"
+      },
+      {
+        "name": "bb14"
+      },
+      {
+        "name": "bb14.bb4_crit_edge"
+      },
+      {
+        "name": "bb22.loopexitsplit"
+      },
+      {
+        "name": "bb22.loopexit"
+      },
+      {
+        "name": "bb22"
+      }
+    ],
+    "additionalNotes": "- The profile data indicates all basic blocks and edges have a count of 0. This suggests that the function was not executed during profiling, or the profiling data was not collected correctly.\n  - Without execution data, all blocks are equally \"cold,\" and the hotness ranking is arbitrary. The order above follows the natural flow of the function.\n  - No blocks were split, merged, or removed between the -O2 and -O3 versions.\n  - The total number of blocks in the sorted list is exactly 12."
+  },
+  {
+    "benchmarkInfo": {
+      "benchmarkName": "automotive_bitcount",
+      "funcName": "main",
+      "numBB": 9,
+      "originalSet": "bb, bb4, bb7, bb7.bb21_crit_edge, bb12.preheader, bb12, bb12.bb12_crit_edge, bb21.loopexit, bb21",
+      "predictedSet": "bb12, bb12.bb12_crit_edge, bb12.preheader, bb, bb7, bb21, bb21.loopexit, bb7.bb21_crit_edge, bb4",
+      "tokenCount": 3446,
+      "discrepancy": false,
+      "duplicates": [],
+      "missing": [],
+      "extra": [],
+      "exceed": false
+    },
+    "hottestBB": {
+      "bbName": "bb12"
+    },
+    "bbOrderByHotness": [
+      {
+        "name": "bb12"
+      },
+      {
+        "name": "bb12.bb12_crit_edge"
+      },
+      {
+        "name": "bb12.preheader"
+      },
+      {
+        "name": "bb"
+      },
+      {
+        "name": "bb7"
+      },
+      {
+        "name": "bb21"
+      },
+      {
+        "name": "bb21.loopexit"
+      },
+      {
+        "name": "bb7.bb21_crit_edge"
+      },
+      {
+        "name": "bb4"
+      }
+    ],
+    "additionalNotes": "- **Mapping Old Blocks to New Blocks**:\n    - 0 in the -O2 profile corresponds to bb in the optimized function.\n    - 12 corresponds to bb12.\n    - 12.ph corresponds to bb12.preheader.\n    - 12_12.ce corresponds to bb12.bb12_crit_edge.\n    - 21 corresponds to bb21.\n    - 21.le corresponds to bb21.loopexit.\n    - 4 corresponds to bb4.\n    - 7 corresponds to bb7.\n    - 7_21.ce corresponds to bb7.bb21_crit_edge.\n\n  - **Computed O1 freq(bb) Table**:\n    - bb: 1 (from 0 : 1)\n    - bb4: 0 (from 4 : 0)\n    - bb7: 1 (from 7 : 1)\n    - bb7.bb21_crit_edge: 0 (from 7_21.ce : 0)\n    - bb12.preheader: 1 (from 12.ph : 1)\n    - bb12: 80 (from 12 : 80)\n    - bb12.bb12_crit_edge: 79 (from 12_12.ce : 79)\n    - bb21.loopexit: 1 (from 21.le : 1)\n    - bb21: 1 (from 21 : 1)\n\n  - **Block Splitting/Merging**:\n    - No blocks were split or merged in the optimized function. The mapping is direct.\n\n  - **Summary**:\n    - The total number of blocks in the sorted list is exactly 9. No blocks are missing or duplicated."
+  }
+]
