@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(HotBlockPrediction)
+project(Hydra)
 
 set(CMAKE_CXX_STANDARD 17 CACHE STRING "")
 
@@ -22,26 +22,6 @@ add_library(WeightedProfileInference MODULE
     lib/Utils/WeightedProfileInference.cpp
 )
 
-add_library(HotBlockRandom MODULE
-    lib/HotBlock/Random.cpp
-    lib/HotBlock/RandomPlugin.cpp
-)
-
-add_library(HotBlockNested MODULE
-    lib/HotBlock/Nested.cpp
-    lib/HotBlock/NestedPlugin.cpp
-)
-
-add_library(HotBlockPredictor MODULE
-    lib/HotBlock/Predictor.cpp
-    lib/HotBlock/PredictorPlugin.cpp
-)
-
-add_library(HotBlockProfile MODULE
-    lib/HotBlock/Profile.cpp
-    lib/HotBlock/ProfilePlugin.cpp
-)
-
 add_library(BlockOrderingRandom MODULE
     lib/BlockOrdering/Random.cpp
     lib/BlockOrdering/RandomPlugin.cpp
@@ -57,32 +37,15 @@ add_library(BlockOrderingProfile MODULE
     lib/BlockOrdering/ProfilePlugin.cpp
 )
 
-add_library(BlockOrderingHydra MODULE
-    lib/BlockOrdering/Hydra.cpp
-    lib/BlockOrdering/HydraPlugin.cpp)
+add_library(BlockOrderingHistRegion MODULE
+    lib/BlockOrdering/HistRegion.cpp
+    lib/BlockOrdering/HistRegionPlugin.cpp)
 
-add_library(BlockOrderingAyupov MODULE
-    lib/BlockOrdering/Ayupov.cpp
-    lib/BlockOrdering/AyupovPlugin.cpp)
+add_library(BlockOrderingHashMatching MODULE
+    lib/BlockOrdering/HashMatching.cpp
+    lib/BlockOrdering/HashMatchingPlugin.cpp)
 
 target_include_directories(WeightedProfileInference PRIVATE
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/Utils"
-)
-
-target_include_directories(HotBlockRandom PRIVATE
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/HotBlock"
-)
-
-target_include_directories(HotBlockNested PRIVATE
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/HotBlock"
-)
-
-target_include_directories(HotBlockPredictor PRIVATE
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/HotBlock"
-)
-
-target_include_directories(HotBlockProfile PRIVATE
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/HotBlock"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/Utils"
 )
 
@@ -99,12 +62,12 @@ target_include_directories(BlockOrderingProfile PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/include/Utils"
 )
 
-target_include_directories(BlockOrderingHydra PRIVATE
+target_include_directories(BlockOrderingHistRegion PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/include/BlockOrdering"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/Utils"
 )
 
-target_include_directories(BlockOrderingAyupov PRIVATE
+target_include_directories(BlockOrderingHashMatching PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/include/BlockOrdering"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/Utils"
 )

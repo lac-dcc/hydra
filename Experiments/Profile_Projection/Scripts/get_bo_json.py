@@ -22,10 +22,10 @@ def process_results(path, type):
             except:
                 pass
             arq1.close()
-        if type == 'Profile':
-            arq = open(aux+'/full_execution_time.txt','r')
-            json_data[bench_name]['full_execution_time'] = float(arq.readlines()[0])
-            arq.close()
+        # if type == 'Profile':
+        arq = open(aux+'/full_execution_time.txt','r')
+        json_data[bench_name]['full_execution_time'] = float(arq.readlines()[0])
+        arq.close()
         arq = open(aux+'/execution_time.txt','r')
         json_data[bench_name]['execution_time'] = float(arq.readlines()[0])
         arq.close()
@@ -40,12 +40,19 @@ def sort_json(data):
     else:
         return data
 
-profile_dir = os.environ.get('RESULTS_FOLDER_PROFILE', 'Results/cBench/Profile')
+hash_matching_dir = os.environ.get('RESULTS_FOLDER_HASH_MATCHING', 'Results/cBench/Hash_Matching')
+hist_region_dir = os.environ.get('RESULTS_FOLDER_HIST_REGION', 'Results/cBench/Hist_Region')
 
-profile_json = process_results(profile_dir, 'Profile')
+hash_matching_json = process_results(hash_matching_dir, 'hash-matching')
+hist_region_json = process_results(hist_region_dir, 'hist-region')
 
-profile_json_file = os.environ.get('PROJECTION_JSON_FILE')
+hash_matching_json_file = os.environ.get('HASH_MATCHING_JSON_FILE')
+hist_region_json_file = os.environ.get('HIST_REGION_JSON_FILE')
 
-arq = open(profile_json_file,'w')
-json.dump(sort_json(profile_json), arq)
+arq = open(hash_matching_json_file,'w')
+json.dump(sort_json(hash_matching_json), arq)
+arq.close()
+
+arq = open(hist_region_json_file,'w')
+json.dump(sort_json(hist_region_json), arq)
 arq.close()

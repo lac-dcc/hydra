@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# export LLVM_INSTALL_DIR="/usr/local"
-# export BASE_DIR="/home/jvf/Codes/hydra"
-
 LLVM_OPT="$LLVM_INSTALL_DIR/bin/opt"
 LLVM_LINK=$LLVM_INSTALL_DIR/bin/llvm-link
 LLVM_DIS=$LLVM_INSTALL_DIR/bin/llvm-dis
@@ -10,14 +7,21 @@ CLANG="$LLVM_INSTALL_DIR/bin/clang"
 
 CURRENT_DIR=$(pwd)
 
-PROFILE_PROJECTION_SCRIPT="$SCRIPTS_FOLDER/profile_projection.sh"
+HIST_REGION_PROJECTION_SCRIPT="$SCRIPTS_FOLDER/hist_region_projection.sh"
+HASH_MATCHING_PROJECTION_SCRIPT="$SCRIPTS_FOLDER/hash_matching_projection.sh"
 # CFLAGS="-Xclang -disable-O0-optnone -Wno-everything -std=c99 -c -S -emit-llvm"
 
 BENCH_DIR=$BASE_DIR/Benchmark/cBench
-export RESULTS_FOLDER_PROFILE=$BASE_DIR/Results/cBench/Profile
-export PROJECTION_JSON_FILE="$BASE_DIR/Experiments/Profile_Projection/JSON_Files/Ayupov/$EXP.json"
+export RESULTS_FOLDER_HASH_MATCHING=$BASE_DIR/Results/cBench/Hash_Matching
+export RESULTS_FOLDER_HIST_REGION=$BASE_DIR/Results/cBench/Hist_Region
+export HASH_MATCHING_JSON_FILE="$BASE_DIR/Experiments/Profile_Projection/JSON_Files/Hash_Matching/$EXP.json"
+export HIST_REGION_JSON_FILE="$BASE_DIR/Experiments/Profile_Projection/JSON_Files/Hist_Region/$EXP.json"
 
-rm -rf $RESULTS_FOLDER_PROFILE
+rm -rf $RESULTS_FOLDER_HASH_MATCHING
+rm -rf $RESULTS_FOLDER_HIST_REGION
+
+mkdir -p $(dirname $HASH_MATCHING_JSON_FILE)
+mkdir -p $(dirname $HIST_REGION_JSON_FILE)
 
 cd $BENCH_DIR
 bash all__delete_work_dirs > /dev/null 2>&1
@@ -52,23 +56,49 @@ do
             cd tmp
             echo "running benchmark $d"
 
-            rm -rf $BASE_DIR/Results/Profile/   
+            # Hash based matching
+
+            rm -rf $BASE_DIR/Results/Hash_Matching/   
             
-            START_TIME_PROFILE=`date +%s.%N`
-            bash "$PROFILE_PROJECTION_SCRIPT" $BENCH_DIR/$d # > /dev/null 2>&1
+            START_TIME_HASH_MATCHING=`date +%s.%N`
+            bash "$HASH_MATCHING_PROJECTION_SCRIPT" $BENCH_DIR/$d > /dev/null 2>&1
             ret_code=$?
             if [[ $ret_code -ne 0 ]]
             then
                 echo "Profile Projection heuristic failed at benchmark $d"
                 exit 1
             fi
-            END_TIME_PROFILE=`date +%s.%N`
-            RUNTIME_PROFILE=$( echo "$END_TIME_PROFILE - $START_TIME_PROFILE" | bc -l )
+            END_TIME_HASH_MATCHING=`date +%s.%N`
+            RUNTIME_HASH_MATCHING=$( echo "$END_TIME_HASH_MATCHING - $START_TIME_HASH_MATCHING" | bc -l )
 
-            mkdir -p $RESULTS_FOLDER_PROFILE/$d
+            # echo "Run hash based matching for $RUNTIME_HASH_MATCHING seconds"
 
-            mv $BASE_DIR/Results/Profile/$d/*.txt $RESULTS_FOLDER_PROFILE/$d/.
-            echo $RUNTIME_PROFILE > $RESULTS_FOLDER_PROFILE/$d/full_execution_time.txt
+            mkdir -p $RESULTS_FOLDER_HASH_MATCHING/$d
+
+            mv $BASE_DIR/Results/Hash_Matching/$d/*.txt $RESULTS_FOLDER_HASH_MATCHING/$d/.
+            echo $RUNTIME_HASH_MATCHING > $RESULTS_FOLDER_HASH_MATCHING/$d/full_execution_time.txt
+
+            # Hist region based matching
+
+            rm -rf $BASE_DIR/Results/Hist_Region/   
+            
+            START_TIME_HIST_REGION=`date +%s.%N`
+            bash "$HIST_REGION_PROJECTION_SCRIPT" $BENCH_DIR/$d > /dev/null 2>&1
+            ret_code=$?
+            if [[ $ret_code -ne 0 ]]
+            then
+                echo "Profile Projection heuristic failed at benchmark $d"
+                exit 1
+            fi
+            END_TIME_HIST_REGION=`date +%s.%N`
+            RUNTIME_HIST_REGION=$( echo "$END_TIME_HIST_REGION - $START_TIME_HIST_REGION" | bc -l )
+
+            # echo "Run hist-region based matching for $RUNTIME_HIST_REGION seconds"
+
+            mkdir -p $RESULTS_FOLDER_HIST_REGION/$d
+
+            mv $BASE_DIR/Results/Hist_Region/$d/*.txt $RESULTS_FOLDER_HIST_REGION/$d/.
+            echo $RUNTIME_HIST_REGION > $RESULTS_FOLDER_HIST_REGION/$d/full_execution_time.txt
 
             cd ..
             rm -rf tmp

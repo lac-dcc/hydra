@@ -19,6 +19,9 @@ export PREDICTOR_JSON_FILE="$BASE_DIR/Experiments/Profile_Prediction/JSON_Files/
 rm -rf $RESULTS_FOLDER_RANDOM
 rm -rf $RESULTS_FOLDER_PREDICTOR
 
+mkdir -p $(dirname $RANDOM_JSON_FILE)
+mkdir -p $(dirname $PREDICTOR_JSON_FILE)
+
 cd $BENCH_DIR
 bash all__delete_work_dirs > /dev/null 2>&1
 bash all__create_work_dirs > /dev/null 2>&1

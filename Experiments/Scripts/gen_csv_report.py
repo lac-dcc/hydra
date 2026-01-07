@@ -14,7 +14,7 @@ csv_data = [
     ['Benchmark Name', 'Function Name', 'Execution', 'Number of vertices', 'Number of edges', 'Min count', 'Max count', 'Block Ordering', 'Guess', 'Distance', 'Hit']
 ]
 
-base_dir = os.environ.get('BASE_DIR', '/home/elisa/Codes/hydra/')
+base_dir = os.environ.get('BASE_DIR', '')
 gt_json = os.environ.get('GT_JSON_FILE', '')
 h_json = os.environ.get('H_JSON_FILE', '')
 csv_file = os.environ.get('CSV_FILE', '')

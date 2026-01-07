@@ -11,18 +11,15 @@ def compute_swap_distance(idx_array):
     return res
 
 csv_data = [
-    # ['Benchmark Name', 'Function Name', 'Execution', 'Number of vertices', 'Number of edges', 'Min count', 'Max count', 'Block Ordering', 'Upper Bound Guess', 'Upper Bound Distance', 'Upper Bound Hit', 'Hydra Guess', 'Hydra Distance', 'Hydra Hit']
     ['Benchmark Name', 'Function Name', 'Execution', 'Number of vertices', 'Number of edges', 'Min count', 'Max count', 'Block Ordering', 'Hydra Guess', 'Hydra Distance', 'Hydra Hit']
 ]
 
-base_dir = os.environ.get('BASE_DIR', '/home/jvf/Codes/hydra/')
+base_dir = os.environ.get('BASE_DIR', '')
 gt_json = os.environ.get('GT_JSON_FILE', '')
-# ub_json = os.environ.get('UB_JSON_FILE', '')
 h_json = os.environ.get('H_JSON_FILE', '')
 csv_file = os.environ.get('CSV_FILE', '')
 
 gt_data = json.load(open(gt_json,'r'))
-# ub_data = json.load(open(ub_json, 'r'))
 h_data = json.load(open(h_json,'r'))
 
 print('Generating CSV File for ' + h_json)
@@ -30,7 +27,6 @@ print('Generating CSV File for ' + h_json)
 for app_name in gt_data:
     for function_name in gt_data[app_name]:
         try:
-            # ub_guess = ub_data[app_name][function_name]
             h_guess = h_data[app_name][function_name]
         except:
             nodes = 0
@@ -81,17 +77,6 @@ for app_name in gt_data:
                 block_ordering_list.append(block)
                 sorted_block_indices[block] = idx
                 idx += 1
-            
-            ub_indices = []
-            ub_made_up_blocks = []
-            # for block in ub_guess:
-            #     try:
-            #         ub_indices.append(sorted_block_indices[block])
-            #     except:
-            #         ub_made_up_blocks.append(block)
-            #         continue
-            # ub_distance = compute_swap_distance(ub_indices)
-            # ub_hit = round(1.0-ub_distance/(nodes*(nodes-1.0)/2.0),4)
 
             h_indices = []
             h_made_up_blocks = []
@@ -109,37 +94,27 @@ for app_name in gt_data:
                 
             
             block_ordering = ';'.join(block_ordering_list)
-
-            # ub_ordering = ';'.join(ub_guess)
-            ub_missing_blocks = []
             
             h_ordering = ';'.join(h_guess)
             h_missing_blocks = []
 
             for block in block_ordering.split(';'):
-                # if block not in ub_ordering.split(';'):
-                #     ub_missing_blocks.append(block)
                 if block not in h_ordering.split(';'):
                     h_missing_blocks.append(block)
 
-            if len(h_missing_blocks) > 0 or len(h_made_up_blocks) > 0 or len(ub_missing_blocks) > 0 or len(ub_made_up_blocks) > 0:
+            if len(h_missing_blocks) > 0 or len(h_made_up_blocks) > 0:
                 if worked:
                     print('Error at: ' + app_name + '/' + function_name + '(' + str(nodes) + ' basic blocks)')
                     if len(h_missing_blocks) > 0:
                         print('Missing heuristic blocks: ' + ','.join(h_missing_blocks))
                     if len(h_made_up_blocks) > 0:
                         print('Made up heuristic blocks ' + ','.join(h_made_up_blocks))
-                    # if len(ub_missing_blocks) > 0:
-                    #     print('Missing upper bound blocks: ' + ','.join(ub_missing_blocks))
-                    # if len(ub_made_up_blocks) > 0:
-                    #     print('Made up upper bound blocks ' + ','.join(ub_made_up_blocks))
                     print('\n\n',end='')
                 worked = False
                 continue
             
             if max_count <= 0 or min_count < 0:
                 continue
-            # csv_data.append([app_name, function_name, execution_number, nodes, edges, min_count, max_count, str(block_ordering), str(ub_ordering), ub_distance, f"{ub_hit:.4f}".replace('.',','), str(h_ordering), h_distance, f"{h_hit:.4f}".replace('.',',')])
             csv_data.append([app_name, function_name, execution_number, nodes, edges, min_count, max_count, str(block_ordering), str(h_ordering), h_distance, f"{h_hit:.4f}".replace('.',',')])
 
 with open(csv_file, mode='w', newline='') as file:

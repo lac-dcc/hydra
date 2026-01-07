@@ -63,7 +63,6 @@ export THRESHOLD
 export MAX_ITER
 
 export LLVM_INSTALL_DIR="/usr/local"
-# export BASE_DIR="/home/jvf/Codes/hydra"
 export SCRIPTS_FOLDER="$BASE_DIR/Experiments/Profile_Projection/Scripts"
 export LL_FILES="$BASE_DIR/Experiments/Profile_Projection/LL_Files"
 export PROF_FILES="$BASE_DIR/Experiments/Profile_Projection/Profiles"

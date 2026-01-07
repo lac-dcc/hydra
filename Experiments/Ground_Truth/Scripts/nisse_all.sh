@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-# export BASE_DIR=/home/jvf/Codes/hydra
 export BENCH_DIR="$BASE_DIR/Benchmark/cBench"
 export RESULTS_DIR="$BASE_DIR/Benchmark_Results/cBench/cBench_benchmarks"
 export JSON_FILE="$BASE_DIR/Experiments/Ground_Truth/JSON_Files/$EXP.json"
@@ -15,6 +14,8 @@ cd $CURRENT_DIR
 
 rm -rf "$RESULTS_DIR"
 
+mkdir -p $(dirname $JSON_FILE)
+
 for i in $(seq 1 $NUM_INPUTS)
 do
     echo "running dataset $i/$NUM_INPUTS"
@@ -23,18 +24,14 @@ do
     do 
         if [ -d $BENCH_DIR/$d ]
         then
-            # # Runtime error with Nisse
-            # if [[ $d =~ ^"consumer" ]]; then continue; fi
-            # if [ "$d" = "security_rijndael_e" ]; then continue; fi
+            # Runtime error with Nisse
+            if [[ $d =~ ^"consumer" ]]; then continue; fi
+            if [ "$d" = "security_rijndael_e" ]; then continue; fi
 
-            # # Runtime error
-            # if [ "$d" = "office_ispell" ]; then continue; fi
-            # if [ "$d" = "security_rijndael_e" ]; then continue; fi
-            
             # Compilation error
-            if [ "$d" = "consumer_lame" ]; then continue; fi
             if [ "$d" = "consumer_mad" ]; then continue; fi
             if [ "$d" = "office_ghostscript" ]; then continue; fi
+            if [ "$d" = "office_ispell" ]; then continue; fi
             if [ "$d" = "office_rsynth" ]; then continue; fi
             if [ "$d" = "security_pgp_d" ]; then continue; fi
             if [ "$d" = "security_pgp_e" ]; then continue; fi
@@ -48,7 +45,7 @@ do
                 if [[ $ret_code -ne 0 ]]
                 then
                     echo "Benchmark $d failed"
-                    # exit 1
+                    exit 1
                 fi
             fi
         fi

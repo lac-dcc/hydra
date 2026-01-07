@@ -11,7 +11,7 @@ fi
 
 # LLVM tools:
 #
-source "$BASE_DIR/Benchmark_Scripts/config.sh"
+source "$BASE_DIR/Experiments/Scripts/config.sh"
 
 LLVM_OPT=$LLVM_INSTALL_DIR/bin/opt
 LLVM_CLANG=$LLVM_INSTALL_DIR/bin/clang
