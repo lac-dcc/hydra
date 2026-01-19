@@ -76,8 +76,7 @@ for exp_folder in exps:
             except:
                 # continue
                 print(i)
-        # json.dump(HB, open(base_dir+'/Experiments/Profile_Prediction/JSON_Files/LLMPred/'+exp_folder+'.json','w'))
-        os.makedirs(base_dir+'/Experiments/Profile_Prediction/JSON_Files/LLMPred', exist_ok=True)
-        json.dump(BO, open(base_dir+'/Experiments/Profile_Prediction/JSON_Files/LLMPred/'+exp_folder.replace('empty','o0')+'.json','w'))
+        os.makedirs(base_dir+'/Experiments/Profile_Prediction/JSON_Files/LLM_Pred', exist_ok=True)
+        json.dump(BO, open(base_dir+'/Experiments/Profile_Prediction/JSON_Files/LLM_Pred/'+exp_folder.replace('empty','o0')+'.json','w'))
     except:
         print('No LLM Prediction results in this experiment')

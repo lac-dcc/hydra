@@ -306,3 +306,5 @@ python3 "$BASE_DIR/Experiments/Scripts/extract_llm_proj_json.py"
 # Generate CSVs
 
 "$BASE_DIR/Experiments/Scripts/gen_csvs.sh"
+
+python3 "$BASE_DIR/Experiments/Scripts/collect_results.py"

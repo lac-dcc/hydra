@@ -8,7 +8,7 @@ do
     export GT_JSON_FILE="$BASE_DIR/Experiments/Ground_Truth/JSON_Files/Flags/$i.json"
 
     # Profile predictor heuristics
-    for j in LLVM Random LLMPred
+    for j in LLVM Random LLM_Pred
     do
         export H_JSON_FILE="$BASE_DIR/Experiments/Profile_Prediction/JSON_Files/$j/$i.json"
         export CSV_FILE="$BASE_DIR/Experiments/Profile_Prediction/CSV_Files/$j/$i.csv"
@@ -19,7 +19,7 @@ do
     # Profile projection heuristics
     for j in o0 o1 o2 o3
     do
-        for k in Hash_Matching Hist_Region LLMProj
+        for k in Hash_Matching Hist_Region LLM_Proj
         do
             export H_JSON_FILE="$BASE_DIR/Experiments/Profile_Projection/JSON_Files/$k/$j/$i.json"
             export CSV_FILE="$BASE_DIR/Experiments/Profile_Projection/CSV_Files/$k/$j/$i.csv"

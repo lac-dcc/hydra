@@ -59,7 +59,7 @@ for src_opt in exps:
                 except:
                     # continue
                     print(i)
-            os.makedirs(base_dir+'/Experiments/Profile_Projection/JSON_Files/LLMProj/'+src_opt, exist_ok=True)
-            json.dump(BO, open(base_dir+'/Experiments/Profile_Projection/JSON_Files/LLMProj/'+src_opt+'/'+dst_opt+'.json','w'))
+            os.makedirs(base_dir+'/Experiments/Profile_Projection/JSON_Files/LLM_Proj/'+src_opt, exist_ok=True)
+            json.dump(BO, open(base_dir+'/Experiments/Profile_Projection/JSON_Files/LLM_Proj/'+src_opt+'/'+dst_opt+'.json','w'))
         except:
             print('No LLM Projection results in this experiment')
