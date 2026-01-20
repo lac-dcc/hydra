@@ -7,6 +7,7 @@ from tabulate import tabulate
 from PIL import Image, ImageDraw, ImageFont
 
 base_dir = os.environ.get('BASE_DIR', '')
+os.makedirs(base_dir+'/Summarized_Results', exist_ok=True)
 
 prediction_results_folder = base_dir+'/Experiments/Profile_Prediction/CSV_Files'
 projection_results_folder = base_dir+'/Experiments/Profile_Projection/CSV_Files'
