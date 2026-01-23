@@ -195,7 +195,7 @@ for func_name, opt_func in opt_functions.items():
     print(f"  Generated prompt: {output_file}")
 
 if prompts:
-    json_output = f"{os.path.splitext(args.opt_file)[0]}_projection_prompts.json"
+    json_output = output_dir / f"projection_prompts.json"
     with open(json_output, 'w', encoding='utf-8') as f:
         json.dump(prompts, f, indent=2, ensure_ascii=False)
     print(f"\nAll prompts saved to: {json_output}")
