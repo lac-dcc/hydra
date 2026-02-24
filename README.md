@@ -6,7 +6,110 @@ Hydra is a collection of benchmarks and tools to test the ability of different t
 Each benchmark consits of a single compilable C file that runs with one or more different inputs.
 We provide execution counts for all the edges of each program, a [table](https://docs.google.com/spreadsheets/d/18C-DGg_l2gepRRfea_ivrW1o9qUde5fHHr6g3LIGn_I/edit?usp=sharing) that we call "*the Ground Truth*", plus scripts to extract and display these counts.
 
-## How to produce the ground truth
+## Build
+
+```bash
+cmake -S . -B build -DLLVM_INSTALL_DIR=/usr/lib/llvm-20
+cmake --build build -j$(nproc)
+```
+
+Requires CMake ≥ 3.20 and LLVM ≥ 17.
+
+## Projection pipeline
+
+Collect profiles at -O0, project them onto the -O3 CFG via block hash matching, then inject
+and compile — no second profiling run needed.
+
+```bash
+# 1. Normalized O0 IR
+clang -O0 -Xclang -disable-O0-optnone -emit-llvm -S src.c -o src.ll
+opt -S -passes="mem2reg,instnamer,loop-simplify,break-crit-edges" src.ll -o o0_norm.ll
+
+# 2. Instrument, run, extract edge profiles
+opt -passes="pgo-instr-gen,instrprof" o0_norm.ll -o inst.bc
+clang -fprofile-instr-generate inst.bc -o program
+LLVM_PROFILE_FILE=bench.profraw ./program
+llvm-profdata merge bench.profraw -o bench.profdata
+opt -S -passes="pgo-instr-use" --pgo-test-profile-file=bench.profdata o0_norm.ll -o annotated.ll
+build/bin/profdata2Edges annotated.ll o0_profiles/
+
+# 3. Normalized O3 IR, then project O0 profiles onto it
+clang -O3 -emit-llvm -S src.c -o src_o3.ll
+opt -S -passes="mem2reg,instnamer,loop-simplify,break-crit-edges" src_o3.ll -o o3_norm.ll
+opt -disable-output \
+    -load-pass-plugin=build/lib/libBlockOrderingHashMatching.so \
+    -passes="block-ordering-hash-matching" \
+    o3_norm.ll -prog o0_norm.ll -prof o0_profiles/ -proj-out projected/ \
+    -matching-threshold 25
+
+# 4. Inject projected profiles and compile
+opt -load-pass-plugin=build/lib/libHydraProfileInject.so \
+    -passes="hydra-inject=projected/,default<O3>" \
+    o3_norm.ll -o optimized.bc
+clang -O3 optimized.bc -o program_optimized
+```
+
+`run_cbench_pgo.sh` automates this over 32 cBench benchmarks and prints a six-pipeline
+comparison table (O0 reference, per-TU O3, per-TU PGO, whole-module O3, whole-module PGO
+oracle, Hydra projected).
+
+```bash
+# optional overrides
+LLVM_BIN=/path/to/llvm/bin  RUNS=5  bash run_cbench_pgo.sh
+```
+
+Results go to `cbench_pgo_results/results.csv`.
+
+The pipeline above uses LLVM's built-in `pgo-instr-gen`/`pgo-instr-use` instrumentation,
+which removes the dependency on an external profiler. If you have a
+[Nisse](https://github.com/lac-dcc/Nisse) build, its `.prof.full.edges` output is fully
+compatible — point `-prof` at Nisse's output directory and skip steps 2–3.
+
+The pipeline above uses LLVM's built-in `pgo-instr-gen`/`pgo-instr-use` instrumentation to
+collect profiles, which removes the dependency on an external profiler. If you have a
+[Nisse](https://github.com/lac-dcc/Nisse) build, its `.prof.full.edges` output is fully
+compatible — point `-prof` at Nisse's output directory and skip steps 2–3.
+
+## Tools
+
+### profdata2Edges
+
+Reads a PGO-annotated IR file (output of `pgo-instr-use`) and writes one `.prof.full.edges`
+file per function:
+
+```
+entry: 10000
+bb -> bb1 : 9000
+bb -> bb2 : 1000
+```
+
+```bash
+build/bin/profdata2Edges annotated.ll output_dir/
+```
+
+### HydraProfileInject
+
+LLVM opt pass. Reads `.prof.full.edges` files and injects `!prof branch_weights` and
+`function_entry_count` metadata into the IR.
+
+```bash
+opt -load-pass-plugin=build/lib/libHydraProfileInject.so \
+    -passes="hydra-inject=projected/,default<O3>" \
+    o3_norm.ll -o optimized.bc
+```
+
+### hydra2profdata
+
+Converts `.prof.full.edges` files to LLVM `.profdata`. Useful for coverage workflows;
+for PGO optimization use `HydraProfileInject` directly.
+
+```bash
+build/bin/hydra2profdata program.ll profiles/ output.profdata
+```
+
+Requires IR compiled with `pgo-instr-gen` (needs `__profd_` globals present in the IR).
+
+## How to produce the ground truth (using Nisse profiler)
 
 You can regenerate the ground truth (in [JSON](./JSON%20Files/jotaiMerlinResults.json)) running the script [nisse_all.sh](./Benchmark%20Scripts/Jotai/nisse_all.sh). The following dependencies are required:
 
