@@ -4,11 +4,9 @@
 #include <vector>
 #include <map>
 #include <set>
-#include <fstream>
+#include <limits>
 #include "SCC.h"
 #include "../WeightedProfileInference.h"
-
-// using namespace llvm;
 
 namespace llvm {
 namespace SCC {
@@ -35,8 +33,7 @@ public:
     FlowBlock *BestBlock = nullptr;
     std::shared_ptr<SCC> MatchedBlock = nullptr;
 
-    const double eps = 1e-9;
-    double BestDistance = 1e18+5;
+    double BestDistance = std::numeric_limits<double>::infinity();
 
     FlowBlock *Block = nullptr;
     std::shared_ptr<SCC> Matching = nullptr;
@@ -62,8 +59,7 @@ public:
     FlowBlock *BestBlock = nullptr;
     std::shared_ptr<SCC> MatchedBlock = nullptr;
 
-    const double eps = 1e-9;
-    double BestDistance = 1e18+5;
+    double BestDistance = std::numeric_limits<double>::infinity();
 
     FlowBlock *Block = nullptr;
     std::shared_ptr<SCC> Matching = nullptr;
@@ -98,6 +94,6 @@ private:
 
 } // namespace SCC
 
-} // namespace LLVM
+} // namespace llvm
 
 #endif // SCC_SCC_MATCHER_H

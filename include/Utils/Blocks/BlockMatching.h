@@ -2,11 +2,10 @@
 #define BLOCK_BLOCK_MATCHING_H
 
 #include <vector>
+#include <limits>
 #include "llvm/IR/BasicBlock.h"
 #include "OpcodeHistogram.h"
 #include <cmath>
-
-// using namespace llvm;
 
 
 
@@ -14,7 +13,8 @@ namespace llvm {
 namespace Block {
 
 typedef std::shared_ptr<OpcodeHistogram> OHPt;
-#define mOHPt(x) std::make_shared<OpcodeHistogram>(x)
+inline OHPt mOHPt() { return std::make_shared<OpcodeHistogram>(); }
+inline OHPt mOHPt(OpcodeHistogram x) { return std::make_shared<OpcodeHistogram>(std::move(x)); }
 
 class BlockMatching {
 private:
@@ -31,7 +31,7 @@ public:
                          OHPt _PredsHistograms, size_t _NumPreds) :
   BlockHistogram(_BlockHistogram), SuccsHistogram(_SuccsHistograms),
   PredsHistogram(_PredsHistograms), NumSuccs(_NumSuccs), NumPreds(_NumPreds),
-  DistanceMatched(1e18) {}
+  DistanceMatched(std::numeric_limits<double>::infinity()) {}
 
   explicit BlockMatching(OHPt _BlockHistogram,
                          const std::vector<OHPt> &_SuccsHistograms,
@@ -47,7 +47,7 @@ public:
     for (auto Pred : _PredsHistograms) {
       *PredsHistogram += *Pred;
     }
-    this->DistanceMatched = 1e18;
+    this->DistanceMatched = std::numeric_limits<double>::infinity();
   }
 
   size_t getBlockHistogramSize() {
@@ -64,11 +64,11 @@ public:
 
   double distance(std::shared_ptr<BlockMatching> BM, uint64_t Threshold) const {
     uint64_t BlockDistance = BlockHistogram->distance2(BM->BlockHistogram);
-    if (BlockDistance > Threshold) return 1e18+5;
+    if (BlockDistance > Threshold) return std::numeric_limits<double>::infinity();
     double SuccDistance = SuccsHistogram->distance2(BM->SuccsHistogram);
     double PredDistance = PredsHistogram->distance2(BM->PredsHistogram);
-    uint64_t DeltaSucc = my_abs(NumSuccs-BM->NumSuccs);
-    uint64_t DeltaPred = my_abs(NumPreds-BM->NumPreds);
+    uint64_t DeltaSucc = (uint64_t)std::abs((int64_t)NumSuccs - (int64_t)BM->NumSuccs);
+    uint64_t DeltaPred = (uint64_t)std::abs((int64_t)NumPreds - (int64_t)BM->NumPreds);
     // if (Debug && VerboseDebug) {
     //   outs() << "Delta successors: " << DeltaSucc << "\n";
     //   outs() << "Successors Distance: " << SuccDistance << "\n";
@@ -79,8 +79,8 @@ public:
   }
 };
 
-} // namespace SCC
+} // namespace Block
 
-} // namespace LLVM
+} // namespace llvm
 
 #endif // BLOCK_BLOCK_MATCHING_H

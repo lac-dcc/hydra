@@ -3,8 +3,6 @@
 
 #include <vector>
 #include <map>
-#include <set>
-#include <fstream>
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/Support/raw_ostream.h"
 
@@ -24,7 +22,7 @@ public:
 
   explicit OpcodeHistogram(const std::vector<uint32_t> &_Opcodes,
                             const std::vector<uint32_t> &_Frequency) {
-    assert(Opcodes.size() == Frequency.size() &&
+    assert(_Opcodes.size() == _Frequency.size() &&
             "Opcode Histogram size mismatch");
     Opcodes.assign(_Opcodes.begin(), _Opcodes.end());
     Frequency.assign(_Frequency.begin(), _Frequency.end());
@@ -43,7 +41,7 @@ public:
     Matched = true;
   }
 
-  const void operator+=(const OpcodeHistogram &OH) {
+  OpcodeHistogram& operator+=(const OpcodeHistogram &OH) {
     std::map<uint32_t, uint64_t> Frequencies;
     std::map<uint32_t, bool> UsedFrequencies;
     for (size_t I = 0; I < OH.Opcodes.size(); I++) {
@@ -62,6 +60,7 @@ public:
         Frequency.emplace_back(Freq);
       }
     }
+    return *this;
   }
 
   uint64_t distance2(const std::shared_ptr<OpcodeHistogram> OH) const {
@@ -88,16 +87,16 @@ public:
     return (uint64_t)Distance2;
   }
 
-  friend std::ostream &operator<<(std::ostream &os, const OpcodeHistogram &OH) {
-    for (int I = 0; I < OH.Opcodes.size(); ++I) {
+  friend raw_ostream &operator<<(raw_ostream &os, const OpcodeHistogram &OH) {
+    for (size_t I = 0; I < OH.Opcodes.size(); ++I) {
       os << OH.Opcodes[I] << ": " << OH.Frequency[I] << "\n";
     }
     return os;
   }
 };
 
-} // namespace SCC
+} // namespace Block
 
-} // namespace LLVM
+} // namespace llvm
 
 #endif // BLOCK_OPCODE_HISTOGRAM_H

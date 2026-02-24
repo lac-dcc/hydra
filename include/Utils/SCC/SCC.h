@@ -3,8 +3,7 @@
 
 #include "OpcodeHistogram.h"
 #include <string>
-#include <regex>
-#include <iostream>
+#include <limits>
 #include <queue>
 #include <unordered_map>
 #include <unordered_set>
@@ -12,7 +11,6 @@
 #include "llvm/Support/CommandLine.h"
 #include "llvm/ADT/Bitfields.h"
 #include "llvm/ADT/Hashing.h"
-#include "llvm/IRReader/IRReader.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Instruction.h"
 #include "llvm/IR/LLVMContext.h"
@@ -25,7 +23,8 @@ namespace llvm {
 namespace SCC {
 
 typedef std::shared_ptr<OpcodeHistogram> OHPt;
-#define mOHPt(x) std::make_shared<OpcodeHistogram>(x)
+inline OHPt mOHPt() { return std::make_shared<OpcodeHistogram>(); }
+inline OHPt mOHPt(OpcodeHistogram x) { return std::make_shared<OpcodeHistogram>(std::move(x)); }
     
 class SCC {
 public:
@@ -43,11 +42,11 @@ public:
       SuccsHistogram(nullptr),
       Depth(_Depth),
       ExitableBlock(false),
-      DistanceMatched(1e18),
+      DistanceMatched(std::numeric_limits<double>::infinity()),
       Size(_Blocks.size()) {
       EntryBlock = false;
       for (BasicBlock *BB : _Blocks) {
-        BlockNames.emplace(BB->getName());
+        BlockNames.emplace(BB->getName().str());
         if (BB->isEntryBlock()) EntryBlock = true;
       }
     }
@@ -57,11 +56,11 @@ public:
   }
 
   bool contains(StringRef Name) {
-    return (BlockNames.count(Name) > 0);
+    return (BlockNames.count(Name.str()) > 0);
   }
 
   bool contains(BasicBlock *BB) {
-    return (BlockNames.count(BB->getName()) > 0);
+    return (BlockNames.count(BB->getName().str()) > 0);
   }
 
   BasicBlock *get_header() {
@@ -177,11 +176,11 @@ public:
     // if (Debug && VerboseDebug) {
     //   outs() << "Block Distance: " << BlockDistance << "\n";
     // }
-    if (BlockDistance > Threshold) return 1e18+5;
+    if (BlockDistance > Threshold) return std::numeric_limits<double>::infinity();
     double SuccDistance = SuccsHistogram->distance2(Comp->SuccsHistogram);
     double PredDistance = PredsHistogram->distance2(Comp->PredsHistogram);
-    uint64_t DeltaSucc = my_abs(0+this->SuccessorsBlocks.size()-Comp->get_successors_size());
-    uint64_t DeltaPred = my_abs(0+this->PredecessorsBlocks.size()-Comp->get_predecessors_size());
+    uint64_t DeltaSucc = (uint64_t)std::abs((int64_t)this->SuccessorsBlocks.size() - (int64_t)Comp->get_successors_size());
+    uint64_t DeltaPred = (uint64_t)std::abs((int64_t)this->PredecessorsBlocks.size() - (int64_t)Comp->get_predecessors_size());
     // if (Debug && VerboseDebug) {
     //   outs() << "Delta successors: " << DeltaSucc << "\n";
     //   outs() << "Successors Distance: " << SuccDistance << "\n";
@@ -201,7 +200,7 @@ public:
 
 private:
   BasicBlock *Header;
-  std::set<StringRef> BlockNames;
+  std::set<std::string> BlockNames;
   std::set<BasicBlock *> PredecessorsBlocks;
   std::set<BasicBlock *> SuccessorsBlocks;
 
@@ -241,7 +240,7 @@ private:
 
 typedef std::shared_ptr<SCC::SCC> SCCPt;
 
-} // namespace LLVM
+} // namespace llvm
 
 
 #endif // SCC_SCC_H

@@ -2,6 +2,7 @@
 #define BLOCK_BLOCK_MATCHER_H
 
 #include <vector>
+#include <limits>
 #include "llvm/IR/BasicBlock.h"
 #include "BlockMatching.h"
 #include "../WeightedProfileInference.h"
@@ -32,8 +33,7 @@ public:
     FlowBlock *BestBlock = nullptr;
     BMPt MatchedBlock = nullptr;
 
-    const double eps = 1e-9;
-    double BestDistance = 1e18+5;
+    double BestDistance = std::numeric_limits<double>::infinity();
 
     FlowBlock *Block = nullptr;
     BMPt Matching = nullptr;
@@ -66,8 +66,8 @@ private:
   std::vector<BMPt> BlockMatchings;
 };
 
-} // namespace SCC
+} // namespace Block
 
-} // namespace LLVM
+} // namespace llvm
 
 #endif // BLOCK_BLOCK_MATCHER_H
