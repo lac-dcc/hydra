@@ -1,35 +1,46 @@
 #include "HistRegion.h"
+#include "ProjectedEdgeWriter.h"
 
 #include "Blocks/BlockMatcher.h"
 #include "SCC/SCCMatcher.h"
 
 #include <string>
-#include <regex>
-#include <iostream>
 #include <queue>
 #include <unordered_map>
 #include <unordered_set>
 #include <cmath>
-#include "llvm/Support/CommandLine.h"
+#include <limits>
 #include "llvm/ADT/Bitfields.h"
 #include "llvm/ADT/Hashing.h"
-#include "llvm/IRReader/IRReader.h"
-#include "llvm/IR/Module.h"
+#include "llvm/ADT/SmallString.h"
+#include "llvm/Analysis/LoopAnalysisManager.h"
+#include "llvm/Analysis/LoopInfo.h"
 #include "llvm/IR/Instruction.h"
 #include "llvm/IR/LLVMContext.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/xxhash.h"
+#include "llvm/IR/Module.h"
 #include "llvm/IR/PassManager.h"
+#include "llvm/IRReader/IRReader.h"
 #include "llvm/Passes/PassBuilder.h"
-#include "llvm/Analysis/LoopAnalysisManager.h"
+#include "llvm/Support/CommandLine.h"
+#include "llvm/Support/Debug.h"
+#include "llvm/Support/FileSystem.h"
+#include "llvm/Support/Path.h"
+#include "llvm/Support/SourceMgr.h"
+#include "llvm/Support/raw_ostream.h"
+#include "llvm/Support/xxhash.h"
 #include "llvm/Analysis/CGSCCPassManager.h"
+
+#define DEBUG_TYPE "hydra-hist-region"
 
 size_t my_abs(int x) {return abs(x);}
 
-
 using namespace llvm;
 
+// NOTE: These cl::opt names ("prog", "prof", "d") conflict with those defined
+// in Profile.cpp and HashMatching.cpp. Only one of these plugins may be loaded
+// per opt invocation. Loading multiple plugins simultaneously will cause a
+// command-line option registration abort.
+// TODO: Elisa revise this
 cl::opt<std::string> LLFilename("prog", cl::desc("<program ll file>"), cl::Required);
 cl::opt<std::string> ProfilesFolder("prof", cl::desc("<profiles folder>"), cl::Required);
 cl::opt<unsigned> MatchingThreshold(
@@ -42,6 +53,9 @@ cl::opt<size_t> MaxIterations(
     cl::init(3), cl::Hidden);
 cl::opt<bool> Debug("d", cl::desc("Enable debug messages"));
 cl::opt<bool> VerboseDebug("v", cl::desc("Enable verbose debug messages, must use with -d"));
+cl::opt<std::string> ProjOutDir("proj-out",
+    cl::desc("Output directory for projected .prof.full.edges files"),
+    cl::init("."));
 
 namespace opts {
 
@@ -213,9 +227,7 @@ namespace SCC {
         }
       }
       Func.FakeExitBlock = true;
-      if (Debug) {
-        outs() << "Created exit block for " << *SuperSCC << "\n";
-      }
+      LLVM_DEBUG(dbgs() << "Created exit block for " << *SuperSCC << "\n");
     }
 
 
@@ -315,7 +327,7 @@ namespace Block {
   }
 } // namespace Block
 
-} // namespace LLVM
+} // namespace llvm
 
 std::vector<SCCPt> computeSCCs(SCCPt Comp, Function &F, FunctionAnalysisManager &AM) {
   LoopInfo &li = AM.getResult<llvm::LoopAnalysis>(F);
@@ -352,7 +364,7 @@ std::vector<SCCPt> computeSCCs(SCCPt Comp, Function &F, FunctionAnalysisManager 
     for (BasicBlock *BB : l->getBlocks()) {
       assert(BB != nullptr && "BB is nullptr");
       if (BB->getParent() != &F) {
-        outs() << "Reached orphan BB\n";
+        LLVM_DEBUG(dbgs() << "Reached orphan BB\n");
         continue;
       }
       assert(BB->getParent() == &F && "BB is orphan");
@@ -361,7 +373,7 @@ std::vector<SCCPt> computeSCCs(SCCPt Comp, Function &F, FunctionAnalysisManager 
     for (BasicBlock *BB : l->getBlocks()) {
       assert(BB != nullptr && "BB is nullptr");
       if (BB->getParent() != &F) {
-        outs() << "Reached orphan BB\n";
+        LLVM_DEBUG(dbgs() << "Reached orphan BB\n");
         continue;
       }
       assert(BB->getParent() == &F && "BB is orphan");
@@ -450,26 +462,22 @@ std::vector<SCCPt> computeSCCs(SCCPt Comp, Function &F, FunctionAnalysisManager 
 }
 
 void HistRegionPass::matchSCCs(Function &oldFunction, Function &newFunction, SCCPt oldComp, SCCPt newComp, FunctionAnalysisManager &oldAM, FunctionAnalysisManager &newAM) {
-  if (Debug) {
-    if (oldComp != nullptr) {
-      outs() << "Running with old sub SCC " << *oldComp << "\n";
-    } else {
-      outs() << "Running without old sub SCC\n";
-    }
-    if (newComp != nullptr) {
-      outs() << "Running with new sub SCC " << *newComp << "\n";
-    } else {
-      outs() << "Running without new sub SCC\n";
-    }
-  }
+  LLVM_DEBUG(
+    if (oldComp != nullptr)
+      dbgs() << "Running with old sub SCC " << *oldComp << "\n";
+    else
+      dbgs() << "Running without old sub SCC\n";
+    if (newComp != nullptr)
+      dbgs() << "Running with new sub SCC " << *newComp << "\n";
+    else
+      dbgs() << "Running without new sub SCC\n";
+  );
   if ((oldComp == nullptr && newComp != nullptr) || (oldComp != nullptr && newComp == nullptr)) return;
   std::vector<SCCPt> oldCompsOrder = computeSCCs(oldComp, oldFunction, oldAM);
   std::vector<SCCPt> newCompsOrder = computeSCCs(newComp, newFunction, newAM);
 
   if (oldCompsOrder.size() == 0 || newCompsOrder.size() == 0) {
-    if (Debug) {
-      outs() << "Something strange found on the loops... continuing\n";
-    }
+    LLVM_DEBUG(dbgs() << "Something strange found on the loops... continuing\n");
     return;
   }
 
@@ -485,9 +493,7 @@ void HistRegionPass::matchSCCs(Function &oldFunction, Function &newFunction, SCC
   }
 
   for (size_t i = 0; i < newCompsOrder.size(); ++i) {
-    if (Debug) {
-      outs() << *newCompsOrder[i] << " has index " << i+1 << "\n";
-    }
+    LLVM_DEBUG(dbgs() << *newCompsOrder[i] << " has index " << i+1 << "\n");
     newBlockIndex[extractAndFormatDigits(newCompsOrder[i]->get_header_name())] = i;
     blocks.push_back(&flowFunc.Blocks[i+1]);
   }
@@ -530,21 +536,21 @@ void HistRegionPass::matchSCCs(Function &oldFunction, Function &newFunction, SCC
         if (matching->getDistance() < matchedDistance) {
           matchedBlocks[oldIdx] = nullptr;
           matchings[oldIdx] = nullptr;
-          matchedDistance = 1e18;
+          matchedDistance = std::numeric_limits<double>::infinity();
         }
       }
     }
   }
 
-  if (Debug) {
+  LLVM_DEBUG(
     for (size_t oldIdx = 0; oldIdx < oldCompsOrder.size(); oldIdx++) {
-      if (matchedBlocks[oldIdx] == nullptr) {
-        outs() << *oldCompsOrder[oldIdx] << " not matched\n";
-      } else {
-        outs() << *oldCompsOrder[oldIdx] << " matched with " << *newCompsOrder[matchedBlocks[oldIdx]->Index-1] << "\n";
-      }
+      if (matchedBlocks[oldIdx] == nullptr)
+        dbgs() << *oldCompsOrder[oldIdx] << " not matched\n";
+      else
+        dbgs() << *oldCompsOrder[oldIdx] << " matched with "
+               << *newCompsOrder[matchedBlocks[oldIdx]->Index-1] << "\n";
     }
-  }
+  );
 
   for (size_t oldIndex = 0; oldIndex < oldCompsOrder.size(); oldIndex++) {
     if (oldCompsOrder[oldIndex]->size() <= 1) {
@@ -587,29 +593,21 @@ void HistRegionPass::projectProfile(Function &oldFunction, Function &newFunction
   std::vector<Block::OHPt> newHistogramsAddresses, oldHistogramsAddresses;
 
   // Initialize histograms for oldFunction
-  if (Debug) {
-    std::cout << "Initializing old blocks\n";
-  }
+  LLVM_DEBUG(dbgs() << "Initializing old blocks\n");
   for (size_t i = 0; i < oldBlockOrder.size(); ++i) {
     BasicBlock *BB = oldBlockOrder[i];
-    if (Debug) {
-      std::cout << "Block at index " << i+1 << ": " <<
-        extractAndFormatDigits(BB->getName().str()) << "\n";
-    }
+    LLVM_DEBUG(dbgs() << "Block at index " << i+1 << ": "
+                      << extractAndFormatDigits(BB->getName().str()) << "\n");
     oldHistogramsAddresses.push_back(Block::initializeHistogram(*BB));
   }
 
   // Initialize histograms for newFunction
-  if (Debug) {
-    std::cout << "Initializing new blocks\n";
-  }
+  LLVM_DEBUG(dbgs() << "Initializing new blocks\n");
   for (size_t i = 0; i < newBlockOrder.size(); ++i) {
     BasicBlock *BB = newBlockOrder[i];
     blocks.push_back(&flowFunc.Blocks[i+1]);
-    if (Debug) {
-      std::cout << "Block at index " << i+1 << ": " <<
-        extractAndFormatDigits(BB->getName().str()) << "\n";
-    }
+    LLVM_DEBUG(dbgs() << "Block at index " << i+1 << ": "
+                      << extractAndFormatDigits(BB->getName().str()) << "\n");
     newHistogramsAddresses.push_back(Block::initializeHistogram(*BB));
   }
 
@@ -636,9 +634,7 @@ void HistRegionPass::projectProfile(Function &oldFunction, Function &newFunction
   BM.init(blocks, blockMatchingsAddresses);
 
   // Match blocks from old function to new function
-  if (Debug) {
-    std::cout << "Matching blocks\n\n";
-  }
+  LLVM_DEBUG(dbgs() << "Matching blocks\n");
 
   // First match the blocks matched during the SCC matching phase
   for (BasicBlock *oldBB : oldBlockOrder) {
@@ -662,9 +658,7 @@ void HistRegionPass::projectProfile(Function &oldFunction, Function &newFunction
       size_t oldBBIndex = oldBlockIndex[oldBBName];
 
       if (matchings.lookup(oldBBIndex) != nullptr) continue;
-      if (Debug) {
-        std::cout << "Trying to match block " << oldBBName << "\n\n";
-      }
+      LLVM_DEBUG(dbgs() << "Trying to match block " << oldBBName << "\n");
       Block::OHPt oldHistogram = oldHistogramsAddresses[oldBBIndex];
       std::vector<Block::OHPt> oldSuccHistograms, oldPredHistograms;
       for (BasicBlock *succ : successors(oldBB)) {
@@ -688,10 +682,8 @@ void HistRegionPass::projectProfile(Function &oldFunction, Function &newFunction
         if (I == MaxIterations && oldBBIndex == 0) {
           matching->Match(-2);
         }
-        if (Debug) {
-          std::cout << "Matched blocks " << oldBBName << " and "
-                  << extractAndFormatDigits(newBlockOrder[matchedBlock->Index-1]->getName().str()) << "\n\n";
-        }
+        LLVM_DEBUG(dbgs() << "Matched blocks " << oldBBName << " and "
+                  << extractAndFormatDigits(newBlockOrder[matchedBlock->Index-1]->getName().str()) << "\n");
         matchedBlocks[oldBBIndex] = matchedBlock;
         matchings[oldBBIndex] = matching;
         matchedDistances[oldBBIndex] = matching->getDistance();
@@ -709,7 +701,7 @@ void HistRegionPass::projectProfile(Function &oldFunction, Function &newFunction
         if (matching->getDistance() < matchedDistance) {
           matchedBlocks[oldBBIndex] = nullptr;
           matchings[oldBBIndex] = nullptr;
-          matchedDistance = 1e18;
+          matchedDistance = std::numeric_limits<double>::infinity();
         }
       }
     }
@@ -719,19 +711,13 @@ void HistRegionPass::projectProfile(Function &oldFunction, Function &newFunction
   std::vector<uint64_t> OutWeight(numBlocks, 0);
   std::vector<uint64_t> InWeight(numBlocks, 0);
 
-  if (Debug) {
-    std::cout << "Matching jumps\n\n";
-  }
+  LLVM_DEBUG(dbgs() << "Matching jumps\n");
   for (BasicBlock *oldBB : oldBlockOrder) {
     std::string oldBBName = extractAndFormatDigits(oldBB->getName().str());
-    if (Debug) {
-      std::cout << "Checking old basic block " << oldBBName << "\n";
-    }
+    LLVM_DEBUG(dbgs() << "Checking old basic block " << oldBBName << "\n");
     for (auto [succ, freq] : profile[oldBBName]) {
-      if (Debug) {
-        std::cout << "Checking jump " << oldBBName << " -> "
-                << succ << " with frequency " << freq << "\n";
-      }
+      LLVM_DEBUG(dbgs() << "Checking jump " << oldBBName << " -> "
+                        << succ << " with frequency " << freq << "\n");
       if (freq == 0)
         continue;
 
@@ -743,24 +729,17 @@ void HistRegionPass::projectProfile(Function &oldFunction, Function &newFunction
 
       if (matchedSrcBlock != nullptr && matchedDstBlock != nullptr) {
         // find a jump between the two blocks
-        if (Debug) {
-          std::cout << "Blocks matched, trying to find equivalent jump\n";
-        }
+        LLVM_DEBUG(dbgs() << "Blocks matched, trying to find equivalent jump\n");
         FlowJump *jump = nullptr;
         for (FlowJump *succJump : matchedSrcBlock->SuccJumps) {
           if (succJump->Target == matchedDstBlock->Index) {
-            if (Debug) {
-              std::cout << "Jump found\n\n";
-            }
+            LLVM_DEBUG(dbgs() << "Jump found\n");
             jump = succJump;
             break;
           }
         }
 
         if (jump != nullptr) {
-          if (Debug) {
-            std::cout << "Jump not found\n\n";
-          }
           jump->Weight = freq;
           jump->HasUnknownWeight = false;
         }
@@ -887,12 +866,12 @@ void HistRegionPass::projectProfile(Function &oldFunction, Function &newFunction
 
   // Apply inference
   applyFlowInference(params, flowFunc);
-  
+
+  // Write inferred edge counts for HydraProfileInject.
+  writeProjectedEdges(flowFunc, newBlockOrder, newFunction.getName(), ProjOutDir);
+
   // Assign inferred profile
   assert(numBlocks == newBlockOrder.size() + 1);
-
-  BasicBlock *hottestBlock = nullptr;
-  uint64_t highestFrequency = 0;
 
   using bbd = std::pair<BasicBlock *, uint64_t>;
   std::vector<bbd> orderedBlocks;
@@ -935,59 +914,20 @@ bool HistRegionPass::readProfile(std::string functionName) {
   std::string colon;
   uint64_t frequency;
 
-  // std::map<std::string, uint64_t> aux;
-
   while (profileFile >> srcBlockName >> arrow >> dstBlockName >> colon >> frequency) {
-    // if (Debug) {
-    //   outs() << "Read " << srcBlockName << " -> " << dstBlockName << " : " << frequency << "\n";
-    // }
+    LLVM_DEBUG(dbgs() << "Read " << srcBlockName << " -> " << dstBlockName
+                      << " : " << frequency << "\n");
     profile[srcBlockName].emplace_back(dstBlockName, frequency);
-    // aux[dstBlockName] += frequency;
-  }
-
-  // for (auto [bb, freq] : aux) {
-  //   outs() << bb << ": " << freq << "\n";
-  // }
-
-  if (Debug) {
-    std::map<std::string, uint64_t> blockProfile;
-    for (auto [srcName, dst] : profile) {
-      for (auto [dstName, freq] : dst) {
-        blockProfile[dstName] += freq;
-      }
-    }
-  
-    for (auto [name, freq] : blockProfile) {
-      outs() << "Read " << name << ": " << freq << "\n";
-    }
   }
 
   profileFile.close();
   return true;
 }
 
-FunctionAnalysisManager createFunctionAnalysisManager(Module &M) {
-  FunctionAnalysisManager FAM;
-  LoopAnalysisManager LAM;
-  CGSCCAnalysisManager CGAM;
-  ModuleAnalysisManager MAM;
-  
-  PassBuilder PB;
-  PB.registerModuleAnalyses(MAM);
-  PB.registerCGSCCAnalyses(CGAM);
-  PB.registerFunctionAnalyses(FAM);
-  PB.registerLoopAnalyses(LAM);
-  PB.crossRegisterProxies(LAM, FAM, CGAM, MAM);
-
-  return FAM;
-}
-
 PreservedAnalyses HistRegionPass::run(Function &F,
                                       FunctionAnalysisManager &AM) {
   std::string functionName = F.getName().str();
 
-  // outs() << "Running on function " << functionName << "\n";
-  // if (functionName != "qsortx") return PreservedAnalyses::all();
   outfile.open(functionName + "-hist-region.txt");
 
   if (!this->readProfile(functionName)) {
@@ -1000,50 +940,31 @@ PreservedAnalyses HistRegionPass::run(Function &F,
   LLVMContext context;
   SMDiagnostic err;
 
-  StringRef oldFileName = LLFilename;
-
   llvm::BranchProbabilityInfo &bpi = AM.getResult<llvm::BranchProbabilityAnalysis>(F);
 
   std::unique_ptr<Module> oldProgram = parseIRFile(LLFilename, err, context);
 
-  FunctionAnalysisManager oldAM = createFunctionAnalysisManager(*oldProgram);
-
-  bool foundFunction = false;
+  // Build a FunctionAnalysisManager (FAM) for the old program; 
+  // all sub-managers must outlive oldFAM.
+  FunctionAnalysisManager oldFAM;
+  LoopAnalysisManager oldLAM;
+  CGSCCAnalysisManager oldCGAM;
+  ModuleAnalysisManager oldMAM;
+  PassBuilder PB;
+  PB.registerModuleAnalyses(oldMAM);
+  PB.registerCGSCCAnalyses(oldCGAM);
+  PB.registerFunctionAnalyses(oldFAM);
+  PB.registerLoopAnalyses(oldLAM);
+  PB.crossRegisterProxies(oldLAM, oldFAM, oldCGAM, oldMAM);
 
   for (Function &fun : *oldProgram) {
-    // Project profile from the function with the same name in the old program
-    // Check if -O3 don't change function names
     if (fun.getName().str() == functionName) {
-      if (Debug) {
-        outs() << "Running projection for function " << functionName << "\n\n";
-      }
-      // outs() << "Starting " << F.getName() << "\n";
-      this->matchSCCs(fun, F, nullptr, nullptr, oldAM, AM);
+      LLVM_DEBUG(dbgs() << "Running projection for function " << functionName << "\n");
+      this->matchSCCs(fun, F, nullptr, nullptr, oldFAM, AM);
       this->projectProfile(fun, F, bpi);
-      // outs() << "Finishing " << F.getName() << "\n";
-      // using sd = std::pair<std::string, uint64_t>;
-      // std::vector<sd> orderedBlocks;
-      // for (auto [bb, freq] : blocks_profile) {
-      //   orderedBlocks.emplace_back(extractAndFormatDigits(bb),freq);
-      // }
-      // std::sort(orderedBlocks.begin(), orderedBlocks.end(), [](sd &a, sd &b) {
-      //   auto [aName, aFreq] = a;
-      //   auto [bName, bFreq] = b;
-      //   return aFreq > bFreq || (aFreq == bFreq && aName < bName);
-      // });
-
-      // for (auto [name, freq] : orderedBlocks) {
-      //   if (Debug) {
-      //     outs() << "Write: " << name << ": " << freq << "\n";
-      //   }
-      //   outfile << name << "\n";
-      // }
-
-      foundFunction = true;
       break;
     }
   }
-
 
   outfile.close();
 

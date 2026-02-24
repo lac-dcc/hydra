@@ -1,32 +1,38 @@
 #include "HashMatching.h"
+#include "ProjectedEdgeWriter.h"
 #include "WeightedProfileInference.h"
 #include <string>
-#include <regex>
-#include <iostream>
 #include <queue>
-#include <unordered_map>
 #include <unordered_set>
 #include <cmath>
-#include "llvm/Support/CommandLine.h"
+#include <limits>
 #include "llvm/ADT/Bitfields.h"
 #include "llvm/ADT/Hashing.h"
-#include "llvm/IRReader/IRReader.h"
-#include "llvm/IR/Module.h"
+#include "llvm/ADT/SmallString.h"
+#include "llvm/Analysis/LoopInfo.h"
 #include "llvm/IR/Instruction.h"
 #include "llvm/IR/LLVMContext.h"
-#include "llvm/Analysis/LoopInfo.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/Support/xxhash.h"
+#include "llvm/IR/Module.h"
 #include "llvm/IR/PassManager.h"
+#include "llvm/IRReader/IRReader.h"
 #include "llvm/Passes/PassBuilder.h"
-#include "llvm/Analysis/LoopAnalysisManager.h"
-#include "llvm/Analysis/CGSCCPassManager.h"
-#include "llvm/ADT/Bitfields.h"
-#include "llvm/ADT/Hashing.h"
+#include "llvm/Support/CommandLine.h"
+#include "llvm/Support/Debug.h"
+#include "llvm/Support/FileSystem.h"
+#include "llvm/Support/Path.h"
+#include "llvm/Support/SourceMgr.h"
+#include "llvm/Support/raw_ostream.h"
+#include "llvm/Support/xxhash.h"
 
+#define DEBUG_TYPE "hydra-hash-matching"
 
 using namespace llvm;
 
+// NOTE: These cl::opt names ("prog", "prof", "d") conflict with those defined
+// in Profile.cpp and HistRegion.cpp. Only one of these plugins may be loaded
+// per opt invocation. Loading multiple plugins simultaneously will cause a
+// command-line option registration abort.
+// TODO: Elisa revise this
 cl::opt<std::string> LLFilename("prog", cl::desc("<program ll file>"), cl::Required);
 cl::opt<std::string> ProfilesFolder("prof", cl::desc("<profiles folder>"), cl::Required);
 cl::opt<unsigned> MatchingThreshold(
@@ -39,6 +45,9 @@ cl::opt<size_t> MaxIterations(
     cl::init(3), cl::Hidden);
 cl::opt<bool> Debug("d", cl::desc("Enable debug messages"));
 cl::opt<bool> VerboseDebug("v", cl::desc("Enable verbose debug messages, must use with -d"));
+cl::opt<std::string> ProjOutDir("proj-out",
+    cl::desc("Output directory for projected .prof.full.edges files"),
+    cl::init("."));
 
 namespace opts {
 
@@ -233,41 +242,24 @@ void HashMatchingPass::computeBlockHashes(Function &F, bool old) {
     BasicBlockIdx[&BB] = I++;
   }
 
-  // Initialize neighbor hash.
+  // Initialize neighbor hashes (successor and predecessor).
   I = 0;
   for (BasicBlock &BB : F) {
+    // Successor hash.
     uint64_t Hash = 0;
     for (BasicBlock *SuccBB : successors(&BB)) {
       uint64_t SuccHash = OpcodeHashes[BasicBlockIdx[SuccBB]];
       Hash = hashing::detail::hash_16_bytes(Hash, SuccHash);
     }
-    uint16_t Hash16 = (uint16_t)hash_value(std::to_string(Hash));
-    // outs() << "Succ: " << std::to_string(Hash) << "\n";
-    BlendedHashes[I].SuccHash = Hash16;
-    ++I;
-  }
+    BlendedHashes[I].SuccHash = (uint16_t)hash_value(std::to_string(Hash));
 
-  I = 0;
-  for (BasicBlock &BB : F) {
-    // Append hashes of successors.
-    uint64_t Hash = 0;
-    for (BasicBlock *SuccBB : successors(&BB)) {
-      uint64_t SuccHash = OpcodeHashes[BasicBlockIdx[SuccBB]];
-      Hash = hashing::detail::hash_16_bytes(Hash, SuccHash);
-    }
-    uint16_t Hash16 = (uint16_t)hash_value(std::to_string(Hash));
-    // outs() << "Succ: " << Hash16 << "\n";
-    BlendedHashes[I].SuccHash = Hash16;
-
-    // Append hashes of predecessors.
+    // Predecessor hash.
     Hash = 0;
     for (BasicBlock *PredBB : predecessors(&BB)) {
       uint64_t PredHash = OpcodeHashes[BasicBlockIdx[PredBB]];
       Hash = hashing::detail::hash_16_bytes(Hash, PredHash);
     }
-    Hash16 = (uint16_t)hash_value(std::to_string(Hash));
-    // outs() << "Pred: " << Hash16  << "\n";
-    BlendedHashes[I].PredHash = Hash16;
+    BlendedHashes[I].PredHash = (uint16_t)hash_value(std::to_string(Hash));
     ++I;
   }
 
@@ -396,45 +388,34 @@ void HashMatchingPass::projectProfile(Function &oldFunction, Function &newFuncti
     assert(old_blocks_hash.lookup(BB) != 0 && "empty hash of BinaryBasicBlockProfile");
     BlendedBlockHash YamlHash(old_blocks_hash.lookup(BB));
     const FlowBlock *MatchedBlock = Matcher.matchBlock(YamlHash);
-    // Always match the entry block.
-    if (MatchedBlock == nullptr && BB->isEntryBlock() == 0)
+    // Always match the entry block if no match was found.
+    if (MatchedBlock == nullptr && BB->isEntryBlock())
       MatchedBlock = Blocks[0];
     if (MatchedBlock != nullptr) {
       MatchedBlocks[OldBlockIdx[extractAndFormatDigits(BB->getName().str())]] = MatchedBlock;
       BlendedBlockHash BinHash = BlendedHashes[MatchedBlock->Index - 1];
-      // Update matching stats accounting for the matched block.
-      if (Debug) {
-        if (Matcher.isHighConfidenceMatch(BinHash, YamlHash)) {
-          errs() << "exact match between " << BB->getName() << " and " << NewBlockOrder[MatchedBlock->Index-1]->getName() << "\n";
-        } else {
-          errs() << "loose match between " << BB->getName() << " and " << NewBlockOrder[MatchedBlock->Index-1]->getName() << "\n";
-        }
-      }
+      LLVM_DEBUG(
+        if (Matcher.isHighConfidenceMatch(BinHash, YamlHash))
+          dbgs() << "exact match between " << BB->getName() << " and "
+                 << NewBlockOrder[MatchedBlock->Index-1]->getName() << "\n";
+        else
+          dbgs() << "loose match between " << BB->getName() << " and "
+                 << NewBlockOrder[MatchedBlock->Index-1]->getName() << "\n";
+      );
     }
-    // } else {
-    //   LLVM_DEBUG(
-    //       dbgs() << "Couldn't match yaml block (bid = " << YamlBB.Index << ")"
-    //              << " with hash " << Twine::utohexstr(YamlBB.Hash) << "\n");
-    // }
   }
 
   // Match jumps from old function to new function
   std::vector<uint64_t> OutWeight(numBlocks, 0);
   std::vector<uint64_t> InWeight(numBlocks, 0);
 
-  if (Debug) {
-    errs() << "Matching jumps\n\n";
-  }
+  LLVM_DEBUG(dbgs() << "Matching jumps\n");
   for (BasicBlock *oldBB : OldBlockOrder) {
     std::string oldBBName = extractAndFormatDigits(oldBB->getName().str());
-    if (Debug) {
-      errs() << "Checking old basic block " << oldBBName << "\n";
-    }
+    LLVM_DEBUG(dbgs() << "Checking old basic block " << oldBBName << "\n");
     for (auto [succ, freq] : profile[oldBBName]) {
-      if (Debug) {
-        errs() << "Checking jump " << oldBBName << " -> "
-                << succ << " with frequency " << freq << "\n";
-      }
+      LLVM_DEBUG(dbgs() << "Checking jump " << oldBBName << " -> "
+                        << succ << " with frequency " << freq << "\n");
       if (freq == 0)
         continue;
 
@@ -446,24 +427,17 @@ void HashMatchingPass::projectProfile(Function &oldFunction, Function &newFuncti
 
       if (matchedSrcBlock != nullptr && matchedDstBlock != nullptr) {
         // find a jump between the two blocks
-        if (Debug) {
-          errs() << "Blocks matched, trying to find equivalent jump\n";
-        }
+        LLVM_DEBUG(dbgs() << "Blocks matched, trying to find equivalent jump\n");
         FlowJump *jump = nullptr;
         for (FlowJump *succJump : matchedSrcBlock->SuccJumps) {
           if (succJump->Target == matchedDstBlock->Index) {
-            if (Debug) {
-              errs() << "Jump found\n\n";
-            }
+            LLVM_DEBUG(dbgs() << "Jump found\n");
             jump = succJump;
             break;
           }
         }
 
         if (jump != nullptr) {
-          if (Debug) {
-            errs() << "Jump not found\n\n";
-          }
           jump->Weight = freq;
           jump->HasUnknownWeight = false;
         }
@@ -591,11 +565,11 @@ void HashMatchingPass::projectProfile(Function &oldFunction, Function &newFuncti
   // Apply inference
   applyFlowInference(params, Func);
 
+  // Write inferred edge counts for HydraProfileInject.
+  writeProjectedEdges(Func, NewBlockOrder, newFunction.getName(), ProjOutDir);
+
   // Assign inferred profile
   assert(numBlocks == NewBlockOrder.size() + 1);
-
-  BasicBlock *hottestBlock = nullptr;
-  uint64_t highestFrequency = 0;
 
   using bbd = std::pair<BasicBlock *, uint64_t>;
   std::vector<bbd> orderedBlocks;
@@ -638,30 +612,13 @@ bool HashMatchingPass::readProfile(std::string functionName) {
   uint64_t frequency;
 
   while (profileFile >> srcBlockName >> arrow >> dstBlockName >> colon >> frequency) {
-    if (Debug) {
-      outs() << "Read " << srcBlockName << " -> " << dstBlockName << " : " << frequency << "\n";
-    }
+    LLVM_DEBUG(dbgs() << "Read " << srcBlockName << " -> " << dstBlockName
+                      << " : " << frequency << "\n");
     profile[srcBlockName].emplace_back(dstBlockName, frequency);
   }
 
   profileFile.close();
   return true;
-}
-
-FunctionAnalysisManager createFunctionAnalysisManager(Module &M) {
-  FunctionAnalysisManager FAM;
-  LoopAnalysisManager LAM;
-  CGSCCAnalysisManager CGAM;
-  ModuleAnalysisManager MAM;
-  
-  PassBuilder PB;
-  PB.registerModuleAnalyses(MAM);
-  PB.registerCGSCCAnalyses(CGAM);
-  PB.registerFunctionAnalyses(FAM);
-  PB.registerLoopAnalyses(LAM);
-  PB.crossRegisterProxies(LAM, FAM, CGAM, MAM);
-
-  return FAM;
 }
 
 PreservedAnalyses HashMatchingPass::run(Function &F,
@@ -682,29 +639,15 @@ PreservedAnalyses HashMatchingPass::run(Function &F,
   LLVMContext context;
   SMDiagnostic err;
 
-  StringRef oldFileName = LLFilename;
-
   llvm::BranchProbabilityInfo &bpi = AM.getResult<llvm::BranchProbabilityAnalysis>(F);
 
   std::unique_ptr<Module> oldProgram = parseIRFile(LLFilename, err, context);
 
-  FunctionAnalysisManager oldAM = createFunctionAnalysisManager(*oldProgram);
-
-  bool foundFunction = false;
-
   for (Function &fun : *oldProgram) {
-    // Project profile from the function with the same name in the old program
-    // Check if -O3 don't change function names
     if (fun.getName().str() == functionName) {
-      if (Debug) {
-        outs() << "Running projection for function " << functionName << "\n\n";
-      }
+      LLVM_DEBUG(dbgs() << "Running projection for function " << functionName << "\n");
       blocks_profile.clear();
-      // outs() << "Starting " << F.getName() << "\n";
       this->projectProfile(fun, F, bpi);
-      // outs() << "Finishing " << F.getName() << "\n";
-
-      // foundFunction = true;
       break;
     }
   }

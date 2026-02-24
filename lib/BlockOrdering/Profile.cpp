@@ -1,13 +1,12 @@
 #include "Profile.h"
 #include "WeightedProfileInference.h"
 #include <string>
-#include <regex>
-#include <iostream>
 #include <queue>
-#include <unordered_map>
 #include <unordered_set>
 #include <cmath>
+#include <limits>
 #include "llvm/Support/CommandLine.h"
+#include "llvm/Support/Debug.h"
 #include "llvm/ADT/Bitfields.h"
 #include "llvm/ADT/Hashing.h"
 #include "llvm/IRReader/IRReader.h"
@@ -17,9 +16,15 @@
 #include "llvm/Support/SourceMgr.h"
 #include "llvm/Support/xxhash.h"
 
+#define DEBUG_TYPE "hydra-profile"
 
 using namespace llvm;
 
+// NOTE: These cl::opt names ("prog", "prof", "d") conflict with those defined
+// in HashMatching.cpp and HistRegion.cpp. Only one of these plugins may be
+// loaded per opt invocation. Loading multiple plugins simultaneously will
+// cause a command-line option registration abort.
+// TODO: Elisa revise this
 cl::opt<std::string> LLFilename("prog", cl::desc("<program ll file>"), cl::Required);
 cl::opt<std::string> ProfilesFolder("prof", cl::desc("<profiles folder>"), cl::Required);
 cl::opt<unsigned> MatchingThreshold(
@@ -134,7 +139,7 @@ public:
 
   explicit OpcodeHistogram(const std::vector<uint32_t> &_Opcodes,
                             const std::vector<uint32_t> &_Frequency) {
-    assert(Opcodes.size() == Frequency.size() &&
+    assert(_Opcodes.size() == _Frequency.size() &&
             "Opcode Histogram size mismatch");
     Opcodes.assign(_Opcodes.begin(), _Opcodes.end());
     Frequency.assign(_Frequency.begin(), _Frequency.end());
@@ -153,7 +158,7 @@ public:
     Matched = true;
   }
 
-  const void operator+=(const OpcodeHistogram &OH) {
+  OpcodeHistogram& operator+=(const OpcodeHistogram &OH) {
     std::map<uint32_t, uint64_t> Frequencies;
     std::map<uint32_t, bool> UsedFrequencies;
     for (size_t I = 0; I < OH.Opcodes.size(); I++) {
@@ -172,20 +177,21 @@ public:
         Frequency.emplace_back(Freq);
       }
     }
+    return *this;
   }
 
-  uint64_t distance2(const OpcodeHistogram *OH) const {
+  uint64_t distance2(const OpcodeHistogram &OH) const {
     std::map<uint32_t, int64_t> Frequencies;
     for (size_t I = 0; I < Opcodes.size(); I++) {
       Frequencies[Opcodes[I]] = Frequency[I];
     }
     
     
-    for (size_t I = 0; I < OH->Opcodes.size(); I++) {
-      if (Frequencies.count(OH->Opcodes[I]) > 0) {
-        Frequencies[OH->Opcodes[I]] -= (int64_t)OH->Frequency[I];
+    for (size_t I = 0; I < OH.Opcodes.size(); I++) {
+      if (Frequencies.count(OH.Opcodes[I]) > 0) {
+        Frequencies[OH.Opcodes[I]] -= (int64_t)OH.Frequency[I];
       } else {
-        Frequencies[OH->Opcodes[I]] = OH->Frequency[I];
+        Frequencies[OH.Opcodes[I]] = OH.Frequency[I];
       }
     }
 
@@ -197,20 +203,13 @@ public:
     
     return (uint64_t)Distance2;
   }
-
-  friend std::ostream &operator<<(std::ostream &os, const OpcodeHistogram &OH) {
-    for (int I = 0; I < OH.Opcodes.size(); ++I) {
-      os << OH.Opcodes[I] << ": " << OH.Frequency[I] << "\n";
-    }
-    return os;
-  }
 };
 
 struct BlockMatching {
 private:
-  OpcodeHistogram *BlockHistogram;
-  OpcodeHistogram *SuccessorsHistogram;
-  OpcodeHistogram *PredsHistogram;
+  OpcodeHistogram *BlockHistogram;   // points into caller's storage
+  OpcodeHistogram SuccessorsHistogram; // combined histogram of all successors
+  OpcodeHistogram PredsHistogram;      // combined histogram of all predecessors
   size_t NumSuccessors, NumPreds;
   double DistanceMatched;
 public:
@@ -222,15 +221,13 @@ public:
     BlockHistogram = _BlockHistogram;
     NumSuccessors = _SuccessorsHistograms.size();
     NumPreds = _PredsHistograms.size();
-    SuccessorsHistogram = new OpcodeHistogram();
-    PredsHistogram = new OpcodeHistogram();
     for (OpcodeHistogram *Successor : _SuccessorsHistograms) {
-      *SuccessorsHistogram += *Successor;
+      SuccessorsHistogram += *Successor;
     }
     for (OpcodeHistogram *Pred : _PredsHistograms) {
-      *PredsHistogram += *Pred;
+      PredsHistogram += *Pred;
     }
-    this->DistanceMatched = 1e18;
+    this->DistanceMatched = std::numeric_limits<double>::infinity();
   }
 
   size_t getBlockHistogramSize() {
@@ -246,21 +243,17 @@ public:
   }
 
   double distance(const BlockMatching &BM, uint64_t Threshold) const {
-    uint64_t BlockDistance = BlockHistogram->distance2(BM.BlockHistogram);
-    if (Debug) {
-      std::cout << "Block Distance: " << BlockDistance << "\n";
-    }
-    if (BlockDistance > Threshold) return 1e18+5;
-    double SuccDistance = SuccessorsHistogram->distance2(BM.SuccessorsHistogram);
-    double PredDistance = PredsHistogram->distance2(BM.PredsHistogram);
-    uint64_t DeltaSucc = abs(NumSuccessors-BM.NumSuccessors);
-    uint64_t DeltaPred = abs(NumPreds-BM.NumPreds);
-    if (Debug) {
-      std::cout << "Delta successors: " << DeltaSucc << "\n";
-      std::cout << "Successors Distance: " << SuccDistance << "\n";
-      std::cout << "Delta predecessors: " << DeltaPred << "\n";
-      std::cout << "Predecessors Distance: " << PredDistance << "\n";
-    }
+    uint64_t BlockDistance = BlockHistogram->distance2(*BM.BlockHistogram);
+    LLVM_DEBUG(dbgs() << "Block Distance: " << BlockDistance << "\n");
+    if (BlockDistance > Threshold) return std::numeric_limits<double>::infinity();
+    double SuccDistance = SuccessorsHistogram.distance2(BM.SuccessorsHistogram);
+    double PredDistance = PredsHistogram.distance2(BM.PredsHistogram);
+    uint64_t DeltaSucc = (size_t)std::abs((int64_t)NumSuccessors - (int64_t)BM.NumSuccessors);
+    uint64_t DeltaPred = (size_t)std::abs((int64_t)NumPreds - (int64_t)BM.NumPreds);
+    LLVM_DEBUG(dbgs() << "Delta successors: " << DeltaSucc << "\n"
+                      << "Successors Distance: " << SuccDistance << "\n"
+                      << "Delta predecessors: " << DeltaPred << "\n"
+                      << "Predecessors Distance: " << PredDistance << "\n");
     return BlockDistance + SuccDistance/(DeltaSucc+1.0) + PredDistance/(DeltaPred+1.0) + sqrt(DeltaSucc) + sqrt(DeltaPred);
   }
 };
@@ -286,23 +279,18 @@ public:
     FlowBlock *BestBlock = nullptr;
     BlockMatching *MatchedBlock = nullptr;
 
-    const double eps = 1e-9;
-    double BestDistance = 1e18+5;
+    double BestDistance = std::numeric_limits<double>::infinity();
 
     FlowBlock *Block = nullptr;
     BlockMatching *Matching = nullptr;
     for (size_t I = 0; I < Blocks.size(); ++I) {
       Block = Blocks[I];
       Matching = BlockMatchings[I];
-      if (Debug) {
-        std::cout << "Computing distance between " << Block->Index << " and " << OldBBName << "\n";
-      }
+      LLVM_DEBUG(dbgs() << "Computing distance between " << Block->Index
+                        << " and " << OldBBName << "\n");
       double CurrentDistance = Matching->distance(BM, Threshold);
-      if (Debug) {
-        std::cout << "Distance: " << CurrentDistance << "\n\n";
-      }
+      LLVM_DEBUG(dbgs() << "Distance: " << CurrentDistance << "\n");
       if (CurrentDistance >= Matching->getDistance()) continue;
-
 
       if (CurrentDistance < BestDistance) {
         BestDistance = CurrentDistance;
@@ -401,15 +389,14 @@ FlowFunction createFlowFunction(std::vector<BasicBlock *> &BlockOrder, BranchPro
   return Func;
 }
 
-OpcodeHistogram *initializeHistogram(BasicBlock &BB) {
+OpcodeHistogram initializeHistogram(BasicBlock &BB) {
   std::vector<uint32_t> opcodes, frequency;
   for (Instruction &inst : BB) {
     unsigned instOpcode = inst.getOpcode();
     unsigned opcodeIdx = 0;
     for (unsigned opcode : opcodes) {
-      if (opcode == instOpcode) {
+      if (opcode == instOpcode)
         break;
-      }
       ++opcodeIdx;
     }
     if (opcodeIdx == opcodes.size()) {
@@ -419,7 +406,7 @@ OpcodeHistogram *initializeHistogram(BasicBlock &BB) {
       frequency[opcodeIdx]++;
     }
   }
-  return new OpcodeHistogram(opcodes, frequency);
+  return OpcodeHistogram(opcodes, frequency);
 }
 
 void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction, BranchProbabilityInfo &bpi) {
@@ -445,81 +432,73 @@ void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction, B
   assert(numBlocks == newBlockOrder.size() + 1);
 
   std::vector<FlowBlock *> blocks;
-  std::vector<OpcodeHistogram *> newHistogramsAddresses, oldHistogramsAddresses;
+  std::vector<OpcodeHistogram> newHistograms, oldHistograms;
+  newHistograms.reserve(newBlockOrder.size());
+  oldHistograms.reserve(oldBlockOrder.size());
 
   // Initialize histograms for oldFunction
-  if (Debug) {
-    std::cout << "Initializing old blocks\n";
-  }
+  LLVM_DEBUG(dbgs() << "Initializing old blocks\n");
   for (size_t i = 0; i < oldBlockOrder.size(); ++i) {
     BasicBlock *BB = oldBlockOrder[i];
-    if (Debug) {
-      std::cout << "Block at index " << i+1 << ": " <<
-        extractAndFormatDigits(BB->getName().str()) << "\n";
-    }
-    oldHistogramsAddresses.push_back(initializeHistogram(*BB));
+    LLVM_DEBUG(dbgs() << "Block at index " << i+1 << ": "
+                      << extractAndFormatDigits(BB->getName().str()) << "\n");
+    oldHistograms.push_back(initializeHistogram(*BB));
   }
 
   // Initialize histograms for newFunction
-  if (Debug) {
-    std::cout << "Initializing new blocks\n";
-  }
+  LLVM_DEBUG(dbgs() << "Initializing new blocks\n");
   for (size_t i = 0; i < newBlockOrder.size(); ++i) {
     BasicBlock *BB = newBlockOrder[i];
     blocks.push_back(&flowFunc.Blocks[i+1]);
-    if (Debug) {
-      std::cout << "Block at index " << i+1 << ": " <<
-        extractAndFormatDigits(BB->getName().str()) << "\n";
-    }
-    newHistogramsAddresses.push_back(initializeHistogram(*BB));
+    LLVM_DEBUG(dbgs() << "Block at index " << i+1 << ": "
+                      << extractAndFormatDigits(BB->getName().str()) << "\n");
+    newHistograms.push_back(initializeHistogram(*BB));
   }
 
-  std::vector<BlockMatching *> blockMatchingsAddresses;
-  
-  
+  // Build BlockMatching objects
+  std::vector<BlockMatching> blockMatchings;
+  blockMatchings.reserve(newBlockOrder.size());
   for (size_t i = 0; i < newBlockOrder.size(); ++i) {
     std::vector<OpcodeHistogram *> succHistograms, predHistograms;
     for (BasicBlock *succBB : successors(newBlockOrder[i])) {
-      succHistograms.emplace_back(newHistogramsAddresses[newBlockIndex[succBB->getName().str()]]);
+      succHistograms.emplace_back(&newHistograms[newBlockIndex[succBB->getName().str()]]);
     }
     for (BasicBlock *predBB : predecessors(newBlockOrder[i])) {
-      predHistograms.emplace_back(newHistogramsAddresses[newBlockIndex[predBB->getName().str()]]);
+      predHistograms.emplace_back(&newHistograms[newBlockIndex[predBB->getName().str()]]);
     }
-    BlockMatching *newMatching = new BlockMatching(newHistogramsAddresses[i], succHistograms, predHistograms);
-    blockMatchingsAddresses.push_back(newMatching);
+    blockMatchings.emplace_back(&newHistograms[i], succHistograms, predHistograms);
   }
+  std::vector<BlockMatching *> blockMatchingPtrs;
+  blockMatchingPtrs.reserve(blockMatchings.size());
+  for (auto &BM : blockMatchings)
+    blockMatchingPtrs.push_back(&BM);
 
   DenseMap<uint64_t, FlowBlock *> matchedBlocks;
   DenseMap<uint64_t, BlockMatching *> matchings;
   DenseMap<uint64_t, double> matchedDistances;
 
   BlockMatcher BM;
-  BM.init(blocks, blockMatchingsAddresses);
+  BM.init(blocks, blockMatchingPtrs);
 
   // Match blocks from old function to new function
-  if (Debug) {
-    std::cout << "Matching blocks\n\n";
-  }
-  for (int I = 1; I <= MaxIterations; I++) {
+  LLVM_DEBUG(dbgs() << "Matching blocks\n");
+  for (int I = 1; I <= (int)MaxIterations; I++) {
     for (BasicBlock *oldBB : oldBlockOrder) {
       std::string oldBBName = extractAndFormatDigits(oldBB->getName().str());
       size_t oldBBIndex = oldBlockIndex[oldBBName];
 
       if (matchings.lookup(oldBBIndex) != nullptr) continue;
-      if (Debug) {
-        std::cout << "Trying to match block " << oldBBName << "\n\n";
-      }
-      OpcodeHistogram *oldHistogram = oldHistogramsAddresses[oldBBIndex];
+      LLVM_DEBUG(dbgs() << "Trying to match block " << oldBBName << "\n");
       std::vector<OpcodeHistogram *> oldSuccHistograms, oldPredHistograms;
       for (BasicBlock *succ : successors(oldBB)) {
         std::string succBBName = extractAndFormatDigits(succ->getName().str());
-        oldSuccHistograms.emplace_back(oldHistogramsAddresses[oldBlockIndex[succBBName]]);
+        oldSuccHistograms.emplace_back(&oldHistograms[oldBlockIndex[succBBName]]);
       }
       for (BasicBlock *pred : predecessors(oldBB)) {
         std::string predBBName = extractAndFormatDigits(pred->getName().str());
-        oldPredHistograms.emplace_back(oldHistogramsAddresses[oldBlockIndex[predBBName]]);
+        oldPredHistograms.emplace_back(&oldHistograms[oldBlockIndex[predBBName]]);
       }
-      BlockMatching oldMatching(oldHistogram, oldSuccHistograms, oldPredHistograms);
+      BlockMatching oldMatching(&oldHistograms[oldBBIndex], oldSuccHistograms, oldPredHistograms);
       FlowBlock *matchedBlock = nullptr;
       BlockMatching *matching = nullptr;
       std::tie(matchedBlock, matching) = BM.matchBlock(oldMatching, MatchingThreshold, oldBBName);
@@ -529,13 +508,11 @@ void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction, B
       }
   
       if (matchedBlock != nullptr) {
-        if (I == MaxIterations && oldBBIndex == 0) {
+        if (I == (int)MaxIterations && oldBBIndex == 0) {
           matching->Match(-1);
         }
-        if (Debug) {
-          std::cout << "Matched blocks " << oldBBName << " and "
-                  << extractAndFormatDigits(newBlockOrder[matchedBlock->Index-1]->getName().str()) << "\n\n";
-        }
+        LLVM_DEBUG(dbgs() << "Matched blocks " << oldBBName << " and "
+                  << extractAndFormatDigits(newBlockOrder[matchedBlock->Index-1]->getName().str()) << "\n");
         matchedBlocks[oldBBIndex] = matchedBlock;
         matchings[oldBBIndex] = matching;
         matchedDistances[oldBBIndex] = matching->getDistance();
@@ -545,7 +522,6 @@ void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction, B
       std::string oldBBName = extractAndFormatDigits(oldBB->getName().str());
       size_t oldBBIndex = oldBlockIndex[oldBBName];
 
-      FlowBlock *matchedBlock = matchedBlocks.lookup(oldBBIndex);
       BlockMatching *matching = matchings.lookup(oldBBIndex);
       double matchedDistance = matchedDistances.lookup(oldBBIndex);
 
@@ -553,7 +529,6 @@ void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction, B
         if (matching->getDistance() < matchedDistance) {
           matchedBlocks[oldBBIndex] = nullptr;
           matchings[oldBBIndex] = nullptr;
-          matchedDistance = 1e18;
         }
       }
     }
@@ -563,19 +538,13 @@ void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction, B
   std::vector<uint64_t> OutWeight(numBlocks, 0);
   std::vector<uint64_t> InWeight(numBlocks, 0);
 
-  if (Debug) {
-    std::cout << "Matching jumps\n\n";
-  }
+  LLVM_DEBUG(dbgs() << "Matching jumps\n");
   for (BasicBlock *oldBB : oldBlockOrder) {
     std::string oldBBName = extractAndFormatDigits(oldBB->getName().str());
-    if (Debug) {
-      std::cout << "Checking old basic block " << oldBBName << "\n";
-    }
+    LLVM_DEBUG(dbgs() << "Checking old basic block " << oldBBName << "\n");
     for (auto [succ, freq] : profile[oldBBName]) {
-      if (Debug) {
-        std::cout << "Checking jump " << oldBBName << " -> "
-                << succ << " with frequency " << freq << "\n";
-      }
+      LLVM_DEBUG(dbgs() << "Checking jump " << oldBBName << " -> "
+                        << succ << " with frequency " << freq << "\n");
       if (freq == 0)
         continue;
 
@@ -587,24 +556,17 @@ void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction, B
 
       if (matchedSrcBlock != nullptr && matchedDstBlock != nullptr) {
         // find a jump between the two blocks
-        if (Debug) {
-          std::cout << "Blocks matched, trying to find equivalent jump\n";
-        }
+        LLVM_DEBUG(dbgs() << "Blocks matched, trying to find equivalent jump\n");
         FlowJump *jump = nullptr;
         for (FlowJump *succJump : matchedSrcBlock->SuccJumps) {
           if (succJump->Target == matchedDstBlock->Index) {
-            if (Debug) {
-              std::cout << "Jump found\n\n";
-            }
+            LLVM_DEBUG(dbgs() << "Jump found\n");
             jump = succJump;
             break;
           }
         }
 
         if (jump != nullptr) {
-          if (Debug) {
-            std::cout << "Jump not found\n\n";
-          }
           jump->Weight = freq;
           jump->HasUnknownWeight = false;
         }
@@ -735,9 +697,6 @@ void ProfilePass::projectProfile(Function &oldFunction, Function &newFunction, B
   // Assign inferred profile
   assert(numBlocks == newBlockOrder.size() + 1);
 
-  BasicBlock *hottestBlock = nullptr;
-  uint64_t highestFrequency = 0;
-
   using bbd = std::pair<BasicBlock *, uint64_t>;
   std::vector<bbd> orderedBlocks;
 
@@ -780,9 +739,8 @@ bool ProfilePass::readProfile(std::string functionName) {
   uint64_t frequency;
 
   while (profileFile >> srcBlockName >> arrow >> dstBlockName >> colon >> frequency) {
-    if (Debug) {
-      std::cout << "Read " << srcBlockName << " -> " << dstBlockName << " : " << frequency << "\n";
-    }
+    LLVM_DEBUG(dbgs() << "Read " << srcBlockName << " -> " << dstBlockName
+                      << " : " << frequency << "\n");
     profile[srcBlockName].emplace_back(dstBlockName, frequency);
   }
 
@@ -806,23 +764,14 @@ PreservedAnalyses ProfilePass::run(Function &F,
   LLVMContext context;
   SMDiagnostic err;
 
-  StringRef oldFileName = LLFilename;
-
   llvm::BranchProbabilityInfo &bpi = AM.getResult<llvm::BranchProbabilityAnalysis>(F);
 
   std::unique_ptr<Module> oldProgram = parseIRFile(LLFilename, err, context);
 
-  bool foundFunction = false;
-
   for (Function &fun : *oldProgram) {
-    // Project profile from the function with the same name in the old program
-    // Check if -O3 don't change function names
     if (fun.getName().str() == functionName) {
-      if (Debug) {
-        std::cout << "Running projection for function " << functionName << "\n\n";
-      }
+      LLVM_DEBUG(dbgs() << "Running projection for function " << functionName << "\n");
       this->projectProfile(fun, F, bpi);
-      foundFunction = true;
       break;
     }
   }
