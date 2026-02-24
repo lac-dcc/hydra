@@ -5,7 +5,7 @@ project(Hydra)
 set(CMAKE_CXX_STANDARD 17 CACHE STRING "")
 
 set(LLVM_INSTALL_DIR "" CACHE PATH "LLVM installation directory")
-set(LLVM_CMAKE_CONFIG_DIR "" "${LLVM_INSTALL_DIR}/lib/cmake/llvm/")
+set(LLVM_CMAKE_CONFIG_DIR "${LLVM_INSTALL_DIR}/lib/cmake/llvm/")
 list(APPEND CMAKE_PREFIX_PATH "${LLVM_CMAKE_CONFIG_DIR}")
 
 find_package(LLVM REQUIRED CONFIG)
@@ -71,3 +71,41 @@ target_include_directories(BlockOrderingHashMatching PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/include/BlockOrdering"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/Utils"
 )
+
+add_library(HydraProfileConverter STATIC
+    lib/HydraProfileConverter.cpp
+)
+
+target_include_directories(HydraProfileConverter PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
+)
+
+add_library(HydraProfileInject MODULE
+    lib/HydraProfileInject.cpp
+)
+
+target_include_directories(HydraProfileInject PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
+)
+
+llvm_map_components_to_libnames(llvm_exe_libs support core irreader profiledata)
+
+add_executable(hydra2profdata
+    lib/hydra2profdata.cpp
+)
+
+target_include_directories(hydra2profdata PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
+)
+
+target_link_libraries(hydra2profdata PRIVATE HydraProfileConverter ${llvm_exe_libs})
+
+add_executable(profdata2Edges
+    lib/profdata2Edges.cpp
+)
+
+target_include_directories(profdata2Edges PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
+)
+
+target_link_libraries(profdata2Edges PRIVATE ${llvm_exe_libs})
